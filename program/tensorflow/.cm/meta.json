@@ -1,0 +1,13 @@
+{
+  "backup_data_uid": "c0bacdae0ce2b532",
+  "compile_deps": {
+    "lib.tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 10,
+      "tags": "lib,tensorflow"
+    }
+  },
+  "data_name": "tensorflow",
+  "program": "yes"
+}

@@ -1,0 +1,25 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+    "VAR":"VAL"
+    }, 
+    "version": "0.10",
+  }, 
+  "deps": {}, 
+  "end_full_path": {}, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "tags": [
+    "lib",
+    "tensorflow",
+    "v0.10"
+  ]
+}

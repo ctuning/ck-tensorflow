@@ -1,18 +1,16 @@
 #! /bin/bash
 
-# PYTHON - python version 2 or 3
-# GPU-ENABLED - n or y
-
 
 #Getting python version from user
 DEFAULT="2"
-PYTHON="${PYTHON:-$DEFAULT}"
 read -e  -p "Choose python version (3/[2]): " PYTHON
+PYTHON="${PYTHON:-$DEFAULT}"
 if [[ ($PYTHON != "2") && ($PYTHON != "3")]]
 then
     echo "Error: version ${PYTHON} doesn't exist. Choose from [2/3]"
     exit 1
 fi
+
 
 
 #Getting GPU_ENABLED answer
@@ -27,8 +25,10 @@ then
 fi
 
 
+
 echo "" 
 echo  "TensorFlow installation started"
+
 
 
 if [[ "$PYTHON" = "2" ]]

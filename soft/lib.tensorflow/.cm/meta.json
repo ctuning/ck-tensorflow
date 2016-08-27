@@ -1,0 +1,23 @@
+{
+"auto_detect": "no",
+  "customize": {
+    "env_prefix": "CK_ENV_LIB_TF",
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "include_file": "",
+    "limit_recursion_dir_search": {
+      "linux": 3
+    },
+    "soft_file": {
+      "linux": ""
+    },
+    "soft_path_example": {
+      "linux": ""
+    }
+  }, 
+  "soft_name": "TensorFlow library",
+  "tags": [
+    "lib",
+    "tensorflow"
+  ]
+}
