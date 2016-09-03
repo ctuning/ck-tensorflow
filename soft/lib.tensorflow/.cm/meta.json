@@ -11,7 +11,22 @@
     "soft_file": {
       "linux": "tensorflow/__init__.py"
     }
-  }, 
+  },
+  "deps": {
+    "compiler.cuda": {
+      "local": "yes", 
+      "name": "Nvidia CUDA Compiler", 
+      "only_for_target_os_tags": [
+        "linux"
+      ], 
+      "tags": "compiler,cuda,lang-c-cuda,lang-cpp-cuda"
+    },
+    "lib.cudnn": {
+      "local": "yes", 
+      "name": "cuDNN library", 
+      "tags": "lib,cuda,cudnn,dnn"
+    }
+  },
   "soft_name": "TensorFlow library",
   "tags": [
     "lib",
