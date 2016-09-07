@@ -20,40 +20,40 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
+#Change configuration file and configure
 cd $TENSORFLOW_SRC_DIR
 
-$TENSORFLOW_SRC_DIR/configure
+cat $PACKAGE_DIR/export-variables |
+while read line;
+do
+    sed -i "1 a $line" configure 
+done 
+ 
+sudo ./configure
+
 
 if [ "${?}" != "0" ] ; then
   echo "Error: TensorFlow installation configuration failed!"
   exit 1
 fi
 
-#Getting GPU_ENABLED answer
-echo ""
-DEFAULT="n"
-read -e  -p "Have you chosen GPU enabled version? (y/[n]): " GPU_ENABLED
-GPU_ENABLED="${GPU_ENABLED:-$DEFAULT}"
-if [[ ($GPU_ENABLED != "n") && ($GPU_ENABLED != "y")]]
-then
-    echo "Error: GPU enabled answer is y or n."
-    exit 1
+
+#Create pip package and install 
+sudo bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
+
+if [ "${?}" != "0" ] ; then
+  echo "Error: Bazel building pip package failed"
+  exit 1
 fi
-
-
-
-if [[ "$GPU_ENABLED" = "y" ]]
-then
-    sudo bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
-else
-    sudo bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
-fi
-
 
 sudo bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
+if [ "${?}" != "0" ] ; then
+  echo "Error: Bazel building pip package failed"
+  exit 1
+fi
 
-for pip_package in /tmp/tensorflow_pkg/*
+for pip_package in /tmp/tensorflow_pkg/*.whl
 do
     sudo pip install $pip_package
 done

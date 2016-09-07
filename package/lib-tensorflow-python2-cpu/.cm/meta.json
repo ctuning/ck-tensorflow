@@ -1,0 +1,41 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+    "INSTALL_DIR":"/usr/local/lib/python2.7/dist-packages/",
+    "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow"
+    }, 
+    "version": "0.10",
+    "params": {
+      "python_bin_python":"/usr/bin/python",
+      "tf_need_gcp":0,
+      "tf_need_cuda":0,
+      "gcc_host_compiler_path":"/usr/bin/gcc",
+      "tf_cuda_version":"7.5",
+      "cuda_toolkit_path":"/usr/local/cuda",
+      "tf_cudnn_version":"4",
+      "cudnn_install_path":"/usr/local/cuda",
+      "tf_cuda_compute_capabilities":"3.5,5.2"
+    }
+  }, 
+  "deps": {}, 
+  "end_full_path": {
+    "linux": "/usr/local/lib/python2.7/dist-packages/tensorflow/__init__.py" 
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178",
+  "suggested_path": "tensorflow", 
+  "tags": [
+    "lib",
+    "tensorflow",
+    "v0.10",
+    "python"
+  ]
+}

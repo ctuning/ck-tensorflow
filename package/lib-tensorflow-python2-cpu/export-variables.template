@@ -1,0 +1,11 @@
+#! /bin/bash
+
+export PYTHON_BIN_PATH="$#python_bin_path#$"
+export TF_NEED_GCP=$#tf_need_gcp#$
+export TF_NEED_CUDA=$#tf_need_cuda#$
+export GCC_HOST_COMPILER_PATH="$#gcc_host_compiler_path#$"
+export TF_CUDA_VERSION="$#tf_cuda_version#$"
+export CUDA_TOOLKIT_PATH="$#cuda_toolkit_path#$"
+export TF_CUDNN_VERSION="$#tf_cudnn_version#$"
+export CUDNN_INSTALL_PATH="$#cudnn_install_path#$"
+export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
