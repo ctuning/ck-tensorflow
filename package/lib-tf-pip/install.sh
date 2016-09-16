@@ -3,6 +3,7 @@
 
 
 #Getting GPU_ENABLED answer
+export INSTALL_DIR=$INSTALL_DIR
 echo ""
 DEFAULT="y"
 read -e  -p "GPU enabled? (n/[y]): " GPU_ENABLED

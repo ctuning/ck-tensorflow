@@ -13,18 +13,13 @@
     }
   },
   "deps": {
-    "compiler.cuda": {
+    "compiler.python": {
       "local": "yes", 
-      "name": "Nvidia CUDA Compiler", 
+      "name": "Python", 
       "only_for_target_os_tags": [
         "linux"
       ], 
-      "tags": "compiler,cuda,lang-c-cuda,lang-cpp-cuda"
-    },
-    "lib.cudnn": {
-      "local": "yes", 
-      "name": "cuDNN library", 
-      "tags": "lib,cuda,cudnn,dnn"
+      "tags": "compiler,python,lang-python"
     }
   },
   "soft_name": "TensorFlow library",

@@ -1,11 +1,9 @@
-#! /bin/bash
-
-export PYTHON_BIN_PATH="/usr/bin/python"
+export PYTHON_BIN_PATH="${CK_ENV_COMPILER_PYTHON}/bin/python"
 export TF_NEED_GCP=0
 export TF_NEED_CUDA=0
-export GCC_HOST_COMPILER_PATH="/usr/bin/gcc"
+export GCC_HOST_COMPILER_PATH="${CK_ENV_COMPILER_GCC}/bin/gcc"
 export TF_CUDA_VERSION="7.5"
-export CUDA_TOOLKIT_PATH="/usr/local/cuda"
+export CUDA_TOOLKIT_PATH="$CK_ENV_COMPILER_CUDA"
 export TF_CUDNN_VERSION="4"
-export CUDNN_INSTALL_PATH="/usr/local/cuda"
+export CUDNN_INSTALL_PATH="${CK_ENV_LIB_CUDNN}"
 export TF_CUDA_COMPUTE_CAPABILITIES="3.5,5.2"

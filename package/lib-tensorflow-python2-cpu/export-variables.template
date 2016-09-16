@@ -1,5 +1,3 @@
-#! /bin/bash
-
 export PYTHON_BIN_PATH="$#python_bin_path#$"
 export TF_NEED_GCP=$#tf_need_gcp#$
 export TF_NEED_CUDA=$#tf_need_cuda#$

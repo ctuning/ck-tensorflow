@@ -54,7 +54,7 @@ def setup(i):
     # Get variables
     ck=i['ck_kernel']
     s=''
-
+    
     iv=i.get('interactive','')
 
     cus=i.get('customize',{})
@@ -82,8 +82,8 @@ def setup(i):
     ep=cus.get('env_prefix','')
     if pi!='':
        env[ep]=pi
-
-    env[ep+'_INCLUDE_NAME']=cus.get('include_name','')
+    
+    s+='\nexport PYTHONPATH='+pl1+':${PYTHONPATH}\n'
     
     return {'return':0, 'bat':s}
 

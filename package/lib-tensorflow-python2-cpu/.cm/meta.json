@@ -2,25 +2,35 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-    "INSTALL_DIR":"/usr/local/lib/python2.7/dist-packages/",
-    "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow"
+      "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow",
+      "USE_CUDA":0,
+      "PYTHON3":0
     }, 
     "version": "0.10",
     "params": {
-      "python_bin_python":"/usr/bin/python",
+      "python_bin_path":"${CK_ENV_COMPILER_PYTHON}/bin/python",
       "tf_need_gcp":0,
       "tf_need_cuda":0,
-      "gcc_host_compiler_path":"/usr/bin/gcc",
+      "gcc_host_compiler_path":"${CK_ENV_COMPILER_GCC}/bin/gcc",
       "tf_cuda_version":"7.5",
-      "cuda_toolkit_path":"/usr/local/cuda",
+      "cuda_toolkit_path":"$CK_ENV_COMPILER_CUDA",
       "tf_cudnn_version":"4",
-      "cudnn_install_path":"/usr/local/cuda",
+      "cudnn_install_path":"${CK_ENV_LIB_CUDNN}",
       "tf_cuda_compute_capabilities":"3.5,5.2"
     }
   }, 
-  "deps": {}, 
+  "deps": {
+    "compiler.gcc": {
+      "local": "yes", 
+      "name": "GCC",
+      "only_for_target_os_tags": [
+        "linux"
+      ], 
+      "tags": "compiler,gcc"
+    }
+  }, 
   "end_full_path": {
-    "linux": "/usr/local/lib/python2.7/dist-packages/tensorflow/__init__.py" 
+     "linux":"tensorflow/__init__.py"
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [
