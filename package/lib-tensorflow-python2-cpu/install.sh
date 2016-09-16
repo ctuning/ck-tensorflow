@@ -5,7 +5,7 @@
 # INSTALL_DIR
 # TENSORFLOW_URL
 
-export TENSORFLOW_SRC_DIR=${PACKAGE_DIR}/src
+export TENSORFLOW_SRC_DIR=${CK_TOOLS}/tensorflow_src
 export TENSORFLOW_LIB_DIR=${INSTALL_DIR}
 export TENSORFLOW_INSTALL_DIR=${INSTALL_DIR}
 
@@ -17,15 +17,16 @@ sudo rm -rf ${TENSORFLOW_SRC_DIR}
 sudo rm -rf ${TENSORFLOW_LIB_DIR}
 echo ""
 echo "Cloning TensorFlow from '${TENSORFLOW_URL}' to '${TENSORFLOW_SRC_DIR}' ..."
+cd $CK_TOOLS
+mkdir src
 git clone ${TENSORFLOW_URL}  ${TENSORFLOW_SRC_DIR}
 if [ "${?}" != "0" ] ; then
   echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"
   exit 1
 fi
 
-
-
 #Change configuration file and configure
+mkdir $TENSORFLOW_LIB_DIR
 cd $TENSORFLOW_SRC_DIR
 
 echo ""
@@ -77,3 +78,7 @@ do
         pip3 install $pip_package -t $TENSORFLOW_LIB_DIR
     fi
 done
+
+
+
+sudo rm -rf $TENSORFLOW_SRC_DIR
