@@ -15,10 +15,10 @@ echo ""
 echo "Removing everything from '${TENSORFLOW_SRC_DIR}' and '${TENSORFLOW_LIB_DIR}'..."
 sudo rm -rf ${TENSORFLOW_SRC_DIR}
 sudo rm -rf ${TENSORFLOW_LIB_DIR}
+mkdir ${TENSORFLOW_SRC_DIR}
 echo ""
 echo "Cloning TensorFlow from '${TENSORFLOW_URL}' to '${TENSORFLOW_SRC_DIR}' ..."
 cd $CK_TOOLS
-mkdir src
 git clone ${TENSORFLOW_URL}  ${TENSORFLOW_SRC_DIR}
 if [ "${?}" != "0" ] ; then
   echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"

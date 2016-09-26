@@ -6,4 +6,5 @@ export TF_CUDA_VERSION="$#tf_cuda_version#$"
 export CUDA_TOOLKIT_PATH="$#cuda_toolkit_path#$"
 export TF_CUDNN_VERSION="$#tf_cudnn_version#$"
 export CUDNN_INSTALL_PATH="$#cudnn_install_path#$"
-export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
+# export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
+export TF_NEED_HDFS=$#tf_need_hdfs#$

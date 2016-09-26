@@ -75,6 +75,7 @@ def setup(i):
 
     iv=i.get('interactive','')
     cus=i.get('customize',{})
+    install_env=cus.get('install_env',{})
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
 
@@ -87,15 +88,24 @@ def setup(i):
       "tf_need_gcp":0,
       "tf_need_cuda":0,
       "gcc_host_compiler_path":"/usr/bin/gcc",
-      "tf_cuda_version":"7.5",
-      "cuda_toolkit_path":"/usr/local/cuda",
-      "tf_cudnn_version":"4",
-      "cudnn_install_path":"/usr/local/cuda",
-      "tf_cuda_compute_capabilities":"3.5,5.2"
+      "tf_need_hdfs":0
     }
 
+    # Update params 
     params.update(cus.get('params',{}))
     
+    # Get versions of CUDA and cuDNN in GPU enabled versions
+    # NEED CK ENV UPDATE IN CUDNN. To get cudnn version from path.
+    if install_env['USE_CUDA']:
+        cuda_path = deps["compiler.cuda"]["dict"]["env"]["CK_ENV_COMPILER_CUDA"]
+        if cuda_path is None:
+            print "Error: CUDA dependence was not added."
+            return 1
+        params['tf_cuda_version'] = cuda_path[-3:]
+        params['cuda_toolkit_path'] = cuda_path[:-4]
+        
+        #cuDNN Version from path here.
+        
     # Load export-variables.template
     pp=os.path.join(p, 'export-variables.template')
     r=ck.load_text_file({'text_file':pp})
