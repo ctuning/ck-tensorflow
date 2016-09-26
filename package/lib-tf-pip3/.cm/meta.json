@@ -2,13 +2,12 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-    "INSTALL_DIR":"/usr/local/lib/python3.5/dist-packages/"
     }, 
     "version": "0.10"
   }, 
   "deps": {}, 
   "end_full_path": {
-    "linux": "/usr/local/lib/python3.5/dist-packages/tensorflow/__init__.py" 
+    "linux": "tensorflow/__init__.py" 
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [

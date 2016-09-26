@@ -2,6 +2,9 @@
 
 
 
+sudo rm-rf $INSTALL_DIR
+mkdir $INSTALL_DIR
+
 #Getting GPU_ENABLED answer
 echo ""
 DEFAULT="y"
@@ -24,5 +27,5 @@ fi
 
 
 
-sudo pip3 install --upgrade $TF_BINARY_URL
+sudo pip3 install --upgrade $TF_BINARY_URL -t $INSTALL_DIR
 

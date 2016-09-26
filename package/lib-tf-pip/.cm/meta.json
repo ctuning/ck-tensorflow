@@ -2,13 +2,12 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-   
     }, 
     "version": "0.10"
   }, 
   "deps": {}, 
   "end_full_path": {
-    "linux": "/usr/local/lib/python2.7/dist-packages/tensorflow/__init__.py" 
+    "linux": "tensorflow/__init__.py" 
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [

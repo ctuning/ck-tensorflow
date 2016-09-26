@@ -2,8 +2,9 @@
 
 
 
+sudo rm-rf $INSTALL_DIR
+mkdir $INSTALL_DIR
 #Getting GPU_ENABLED answer
-export INSTALL_DIR=$INSTALL_DIR
 echo ""
 DEFAULT="y"
 read -e  -p "GPU enabled? (n/[y]): " GPU_ENABLED
@@ -23,11 +24,11 @@ echo  "TensorFlow installation started"
 
 if [[ "$GPU_ENABLED" = "y" ]]
 then
-    export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.10.0rc0-cp27-none-linux_x86_64.whl
+    export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.10.0rc0-cp27-none-linux_x86_64.whl 
 else
-    export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.10.0rc0-cp27-none-linux_x86_64.whl
+    export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.10.0rc0-cp27-none-linux_x86_64.whl 
 fi
 
 
 
-sudo pip install --upgrade $TF_BINARY_URL
+sudo pip install --upgrade $TF_BINARY_URL -t $INSTALL_DIR
