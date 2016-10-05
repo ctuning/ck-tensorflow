@@ -2,12 +2,14 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
+      "GPU_ENABLED":0,
+      "PYTHON3":0
     }, 
     "version": "0.10"
   }, 
   "deps": {}, 
   "end_full_path": {
-    "linux": "tensorflow/__init__.py" 
+     "linux":"tensorflow/__init__.py"
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [
@@ -16,6 +18,7 @@
   "only_for_target_os_tags": [
     "linux"
   ], 
+  "package_extra_name":" (python, cpu)",
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178",
   "suggested_path": "tensorflow", 
@@ -23,6 +26,7 @@
     "lib",
     "tensorflow",
     "v0.10",
-    "python3"
+    "python"
   ]
 }
+

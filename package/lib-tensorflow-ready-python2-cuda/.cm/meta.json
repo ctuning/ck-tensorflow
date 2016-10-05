@@ -1,0 +1,62 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "GPU_ENABLED":1,
+      "PYTHON3":0
+    }, 
+    "version": "0.10"
+  }, 
+  "deps": {
+    "compiler.gcc": {
+      "local": "yes", 
+      "name": "GCC",
+      "only_for_target_os_tags": [
+        "linux"
+      ],
+      "tags": "compiler,gcc"
+    },
+    "compiler.cuda": {
+      "local": "yes", 
+      "name": "CUDA Toolkit",
+      "only_for_target_os_tags": [
+        "linux"
+      ],
+      "tags": "compiler,cuda"
+    },
+    "lib.cudnn": {
+      "local": "yes", 
+      "name": "cuDNN library",
+      "only_for_target_os_tags": [
+        "linux"
+      ],
+      "tags": "lib,cudnn,dnn,cuda"
+    }
+  }, 
+  "end_full_path": {
+     "linux":"tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178",
+  "package_extra_name":" (python, cuda)",
+  "suggested_path": "tensorflow", 
+  "tags": [
+    "lib",
+    "tensorflow",
+    "v0.10",
+    "python",
+    "python3"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "d4a231343d4fb38e"
+  }
+
+}
+
