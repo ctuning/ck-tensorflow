@@ -94,6 +94,10 @@ def setup(i):
     # Update params 
     params.update(cus.get('params',{}))
     
+    #python check. Tensorflow uses the same python version as ck in this script. 
+    if sys.version_info[0] > 2:
+        params['python_bin_path'] += '3'
+    
     # Get versions of CUDA and cuDNN in GPU enabled versions
     # NEED CK ENV UPDATE IN CUDNN. To get cudnn version from path.
     if install_env['USE_CUDA']:

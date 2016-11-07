@@ -3,12 +3,11 @@
     "extra_dir": "", 
     "install_env": {
       "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow",
-      "USE_CUDA":1,
-      "PYTHON3":1
+      "USE_CUDA":1
     }, 
     "version": "0.10",
     "params": {
-      "python_bin_path":"${CK_ENV_COMPILER_PYTHON}/bin/python3",
+      "python_bin_path":"${CK_ENV_COMPILER_PYTHON}/bin/python",
       "tf_need_gcp":0,
       "tf_need_cuda":1,
       "gcc_host_compiler_path":"${CK_ENV_COMPILER_GCC}/bin/gcc",
@@ -54,19 +53,18 @@
   ], 
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178",
-  "package_extra_name":" (python3, cuda)",
+  "package_extra_name":" (cuda)",
   "suggested_path": "tensorflow", 
   "tags": [
     "lib",
     "tensorflow",
     "v0.10",
     "python",
-    "python3",
     "cuda",
     "cudnn"
   ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "224806ab74d86552"
+    "data_uoa": "939b484199d4d7da"
   }
 
 }

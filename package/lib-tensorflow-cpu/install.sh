@@ -30,14 +30,19 @@ mkdir $TENSORFLOW_LIB_DIR
 cd $TENSORFLOW_SRC_DIR
 
 echo ""
-echo "Editing configure file"
+echo "Library will be installed to '${TENSORFLOW_LIB_DIR}'."
+echo "Editing configure file..."
+
 cat $PACKAGE_DIR/export-variables |
 while read line;
 do
     sed -i "1 a $line" configure 
 done
 
-sed -i "s#(./util/python/python_config.sh#echo $TENSORFLOW_LIB_DIR | (./util/python/python_config.sh#" configure
+echo $TENSORFLOW_LIB_DIR
+
+#python libraries answer.
+sed -i "s#./util/python/python_config.sh#echo $TENSORFLOW_LIB_DIR | ./util/python/python_config.sh#" configure
 
 sudo -E ./configure
 
@@ -65,6 +70,16 @@ sudo bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pk
 if [ "${?}" != "0" ] ; then
   echo "Error: Bazel building pip package failed"
   exit 1
+fi
+
+
+
+#Python 3 detection
+source ./export-variables
+if [ ${PYTHON_BIN_PATH: -1} == 3 ]; then
+        export PYTHON3=1
+else
+        export PYTHON3=0
 fi
 
 
