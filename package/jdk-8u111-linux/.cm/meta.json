@@ -1,0 +1,25 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "PACKAGE_NAME": "jdk-8u111-linux-x64",
+      "PACKAGE_CMD": "wget --no-check-certificate --no-cookies --header \\\"Cookie: oraclelicense=accept-securebackup-cookie\\\" http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "jdk1.8.0_111/bin/javac"
+  }, 
+  "process_script": "install", 
+  "soft_uoa": "0129a3b82235cbc0", 
+  "suggested_path": "jdk-8u111", 
+  "tags": [
+    "compiler", 
+    "java", 
+    "lang-java",
+    "v8u111",
+    "v8",
+    "v1.8",
+    "v1.8.0_111"
+  ]
+}

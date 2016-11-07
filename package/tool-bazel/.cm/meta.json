@@ -1,0 +1,31 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "PACKAGE_URL": "https://github.com/bazelbuild/bazel.git"
+    }, 
+    "use_git_revision": "yes", 
+    "version": "master"
+  }, 
+  "deps": {
+    "java-compiler": {
+      "local": "yes", 
+      "name": "Java compiler", 
+      "sort": 10, 
+      "tags": "compiler,lang-java"
+    } 
+  }, 
+  "end_full_path": {
+    "linux": "src/output/bazel"
+  }, 
+  "process_script": "install", 
+  "soft_uoa": "359f7730bd23ec60", 
+  "suggested_path": "tool-bazel", 
+  "tags": [
+    "tool", 
+    "bazel", 
+    "vmaster"
+  ]
+}
