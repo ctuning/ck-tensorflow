@@ -1,13 +1,33 @@
 {
-  "backup_data_uid": "c0bacdae0ce2b532",
+  "backup_data_uid": "c0bacdae0ce2b532", 
   "compile_deps": {
-    "lib.tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "sort": 10,
+    "lib-tensorflow": {
+      "local": "yes", 
+      "name": "TensorFlow library", 
+      "skip_pruning_by_other_deps": "yes", 
+      "sort": 10, 
       "tags": "lib,tensorflow"
     }
+  }, 
+  "data_name": "tensorflow", 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "no_compile": "yes", 
+  "no_target_file": "yes", 
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../alexnet_benchmark.py --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+      }
+    }
+  }, 
+  "run_vars": {
+    "BATCH_SIZE": 128,
+    "NUM_BATCHES": 10
   },
-  "data_name": "tensorflow",
-  "program": "yes"
+  "tags": [
+    "tensorflow", 
+    "demo"
+  ]
 }

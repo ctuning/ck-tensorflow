@@ -1,3 +1,4 @@
 2016.11.08 - major clean up / update
            - added tensorflow-classification of images using CK data sets
            - added tensorflow-model and improved classification with basic timing
+           - added tensorflow benchmarking (AlexNet) -> ck run program:tensorflow
