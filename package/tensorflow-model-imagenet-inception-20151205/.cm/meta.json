@@ -1,0 +1,30 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "MODEL_FILE1":"inception-2015-12-05.tgz",
+      "MODEL_FILE2":"inception-2015-12-05.tar",
+      "MODEL_URL": "http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz"
+    }, 
+    "no_os_in_suggested_path": "yes",
+    "version": "20151205"
+  }, 
+  "end_full_path": {
+    "linux": "classify_image_graph_def.pb",
+    "win": "classify_image_graph_def.pb"
+  }, 
+  "package_extra_name": " (imagenet, inception)", 
+  "process_script": "download", 
+  "soft_uoa": "a8ec2e23cc4027b8", 
+  "suggested_path": "tensorflow-model-imagenet-inception", 
+  "tags": [
+    "tensorflow", 
+    "weights", 
+    "tensorflowmodel", 
+    "google", 
+    "imagenet",
+    "inception",
+    "v20151205"
+  ]
+}

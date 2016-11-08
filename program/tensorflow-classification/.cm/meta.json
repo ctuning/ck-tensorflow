@@ -7,6 +7,12 @@
       "skip_pruning_by_other_deps": "yes", 
       "sort": 10, 
       "tags": "lib,tensorflow"
+    },
+    "tensorflow-model": {
+      "local": "yes",
+      "name": "TensorFlow model (net and weights)",
+      "sort": 20,
+      "tags": "tensorflowmodel"
     }
   }, 
   "data_name": "tensorflow-classification", 
@@ -23,7 +29,7 @@
       ], 
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ -m tensorflow.models.image.imagenet.classify_image --image_file=$#dataset_path#$$#dataset_filename#$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify_image.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$#dataset_path#$$#dataset_filename#$"
       }
     }
   }, 
