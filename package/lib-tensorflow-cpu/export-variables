@@ -4,15 +4,18 @@ export USE_DEFAULT_PYTHON_LIB_PATH=1
 export CK_PYTHON3=0
 
 export GCC_HOST_COMPILER_PATH="/usr/bin/gcc-5"
+export HOST_C_COMPILER="/usr/bin/gcc-5"
+export HOST_CXX_COMPILER="/usr/bin/g++-5"
 
 export TF_NEED_CUDA=0
+export CUDA_HOME=""
 export CUDA_TOOLKIT_PATH=""
 export TF_CUDA_VERSION=""
-# export TF_CUDA_COMPUTE_CAPABILITIES=""
+export TF_CUDA_COMPUTE_CAPABILITIES=""
 
 export CUDNN_INSTALL_PATH=""
 export TF_CUDNN_VERSION=""
 
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
-export TF_NEED_OPENCL=0
+export TF_NEED_OPENCL=1

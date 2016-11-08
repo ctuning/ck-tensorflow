@@ -4,11 +4,14 @@ export USE_DEFAULT_PYTHON_LIB_PATH=1
 export CK_PYTHON3=$#python3#$
 
 export GCC_HOST_COMPILER_PATH="$#gcc_host_compiler_path#$"
+export HOST_C_COMPILER="$#gcc_host_compiler_path#$"
+export HOST_CXX_COMPILER="$#cxx_host_compiler#$"
 
 export TF_NEED_CUDA=$#tf_need_cuda#$
+export CUDA_HOME="$#cuda_toolkit_path#$"
 export CUDA_TOOLKIT_PATH="$#cuda_toolkit_path#$"
 export TF_CUDA_VERSION="$#tf_cuda_version#$"
-# export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
+export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
 
 export CUDNN_INSTALL_PATH="$#cudnn_install_path#$"
 export TF_CUDNN_VERSION="$#tf_cudnn_version#$"

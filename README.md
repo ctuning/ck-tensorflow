@@ -63,10 +63,16 @@ $ sudo apt-get install  \
 
 # Installing TensorFlow via CK
 
-We are now ready to install and run CK-TensorFlow:
+We are now ready to compile, install and run CK-TensorFlow (CPU version):
 ```
 $ ck pull repo:ck-tensorflow
 $ ck install package:lib-tensorflow-cpu
+```
+
+You can also compile and install CUDA version of the TensorFlow 
+which can co-exist with CPU version (via CK repository):
+```
+$ ck install package:lib-tensorflow-cuda
 ```
 
 # Benchmarking AlexNet:

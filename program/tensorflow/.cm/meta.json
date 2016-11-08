@@ -24,7 +24,7 @@
   }, 
   "run_vars": {
     "BATCH_SIZE": 128,
-    "NUM_BATCHES": 10
+    "NUM_BATCHES": 100
   },
   "tags": [
     "tensorflow", 

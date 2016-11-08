@@ -67,9 +67,6 @@ def setup(i):
 
     phosd=hosd.get('ck_name','')
 
-    sv1='$('
-    sv2=')'
-
     svarb=hosd.get('env_var_start','')
     svarb1=hosd.get('env_var_extra1','')
     svare=hosd.get('env_var_stop','')
@@ -80,6 +77,7 @@ def setup(i):
     install_env=cus.get('install_env',{})
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
+    ft=i.get('features',{})
 
     # Check python path and version
     python_ver=deps.get('python',{}).get('ver','')
@@ -91,7 +89,12 @@ def setup(i):
     python_path=deps.get('python',{}).get('dict',{}).get('customize',{}).get('full_path','')
 
     # Check GCC path
-    gcc_path=deps.get('gcc-compiler',{}).get('dict',{}).get('customize',{}).get('full_path','')
+    gcc_path=deps.get('compiler.gcc',{}).get('dict',{}).get('customize',{}).get('full_path','')
+
+    cxx_path=deps.get('compiler.gcc',{}).get('dict',{}).get('customize',{}).get('full_path','')
+    cxx=deps.get('compiler.gcc',{}).get('dict',{}).get('env',{}).get('CK_CXX','')
+
+    cxx_path=os.path.join(os.path.dirname(cxx_path),cxx)
 
     p=i.get('path','')
     pi=i.get('install_path','')
@@ -100,6 +103,7 @@ def setup(i):
     params={
       "python_bin_path":python_path,
       "gcc_host_compiler_path":gcc_path,
+      "cxx_host_compiler":cxx_path,
       "python3":python3,
       "tf_need_gcp":0,
       "tf_need_cuda":0,
@@ -115,16 +119,41 @@ def setup(i):
     # Update params 
     params.update(cus.get('params',{}))
 
-    # NEED CK ENV UPDATE IN CUDNN. To get cudnn version from path.
     if params.get('tf_need_cuda',0)==1:
-        cuda_path = deps["compiler.cuda"]["dict"]["env"]["CK_ENV_COMPILER_CUDA"]
-        if cuda_path is None:
-            print "Error: CUDA dependence was not added."
-            return 1
-        params['tf_cuda_version'] = cuda_path[-3:]
-        params['cuda_toolkit_path'] = cuda_path[:-4]
+        # Cuda compute capabilities
+        cc=''
+        cft=ft.get('gpgpu',[])
+        if len(cft)>0:
+            # For now first device
+            cc=cft[0].get('gpgpu_misc',{}).get('gpu compute capability','')
+
+        params['tf_cuda_compute_capabilities']=cc
+
+        # Cuda path
+        cuda_path=deps.get('compiler.cuda',{}).get('dict',{}).get('env',{}).get('CK_ENV_COMPILER_CUDA','')
+        if cuda_path=='':
+            return {'return':1, 'error':'CUDA dependence was not added'}
+
+        cuda_ver=deps.get('compiler.cuda',{}).get('ver','')
+        j=cuda_ver.find('.')
+        if j>0:
+            j=cuda_ver.find('.',j+1)
+            if j>0:
+                cuda_ver=cuda_ver[:j]
+
+        params['tf_cuda_version'] = cuda_ver
+        params['cuda_toolkit_path'] = cuda_path
 
         #cuDNN Version from path here.
+        cudnn_path=deps.get('lib.cudnn',{}).get('dict',{}).get('env',{}).get('CK_ENV_LIB_CUDNN','')
+        cudnn_ver=deps.get('lib.cudnn',{}).get('ver','')
+        if cudnn_path=='':
+            return {'return':1, 'error':'cuDNN dependence was not added'}
+        if cudnn_ver.startswith('api-'):
+            cudnn_ver=cudnn_ver[4:]
+
+        params['cudnn_install_path']=cudnn_path
+        params['tf_cudnn_version']=cudnn_ver
 
     # Load export-variables.template
     pp=os.path.join(p, 'export-variables.template')

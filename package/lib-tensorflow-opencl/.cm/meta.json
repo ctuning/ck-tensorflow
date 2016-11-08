@@ -1,0 +1,70 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "TENSORFLOW_URL": "https://github.com/tensorflow/tensorflow", 
+      "USE_CUDA": 0,
+      "USE_OPENCL": 1
+    }, 
+    "params": {
+      "tf_need_cuda": 0, 
+      "tf_need_gcp": 0, 
+      "tf_need_hdfs": 0, 
+      "tf_need_opencl": 1
+    }, 
+    "use_git_revision": "yes", 
+    "version": "master"
+  }, 
+  "deps": {
+    "bazel": {
+      "local": "yes", 
+      "name": "Bazel", 
+      "sort": 10, 
+      "tags": "tool,bazel"
+    }, 
+    "compiler.gcc": {
+      "local": "yes", 
+      "name": "GCC compiler", 
+      "sort": 30, 
+      "tags": "compiler,lang-c,gcc"
+    }, 
+    "lib.opencl": {
+      "add_to_path": "yes", 
+      "local": "yes", 
+      "name": "OpenCL library", 
+      "sort": 50, 
+      "tags": "lib,opencl"
+    }, 
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "need_gpgpu_info": "yes", 
+  "need_gpgpu_type": "opencl", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "package_extra_name": " (opencl)", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "tensorflow-opencl", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "tensorflow-opencl"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "939b484199d4d7da"
+  }
+}
