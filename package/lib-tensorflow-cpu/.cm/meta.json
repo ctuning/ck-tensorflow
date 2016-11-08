@@ -6,6 +6,7 @@
     }, 
     "use_git_revision": "yes", 
     "version": "master",
+    "git_src_dir":"src",
     "params": {
       "tf_need_cuda":0,
       "tf_need_opencl":0,

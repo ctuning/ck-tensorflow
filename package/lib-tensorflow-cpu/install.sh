@@ -19,18 +19,18 @@ export TENSORFLOW_INSTALL_DIR=${INSTALL_DIR}
 ######################################################################################
 echo ""
 echo "Removing everything from '${TENSORFLOW_PKG_DIR}' and '${TENSORFLOW_LIB_DIR}'..."
-##rm -rf ${TENSORFLOW_SRC_DIR}
-#rm -rf ${TENSORFLOW_PKG_DIR}
+rm -rf ${TENSORFLOW_SRC_DIR}
+rm -rf ${TENSORFLOW_PKG_DIR}
 rm -rf ${TENSORFLOW_LIB_DIR}
 
 ######################################################################################
 echo ""
 echo "Cloning TensorFlow from '${TENSORFLOW_URL}' to '${TENSORFLOW_SRC_DIR}' ..."
 git clone ${TENSORFLOW_URL}  ${TENSORFLOW_SRC_DIR}
-##if [ "${?}" != "0" ] ; then
-##  echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"
-##  exit 1
-##fi
+if [ "${?}" != "0" ] ; then
+  echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"
+  exit 1
+fi
 
 ######################################################################################
 cd $TENSORFLOW_SRC_DIR
