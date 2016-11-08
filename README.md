@@ -3,7 +3,7 @@ Collective Knowledge repository for evaluating and optimising performance of Ten
 
 # Contributors
 
-* Vladislav Zaborovskiy, MIPT
+* Vladislav Zaborovskiy
 * Grigori Fursin, [dividiti](http://dividiti.com) / [cTuning foundation](http://ctuning.org)
 * Anton Lokhmotov, [dividiti](http://dividiti.com)
 
