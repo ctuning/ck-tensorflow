@@ -66,8 +66,9 @@ $ sudo apt-get install  \
 We are trying to unifying performance analysis and tuning of various DNN frameworks
 using Collective Knowledge Technology:
 * [CK-Caffe](https://github.com/dividiti/ck-caffe)
-* [CK-TinyDNN](https://github.com/ctuning/ck-tinydnn)
+* [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
 * [Android app for DNN crowd-benchmarking and crowd-tuning](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments)
+* [CK-powered ARM workload automation](https://github.com/ctuning/ck-wa)
 
 # Related Publications with long term vision
 
