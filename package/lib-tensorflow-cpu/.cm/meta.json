@@ -2,8 +2,7 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-      "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow",
-      "USE_CUDA":0
+      "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow"
     }, 
     "use_git_revision": "yes", 
     "version": "master",
@@ -26,7 +25,12 @@
       "name": "Python", 
       "sort": 20, 
       "tags": "compiler,python"
-    } 
+    },
+    "gcc-compiler": {
+      "local": "yes", 
+      "name": "GCC compiler", 
+      "tags": "compiler,lang-c,gcc"
+    }
   }, 
   "end_full_path": {
      "linux":"lib/tensorflow/__init__.py"

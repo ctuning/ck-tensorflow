@@ -81,6 +81,7 @@ def setup(i):
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
 
+    # Check python path and version
     python_ver=deps.get('python',{}).get('ver','')
 
     python3=0
@@ -89,29 +90,33 @@ def setup(i):
 
     python_path=deps.get('python',{}).get('dict',{}).get('customize',{}).get('full_path','')
 
+    # Check GCC path
+    gcc_path=deps.get('gcc-compiler',{}).get('dict',{}).get('customize',{}).get('full_path','')
+
     p=i.get('path','')
     pi=i.get('install_path','')
 
     # Set default parameters
     params={
       "python_bin_path":python_path,
+      "gcc_host_compiler_path":gcc_path,
       "python3":python3,
       "tf_need_gcp":0,
       "tf_need_cuda":0,
-      "gcc_host_compiler_path":"/usr/bin/gcc",
+      "tf_need_opencl":0,
+      "cuda_toolkit_path":"",
+      "tf_cuda_version":"",
+      "tf_cuda_compute_capabilities":"",
+      "cudnn_install_path":"",
+      "tf_cudnn_version":"",
       "tf_need_hdfs":0
     }
 
     # Update params 
     params.update(cus.get('params',{}))
 
-    #python check. Tensorflow uses the same python version as ck in this script. 
-    if sys.version_info[0] > 2:
-        params['python_bin_path'] += '3'
-
-    # Get versions of CUDA and cuDNN in GPU enabled versions
     # NEED CK ENV UPDATE IN CUDNN. To get cudnn version from path.
-    if install_env['USE_CUDA']:
+    if params.get('tf_need_cuda',0)==1:
         cuda_path = deps["compiler.cuda"]["dict"]["env"]["CK_ENV_COMPILER_CUDA"]
         if cuda_path is None:
             print "Error: CUDA dependence was not added."
