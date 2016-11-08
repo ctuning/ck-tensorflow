@@ -69,6 +69,11 @@ $ ck pull repo:ck-tensorflow
 $ ck install package:lib-tensorflow-cpu
 ```
 
+# Benchmarking AlexNet:
+```
+ $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
+```
+
 # Testing installation via image classification
 
 ```
