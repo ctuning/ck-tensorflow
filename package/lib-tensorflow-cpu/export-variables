@@ -1,10 +1,18 @@
-export PYTHON_BIN_PATH="${CK_ENV_COMPILER_PYTHON}/bin/python"
-export TF_NEED_GCP=0
-export TF_NEED_CUDA=0
+export PYTHON_BIN_PATH="/usr/bin/python"
+export USE_DEFAULT_PYTHON_LIB_PATH=1
+
+export CK_PYTHON3=0
+
 export GCC_HOST_COMPILER_PATH="/usr/bin/gcc"
-export TF_CUDA_VERSION="$#tf_cuda_version#$"
+
+export TF_NEED_CUDA=0
 export CUDA_TOOLKIT_PATH="$#cuda_toolkit_path#$"
-export TF_CUDNN_VERSION="$#tf_cudnn_version#$"
-export CUDNN_INSTALL_PATH="$#cudnn_install_path#$"
+export TF_CUDA_VERSION="$#tf_cuda_version#$"
 # export TF_CUDA_COMPUTE_CAPABILITIES="$#tf_cuda_compute_capabilities#$"
+
+export CUDNN_INSTALL_PATH="$#cudnn_install_path#$"
+export TF_CUDNN_VERSION="$#tf_cudnn_version#$"
+
+export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
+export TF_NEED_OPENCL=0

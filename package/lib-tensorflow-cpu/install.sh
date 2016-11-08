@@ -1,63 +1,62 @@
 #! /bin/bash
 
+# CK installation script for TensorFlow package
+#
+# Developer(s): 
+#  * Vladislav Zaborovskiy, vladzab@yandex.ru
+#  * Grigori Fursin, dividiti/cTuning foundation
+#
 
 # PACKAGE_DIR
 # INSTALL_DIR
 # TENSORFLOW_URL
 
-export TENSORFLOW_SRC_DIR=${CK_TOOLS}/tensorflow_src
-export TENSORFLOW_LIB_DIR=${INSTALL_DIR}
+export TENSORFLOW_SRC_DIR=${INSTALL_DIR}/src
+export TENSORFLOW_PKG_DIR=${INSTALL_DIR}/pkg
+export TENSORFLOW_LIB_DIR=${INSTALL_DIR}/lib
 export TENSORFLOW_INSTALL_DIR=${INSTALL_DIR}
 
-
-
+######################################################################################
 echo ""
-echo "Removing everything from '${TENSORFLOW_SRC_DIR}' and '${TENSORFLOW_LIB_DIR}'..."
-sudo rm -rf ${TENSORFLOW_SRC_DIR}
-sudo rm -rf ${TENSORFLOW_LIB_DIR}
-mkdir ${TENSORFLOW_SRC_DIR}
+echo "Removing everything from '${TENSORFLOW_PKG_DIR}' and '${TENSORFLOW_LIB_DIR}'..."
+##rm -rf ${TENSORFLOW_SRC_DIR}
+#rm -rf ${TENSORFLOW_PKG_DIR}
+rm -rf ${TENSORFLOW_LIB_DIR}
+
+######################################################################################
 echo ""
 echo "Cloning TensorFlow from '${TENSORFLOW_URL}' to '${TENSORFLOW_SRC_DIR}' ..."
-cd $CK_TOOLS
 git clone ${TENSORFLOW_URL}  ${TENSORFLOW_SRC_DIR}
-if [ "${?}" != "0" ] ; then
-  echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"
-  exit 1
-fi
+##if [ "${?}" != "0" ] ; then
+##  echo "Error: Cloning TensorFlow from '${TENSORFLOW_URL}' failed!"
+##  exit 1
+##fi
 
-#Change configuration file and configure
-mkdir $TENSORFLOW_LIB_DIR
+######################################################################################
 cd $TENSORFLOW_SRC_DIR
 
 echo ""
-echo "Library will be installed to '${TENSORFLOW_LIB_DIR}'."
-echo "Editing configure file..."
+echo "Configuring ..."
 
-cat $PACKAGE_DIR/export-variables |
-while read line;
-do
-    sed -i "1 a $line" configure 
-done
-
-echo $TENSORFLOW_LIB_DIR
-
-#python libraries answer.
-sed -i "s#./util/python/python_config.sh#echo $TENSORFLOW_LIB_DIR | ./util/python/python_config.sh#" configure
-
-sudo -E ./configure
-
+source ${PACKAGE_DIR}/export-variables
+./configure
 if [ "${?}" != "0" ] ; then
   echo "Error: TensorFlow installation configuration failed!"
   exit 1
 fi
 
+######################################################################################
+echo ""
+echo "Preparing pip package ..."
 
-
-#Create pip package
-if [ "$USE_CUDA" == 0 ]; then
-    sudo bazel build -c opt //tensorflow/tools/pip_package:build_pip_package;
+if [ "$TF_NEED_CUDA" == 0 ]; then
+ if [ "$TF_NEED_OPENCL" == 0 ]; then
+  bazel build -c opt //tensorflow/tools/pip_package:build_pip_package;
+ else 
+   bazel build -c opt --config=sycl //tensorflow/tools/pip_package:build_pip_package;
+ fi
 else 
-    sudo bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package;
+  bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package;
 fi
 
 if [ "${?}" != "0" ] ; then
@@ -65,35 +64,34 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
-sudo bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+######################################################################################
+echo ""
+echo "Building pip package(s) ..."
 
+bazel-bin/tensorflow/tools/pip_package/build_pip_package ${TENSORFLOW_PKG_DIR}
 if [ "${?}" != "0" ] ; then
   echo "Error: Bazel building pip package failed"
   exit 1
 fi
 
+######################################################################################
+echo ""
+echo "Installing pip package(s) ..."
 
-
-#Python 3 detection
-source ./export-variables
-if [ ${PYTHON_BIN_PATH: -1} == 3 ]; then
-        export PYTHON3=1
-else
-        export PYTHON3=0
-fi
-
-
-
-#Install pip package
-for pip_package in /tmp/tensorflow_pkg/*.whl
+for pip_package in ${TENSORFLOW_PKG_DIR}/*.whl
 do
-    if [ "$PYTHON3" == 0 ]; then
+    if [ "$CK_PYTHON3" == 0 ]; then
         pip install $pip_package -t $TENSORFLOW_LIB_DIR
     else
         pip3 install $pip_package -t $TENSORFLOW_LIB_DIR
     fi
 done
 
+######################################################################################
+#echo ""
+#echo "Cleaning up directories ..."
 
+#rm -rf $TENSORFLOW_SRC_DIR
+#rm -rf $TENSORFLOW_PKG_DIR
 
-sudo rm -rf $TENSORFLOW_SRC_DIR
+exit 0

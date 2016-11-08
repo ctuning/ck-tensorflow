@@ -76,6 +76,10 @@ using Collective Knowledge Technology:
 
 # Troubleshooting
 
+TensorFlow installation may occasionally fail due to failing to download
+some dependencies from GitHub. Restart package installation several times
+until Bazel downloads all necessary files.
+
 Sometimes, after installation, TensorFlow crashes with undefined "syntax".
 It is usually related to outdated default protobuf (you need version >=3.0.0a4).
 To fix this problem upgrade protobuf via

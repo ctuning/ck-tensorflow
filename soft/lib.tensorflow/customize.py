@@ -54,7 +54,7 @@ def setup(i):
     # Get variables
     ck=i['ck_kernel']
     s=''
-    
+
     iv=i.get('interactive','')
 
     cus=i.get('customize',{})
@@ -63,27 +63,19 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
+    winh=hosd.get('windows_base','')
+
     env=i['env']
+    ep=cus['env_prefix']
 
-    fi=cus.get('include_file','')
-    pi=fp
+    p1=os.path.dirname(fp)
+    pl=os.path.dirname(p1)
+    pi=os.path.dirname(pl)
 
-    lb=os.path.basename(fp)
-    lbs=lb
-    
-    pl=os.path.dirname(fp)
-    cus['path_lib']=pl
-    
-    pl1=os.path.dirname(pl)
-    
-    cus['path_include']=os.path.join(pl)
-    cus['include_name']=fi
+    env[ep]=pi
+    env[ep+'_LIB']=pl
 
-    ep=cus.get('env_prefix','')
-    if pi!='':
-       env[ep]=pi
-    
-    s+='\nexport PYTHONPATH='+pl1+':${PYTHONPATH}\n'
-    
+    if winh!='yes':
+        s+='\nexport PYTHONPATH='+pl1+':${PYTHONPATH}\n'
+
     return {'return':0, 'bat':s}
-

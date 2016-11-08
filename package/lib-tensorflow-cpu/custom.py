@@ -1,7 +1,9 @@
-#!/usr/bin/python
-
 #
-# Developer: Zaborovskiy Vladislav, vladzab@yandex.ru
+# CK configuration script for TensorFlow package
+#
+# Developer(s): 
+#  * Vladislav Zaborovskiy, vladzab@yandex.ru
+#  * Grigori Fursin, dividiti/cTuning foundation
 #
 
 import os
@@ -79,12 +81,21 @@ def setup(i):
     cfg=i.get('cfg',{})
     deps=i.get('deps',{})
 
+    python_ver=deps.get('python',{}).get('ver','')
+
+    python3=0
+    if python_ver.startswith('3'):
+        python3=1
+
+    python_path=deps.get('python',{}).get('dict',{}).get('customize',{}).get('full_path','')
+
     p=i.get('path','')
     pi=i.get('install_path','')
 
     # Set default parameters
     params={
-      "python_bin_path":"/usr/bin/python",
+      "python_bin_path":python_path,
+      "python3":python3,
       "tf_need_gcp":0,
       "tf_need_cuda":0,
       "gcc_host_compiler_path":"/usr/bin/gcc",
@@ -93,11 +104,11 @@ def setup(i):
 
     # Update params 
     params.update(cus.get('params',{}))
-    
+
     #python check. Tensorflow uses the same python version as ck in this script. 
     if sys.version_info[0] > 2:
         params['python_bin_path'] += '3'
-    
+
     # Get versions of CUDA and cuDNN in GPU enabled versions
     # NEED CK ENV UPDATE IN CUDNN. To get cudnn version from path.
     if install_env['USE_CUDA']:
@@ -107,9 +118,9 @@ def setup(i):
             return 1
         params['tf_cuda_version'] = cuda_path[-3:]
         params['cuda_toolkit_path'] = cuda_path[:-4]
-        
+
         #cuDNN Version from path here.
-        
+
     # Load export-variables.template
     pp=os.path.join(p, 'export-variables.template')
     r=ck.load_text_file({'text_file':pp})
