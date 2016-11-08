@@ -61,6 +61,29 @@ $ sudo apt-get install  \
     python3-pip
 ```
 
+# Installing TensorFlow via CK
+
+We are now ready to install and run CK-TensorFlow:
+```
+$ ck pull repo:ck-tensorflow
+$ ck install package:lib-tensorflow-cpu
+```
+
+# Testing installation via image classification
+
+```
+ $ ck run program:tensorflow-classification
+```
+
+Note, that you will be asked to select a jpeg image from available CK data sets.
+We added standard demo images (cat.jpg, catgrey.jpg, fish-bike.jpg, computer_mouse.jpg)
+to the ['ctuning-datasets-min' repository](https://github.com/ctuning/ctuning-datasets-min).
+You can list them via
+```
+ $ ck pull repo:ctuning-datasets-min
+ $ ck search dataset --tags=dnn
+```
+
 # Related projects and initiatives
 
 We are trying to unifying performance analysis and tuning of various DNN frameworks
