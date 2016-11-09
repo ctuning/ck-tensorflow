@@ -636,7 +636,7 @@ def show(i):
     h+='   <td '+ha+'><b>Network</b></td>\n'
     h+='   <td '+ha+'><b>Batch size</b></td>\n'
     h+='   <td '+ha+'><b>Num batches</b></td>\n'
-    h+='   <td '+ha+'><b>Total time</b></td>\n'
+    h+='   <td '+ha+'><b>Total time (sec.)</b></td>\n'
     h+='   <td '+ha+'><b>Chars</b></td>\n'
     h+='   <td '+ha+'><b>Platform</b></td>\n'
     h+='   <td '+ha+'><b>CPU</b></td>\n'
@@ -656,7 +656,7 @@ def show(i):
         bgraph['1']=[]
 
     # Sort
-    splst=sorted(plst, key=lambda x: x.get('meta',{}).get('characteristics',{}).get('run',{}).get('time_fwbw_ms',0))
+    splst=sorted(plst, key=lambda x: x.get('meta',{}).get('characteristics',{}).get('run',{}).get('total_execution_time',0))
 
     for q in splst:
         ix+=1
@@ -737,7 +737,7 @@ def show(i):
         x1=dstat.get("##characteristics#run#total_execution_time#center",None)
         x2=dstat.get("##characteristics#run#total_execution_time#halfrange",None)
         if x1!=None and x2!=None:
-            x=('%.2f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.2f'%x2)+'&nbsp;ms.'
+            x=('%.2f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.2f'%x2)
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
@@ -856,7 +856,7 @@ def show(i):
            "title":"Powered by Collective Knowledge",
 
            "axis_x_desc":"Experiment",
-           "axis_y_desc":"Neural network total time (ms.)",
+           "axis_y_desc":"Neural network total time (sec.)",
 
            "plot_grid":"yes",
 
