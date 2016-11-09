@@ -52,6 +52,7 @@
   "tags": [
     "lib", 
     "tensorflow", 
+    "tensorflow-cuda", 
     "v0", 
     "v0.11", 
     "v0.11.0", 

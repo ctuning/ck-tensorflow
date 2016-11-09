@@ -51,6 +51,7 @@
   "suggested_path": "tensorflow", 
   "tags": [
     "lib",
-    "tensorflow"
+    "tensorflow",
+    "tensorflow-cpu"
   ]
 }

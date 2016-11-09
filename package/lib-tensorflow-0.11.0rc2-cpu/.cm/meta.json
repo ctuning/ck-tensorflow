@@ -32,6 +32,7 @@
   "tags": [
     "lib", 
     "tensorflow", 
+    "tensorflow-cpu", 
     "v0", 
     "v0.11", 
     "v0.11.0", 
