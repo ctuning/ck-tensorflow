@@ -101,18 +101,6 @@ You can list them via
  $ ck search dataset --tags=dnn
 ```
 
-# Related projects and initiatives
-
-We are trying to unifying performance analysis and tuning of various DNN frameworks
-using Collective Knowledge Technology:
-* [CK-Caffe](https://github.com/dividiti/ck-caffe)
-* [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
-* [Android app for DNN crowd-benchmarking and crowd-tuning](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments)
-* [CK-powered ARM workload automation](https://github.com/ctuning/ck-wa)
-
-# Related Publications with long term vision
-
-* <a href="https://github.com/ctuning/ck/wiki/Publications">All references with BibTex</a>
 
 # Troubleshooting
 
@@ -128,3 +116,23 @@ To fix this problem upgrade protobuf via
   or
  $ pip3 install protobuf --upgrade
 ```
+
+# Related projects and initiatives
+
+We are working with the community to unify and crowdsource performance analysis 
+and tuning of various DNN frameworks (or any realistic workload) 
+using Collective Knowledge Technology:
+* [CK-Caffe](https://github.com/dividiti/ck-caffe)
+* [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
+* [Android app for DNN crowd-benchmarking and crowd-tuning](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments)
+* [CK-powered ARM workload automation](https://github.com/ctuning/ck-wa)
+
+# Open R&D challenges
+
+We use crowd-benchmarking and crowd-tuning of such realistic workloads across diverse hardware for 
+[open academic and industrial R&D challenges](https://github.com/ctuning/ck/wiki/Research-and-development-challenges.mediawiki) - 
+join this community effort!
+
+# Related Publications with long term vision
+
+* <a href="https://github.com/ctuning/ck/wiki/Publications">All references with BibTex</a>
