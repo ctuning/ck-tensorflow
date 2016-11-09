@@ -227,11 +227,19 @@ def crowdsource(i):
                  'data_uoa':'tensorflow'})
     if r['return']>0: return r
 
-    deps=r['dict']['compile_deps']
+    dd=r['dict']
+    deps=dd['compile_deps']
     pp=r['path']
 
     lib_dep=deps['lib-tensorflow']
     lib_dep['tags']=tags
+
+    # Get explicit choices (batch size, num batches)
+    env=i.get('env',{})
+    echoices=dd['run_vars']
+    for k in echoices:
+        if env.get(k,'')!='':
+            echoices[k]=env[k]
 
     # Check environment for selected type
     r=ck.access({'action':'resolve',
@@ -252,7 +260,7 @@ def crowdsource(i):
 
         'prepare':'yes',
 
-        'env':i.get('env',{}),
+        'env':env,
         'choices':choices,
         'dependencies':deps,
         'cmd_key':run_cmd,
@@ -271,6 +279,9 @@ def crowdsource(i):
 
     rr=ck.access(ii)
     if rr['return']>0: return rr
+
+#    ck.save_json_to_file({'json_file':'/tmp/xyz3.json','dict':rr, 'sort_keys':'yes'})
+#    exit(1)
 
     fail=rr.get('fail','')
     if fail=='yes':
@@ -298,7 +309,8 @@ def crowdsource(i):
           'gpu_name':gpu_name,
           'tensorflow_type':xtp,
           'gpgpu_name':gpgpu_name,
-          'cmd_key':run_cmd}
+          'cmd_key':run_cmd,
+          'echoices':echoices}
 
     # Process deps
     xdeps={}
@@ -306,19 +318,12 @@ def crowdsource(i):
     xblas=''
     for k in deps:
         dp=deps[k]
-        dname=dp.get('dict',{}).get('data_name','')
-
-        if k=='tensorflowmodel':
-            xnn=dname
-
-            j1=xnn.rfind('(')
-            if j1>0:
-                xnn=xnn[j1+1:-1]
-
-        xdeps[k]={'name':dp.get('name',''), 'data_name':dname, 'ver':dp.get('ver','')}
+        xdeps[k]={'name':dp.get('name',''), 
+                  'data_name':dp.get('dict',{}).get('data_name',''), 
+                  'ver':dp.get('ver','')}
 
     meta['xdeps']=xdeps
-    meta['nn_type']=xnn
+    meta['nn_type']='alexnet'
 
     mmeta=copy.deepcopy(meta)
 
@@ -629,17 +634,15 @@ def show(i):
     h+='   <td '+ha+'><b>All raw files</b></td>\n'
     h+='   <td '+ha+'><b>Type</b></td>\n'
     h+='   <td '+ha+'><b>Network</b></td>\n'
-    h+='   <td '+ha+'><b>FWBW</b></td>\n'
-    h+='   <td '+ha+'><b>FW</b></td>\n'
-    h+='   <td '+ha+'><b>BW</b></td>\n'
-    h+='   <td '+ha+'><b>Accuracy<br>(TP1 / TP5)</b></td>\n'
+    h+='   <td '+ha+'><b>Batch size</b></td>\n'
+    h+='   <td '+ha+'><b>Num batches</b></td>\n'
+    h+='   <td '+ha+'><b>Total time</b></td>\n'
     h+='   <td '+ha+'><b>Chars</b></td>\n'
     h+='   <td '+ha+'><b>Platform</b></td>\n'
     h+='   <td '+ha+'><b>CPU</b></td>\n'
     h+='   <td '+ha+'><b>GPGPU</b></td>\n'
     h+='   <td '+ha+'><b>OS</b></td>\n'
     h+='   <td '+ha+'><b>Fail?</b></td>\n'
-    h+='   <td '+ha+'><b>Choices</b></td>\n'
     h+='   <td '+ha+'><b>User</b></td>\n'
     h+='   <td '+ha+'><b>Replay</b></td>\n'
     h+='  <tr>\n'
@@ -681,6 +684,11 @@ def show(i):
         gpu_uid=meta.get('gpu_uid','')
         gpgpu_uid=meta.get('gpgpu_uid','')
 
+        echoices=meta.get('echoices','')
+
+        bs=echoices.get('BATCH_SIZE','')
+        nb=echoices.get('NUM_BATCHES','')
+
         user=meta.get('user','')
 
         te=d.get('characteristics',{}).get('run',{})
@@ -718,6 +726,9 @@ def show(i):
             if r['return']>0: return r
             dstat=r['dict']
 
+        h+='   <td '+ha+'>'+str(bs)+'</td>\n'
+        h+='   <td '+ha+'>'+str(nb)+'</td>\n'
+
         x=''
 
         # Check if has stats
@@ -727,37 +738,6 @@ def show(i):
         x2=dstat.get("##characteristics#run#time_fwbw_ms#halfrange",None)
         if x1!=None and x2!=None:
             x=('%.0f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.0f'%x2)+'&nbsp;ms.'
-
-        h+='   <td '+ha+'>'+x+'</td>\n'
-
-        if fail!='yes' and x0!=None and duid!=hi_uid:
-            bgraph['0'].append([ix,x0])
-            if hi_uid!='': bgraph['1'].append([ix,None])
-
-        x1=dstat.get("##characteristics#run#time_fw_ms#center",None)
-        x2=dstat.get("##characteristics#run#time_fw_ms#halfrange",None)
-        if x1!=None and x2!=None:
-            x=('%.0f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.0f'%x2)+'&nbsp;ms.'
-
-        h+='   <td '+ha+'>'+x+'</td>\n'
-
-        x1=dstat.get("##characteristics#run#time_bw_ms#center",None)
-        x2=dstat.get("##characteristics#run#time_bw_ms#halfrange",None)
-        if x1!=None and x2!=None:
-            x=('%.0f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.0f'%x2)+'&nbsp;ms.'
-
-        h+='   <td '+ha+'>'+x+'</td>\n'
-
-        # Accuracy - for now hardwired - later should get directly from experiment description
-        x=''
-        if nn=='bvlc, alexnet':
-            x='0.568279&nbsp;/&nbsp;0.799501'
-        elif nn=='bvlc, googlenet':
-            x='0.689299&nbsp;/&nbsp;0.891441'
-        elif nn=='deepscale, squeezenet, 1.1':
-            x='0.583880&nbsp;/&nbsp;0.810123'
-        elif nn=='deepscale, squeezenet, 1.0':
-            x='0.576801&nbsp;/&nbsp;0.803903'
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
