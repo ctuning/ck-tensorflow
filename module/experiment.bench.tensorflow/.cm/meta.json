@@ -17,8 +17,8 @@
   "developer_webpage": "http://fursin.net/research.html", 
   "external_html": {
     "action": "show", 
-    "crowd_key": "ck_wa_", 
-    "module_uoa": "155b6fa5a4012a93"
+    "crowd_key": "ck_tensorflow_", 
+    "module_uoa": "bca33b04b438d756"
   }, 
   "license": "See CK LICENSE.txt for licensing details", 
   "module_deps": {
