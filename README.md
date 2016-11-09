@@ -75,6 +75,12 @@ which can co-exist with CPU version (via CK repository):
 $ ck install package:lib-tensorflow-cuda
 ```
 
+Finally, you can try to compiler and install OpenCL version of the TensorFlow
+which required ComputeCPP, but at this moment we didn't manage to run it:
+```
+$ ck install package:lib-tensorflow-opencl
+```
+
 # Benchmarking AlexNet:
 ```
  $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
