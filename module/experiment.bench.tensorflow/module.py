@@ -741,6 +741,10 @@ def show(i):
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
+        if fail!='yes' and x0!=None and duid!=hi_uid:
+            bgraph['0'].append([ix,x0])
+            if hi_uid!='': bgraph['1'].append([ix,None])
+
         # Check all characteristics
         x=''
         x5=''
