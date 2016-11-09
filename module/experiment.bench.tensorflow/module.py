@@ -737,7 +737,7 @@ def show(i):
         x1=dstat.get("##characteristics#run#total_execution_time#center",None)
         x2=dstat.get("##characteristics#run#total_execution_time#halfrange",None)
         if x1!=None and x2!=None:
-            x=('%.0f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.0f'%x2)+'&nbsp;ms.'
+            x=('%.2f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.2f'%x2)+'&nbsp;ms.'
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
