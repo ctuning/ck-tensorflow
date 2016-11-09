@@ -1,3 +1,6 @@
+2016.11.09 - added pre-built libs and changing benchmarking to support older TensorFlow versions
+           - updated pre-build libs from 0.10.0rc0 to 0.11.0rc2
+
 2016.11.08 - major clean up / update
            - added tensorflow-classification of images using CK data sets
            - added tensorflow-model and improved classification with basic timing

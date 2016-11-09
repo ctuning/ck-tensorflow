@@ -18,7 +18,7 @@ export TENSORFLOW_INSTALL_DIR=${INSTALL_DIR}
 
 ######################################################################################
 echo ""
-echo "Removing everything from '${TENSORFLOW_PKG_DIR}' and '${TENSORFLOW_LIB_DIR}'..."
+echo "Removing everything from '${TENSORFLOW_PKG_DIR}' and '${TENSORFLOW_LIB_DIR}' ..."
 rm -rf ${TENSORFLOW_SRC_DIR}
 rm -rf ${TENSORFLOW_PKG_DIR}
 rm -rf ${TENSORFLOW_LIB_DIR}
