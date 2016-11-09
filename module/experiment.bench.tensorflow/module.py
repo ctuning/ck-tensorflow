@@ -732,10 +732,10 @@ def show(i):
         x=''
 
         # Check if has stats
-        x0=dstat.get("##characteristics#run#time_fwbw_ms#min",None)
-        x0e=dstat.get("##characteristics#run#time_fwbw_ms#exp",None)
-        x1=dstat.get("##characteristics#run#time_fwbw_ms#center",None)
-        x2=dstat.get("##characteristics#run#time_fwbw_ms#halfrange",None)
+        x0=dstat.get("##characteristics#run#total_execution_time#min",None)
+        x0e=dstat.get("##characteristics#run#total_execution_time#exp",None)
+        x1=dstat.get("##characteristics#run#total_execution_time#center",None)
+        x2=dstat.get("##characteristics#run#total_execution_time#halfrange",None)
         if x1!=None and x2!=None:
             x=('%.0f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.0f'%x2)+'&nbsp;ms.'
 
@@ -819,7 +819,7 @@ def show(i):
         if x!='':
             x1='<input type="button" class="ck_small_button" onClick="alert(\''+x+'\');" value="See">'
 
-        h+='   <td '+ha+'>'+x1+'</td>\n'
+#        h+='   <td '+ha+'>'+x1+'</td>\n'
 
         h+='   <td '+ha+'><a href="'+url0+'&action=index&module_uoa=wfe&native_action=show&native_module_uoa=experiment.user">'+user+'</a></td>\n'
 
