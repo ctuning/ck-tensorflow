@@ -18,4 +18,6 @@ export TF_CUDNN_VERSION="$#tf_cudnn_version#$"
 
 export TF_NEED_GCP=$#tf_need_gcp#$
 export TF_NEED_HDFS=$#tf_need_hdfs#$
+
 export TF_NEED_OPENCL=$#tf_need_opencl#$
+export COMPUTECPP_TOOLKIT_PATH="$#computecpp_toolkit_path#$"

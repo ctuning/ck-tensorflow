@@ -18,4 +18,6 @@ export TF_CUDNN_VERSION=""
 
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
+
 export TF_NEED_OPENCL=1
+export COMPUTECPP_TOOLKIT_PATH="/usr/local/ComputeCpp-CE-0.1.1-Linux"

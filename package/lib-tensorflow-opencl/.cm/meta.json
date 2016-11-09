@@ -29,6 +29,12 @@
       "sort": 30, 
       "tags": "compiler,lang-c,gcc"
     }, 
+    "compiler.computecpp": {
+      "local": "yes", 
+      "name": "ComputeCPP compiler", 
+      "sort": 40, 
+      "tags": "compiler,lang-computecpp"
+    }, 
     "lib.opencl": {
       "add_to_path": "yes", 
       "local": "yes", 

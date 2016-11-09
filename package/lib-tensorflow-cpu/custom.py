@@ -119,7 +119,12 @@ def setup(i):
     # Update params 
     params.update(cus.get('params',{}))
 
-    if params.get('tf_need_cuda',0)==1:
+    if params.get('tf_need_opencl',0)==1:
+        ccpp=deps.get('compiler.computecpp',{}).get('dict',{}).get('env',{}).get('CK_ENV_COMPILER_COMPUTECPP','')
+
+        params['computecpp_toolkit_path']=ccpp
+
+    elif params.get('tf_need_cuda',0)==1:
         # Cuda compute capabilities
         cc=''
         cft=ft.get('gpgpu',[])
