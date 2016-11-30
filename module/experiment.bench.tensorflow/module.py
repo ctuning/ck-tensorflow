@@ -684,7 +684,7 @@ def show(i):
         gpu_uid=meta.get('gpu_uid','')
         gpgpu_uid=meta.get('gpgpu_uid','')
 
-        echoices=meta.get('echoices','')
+        echoices=meta.get('echoices',{})
 
         bs=echoices.get('BATCH_SIZE','')
         nb=echoices.get('NUM_BATCHES','')
