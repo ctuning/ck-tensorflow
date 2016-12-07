@@ -25,7 +25,7 @@ echo ""
 echo "Compiling bazel ..."
 
 cd src
-#./compile.sh
+./compile.sh
 if [ "${?}" != "0" ] ; then
   echo "Error: compiling bazel failed!"
   exit 1
@@ -36,7 +36,7 @@ echo ""
 echo "Building bazel ..."
 
 cd output
-#./bazel build //scripts:bazel-complete.bash
+./bazel build //scripts:bazel-complete.bash
 if [ "${?}" != "0" ] ; then
   echo "Error: building bazel failed!"
   exit 1
