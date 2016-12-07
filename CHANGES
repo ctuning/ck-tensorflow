@@ -1,3 +1,5 @@
+2016.12.07 - fixed Basel version (installation on Linux)
+
 2016.11.09 - added pre-built libs and changing benchmarking to support older TensorFlow versions
            - updated pre-build libs from 0.10.0rc0 to 0.11.0rc2
            - added CK front-end for TensorFlow experiments and crowd-benchmarking prototype

@@ -7,7 +7,6 @@
 # See CK COPYRIGHT.txt for copyright details.
 #
 # Developer(s):
-# - Anton Lokhmotov, anton@dividiti.com, 2016
 # - Grigori Fursin, grigori@dividiti.com, 2016
 
 # PACKAGE_DIR
@@ -18,27 +17,19 @@ echo ""
 echo "Cloning from '${PACKAGE_URL}' ..."
 
 cd ${INSTALL_DIR}
-git clone ${PACKAGE_URL} src
 
-################################################################################
-echo ""
-echo "Compiling bazel ..."
-
-cd src
-./compile.sh
+rm -rf ${PACKAGE_INSTALL}
+wget ${PACKAGE_URL}/${PACKAGE_INSTALL}
 if [ "${?}" != "0" ] ; then
-  echo "Error: compiling bazel failed!"
+  echo "Error: downloading failed!"
   exit 1
 fi
 
-################################################################################
-echo ""
-echo "Building bazel ..."
+chmod 755 ${PACKAGE_INSTALL}
 
-cd output
-./bazel build //scripts:bazel-complete.bash
+./${PACKAGE_INSTALL} --prefix=${INSTALL_DIR} --bazelrc=${INSTALL_DIR}
 if [ "${?}" != "0" ] ; then
-  echo "Error: building bazel failed!"
+  echo "Error: executing installer failed!"
   exit 1
 fi
 

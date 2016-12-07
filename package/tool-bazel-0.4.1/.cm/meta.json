@@ -2,12 +2,11 @@
   "check_exit_status": "yes", 
   "customize": {
     "extra_dir": "", 
-    "git_src_dir": "src", 
     "install_env": {
-      "PACKAGE_URL": "https://github.com/bazelbuild/bazel.git"
+      "PACKAGE_INSTALL": "bazel-0.4.1-installer-linux-x86_64.sh", 
+      "PACKAGE_URL": "https://github.com/bazelbuild/bazel/releases/download/0.4.1"
     }, 
-    "use_git_revision": "yes", 
-    "version": "master"
+    "version": "0.4.1"
   }, 
   "deps": {
     "java-compiler": {
@@ -15,10 +14,10 @@
       "name": "Java compiler", 
       "sort": 10, 
       "tags": "compiler,lang-java"
-    } 
+    }
   }, 
   "end_full_path": {
-    "linux": "src/output/bazel"
+    "linux": "bin/bazel"
   }, 
   "process_script": "install", 
   "soft_uoa": "359f7730bd23ec60", 
@@ -26,6 +25,8 @@
   "tags": [
     "tool", 
     "bazel", 
-    "vmaster"
+    "v0.4.1", 
+    "v0.4", 
+    "v0"
   ]
 }

@@ -50,7 +50,10 @@ For python 2.7 install
 ```
 $ sudo apt-get install  \
     python-dev \
-    python-pip
+    python-pip \
+    python-setuptools
+
+$ sudo pip install wheel
 ```
 
 For python 3.5 install 
@@ -58,7 +61,9 @@ For python 3.5 install
 ```
 $ sudo apt-get install  \
     python3-dev \
-    python3-pip
+    python3-pip \
+    python3-setuptools
+$ sudo pip3 install wheel
 ```
 
 # Installing TensorFlow via CK
