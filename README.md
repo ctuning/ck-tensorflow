@@ -138,9 +138,15 @@ Sometimes, after installation, TensorFlow crashes with undefined "syntax".
 It is usually related to outdated default protobuf (you need version >=3.0.0a4).
 To fix this problem upgrade protobuf via
 ```
- $ pip install protobuf --upgrade
+ $ sudo pip install protobuf --upgrade
   or
- $ pip3 install protobuf --upgrade
+ $ sudo pip3 install protobuf --upgrade
+```
+
+It may also fail with the following message "can't combine user with prefix, exec_prefix/home, or install_(plat)base".
+The following fix may help:
+```
+ $ sudo pip install --upgrade pip"
 ```
 
 # Related projects and initiatives
