@@ -82,8 +82,16 @@ for pip_package in ${TENSORFLOW_PKG_DIR}/*.whl
 do
     if [ "$CK_PYTHON3" == 0 ]; then
         pip install $pip_package -t $TENSORFLOW_LIB_DIR
+        if [ "${?}" != "0" ] ; then
+            echo "Error: Bazel building pip package failed"
+            exit 1
+        fi
     else
         pip3 install $pip_package -t $TENSORFLOW_LIB_DIR
+        if [ "${?}" != "0" ] ; then
+            echo "Error: Bazel building pip package failed"
+            exit 1
+        fi
     fi
 done
 
