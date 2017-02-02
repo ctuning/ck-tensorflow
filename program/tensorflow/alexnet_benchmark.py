@@ -209,8 +209,8 @@ def run_benchmark():
     pool5, parameters = inference(images)
 
     # Build an initialization operation.
-    #OUTDATED init = tf.initialize_all_variables()
-    init = tf.global_variables_initializer()
+    init = tf.initialize_all_variables()
+    #init = tf.global_variables_initializer()
 
     # Start running operations on the Graph.
     config = tf.ConfigProto()

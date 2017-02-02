@@ -15,16 +15,22 @@
   "no_compile": "yes", 
   "no_target_file": "yes", 
   "run_cmds": {
-    "default": {
+    "AlexNet_benchmark": {
       "ignore_return_code": "no", 
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../alexnet_benchmark.py --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       }
+    },
+    "OverFeat_benchmark": {
+      "ignore_return_code": "no", 
+      "run_time":{
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../benchmark_overfeat.py $<<BATCH_SIZE>>$ $<<NUM_BATCHES>>$"
+      }
     }
   }, 
   "run_vars": {
-    "BATCH_SIZE": 128,
-    "NUM_BATCHES": 100
+    "BATCH_SIZE": 32,
+    "NUM_BATCHES": 25
   },
   "tags": [
     "tensorflow", 
