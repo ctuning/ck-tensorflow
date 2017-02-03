@@ -24,7 +24,13 @@
     "OverFeat_benchmark": {
       "ignore_return_code": "no", 
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../benchmark_overfeat.py $<<BATCH_SIZE>>$ $<<NUM_BATCHES>>$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../benchmark_overfeat.py --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+      }
+    },
+    "GoogLeNet_benchmark": {
+      "ignore_return_code": "no", 
+      "run_time":{
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../benchmark_googlenet.py --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       }
     }
   }, 
