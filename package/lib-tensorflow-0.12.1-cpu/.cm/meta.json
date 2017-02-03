@@ -3,9 +3,9 @@
     "extra_dir": "", 
     "install_env": {
       "GPU_ENABLED": 0,
-      "TENSORFLOW_PACKAGE_VER":"0.11.0rc2"
+      "TENSORFLOW_PACKAGE_VER":"0.12.1"
     }, 
-    "version": "0.11.0rc2"
+    "version": "0.12.1"
   }, 
   "deps": {
     "python": {
@@ -34,9 +34,9 @@
     "tensorflow", 
     "tensorflow-cpu", 
     "v0", 
-    "v0.11", 
-    "v0.11.0", 
-    "v0.11.0rc2", 
+    "v0.12", 
+    "v0.12.1", 
+    "v0.12.1", 
     "prebuilt",
     "cpu"
   ]

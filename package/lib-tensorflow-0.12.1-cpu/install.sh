@@ -28,7 +28,7 @@ if [[ $PYTHON3 == 0 ]]
 then
     if [[ $GPU_ENABLED == 1 ]]
     then
-        export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-${TENSORFLOW_PACKAGE_VER}-cp27-none-linux_x86_64.whl 
+        export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${TENSORFLOW_PACKAGE_VER}-cp27-none-linux_x86_64.whl 
     else
         export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${TENSORFLOW_PACKAGE_VER}-cp27-none-linux_x86_64.whl 
     fi
@@ -36,7 +36,7 @@ then
 else
     if [[ $GPU_ENABLED == 1 ]]
     then
-        export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-${TENSORFLOW_PACKAGE_VER}-cp35-cp35m-linux_x86_64.whl
+        export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${TENSORFLOW_PACKAGE_VER}-cp35-cp35m-linux_x86_64.whl
     else
         export TF_BINARY_URL=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${TENSORFLOW_PACKAGE_VER}-cp35-cp35m-linux_x86_64.whl
     fi
