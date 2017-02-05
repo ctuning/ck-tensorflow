@@ -1,6 +1,21 @@
 Collective Knowledge repository for evaluating and optimising performance of TensorFlow
 =======================================================================================
 
+# Introduction
+
+We need to have easily customizable TensorFlow builds 
+via JSON API to be able to plug it to our framework 
+for collaborative benchmarking and optimization of workloads 
+across diverse inputs and hardware provided by volunteers 
+(see [project page](http://cKnowledge.org/ai), 
+[live repo](http://cKnowledge.org/repo)
+and papers [1](https://arxiv.org/abs/1506.06256), 
+[2](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:maZDTaKrznsC), 
+[3](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:LkGwnXOMwfcC) 
+for more details).
+
+[[http://cKnowledge.org/images/ai-cloud-resize.png]]
+
 # Contributors
 
 * Vladislav Zaborovskiy
