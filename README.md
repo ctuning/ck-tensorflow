@@ -14,7 +14,7 @@ and papers [1](https://arxiv.org/abs/1506.06256),
 [3](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:LkGwnXOMwfcC) 
 for more details).
 
-[[http://cKnowledge.org/images/ai-cloud-resize.png]]
+[http://cKnowledge.org/images/ai-cloud-resize.png]
 
 # Contributors
 
