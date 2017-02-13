@@ -111,6 +111,23 @@ def loss(logits, labels):
     return loss
 
 def inference(images):
+    conv1 = _conv (images, 3, 64, 11, 11, 4, 4, 'VALID')
+    pool1 = _mpool(conv1,  3, 3, 2, 2)
+    conv2 = _conv(pool1, 64, 192, 5, 5, 1, 1, 'VALID')
+    pool2 = _mpool(conv2,  3, 3, 2, 2)
+    conv3 = _conv (pool2,  192, 384, 3, 3, 1, 1, 'SAME')
+    conv4 = _conv (conv3,  384, 256, 3, 3, 1, 1, 'SAME')
+    conv5 = _conv (conv4,  256, 256, 3, 3, 1, 1, 'SAME')
+    pool5 = _mpool(conv5,  3, 3, 2, 2)
+    resh1 = tf.reshape(pool5, [-1, 256 * 5 * 5])
+    affn1 = _affine(resh1, 256 * 5 * 5, 768)
+    affn2 = _affine(affn1, 768, 1024)
+    affn3 = _affine(affn2, 1024, 1000)
+
+    return affn3
+
+'''
+def inference(images):
     conv1 = _conv (images, 3, 96, 11, 11, 4, 4, 'VALID')
     pool1 = _mpool(conv1,  2, 2, 2, 2)
     conv2 = _conv(pool1, 96, 256, 5, 5, 1, 1, 'VALID')
@@ -125,23 +142,8 @@ def inference(images):
     affn3 = _affine(affn2, 4096, 1000)
 
     return affn3
-"""
-def inference(images):
-    conv1 = _conv (images, 3, 128, 11, 11, 4, 4, 'VALID')
-    pool1 = _mpool(conv1,  2, 2, 2, 2)
-    conv2 = _conv(pool1, 128, 128, 5, 5, 1, 1, 'VALID')
-    pool2 = _mpool(conv2,  2, 2, 2, 2)
-    conv3 = _conv (pool2,  128, 128, 3, 3, 1, 1, 'SAME')
-    conv4 = _conv (conv3,  128, 128, 3, 3, 1, 1, 'SAME')
-    conv5 = _conv (conv4,  128, 128, 3, 3, 1, 1, 'SAME')
-    pool5 = _mpool(conv5,  2, 2, 2, 2)
-    resh1 = tf.reshape(pool5, [-1, 128 * 6 * 6])
-    affn1 = _affine(resh1, 128 * 6 * 6, 128)
-    affn2 = _affine(affn1, 128, 128)
-    affn3 = _affine(affn2, 128, 128)
+'''
 
-    return affn3
-"""
 def time_tensorflow_run(session, target, info_string):
   num_steps_burn_in = 10
   total_duration = 0.0
