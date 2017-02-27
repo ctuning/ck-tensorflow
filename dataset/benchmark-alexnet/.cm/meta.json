@@ -1,0 +1,11 @@
+{
+  "dataset_files": [
+    "benchmark-alexnet.py"
+  ],
+  "tags":[
+    "dataset",
+    "benchmark",
+    "tensorflow",
+    "alexnet"
+  ]
+}

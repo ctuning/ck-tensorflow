@@ -1,0 +1,11 @@
+{
+  "dataset_files":[
+    "benchmark-googlenet.py"
+  ],
+  "tags":[
+    "benchmark",
+    "tensorflow",
+    "dataset",
+    "googlenet"
+  ]
+}

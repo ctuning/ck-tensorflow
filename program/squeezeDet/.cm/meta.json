@@ -1,5 +1,4 @@
 {
-  "backup_data_uid": "c0bacdae0ce2b532", 
   "compile_deps": {
     "lib-tensorflow": {
       "local": "yes", 
@@ -7,6 +6,13 @@
       "skip_pruning_by_other_deps": "yes", 
       "sort": 10, 
       "tags": "lib,tensorflow"
+    },
+    "lib-openCV": {
+      "local": "yes",
+      "name": "openCV library",
+      "sort": 20,
+      "tags": "lib,opencv",
+      "skip_pruning_by_other_deps": "yes"
     }
   }, 
   "data_name": "tensorflow", 
@@ -15,24 +21,19 @@
   "no_compile": "yes", 
   "no_target_file": "yes", 
   "run_cmds": {
-    "TensorFlow_benchmark": {
-      "dataset_tags": [
-        "benchmark",
-        "tensorflow",
-        "dataset"
-      ],
-      "ignore_return_code": "no", 
-      "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+    "main":{
+      "run_time":{
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../main.py "
       }
     }
-  }, 
+  },
   "run_vars": {
     "BATCH_SIZE": 32,
     "NUM_BATCHES": 25
   },
   "tags": [
     "tensorflow", 
-    "demo"
+    "squeezeDet"
   ]
 }
+

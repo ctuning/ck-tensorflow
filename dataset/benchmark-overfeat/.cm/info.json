@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "7f8e2860005615f4", 
+  "backup_module_uid": "8a7141c59cd335f5", 
+  "backup_module_uoa": "dataset", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-02-27T20:16:55.901222", 
+    "version": [
+      "1", 
+      "8", 
+      "6", 
+      "1"
+    ]
+  }, 
+  "data_name": "benchmark-overfeat"
+}

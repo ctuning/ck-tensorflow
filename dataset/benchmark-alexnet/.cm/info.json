@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "c3507a94b6bb1b06", 
+  "backup_module_uid": "8a7141c59cd335f5", 
+  "backup_module_uoa": "dataset", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-02-27T19:35:27.688297", 
+    "version": [
+      "1", 
+      "8", 
+      "6", 
+      "1"
+    ]
+  }, 
+  "data_name": "benchmark-alexnet"
+}
