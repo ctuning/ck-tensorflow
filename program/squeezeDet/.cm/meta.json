@@ -1,5 +1,11 @@
 {
   "compile_deps": {
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
+    },
     "lib-tensorflow": {
       "local": "yes", 
       "name": "TensorFlow library", 
@@ -13,6 +19,18 @@
       "sort": 20,
       "tags": "lib,opencv",
       "skip_pruning_by_other_deps": "yes"
+    },
+    "squeezeDet":{
+      "local": "yes",
+      "name": "squeezeDet",
+      "sort": 30,
+      "tags": "model,tensorflow,squeezedet"
+    },
+    "KITTI":{
+      "local": "yes",
+      "name": "KITTI dataset",
+      "sort": 30,
+      "tags": "dataset,KITTI,tensorflow,squeezedet"
     }
   }, 
   "data_name": "tensorflow", 
@@ -21,15 +39,18 @@
   "no_compile": "yes", 
   "no_target_file": "yes", 
   "run_cmds": {
-    "main":{
+    "squeezedet":{
+      "dataset_tags": [
+        "squeezedet",
+        "model",
+        "dataset",
+        "script"
+      ],
+      "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../main.py "
+        "run_cmd_main": "sh $#dataset_path#$$#dataset_filename#$ "
       }
     }
-  },
-  "run_vars": {
-    "BATCH_SIZE": 32,
-    "NUM_BATCHES": 25
   },
   "tags": [
     "tensorflow", 

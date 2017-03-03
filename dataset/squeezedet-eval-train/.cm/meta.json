@@ -1,0 +1,13 @@
+{
+  "dataset_files": [
+    "squeezedet_eval_train.sh"
+  ],
+  "tags":[
+    "dataset",
+    "squeezedet",
+    "evaltrain",
+    "model",
+    "script"
+  ]
+}
+

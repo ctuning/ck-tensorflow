@@ -1,0 +1,25 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_DATASET_KITTI",
+    "limit_recursion_dir_search": {
+      "linux": 5
+    }, 
+    "soft_file": {
+      "linux": "trainval.txt"
+    }
+  }, 
+  "deps": {
+  }, 
+  "soft_name": "KITTI dataset", 
+  "tags": [
+    "dataset", 
+    "KITTI", 
+    "val",
+    "tensorflow",
+    "squeezedet"
+  ]
+}
+

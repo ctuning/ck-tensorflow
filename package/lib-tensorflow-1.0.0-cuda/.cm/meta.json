@@ -3,9 +3,9 @@
     "extra_dir": "", 
     "install_env": {
       "GPU_ENABLED": 1, 
-      "TENSORFLOW_PACKAGE_VER": "0.12.1"
+      "TENSORFLOW_PACKAGE_VER": "1.0.0"
     }, 
-    "version": "0.12.1"
+    "version": "1.0.0"
   }, 
   "deps": {
     "python": {
@@ -53,10 +53,9 @@
     "lib", 
     "tensorflow", 
     "tensorflow-cuda", 
-    "v0", 
-    "v0.12", 
-    "v0.12.1", 
-    "v0.12.1", 
+    "v1", 
+    "v1.0", 
+    "v1.0.0", 
     "prebuilt",
     "cuda"
   ],
