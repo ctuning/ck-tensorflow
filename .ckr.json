@@ -3,6 +3,15 @@
   "data_name": "ck-tensorflow",
   "dict": {
     "shared": "git",
+    "sync": "yes",
+    "repo_deps": [
+      {
+        "repo_uoa": "ck-autotuning"
+      },
+      {
+        "repo_uoa": "ck-math"
+      }
+    ],
     "url": "https://github.com/ctuning/ck-tensorflow"
   },
   "data_uoa": "ck-tensorflow",
