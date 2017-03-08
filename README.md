@@ -34,7 +34,13 @@ Under development.
 
 # Installing CK-TensorFlow
 
-## Installing CK on Linux
+## Installing Java on Ubuntu
+```
+$ sudo apt install openjdk-8-jdk-headless
+```
+**NB:** Installation fails with `openjdk-9-jdk-headless` (cf. [this](https://github.com/bazelbuild/bazel/issues/1456)).
+
+## Installing CK on Ubuntu
 ```
 $ sudo pip install ck
 ```
@@ -53,7 +59,8 @@ $ ck pull repo:ck-tensorflow
 
 ## Extra dependencies for GPU version
 
-If you want to use GPU, make sure you have installed CUDA toolkit >=7.0 and cuDNN v2+. If you want to use GPU and pip installation install CUDA toolkit 7.5 and cuDNN v4. 
+If you want to use the GPU, please install CUDA toolkit >= v7.0 and cuDNN >= v2.
+If you want to use the GPU and pip, please install CUDA toolkit >= v7.5 and cuDNN >= v4.
 
 Check if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus).
 
