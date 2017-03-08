@@ -21,7 +21,7 @@
       "local": "yes", 
       "name": "Bazel", 
       "sort": 10, 
-      "tags": "tool,bazel"
+      "tags": "tool,bazel,v0.4.2"
     }, 
     "compiler.gcc": {
       "local": "yes", 
