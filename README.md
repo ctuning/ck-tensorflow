@@ -60,7 +60,7 @@ $ ck pull repo:ck-tensorflow
 ## Extra dependencies for GPU version
 
 If you want to use the GPU, please install CUDA toolkit >= v7.0 and cuDNN >= v2.
-If you want to use the GPU and pip, please install CUDA toolkit >= v7.5 and cuDNN >= v4.
+If you want to use the GPU and pip, please install CUDA toolkit >= v8.0 and cuDNN >= v5.
 
 Check if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus).
 
