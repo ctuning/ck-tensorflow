@@ -1,0 +1,52 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "GPU_ENABLED": 1, 
+      "TENSORFLOW_PACKAGE_VER": "1.0.1"
+    }, 
+    "version": "1.0.1"
+  }, 
+  "deps": {
+    "lib.cudnn": {
+      "add_to_path": "yes", 
+      "local": "yes", 
+      "name": "cuDNN library", 
+      "sort": 50, 
+      "tags": "lib,cudnn,dnn,cuda"
+    }, 
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "package_extra_name": " (prebuilt, cuda)", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "tensorflow-prebuilt-cuda", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "tensorflow-cuda", 
+    "v1", 
+    "v1.0", 
+    "v1.0.1", 
+    "vprebuilt", 
+    "vcuda"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "1bb541bb2330badd"
+  }
+}
