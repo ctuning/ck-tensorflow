@@ -15,11 +15,11 @@
       "sort": 0, 
       "tags": "lib, tensorflow, tensorflow-cpu"
     },
-    "tensorflow_master_linux_64": {
+    "tensorflow-model-imagenet-inception-20151205": {
       "local": "yes", 
-      "name": "Tensorflow master for linux64", 
+      "name": "Tensorflow model", 
       "sort": 1, 
-      "tags": "lib, tensorflow, tensorflow-cpu"
+      "tags": " tensorflow, weights, tensorflowmodel, google, imagenet, inception,v20151205"
     }
   }, 
   "compiler_env": "CK_CXX", 
@@ -55,8 +55,7 @@
   "tags": [
     "tensorflow-classification-cpp", 
     "demo", 
-    "vcpu", 
-    "continuous"
+    "vcpu"
   ],
   "target_file": "classification", 
   "use_compile_script": "yes"
