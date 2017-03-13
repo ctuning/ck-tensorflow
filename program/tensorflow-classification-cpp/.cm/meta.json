@@ -30,14 +30,21 @@
     "linux", 
     "android"
   ], 
+  "print_files_after_run": [
+    "tmp-output1.tmp"
+  ],
   "process_in_tmp": "yes", 
   "program": "yes", 
   "run_cmds": {
-    "classification": {
+    "default": {
       "hot_functions": [], 
       "ignore_return_code": "no", 
       "run_time": { 
-        "run_cmd_main": "sh ../ck-run$#script_ext#$"
+        "run_cmd_main": "sh ../ck-run$#script_ext#$",
+        "run_cmd_out1": "tmp-output1.tmp",
+        "run_output_files": [
+          "tmp-output1.tmp"
+        ]
       }
     }
   },

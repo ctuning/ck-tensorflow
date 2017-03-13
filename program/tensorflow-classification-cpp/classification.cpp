@@ -33,6 +33,7 @@ limitations under the License.
 
 #include <fstream>
 #include <vector>
+#include <iomanip>
 
 #include "tensorflow/cc/ops/const_op.h"
 #include "tensorflow/cc/ops/image_ops.h"
@@ -185,7 +186,7 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
 // Given the output of a model run, and the name of a file containing the labels
 // this prints out the top five highest-scoring values.
 Status PrintTopLabels(const std::vector<Tensor>& outputs,
-                      string labels_file_name) {
+                      string labels_file_name, string image_file_name) {
   std::vector<string> labels;
   size_t label_count;
   Status read_labels_status =
@@ -200,10 +201,13 @@ Status PrintTopLabels(const std::vector<Tensor>& outputs,
   TF_RETURN_IF_ERROR(GetTopLabels(outputs, how_many_labels, &indices, &scores));
   tensorflow::TTypes<float>::Flat scores_flat = scores.flat<float>();
   tensorflow::TTypes<int32>::Flat indices_flat = indices.flat<int32>();
+
+  std::cout << "---------- Prediction for " << image_file_name <<" ----------" << std::endl;
   for (int pos = 0; pos < how_many_labels; ++pos) {
     const int label_index = indices_flat(pos);
     const float score = scores_flat(pos);
-    LOG(INFO) << labels[label_index] << " (" << label_index << "): " << score;
+    std::cout << std::fixed << std::setprecision(4) << score 
+      << " - \"" << labels[label_index] << " (" << label_index << ")\"" << std::endl;
   }
   return Status::OK();
 }
@@ -323,7 +327,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Do something interesting with the results we've generated.
-  Status print_status = PrintTopLabels(outputs, labels);
+  Status print_status = PrintTopLabels(outputs, labels, image_path);
   if (!print_status.ok()) {
     LOG(ERROR) << "Running print failed: " << print_status;
     return -1;
