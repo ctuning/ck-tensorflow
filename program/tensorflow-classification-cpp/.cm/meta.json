@@ -1,0 +1,56 @@
+{
+  "backup_data_uid": "a8addbb39edc4398", 
+  "build_compiler_vars": {
+    "CPU_ONLY": "ON"
+  }, 
+  "compile_cmds": {
+    "default": {
+      "cmd": "sh ../ck-compile$#script_ext#$"
+    }
+  }, 
+  "compile_deps": {
+    "lib_tensorflow_cpu": {
+      "local": "yes", 
+      "name": "Tensorflow CPU library", 
+      "sort": 0, 
+      "tags": "lib, tensorflow, tensorflow-cpu"
+    },
+    "tensorflow_master_linux_64": {
+      "local": "yes", 
+      "name": "Tensorflow master for linux64", 
+      "sort": 1, 
+      "tags": "lib, tensorflow, tensorflow-cpu"
+    }
+  }, 
+  "compiler_env": "CK_CXX", 
+  "data_name": "tensorflow-classification-cpp", 
+  "main_language": "cpp", 
+  "only_for_target_os_tags": [
+    "windows", 
+    "linux", 
+    "android"
+  ], 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "classification": {
+      "hot_functions": [], 
+      "ignore_return_code": "no", 
+      "run_time": { 
+        "run_cmd_main": "sh ../ck-run$#script_ext#$"
+      }
+    }
+  },
+  "skip_bin_ext": "yes", 
+  "source_files": [
+    "classification.cpp"
+  ], 
+  "tags": [
+    "tensorflow-classification-cpp", 
+    "demo", 
+    "vcpu", 
+    "continuous"
+  ],
+  "target_file": "classification", 
+  "use_compile_script": "yes"
+}
