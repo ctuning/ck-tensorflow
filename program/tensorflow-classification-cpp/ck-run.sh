@@ -1,8 +1,7 @@
 #! /bin/bash
-
-MODEL=$CK_ENV_LIB_TF_SRC/tensorflow/examples/label_image/data/tensorflow_inception_graph.pb
-LABELS=$CK_ENV_LIB_TF_SRC/tensorflow/examples/label_image/data/imagenet_comp_graph_label_strings.txt
-IMAGE=$CK_ENV_LIB_TF_SRC/tensorflow/examples/label_image/data/grace_hopper.jpg
+MODEL=$CK_ENV_MODEL_TENSORFLOW/classify_image_graph_def.pb
+LABELS=$CK_ENV_MODEL_TENSORFLOW/imagenet_synset_to_human_label_map.txt
+IMAGE=$CK_ENV_MODEL_TENSORFLOW/cropped_panda.jpg
 
 if [ ! -z ${CK_TF_MODEL} ]; then
     MODEL=${CK_TF_MODEL}

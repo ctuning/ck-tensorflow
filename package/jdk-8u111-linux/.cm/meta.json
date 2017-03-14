@@ -8,7 +8,8 @@
     }
   }, 
   "end_full_path": {
-    "linux": "jdk1.8.0_111/bin/javac"
+    "linux": "jdk1.8.0_111/bin/javac",
+    "android": "jdk1.8.0_111/bin/javac"
   }, 
   "process_script": "install", 
   "soft_uoa": "0129a3b82235cbc0", 

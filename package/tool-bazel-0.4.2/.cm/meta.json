@@ -17,7 +17,8 @@
     }
   }, 
   "end_full_path": {
-    "linux": "bin/bazel"
+    "linux": "bin/bazel",
+    "android": "bin/bazel"
   }, 
   "process_script": "install", 
   "soft_uoa": "359f7730bd23ec60", 

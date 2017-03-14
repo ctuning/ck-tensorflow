@@ -12,6 +12,7 @@
   }, 
   "end_full_path": {
     "linux": "classify_image_graph_def.pb",
+    "android": "classify_image_graph_def.pb",
     "win": "classify_image_graph_def.pb"
   }, 
   "package_extra_name": " (imagenet, inception)", 
