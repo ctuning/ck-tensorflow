@@ -2,10 +2,10 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-      "GPU_ENABLED": 0,
-      "TENSORFLOW_PACKAGE_VER":"1.0.0"
+      "GPU_ENABLED": 0, 
+      "TENSORFLOW_PACKAGE_VER": "1.0.1"
     }, 
-    "version": "1.0.0"
+    "version": "1.0.1"
   }, 
   "deps": {
     "python": {
@@ -35,8 +35,11 @@
     "tensorflow-cpu", 
     "v1", 
     "v1.0", 
-    "v1.0.0",  
-    "vprebuilt",
+    "v1.0.1", 
+    "vprebuilt", 
     "vcpu"
-  ]
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "1bb541bb2330badd"
+  }
 }
