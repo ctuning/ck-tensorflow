@@ -102,7 +102,7 @@ def loss(logits, labels):
     labels = tf.expand_dims(labels, 1)
     indices = tf.expand_dims(tf.range(0, batch_size, 1), 1)
 #if layers configuration is changed, you probably should change stacked array size below.
-    concated = tf.concat(1, [indices, labels])
+    concated = tf.concat([indices, labels], 1)
     onehot_labels = tf.sparse_to_dense(
         concated, tf.stack([batch_size, 1000]), 1.0, 0.0)
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(
@@ -201,7 +201,7 @@ def run_benchmark():
     last_layer = inference(images)
 
     # Build an initialization operation.
-    init = tf.initialize_all_variables()
+    init = tf.global_variables_initializer()
 
     # Start running operations on the Graph.
     sess = tf.Session('')
