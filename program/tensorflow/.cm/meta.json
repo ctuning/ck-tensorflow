@@ -10,7 +10,8 @@
       "dataset_tags": [
         "benchmark",
         "tensorflow",
-        "dataset"
+        "dataset",
+        "vcpu"
       ],
       "ignore_return_code": "no",
       "run_time": {
@@ -27,7 +28,8 @@
       "dataset_tags": [
         "benchmark",
         "tensorflow",
-        "dataset"
+        "dataset",
+        "vcuda"
       ],
       "ignore_return_code": "no",
       "run_time": {
