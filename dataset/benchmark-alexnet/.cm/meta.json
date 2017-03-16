@@ -6,6 +6,8 @@
     "dataset",
     "benchmark",
     "tensorflow",
-    "alexnet"
+    "alexnet",
+    "vcpu",
+    "vcuda"
   ]
 }
