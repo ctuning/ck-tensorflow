@@ -33,6 +33,20 @@
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       },
+      "run_deps": {
+        "lib-cudart": {
+          "local": "yes",
+          "name": "CUDA runtime",
+          "sort": 15,
+          "tags": "compiler,cuda,lang-c-cuda"
+        },
+        "lib-cudnn": {
+          "local": "yes",
+          "name": "cuDNN library",
+          "sort": 20,
+          "tags": "lib,cudnn"
+        }
+      },
       "update_deps": {
         "lib-tensorflow": {
           "no_tags": "tensorflow-cpu",
