@@ -1,10 +1,11 @@
 #! /bin/bash
 
-# CK installation script for KITTI dataset package, squeezeNet built-in
+# CK installation script for the KITTI dataset package, squeezeNet built-in
 #
 # Developer(s): 
-#  * Vladislav Zaborovskiy, vladzab@yandex.ru
-#  
+# - Vladislav Zaborovskiy, vladzab@yandex.ru, 2017
+# - Anton Lokhmotov, anton@dividiti.com, 2017
+# 
 
 # PACKAGE_DIR
 # INSTALL_DIR
@@ -29,12 +30,12 @@ mkdir $KITTI_VAL
 
 ######################################################################################
 echo ""
-echo "Warning:  More than 26GB of free space required."
+read -p "Warning: More than 26 GB of free space required."
 
 echo "Downloading KITTI images ..."
 wget -P $KITTI_ROOT $KITTI_IMAGES_URL
 if [ "${?}" != "0" ] ; then
-  echo "Error: Downloading KITTI images  archive from '${KITTI_IMAGES_URL}' failed!"
+  echo "Error: Downloading KITTI images archive from '${KITTI_IMAGES_URL}' failed!"
   exit 1
 fi
 
@@ -43,7 +44,7 @@ echo "Downloading KITTI labels ..."
 wget -P $KITTI_ROOT $KITTI_LABELS_URL
 
 if [ "${?}" != "0" ] ; then
-  echo "Error: Downloading KITTI labels  archive from '${KITTI_LABELS_URL}' failed!"
+  echo "Error: Downloading KITTI labels archive from '${KITTI_LABELS_URL}' failed!"
   exit 1
 fi
 
@@ -51,7 +52,7 @@ fi
 echo ""
 echo "Extracting archives ..."
 echo "Extracting '$KITTI_ROOT'/data_object_image_2.zip ..."
-unzip  ${KITTI_ROOT}/data_object_image_2.zip -d ${KITTI_ROOT}
+unzip ${KITTI_ROOT}/data_object_image_2.zip -d ${KITTI_ROOT}
 if [ "${?}" != "0" ] ; then
   echo "Error: Extracting images archive '${KITTI_ROOT}'/data_object_image_2.zip failed!"
   exit 1
@@ -60,7 +61,7 @@ rm ${KITTI_ROOT}/data_object_image_2.zip
 
 echo ""
 echo "Extracting '$KITTI_ROOT'/data_object_label_2.zip ..."
-unzip  ${KITTI_ROOT}/data_object_label_2.zip -d ${KITTI_ROOT}
+unzip ${KITTI_ROOT}/data_object_label_2.zip -d ${KITTI_ROOT}
 if [ "${?}" != "0" ] ; then
   echo "Error: Extracting labels archive '${KITTI_ROOT}'/data_object_label_2.zip failed!"
   exit 1
@@ -75,7 +76,7 @@ ls ../training/image_2/ | grep ".png" | sed s/.png// > trainval.txt
 cd $SQDT_DATA
 $CK_ENV_COMPILER_PYTHON_FILE random_split_train_val.py
 if [ "${?}" != "0" ] ; then
-  echo "Error: Validation with '$SQDT_DATA'random_split_train_val.py' failed! Do it manually with $ python random_split_train_val.py"
+  echo "Error: Validation with '$SQDT_DATA'random_split_train_val.py' failed! Do it manually with 'python random_split_train_val.py'"
   exit 1
 fi
 
