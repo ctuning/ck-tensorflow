@@ -46,6 +46,12 @@
     "NUM_BATCHES": 25
   },
   "run_deps": {
+    "lang-python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "python,lang-python,compiler"
+    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
