@@ -4,6 +4,7 @@
     "extra_dir": "", 
     "install_env": {
       "PACKAGE_INSTALL": "bazel-0.4.2-installer-linux-x86_64.sh", 
+      "PACKAGE_INSTALL_OSX": "bazel-0.4.2-installer-darwin-x86_64.sh",
       "PACKAGE_URL": "https://github.com/bazelbuild/bazel/releases/download/0.4.2"
     }, 
     "version": "0.4.2"

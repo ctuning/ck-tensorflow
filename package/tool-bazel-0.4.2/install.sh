@@ -19,8 +19,14 @@ echo "Cloning from '${PACKAGE_URL}' ..."
 
 cd ${INSTALL_DIR}
 
-rm -rf ${PACKAGE_INSTALL}
-wget ${PACKAGE_URL}/${PACKAGE_INSTALL}
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  rm -rf ${PACKAGE_INSTALL_OSX}
+  wget ${PACKAGE_URL}/${PACKAGE_INSTALL_OSX}
+else
+  rm -rf ${PACKAGE_INSTALL}
+  wget ${PACKAGE_URL}/${PACKAGE_INSTALL}
+fi
+
 if [ "${?}" != "0" ] ; then
   echo "Error: downloading failed!"
   exit 1
