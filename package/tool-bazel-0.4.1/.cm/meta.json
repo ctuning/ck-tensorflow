@@ -11,6 +11,7 @@
   "deps": {
     "java-compiler": {
       "local": "yes", 
+      "skip_default" : "yes",
       "name": "Java compiler", 
       "sort": 10, 
       "tags": "compiler,lang-java"
