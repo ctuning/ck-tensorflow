@@ -32,47 +32,49 @@ for more details).
 # Status
 Under development.
 
-# Installing CK-TensorFlow
+# Installing CK-TensorFlow dependencies
 
-## Installing Java on Ubuntu
+## Installing CK
+
+### Ubuntu
+```
+$ sudo pip install ck
+```
+
+### Windows
+```
+$ pip install ck
+```
+
+## Installing CK-TensorFlow with all its dependencies
+```
+$ ck pull repo:ck-tensorflow
+```
+
+## Installing TensorFlow dependencies on Ubuntu
+
+### Java
 ```
 $ sudo apt install openjdk-8-jdk-headless
 ```
 **NB:** Installation fails with `openjdk-9-jdk-headless` (cf. [this](https://github.com/bazelbuild/bazel/issues/1456)).
 
-## Installing CK on Ubuntu
-```
-$ sudo pip install ck
-```
-
-## Installing CK on Windows
-```
-$ pip install ck
-```
-
-## Obtaining this repository with all dependencies
-```
-$ ck pull repo:ck-tensorflow
-```
-
-## Installing TensorFlow on Ubuntu
-
-## Extra dependencies for GPU version
+### CUDA, cuDNN (GPU version only)
 
 If you want to use the GPU, please install CUDA toolkit >= v7.0 and cuDNN >= v2.
 If you want to use the GPU and pip, please install CUDA toolkit >= v8.0 and cuDNN >= v5.
 
-Check if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus).
+- Check if you have a [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus).
 
-[Download and install CUDA](https://developer.nvidia.com/cuda-downloads).
+- [Download and install CUDA](https://developer.nvidia.com/cuda-downloads).
 
-[Download and install cuDNN](https://developer.nvidia.com/rdp/cudnn-download) (Registration required)
+- [Download and install cuDNN](https://developer.nvidia.com/rdp/cudnn-download) (requires registration).
 
-[More instructions](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#optional-install-cuda-gpus-on-linux)
+- [More detailed instructions](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#optional-install-cuda-gpus-on-linux).
 
-### For pip installation
+### For installation via pip
 
-For python 2.7 install
+For python 2.7, install:
 ```
 $ sudo apt-get install  \
     python-dev \
@@ -82,7 +84,7 @@ $ sudo apt-get install  \
 $ sudo pip install wheel
 ```
 
-For python 3.5 install 
+For python 3.5, install:
 
 ```
 $ sudo apt-get install  \
@@ -92,32 +94,40 @@ $ sudo apt-get install  \
 $ sudo pip3 install wheel
 ```
 
+### Python
+```
+$ sudo pip install \
+    protobuf \
+    easydict \
+    joblib
+```
+
 # Installing TensorFlow via CK
 
-We are now ready to compile, install and run CK-TensorFlow (CPU version):
+You should now be ready to install the CPU version of CK-TensorFlow:
 ```
-$ ck pull repo:ck-tensorflow
 $ ck install package:lib-tensorflow-cpu
 ```
 
-You can also compile and install CUDA version of the TensorFlow 
-which can co-exist with CPU version (via CK repository):
+You can also install the CUDA version of TensorFlow 
+(which when installed via CK can co-exist with the CPU version):
 ```
 $ ck install package:lib-tensorflow-cuda
 ```
 
-Finally, you can try to compiler and install OpenCL version of the TensorFlow
-which required ComputeCPP, but at this moment we didn't manage to run it:
+Finally, you can try to install the OpenCL version of TensorFlow
+(which requires ComputeCPP; unfortunately, at the time of this writing we were not able to run it):
 ```
 $ ck install package:lib-tensorflow-opencl
 ```
 
-# Benchmarking AlexNet:
+# Benchmarking
 ```
  $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
 ```
+Select one of the `benchmark_cpu` and `benchmark_cuda` commands;  select an available version of TensorFlow, if prompted (more than one choice); select an available benchmark, if prompted (more than one choice).  
 
-# Testing installation via image classification
+# Testing (image classification)
 
 ```
  $ ck run program:tensorflow-classification
