@@ -12,7 +12,7 @@
 # PACKAGE_DIR
 # INSTALL_DIR
 
-rm ${PACKAGE_NAME}*
+rm -f ${PACKAGE_NAME}*
 
 ################################################################################
 echo ""
