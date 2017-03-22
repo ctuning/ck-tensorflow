@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# CK installation script for the squeezeDet package.
+# CK installation script for the squeezeDet package (TensorFlow model).
 # See LICENCE.md in the squeezeDet package folder for the model license.
 #
 # Developer(s):
@@ -126,32 +126,15 @@ if [ "$VGG16_INCLUDED" != "0" ] ; then
 fi
 
 ######################################################################################
+# Some minor text editing to temporarily address point 1 in issue #10
+# (https://github.com/ctuning/ck-tensorflow/issues/10).
 echo ""
-echo "Downloading the TensorFlow script for upgrading from v0.x to v1.x ..."
-
-#TODO Only download a subdir without 3d party software.
-git clone ${TENSORFLOW_URL} ${INSTALL_DIR}/tensorflow_update
-if [ "${?}" != "0" ] ; then
-  echo "Error: Downloading TensorFlow from '${TENSORFLOW_URL}' failed!"
-  exit 1
-fi
-export TENSORFLOW_UPGRADE_SCRIPT=${INSTALL_DIR}/tensorflow_update/tensorflow/tools/compatibility/tf_upgrade.py
-
-echo ""
-echo "Upgrading TensorFlow scripts from v0.x to v1.x ..."
-${CK_ENV_COMPILER_PYTHON_FILE} ${TENSORFLOW_UPGRADE_SCRIPT} --intree ${SQDT_ROOT} --outtree ${INSTALL_DIR}/squeezeDet_updated
-cp -rf ${INSTALL_DIR}/squeezeDet_updated/* ${SQDT_ROOT}
-
-######################################################################################
-#Some manual text editing
-echo ""
-echo "Small source code change ..."
-sed -i 's/max_images/max_outputs/g' ${SQDT_ROOT}/src/nn_skeleton.py
+echo "Making a minor source code change ..."
+sed -i 's/reduction_indices/axis/g' ${SQDT_ROOT}/src/nn_skeleton.py
+git -C ${SQDT_ROOT} diff
 
 ######################################################################################
 echo ""
 echo "Cleaning ..."
-rm -rf ${INSTALL_DIR}/squeezeDet_updated
-rm -rf ${INSTALL_DIR}/tensorflow_update
 
 exit 0
