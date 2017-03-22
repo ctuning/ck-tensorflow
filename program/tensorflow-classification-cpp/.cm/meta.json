@@ -44,11 +44,13 @@
           "data_uoa": "a8addbb39edc4398",
           "script_name": "preprocess"
         },
-        "run_cmd_main": "if [ ! -z ${ANDROID_ROOT} ]; then \n $#BIN_FILE#$ \n else \n $#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_LABELS} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_ENV_MODEL_TENSORFLOW}/cropped_panda.jpg \n fi",
+        "run_cmd_main": "if [ ! -z ${ANDROID_ROOT} ]; then \n $#BIN_FILE#$ --labels=/data/local/tmp/${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=/data/local/tmp/tmp/${CK_DATASET_TENSORFLOW_AUX_PB} --image=/data/local/tmp/tmp/${CK_DATASET_TENSORFLOW_AUX_IMG} \n else \n $#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_LABELS} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_ENV_MODEL_TENSORFLOW}/cropped_panda.jpg \n fi",
         "run_cmd_out1": "tmp-output1.tmp",
         "run_correctness_output_files": [],
         "run_input_files": [
-          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$"
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$",
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_TXT>>$",
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_IMG>>$"
         ],
         "run_output_files": [
           "tmp-output1.tmp"

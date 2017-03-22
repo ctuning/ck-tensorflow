@@ -1,0 +1,23 @@
+export PYTHON_BIN_PATH="/usr/local/bin/python"
+export USE_DEFAULT_PYTHON_LIB_PATH=1
+
+export CK_PYTHON3=0
+
+export GCC_HOST_COMPILER_PATH="/usr/local/bin/gcc-6"
+export HOST_C_COMPILER="/usr/local/bin/gcc-6"
+export HOST_CXX_COMPILER="/usr/local/bin/g++-6"
+
+export TF_NEED_CUDA=0
+export CUDA_HOME=""
+export CUDA_TOOLKIT_PATH=""
+export TF_CUDA_VERSION=""
+export TF_CUDA_COMPUTE_CAPABILITIES=""
+
+export CUDNN_INSTALL_PATH=""
+export TF_CUDNN_VERSION=""
+
+export TF_NEED_GCP=0
+export TF_NEED_HDFS=0
+
+export TF_NEED_OPENCL=0
+export COMPUTECPP_TOOLKIT_PATH="$#computecpp_toolkit_path#$"
