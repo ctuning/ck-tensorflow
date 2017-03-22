@@ -14,6 +14,12 @@
       "name": "Tensorflow CPU library", 
       "sort": 0, 
       "tags": "lib, tensorflow, tensorflow-cpu"
+    },
+    "libjpeg": {
+      "local": "yes",
+      "name": "libjpeg",
+      "sort": 1,
+      "tags": "lib,libjpeg,jpeg"
     }
   }, 
   "compiler_env": "CK_CXX", 
