@@ -228,6 +228,7 @@ ifeq ($(TARGET),ANDROID)
 -I$(MAKEFILE_DIR)/gen/protobuf/include \
 -I$(PROTOGENDIR) \
 -I$(PBTGENDIR)
+
 INCLUDES += -I$(CK_LIB_LIBJPEG_TENSORFLOW)
 
 	LIBS := \
@@ -469,7 +470,7 @@ TF_CC_SRCS += $(shell cat $(MAKEFILE_DIR)/tf_op_files.txt)
 PBT_CC_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_pb_text_files.txt)
 PROTO_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_proto_files.txt)
 BENCHMARK_SRCS := \
-tensorflow/contrib/pi_examples/label_image/label_image.cc
+tensorflow/contrib/makefile/samples/classification.cc
 #tensorflow/core/util/reporter.cc \
 #tensorflow/tools/benchmark/benchmark_model.cc \
 #tensorflow/tools/benchmark/benchmark_model_main.cc
