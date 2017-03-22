@@ -99,7 +99,13 @@ $ sudo pip3 install wheel
 $ sudo pip install \
     protobuf \
     easydict \
-    joblib
+    joblib \
+    image
+```
+
+```
+$ sudo apt install \
+    python-opencv
 ```
 
 # Installing TensorFlow via CK
