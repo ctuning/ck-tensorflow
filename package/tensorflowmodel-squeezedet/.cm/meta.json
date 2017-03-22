@@ -1,6 +1,6 @@
 {
   "customize": {
-    "extra_dir": "", 
+    "extra_dir": "",
     "install_env": {
       "SQUEEZEDET_URL": "https://github.com/BichenWuUCB/squeezeDet",
       "DEMO_URL": "https://www.dropbox.com/s/a6t3er8f03gdl4z/model_checkpoints.tgz",
@@ -11,53 +11,54 @@
       "VGG16_INCLUDED": 1,
       "CNN_VGG16_URL": "https://www.dropbox.com/s/zxd72nj012lzrlf/VGG16.tgz",
       "TENSORFLOW_URL": "https://github.com/tensorflow/tensorflow"
-    }, 
-    "use_git_revision": "yes", 
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "use_git_revision": "yes",
     "version": "master",
     "git_src_dir":"squeezeDet",
     "params": {
-      
     }
-  }, 
+  },
   "deps": {
     "tensorflow": {
-      "local": "yes", 
-      "name": "Tensorflow", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "TensorFlow framework",
+      "sort": 10,
       "tags": "lib,tensorflow,tensorflow-cuda"
     },
     "python": {
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 20,
       "tags": "compiler,python"
     },
     "opencv": {
-      "local": "yes", 
-      "sort": 30, 
-      "name": "openCV library", 
+      "local": "yes",
+      "sort": 30,
+      "name": "OpenCV library",
       "tags": "lib,opencv"
     }
-  }, 
+  },
   "end_full_path": {
      "linux":"squeezeDet/README.md"
-  }, 
-  "need_cpu_info": "yes", 
+  },
+  "need_cpu_info": "yes",
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "process_script": "install", 
+  ],
+  "process_script": "install",
   "soft_uoa": "00ea54addb99aab8",
-  "suggested_path": "squeezeDet", 
+  "suggested_path": "tensorflowmodel-squeezedet",
   "tags": [
     "model",
     "tensorflow",
+    "tensorflowmodel",
     "tensorflow-cuda",
-    "opencv",
-    "squeezedet"
+    "squeezedet",
+    "opencv"
   ]
 }
-
