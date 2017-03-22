@@ -40,8 +40,16 @@
       "hot_functions": [], 
       "ignore_return_code": "no", 
       "run_time": { 
-        "run_cmd_main": "sh ../ck-run$#script_ext#$",
+        "pre_process_via_ck": {
+          "data_uoa": "a8addbb39edc4398",
+          "script_name": "preprocess"
+        },
+        "run_cmd_main": "if [ ! -z ${ANDROID_ROOT} ]; then \n $#BIN_FILE#$ \n else \n $#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_LABELS} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_ENV_MODEL_TENSORFLOW}/cropped_panda.jpg \n fi",
         "run_cmd_out1": "tmp-output1.tmp",
+        "run_correctness_output_files": [],
+        "run_input_files": [
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$"
+        ],
         "run_output_files": [
           "tmp-output1.tmp"
         ]
