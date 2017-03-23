@@ -137,8 +137,10 @@ endif
 # This is at the end so any globally-installed frameworks like protobuf don't
 # override local versions in the source tree.
 INCLUDES += -I/usr/local/include
+INCLUDES += -I$(CK_ENV_LIB_RTL_XOPENME_INCLUDE)
 
 LIBS := \
+-L$(CK_ENV_LIB_RTL_XOPENME_LIB) -lrtlxopenmp \
 -lstdc++ \
 -lprotobuf \
 -lz \
@@ -230,8 +232,10 @@ ifeq ($(TARGET),ANDROID)
 -I$(PBTGENDIR)
 
 INCLUDES += -I$(CK_LIB_LIBJPEG_TENSORFLOW)
+INCLUDES += -I$(CK_ENV_LIB_RTL_XOPENME_INCLUDE)
 
 	LIBS := \
+-L$(CK_ENV_LIB_RTL_XOPENME_LIB) -lrtlxopenme \
 -L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/armeabi-v7a -ljpeg \
 -lgnustl_static \
 -lprotobuf \
