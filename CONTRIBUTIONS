@@ -35,3 +35,11 @@ O: xored
 C: feedback about CK-Tensorflow installation
 W:
 
+================================================================================
+N: Anatoliy Belonog
+E: 
+H: 
+O: xored
+C: improving Tensorflow compilation for Android via CK (for CK crowdtuning scenarios)
+W:
+

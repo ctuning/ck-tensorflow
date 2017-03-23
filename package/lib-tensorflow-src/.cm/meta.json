@@ -5,15 +5,17 @@
     "install_env": {
       "PACKAGE_GIT": "YES", 
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
-      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
-      "PACKAGE_SUB_DIR": "src"
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     }, 
     "use_git_revision": "yes", 
     "version": "master"
   }, 
   "end_full_path": {
-    "android": "lib/tensorflow/__init__.py", 
-    "linux": "lib/tensorflow/__init__.py"
+    "android": "src/tensorflow/tensorflow.bzl", 
+    "linux": "src/tensorflow/tensorflow.bzl", 
+    "win": "src\\tensorflow\\tensorflow.bzl"
   }, 
   "package_extra_name": " (src)", 
   "process_script": "install", 
@@ -21,8 +23,8 @@
   "suggested_path": "tensorflow-src", 
   "tags": [
     "lib", 
-    "tensorflow-src" 
-  ],
+    "tensorflow-src"
+  ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 
     "module_uoa": "script"
