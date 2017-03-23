@@ -1,5 +1,6 @@
 2017.03.23 - added tensorflow src universal package (to build Android scenarios)
            - moved soft:lib.libjpeg to ck-env repo
+           - moved package:jdk-8u111-linux , lib-libjpeg , tool-bazel-0.4.1 , tool-bazel-0.4.2 to ck-autotuning repo from here
 
 2016.12.07 - fixed Basel version (installation on Linux)
 
