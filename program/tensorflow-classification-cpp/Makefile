@@ -207,22 +207,38 @@ ifeq ($(TARGET),ANDROID)
     $(error "windows is not supported.")
 	endif
 
+	ifeq ($(ANDROID_ARCH),arm64-v8a)
+		TOOLCHAIN := aarch64-linux-android-4.9
+		SYSROOT_ARCH := arm64
+		BIN_PREFIX := aarch64-linux-android
+	endif
+	ifeq ($(ANDROID_ARCH),armeabi-v7a)
+		TOOLCHAIN := arm-linux-androideabi-4.9
+		SYSROOT_ARCH := arm
+		BIN_PREFIX := arm-linux-androideabi
+	endif
+	
 	ifndef NDK_ROOT
     $(error "NDK_ROOT is not defined.")
 	endif
-	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/bin/arm-linux-androideabi-g++
+	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/bin/$(BIN_PREFIX)-g++
 	CXXFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-21/arch-arm \
+--sysroot $(NDK_ROOT)/platforms/android-21/arch-$(SYSROOT_ARCH) \
 -Wno-narrowing \
--march=armv7-a \
--mfloat-abi=softfp \
--mfpu=neon \
--fPIE
+-fPIE 
+
+	ifeq ($(ANDROID_ARCH),armeabi-v7a)
+		CXXFLAGS +=\
+		-march=armv7-a \
+		-mfloat-abi=softfp \
+		-mfpu=neon
+	endif
+
 
 	INCLUDES = \
 -I$(NDK_ROOT)/sources/android/support/include \
 -I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/include \
--I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi/include \
+-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH)/include \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
@@ -236,24 +252,24 @@ INCLUDES += -I$(CK_ENV_LIB_RTL_XOPENME_INCLUDE)
 
 	LIBS := \
 -L$(CK_ENV_LIB_RTL_XOPENME_LIB) -lrtlxopenme \
--L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/armeabi-v7a -ljpeg \
+-L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/$(ANDROID_ARCH) -ljpeg \
 -lgnustl_static \
 -lprotobuf \
 -llog \
 -lz \
 -lm \
 
-	LD := $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/arm-linux-androideabi/bin/ld
+	LD := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/$(BIN_PREFIX)/bin/ld
 
 	LDFLAGS := \
--march=armv7-a \
 -L$(MAKEFILE_DIR)/gen/protobuf/lib \
--L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a \
+-L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH) \
 -fPIE \
 -pie \
--v
+-v \
+#-march=armv7-a \
 
-	AR := $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/bin/arm-linux-androideabi-ar
+	AR := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/bin/$(BIN_PREFIX)-ar
 	ARFLAGS := r
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 
