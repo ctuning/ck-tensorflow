@@ -44,7 +44,7 @@
           "data_uoa": "a8addbb39edc4398",
           "script_name": "preprocess"
         },
-        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=/home/anatoly/CK-TOOLS/tensorflow-model-aux-201512/tensorflow_inception_stripped.pb --image=${CK_DATASET_TENSORFLOW_AUX_IMG}",
+        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_DATASET_TENSORFLOW_AUX_IMG}",
         "run_cmd_out1": "tmp-output1.tmp",
         "run_correctness_output_files": [],
         "run_input_files": [
