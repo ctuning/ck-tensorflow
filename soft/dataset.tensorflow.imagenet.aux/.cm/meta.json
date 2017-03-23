@@ -1,0 +1,27 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_DATASET_TENSORFLOW_AUX", 
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "android": 3,
+      "win": 3
+    }, 
+    "soft_file": {
+      "linux": "tensorflow_inception_graph.pb",
+      "android": "tensorflow_inception_graph.pb",
+      "win": "tensorflow_inception_graph.pb"
+    }
+  }, 
+  "soft_name": "TensorFlow Imagenet dataset aux (net and weights)", 
+  "tags": [
+    "tensorflow", 
+    "model",
+    "tensorflowmodel", 
+    "google",
+    "imagenet",
+    "aux"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX", 
+    "limit_recursion_dir_search": {
+      "linux": 3,
+      "android": 3,
+      "win": 3
+    }, 
+    "soft_file": {
+      "linux": "tensorflow_inception_stripped.pb",
+      "android": "tensorflow_inception_stripped.pb",
+      "win": "tensorflow_inception_stripped.pb"
+    }
+  }, 
+  "soft_name": "TensorFlow Imagenet stripped dataset aux (net and weights)", 
+  "tags": [
+    "tensorflow", 
+    "model",
+    "tensorflowmodel", 
+    "google",
+    "imagenet",
+    "stripped",
+    "aux"
+  ]
+}

@@ -6,10 +6,12 @@
     "env_prefix": "CK_ENV_MODEL_TENSORFLOW", 
     "limit_recursion_dir_search": {
       "linux": 3,
+      "android": 3,
       "win": 3
     }, 
     "soft_file": {
       "linux": "classify_image_graph_def.pb",
+      "android": "classify_image_graph_def.pb",
       "win": "classify_image_graph_def.pb"
     }
   }, 

@@ -4,6 +4,7 @@
     "extra_dir": "", 
     "install_env": {
       "PACKAGE_INSTALL": "bazel-0.4.2-installer-linux-x86_64.sh", 
+      "PACKAGE_INSTALL_OSX": "bazel-0.4.2-installer-darwin-x86_64.sh",
       "PACKAGE_URL": "https://github.com/bazelbuild/bazel/releases/download/0.4.2"
     }, 
     "version": "0.4.2"
@@ -18,7 +19,8 @@
     }
   }, 
   "end_full_path": {
-    "linux": "bin/bazel"
+    "linux": "bin/bazel",
+    "android": "bin/bazel"
   }, 
   "process_script": "install", 
   "soft_uoa": "359f7730bd23ec60", 

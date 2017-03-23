@@ -1,0 +1,93 @@
+{
+  "backup_data_uid": "a8addbb39edc4398", 
+  "build_compiler_vars": {
+    "CPU_ONLY": "ON",
+    "XOPENME":""
+  }, 
+  "compile_cmds": {
+    "default": {
+      "cmd": "sh ../ck-compile$#script_ext#$"
+    }
+  }, 
+  "compile_deps": {
+    "lib_tensorflow_cpu": {
+      "local": "yes", 
+      "name": "Tensorflow CPU library", 
+      "sort": 0, 
+      "tags": "lib, tensorflow, tensorflow-cpu"
+    },
+    "libjpeg": {
+      "local": "yes",
+      "name": "libjpeg",
+      "sort": 1,
+      "tags": "lib,libjpeg,jpeg"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
+    }
+  }, 
+  "compiler_env": "CK_CXX", 
+  "data_name": "tensorflow-classification-cpp", 
+  "main_language": "cpp", 
+  "only_for_target_os_tags": [
+    "windows", 
+    "linux", 
+    "android"
+  ], 
+  "print_files_after_run": [
+    "tmp-output1.tmp"
+  ],
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "hot_functions": [], 
+      "ignore_return_code": "no", 
+      "run_time": { 
+        "pre_process_via_ck": {
+          "data_uoa": "a8addbb39edc4398",
+          "script_name": "preprocess"
+        },
+        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_DATASET_TENSORFLOW_AUX_IMG}",
+        "run_cmd_out1": "tmp-output1.tmp",
+        "run_correctness_output_files": [],
+        "run_input_files": [
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$",
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_TXT>>$",
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_IMG>>$"
+        ],
+        "run_output_files": [
+          "tmp-output1.tmp"
+        ]
+      }
+    }
+  },
+  "run_deps": {
+    "tensorflow-model-imagenet": {
+      "local": "yes", 
+      "name": "Tensorflow model", 
+      "sort": 1, 
+      "tags": " tensorflow,weights,tensorflowmodel,google,imagenet,inception,v20151205"
+    },
+    "tensorflow-aux": {
+      "local": "yes", 
+      "name": "Tensorflow aux", 
+      "sort": 2, 
+      "tags": "tensorflow,model,tensorflowmodel,google,aux,imagenet,stripped,inception,v201512"
+    }
+  },
+  "skip_bin_ext": "yes", 
+  "source_files": [
+    "classification.cpp"
+  ], 
+  "tags": [
+    "tensorflow-classification-cpp", 
+    "demo", 
+    "vcpu"
+  ],
+  "target_file": "classification", 
+  "use_compile_script": "yes"
+}
