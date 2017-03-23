@@ -1,3 +1,5 @@
+2017.03.23 - added tensorflow src universal package (to build Android scenarios)
+
 2016.12.07 - fixed Basel version (installation on Linux)
 
 2016.11.09 - added pre-built libs and changing benchmarking to support older TensorFlow versions
