@@ -331,7 +331,7 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
   std::vector<Tensor> out_tensors;
   TF_RETURN_IF_ERROR(session->Run({}, {output_name + ":0", output_name + ":1"},
                                   {}, &out_tensors));
-  *out_indices = out_tensors[0];
+  *out_scores = out_tensors[0];
   *out_indices = out_tensors[1];
   #endif
   return Status::OK();
