@@ -1,7 +1,8 @@
 {
   "backup_data_uid": "a8addbb39edc4398", 
   "build_compiler_vars": {
-    "CPU_ONLY": "ON"
+    "CPU_ONLY": "ON",
+    "XOPENME":""
   }, 
   "compile_cmds": {
     "default": {
@@ -20,6 +21,12 @@
       "name": "libjpeg",
       "sort": 1,
       "tags": "lib,libjpeg,jpeg"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
     }
   }, 
   "compiler_env": "CK_CXX", 
@@ -69,7 +76,7 @@
       "local": "yes", 
       "name": "Tensorflow aux", 
       "sort": 2, 
-      "tags": "tensorflow,model,tensorflowmodel,google,aux,imagenet,inception,v201512"
+      "tags": "tensorflow,model,tensorflowmodel,google,aux,imagenet,stripped,inception,v201512"
     }
   },
   "skip_bin_ext": "yes", 

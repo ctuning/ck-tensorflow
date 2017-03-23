@@ -80,7 +80,7 @@ def setup(i):
 
     ep=cus['env_prefix']
     env[ep]=pi
-    env[ep + '_PB']=pi+sdirs+'tensorflow_inception_graph.pb'
+    env[ep + '_PB']=pi+sdirs+'tensorflow_inception_stripped.pb'
     env[ep + '_LABELS']=pi+sdirs+'imagenet_comp_graph_label_strings.txt'
 
     return {'return':0, 'bat':s}

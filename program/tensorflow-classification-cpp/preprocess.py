@@ -22,10 +22,10 @@ def ck_preprocess(i):
     x=deps['tensorflow-aux']
     y=deps['tensorflow-model-imagenet']
 
-    pb_path_full=x['dict']['env']['CK_ENV_DATASET_TENSORFLOW_AUX'] + '/tensorflow_inception_stripped.pb'
+    pb_path_full=x['dict']['env']['CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX'] + '/tensorflow_inception_stripped.pb'
     nenv['CK_ENV_DATASET_TENSORFLOW_AUX_PB']=pb_path_full
 
-    txt_path_full=x['dict']['env']['CK_ENV_DATASET_TENSORFLOW_AUX'] + '/imagenet_comp_graph_label_strings.txt'
+    txt_path_full=x['dict']['env']['CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX'] + '/imagenet_comp_graph_label_strings.txt'
     nenv['CK_ENV_DATASET_TENSORFLOW_AUX_TXT']=txt_path_full
 
     img_path_full=y['dict']['env']['CK_ENV_MODEL_TENSORFLOW'] + '/cropped_panda.jpg'
