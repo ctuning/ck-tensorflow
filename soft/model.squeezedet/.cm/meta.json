@@ -11,11 +11,11 @@
       "linux": "squeezeDet/README.md"
     }
   },
-  "soft_name": "SquezeDet TensorFlow model",
+  "soft_name": "TensorFlow model - SqueezeDet",
   "tags": [
+    "tensorflow",
     "model",
-    "squeezedet",
-    "tensorflow"
+    "squeezedet"
   ]
 }
 

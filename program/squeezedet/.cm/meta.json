@@ -1,43 +1,43 @@
 {
   "compile_deps": {
     "python": {
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
       "tags": "compiler,python"
     },
     "lib-tensorflow": {
-      "local": "yes", 
-      "name": "TensorFlow library", 
-      "skip_pruning_by_other_deps": "yes", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "TensorFlow library",
+      "skip_pruning_by_other_deps": "yes",
+      "sort": 10,
       "tags": "lib,tensorflow"
     },
-    "lib-openCV": {
+    "lib-opencv": {
       "local": "yes",
-      "name": "openCV library",
+      "name": "OpenCV library",
       "sort": 20,
       "tags": "lib,opencv",
       "skip_pruning_by_other_deps": "yes"
     },
-    "squeezeDet":{
+    "squeezedet": {
       "local": "yes",
-      "name": "squeezeDet",
+      "name": "SqueezeDet artifact",
       "sort": 30,
       "tags": "model,tensorflow,squeezedet"
     },
-    "KITTI":{
+    "dataset-kitti": {
       "local": "yes",
       "name": "KITTI dataset",
-      "sort": 30,
-      "tags": "dataset,KITTI,tensorflow,squeezedet"
+      "sort": 40,
+      "tags": "dataset,kitti"
     }
-  }, 
-  "data_name": "tensorflow", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
-  "no_compile": "yes", 
-  "no_target_file": "yes", 
+  },
+  "data_name": "tensorflow",
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "no_compile": "yes",
+  "no_target_file": "yes",
   "run_cmds": {
     "squeezedet":{
       "dataset_tags": [
@@ -53,8 +53,7 @@
     }
   },
   "tags": [
-    "tensorflow", 
-    "squeezeDet"
+    "tensorflow",
+    "squeezedet"
   ]
 }
-

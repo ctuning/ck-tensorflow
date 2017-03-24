@@ -1,38 +1,84 @@
 {
-  "backup_data_uid": "c0bacdae0ce2b532", 
-  "compile_deps": {
-    "lib-tensorflow": {
-      "local": "yes", 
-      "name": "TensorFlow library", 
-      "skip_pruning_by_other_deps": "yes", 
-      "sort": 10, 
-      "tags": "lib,tensorflow"
-    }
-  }, 
-  "data_name": "tensorflow", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
-  "no_compile": "yes", 
-  "no_target_file": "yes", 
+  "backup_data_uid": "c0bacdae0ce2b532",
+  "data_name": "tensorflow",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
-    "TensorFlow_benchmark": {
+    "benchmark_cpu": {
       "dataset_tags": [
         "benchmark",
         "tensorflow",
-        "dataset"
+        "dataset",
+        "vcpu"
       ],
-      "ignore_return_code": "no", 
+      "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+      },
+      "update_deps": {
+        "lib-tensorflow": {
+          "no_tags": "tensorflow-cuda",
+          "tags": "tensorflow-cpu"
+        }
+      }
+    },
+    "benchmark_cuda": {
+      "dataset_tags": [
+        "benchmark",
+        "tensorflow",
+        "dataset",
+        "vcuda"
+      ],
+      "ignore_return_code": "no",
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+      },
+      "run_deps": {
+        "lib-cudart": {
+          "local": "yes",
+          "name": "CUDA runtime",
+          "sort": 15,
+          "tags": "compiler,cuda,lang-c-cuda"
+        },
+        "lib-cudnn": {
+          "local": "yes",
+          "name": "cuDNN library",
+          "sort": 20,
+          "tags": "lib,cudnn"
+        }
+      },
+      "update_deps": {
+        "lib-tensorflow": {
+          "no_tags": "tensorflow-cpu",
+          "tags": "tensorflow-cuda"
+        }
       }
     }
-  }, 
+  },
   "run_vars": {
     "BATCH_SIZE": 32,
     "NUM_BATCHES": 25
   },
+  "run_deps": {
+    "lang-python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "python,lang-python,compiler"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "skip_pruning_by_other_deps": "no",
+      "sort": 10,
+      "tags": "lib,tensorflow"
+    }
+  },
   "tags": [
-    "tensorflow", 
+    "benchmark",
+    "tensorflow",
     "demo"
   ]
 }

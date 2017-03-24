@@ -2,8 +2,8 @@
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
     "install_env": {
        "KITTI_IMAGES_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_image_2.zip",
        "KITTI_LABELS_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_label_2.zip"
@@ -12,23 +12,20 @@
   "deps": {
     "SqueezeDet":{
       "local": "yes",
-      "name" : "squeezeDet",
+      "name" : "SqueezeDet",
       "tags": "model,tensorflow,squeezedet"
     }
   },
   "need_cpu_info": "no",
   "end_full_path": {
     "linux": "KITTI/ImageSets/trainval.txt"
-  }, 
+  },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
   "suggested_path": "KITTI",
   "tags": [
-    "dataset", 
-    "squeezenet", 
-    "val",
+    "dataset",
     "kitti",
-    "tensorflow"
+    "KITTI"
   ]
 }
-

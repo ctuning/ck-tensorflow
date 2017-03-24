@@ -6,6 +6,7 @@
     "benchmark",
     "tensorflow",
     "dataset",
-    "overfeat"
+    "overfeat",
+    "vcuda"
   ]
 }

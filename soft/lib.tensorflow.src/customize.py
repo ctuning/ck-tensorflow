@@ -4,7 +4,7 @@
 # See CK LICENSE.txt for licensing details
 # See CK COPYRIGHT.txt for copyright details
 #
-# Developer: Grigori Fursin, Grigori.Fursin@cTuning.org, http://fursin.net
+# Developer: Grigori Fursin
 #
 
 import os
@@ -63,22 +63,13 @@ def setup(i):
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
 
-    sdirs=hosd.get('dir_sep','')
-
-    # Check platform
-    hplat=hosd.get('ck_name','')
-
-    hproc=hosd.get('processor','')
-    tproc=tosd.get('processor','')
-
-    remote=tosd.get('remote','')
-    tbits=tosd.get('bits','')
-
     env=i['env']
-
-    pi=os.path.dirname(fp)
-
     ep=cus['env_prefix']
+
+    p1=os.path.dirname(fp)
+    pl=os.path.dirname(p1)
+    pi=os.path.dirname(pl)
+
     env[ep]=pi
 
     return {'return':0, 'bat':s}
