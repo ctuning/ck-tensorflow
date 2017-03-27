@@ -8,9 +8,11 @@ TENSORFLOW_SRC=${CK_ENV_LIB_TF}/src
 
 cd ${TENSORFLOW_SRC}
 
-if [ "${CK_TARGET_OS_NAME2_ANDROID}" == "1" ] ; then
+if [ "${CK_ANDROID_ABI}" != "" ] ; then
   MAKEFILE_DIR=tensorflow/contrib/makefile
   FULL_MAKEFILE_DIR=${TENSORFLOW_SRC}/${MAKEFILE_DIR}
+
+  export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
 
   ####################################################################
   if [ ! -d "${MAKEFILE_DIR}/downloads" ]; then
@@ -28,10 +30,21 @@ if [ "${CK_TARGET_OS_NAME2_ANDROID}" == "1" ] ; then
 
   ####################################################################
   cp -f ${PROGRAM_DIR}/classification.cpp ${MAKEFILE_DIR}/samples/classification.cc
-  cp -f ${PROGRAM_DIR}/Makefile ${MAKEFILE_DIR}/Makefile
+  cp -f ${PROGRAM_DIR}/Makefile.android ${MAKEFILE_DIR}/Makefile
 
   ####################################################################
-  make -f ${MAKEFILE_DIR}/Makefile VERBOSE=1 CXX=${CK_CXX} CK_INCLUDE="-I${CK_ENV_LIB_PROTOBUF_INCLUDE}" PROTOC=${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc
+#  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
+  make -j 4 \
+       -f ${MAKEFILE_DIR}/Makefile VERBOSE=1 \
+       AR="${CK_ENV_COMPILER_GCC_BIN}/${CK_AR}" \
+       LD="${CK_ENV_COMPILER_GCC_BIN}/${CK_LD}" \
+       CXX="${CK_ENV_COMPILER_GCC_BIN}/${CK_CXX}" \
+       CK_INCLUDE="-I${CK_ENV_LIB_PROTOBUF_INCLUDE} -I${CK_LIB_LIBJPEG_INCLUDE}" \
+       CK_LIBS="-ljpeg" \
+       CK_LDFLAGS="-L${CK_LIB_LIBJPEG_LIB}" \
+       PROTOC=${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc \
+       TARGET=ANDROID \
+       V=1
   if [ "${?}" != "0" ] ; then
     echo ""
     echo "Error: make for android classification failed!"
