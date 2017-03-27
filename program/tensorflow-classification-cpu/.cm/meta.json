@@ -16,6 +16,10 @@
     "bazel": {
       "local": "yes", 
       "name": "Bazel", 
+      "only_for_target_os_tags": [
+        "linux",
+        "windows"
+      ],
       "sort": 0, 
       "tags": "tool,bazel"
     },
@@ -46,8 +50,21 @@
     "lib-tensorflow-src": {
       "local": "yes",
       "name": "Tensorflow library (sources)",
+      "only_for_target_os_tags": [
+        "android"
+      ],
       "sort": 0,
       "tags": "lib, tensorflow-src"
+    },
+    "lib-tensorflow-cpu": {
+      "local": "yes",
+      "name": "Tensorflow library (CPU)",
+      "sort": 0,
+      "only_for_target_os_tags": [
+        "linux",
+        "windows"
+      ],
+      "tags": "lib, tensorflow,vcpu"
     },
     "libjpeg": {
       "local": "yes",
@@ -77,20 +94,23 @@
   "program": "yes",
   "run_cmds": {
     "default": {
+      "dataset_tags": [
+        "image",
+        "jpeg",
+        "dataset"
+      ],
       "hot_functions": [],
       "ignore_return_code": "no",
       "run_time": {
         "pre_process_via_ck": {
-          "data_uoa": "a8addbb39edc4398",
           "script_name": "preprocess"
         },
-        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=${CK_DATASET_TENSORFLOW_AUX_IMG}",
+        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=$#dataset_path#$$#dataset_filename#$",
         "run_cmd_out1": "tmp-output1.tmp",
         "run_correctness_output_files": [],
         "run_input_files": [
           "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$",
-          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_TXT>>$",
-          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_IMG>>$"
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_TXT>>$"
         ],
         "run_output_files": [
           "tmp-output1.tmp"
@@ -99,17 +119,11 @@
     }
   },
   "run_deps": {
-    "tensorflow-aux": {
+    "tensorflow-model": {
       "local": "yes",
       "name": "Tensorflow aux",
-      "sort": 2,
-      "tags": "tensorflow,model,tensorflowmodel,google,aux,imagenet,stripped,inception,v201512"
-    },
-    "tensorflow-model-imagenet": {
-      "local": "yes",
-      "name": "Tensorflow model",
       "sort": 1,
-      "tags": " tensorflow,weights,tensorflowmodel,google,imagenet,inception,v20151205"
+      "tags": "tensorflowmodel,stripped"
     }
   },
   "skip_bin_ext": "yes",

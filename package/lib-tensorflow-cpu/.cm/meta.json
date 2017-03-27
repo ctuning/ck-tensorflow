@@ -20,7 +20,7 @@
       "local": "yes", 
       "name": "Bazel", 
       "sort": 10, 
-      "tags": "tool,bazel,v0.4.2"
+      "tags": "tool,bazel"
     },
     "python": {
       "local": "yes", 
@@ -54,6 +54,7 @@
   "tags": [
     "lib",
     "tensorflow",
-    "tensorflow-cpu"
+    "tensorflow-cpu",
+    "vcpu"
   ]
 }

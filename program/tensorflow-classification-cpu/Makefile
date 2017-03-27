@@ -48,7 +48,7 @@ endif
 HOST_LDOPTS += -L/usr/local/lib
 
 HOST_INCLUDES := \
-$(PROTOBUF_INCLUDE) \
+$(CK_INCLUDE) \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
@@ -126,7 +126,7 @@ LDFLAGS := \
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
 
 INCLUDES := \
-$(PROTOBUF_INCLUDE) \
+$(CK_INCLUDE) \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
