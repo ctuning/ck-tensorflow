@@ -10,16 +10,25 @@
     }
   }, 
   "compile_deps": {
+    "bazel": {
+      "local": "yes", 
+      "name": "Bazel", 
+      "sort": 0, 
+      "tags": "tool,bazel"
+    },
     "lib-tensorflow-src": {
       "local": "yes", 
       "name": "Tensorflow library (sources)", 
-      "sort": 0, 
+      "sort": 5, 
       "tags": "lib, tensorflow-src"
     }, 
     "libjpeg": {
       "local": "yes", 
       "name": "Jpeg library", 
       "sort": 10, 
+      "only_for_target_os_tags": [
+        "android"
+      ],
       "tags": "lib,libjpeg"
     }, 
     "xopenme": {
