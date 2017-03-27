@@ -11,5 +11,5 @@
       "7"
     ]
   }, 
-  "data_name": "tensorflow-imagenet-stripped-201512-aux"
+  "data_name": "tensorflowmodel-imagenet-inception-20151205-stripped"
 }

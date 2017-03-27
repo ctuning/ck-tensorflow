@@ -21,6 +21,7 @@
   "suggested_path": "tensorflow-model-imagenet-inception-20151205", 
   "tags": [
     "tensorflow", 
+    "native",
     "weights", 
     "tensorflowmodel", 
     "google", 
