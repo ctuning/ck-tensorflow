@@ -7,8 +7,10 @@ if [ ! -z ${CK_ANDROID_NDK_PLATFORM} ]; then
     export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
 
     #compile static library for libjpeg
-    if [ ! -f "${CK_LIB_LIBJPEG_TENSORFLOW}/obj/local/armeabi-v7a/libjpeg.a" ]; then
-        cd ${CK_LIB_LIBJPEG_TENSORFLOW} && ${NDK_ROOT}/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk APP_ABI=armeabi-v7a obj/local/armeabi-v7a/libjpeg.a
+    LIBJPEG_DIR=obj/local/${CK_ANDROID_ABI}/libjpeg.a
+
+    if [ ! -f "${CK_LIB_LIBJPEG_TENSORFLOW}/${LIBJPEG_DIR}" ]; then
+        cd ${CK_LIB_LIBJPEG_TENSORFLOW} && ${NDK_ROOT}/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk APP_ABI=${CK_ANDROID_ABI} ${LIBJPEG_DIR}
         if [ "${?}" != "0" ] ; then
             echo ""
             echo "Error: Compiling static library for libjpeg failed!"
@@ -29,7 +31,7 @@ if [ ! -z ${CK_ANDROID_NDK_PLATFORM} ]; then
     fi
     
     if [ ! -d "${MAKEFILE_DIR}/gen/protobuf" ]; then
-        tensorflow/contrib/makefile/compile_android_protobuf.sh -c
+        tensorflow/contrib/makefile/compile_android_protobuf.sh -c -a ${CK_ANDROID_ABI}
         if [ "${?}" != "0" ] ; then
             echo ""
             echo "Error: Compiling android protobuf for '${CK_ENV_LIB_TF}/src/${MAKEFILE_DIR}' failed!"
@@ -39,7 +41,7 @@ if [ ! -z ${CK_ANDROID_NDK_PLATFORM} ]; then
 
     cp ${PROGRAM_DIR}/classification.cpp ${MAKEFILE_DIR}/samples/classification.cc
     cp ${PROGRAM_DIR}/Makefile ${MAKEFILE_DIR}/Makefile
-    make -f ${MAKEFILE_DIR}/Makefile TARGET=ANDROID
+    make -f ${MAKEFILE_DIR}/Makefile TARGET=ANDROID ANDROID_ARCH=${CK_ANDROID_ABI}
     if [ "${?}" != "0" ] ; then
         echo ""
         echo "Error: make for android classification failed!"

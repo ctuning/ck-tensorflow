@@ -48,6 +48,7 @@ endif
 HOST_LDOPTS += -L/usr/local/lib
 
 HOST_INCLUDES := \
+$(CK_INCLUDE) \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
@@ -119,12 +120,13 @@ ifneq ($(TARGET),ANDROID)
   OPTFLAGS += -march=native
 endif
 
-CXXFLAGS := --std=c++11 -DIS_SLIM_BUILD -fno-exceptions -DNDEBUG $(OPTFLAGS)
+CXXFLAGS := --std=c++11 -DIS_SLIM_BUILD -fno-exceptions -DNDEBUG $(OPTFLAGS) ${CK_COMPILER_FLAGS_OBLIGATORY}
 LDFLAGS := \
 -L/usr/local/lib
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
 
 INCLUDES := \
+$(CK_INCLUDE) \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
@@ -137,10 +139,8 @@ endif
 # This is at the end so any globally-installed frameworks like protobuf don't
 # override local versions in the source tree.
 INCLUDES += -I/usr/local/include
-INCLUDES += -I$(CK_ENV_LIB_RTL_XOPENME_INCLUDE)
 
 LIBS := \
--L$(CK_ENV_LIB_RTL_XOPENME_LIB) -lrtlxopenmp \
 -lstdc++ \
 -lprotobuf \
 -lz \
@@ -207,69 +207,49 @@ ifeq ($(TARGET),ANDROID)
     $(error "windows is not supported.")
 	endif
 
-	ifeq ($(ANDROID_ARCH),arm64-v8a)
-		TOOLCHAIN := aarch64-linux-android-4.9
-		SYSROOT_ARCH := arm64
-		BIN_PREFIX := aarch64-linux-android
-	endif
-	ifeq ($(ANDROID_ARCH),armeabi-v7a)
-		TOOLCHAIN := arm-linux-androideabi-4.9
-		SYSROOT_ARCH := arm
-		BIN_PREFIX := arm-linux-androideabi
-	endif
-	
 	ifndef NDK_ROOT
     $(error "NDK_ROOT is not defined.")
 	endif
-	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/bin/$(BIN_PREFIX)-g++
+	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/bin/arm-linux-androideabi-g++
 	CXXFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-21/arch-$(SYSROOT_ARCH) \
 -Wno-narrowing \
--fPIE 
-
-	ifeq ($(ANDROID_ARCH),armeabi-v7a)
-		CXXFLAGS +=\
-		-march=armv7-a \
-		-mfloat-abi=softfp \
-		-mfpu=neon
-	endif
-
+-fPIE
 
 	INCLUDES = \
 -I$(NDK_ROOT)/sources/android/support/include \
--I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/include \
--I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH)/include \
+-I${CK_ENV_LIB_STDCPP_INCLUDE} \
+-I${CK_ENV_LIB_STDCPP_INCLUDE_EXTRA} \
 -I. \
 -I$(MAKEFILE_DIR)/downloads/ \
 -I$(MAKEFILE_DIR)/downloads/eigen \
 -I$(MAKEFILE_DIR)/downloads/gemmlowp \
--I$(MAKEFILE_DIR)/gen/protobuf/include \
+-I${CK_ENV_LIB_PROTOBUF_INCLUDE} \
 -I$(PROTOGENDIR) \
 -I$(PBTGENDIR)
 
-INCLUDES += -I$(CK_LIB_LIBJPEG_TENSORFLOW)
-INCLUDES += -I$(CK_ENV_LIB_RTL_XOPENME_INCLUDE)
+#INCLUDES += -I$(CK_LIB_LIBJPEG_TENSORFLOW)
 
 	LIBS := \
--L$(CK_ENV_LIB_RTL_XOPENME_LIB) -lrtlxopenme \
--L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/$(ANDROID_ARCH) -ljpeg \
 -lgnustl_static \
 -lprotobuf \
 -llog \
 -lz \
 -lm \
+#-L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/armeabi-v7a -ljpeg \
 
-	LD := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/$(BIN_PREFIX)/bin/ld
+	LD := $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/arm-linux-androideabi/bin/ld
 
 	LDFLAGS := \
--L$(MAKEFILE_DIR)/gen/protobuf/lib \
--L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH) \
+-L${CK_ENV_LIB_PROTOBUF_LIB} \
+-L${CK_ENV_LIB_STDCPP} \
 -fPIE \
 -pie \
--v \
-#-march=armv7-a \
 
-	AR := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(OS_PATH)-x86_64/bin/$(BIN_PREFIX)-ar
+#-v
+#${CK_ENV_LIB_STDCPP_STATIC} \
+#-lprotobuf \
+
+	AR := $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/bin/arm-linux-androideabi-ar
 	ARFLAGS := r
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 
@@ -456,7 +436,6 @@ $(wildcard tensorflow/core/*/*/*main.cc) \
 $(wildcard tensorflow/core/debug/*.cc) \
 $(wildcard tensorflow/core/framework/op_gen_lib.cc) \
 $(wildcard tensorflow/core/graph/dot.*) \
-$(wildcard tensorflow/core/grappler/devices.*) \
 $(wildcard tensorflow/core/lib/gif/*) \
 $(wildcard tensorflow/core/lib/io/zlib*) \
 $(wildcard tensorflow/core/lib/io/record*) \
@@ -481,6 +460,8 @@ $(wildcard tensorflow/core/common_runtime/gpu/*) \
 $(wildcard tensorflow/core/common_runtime/gpu_device_factory.*) \
 $(wildcard tensorflow/core/grappler/inputs/trivial_test_graph_input_yielder.*) \
 $(wildcard tensorflow/core/grappler/clusters/single_machine.*)
+#$(wildcard tensorflow/core/grappler/devices.*) \
+
 # Filter out all the excluded files.
 TF_CC_SRCS := $(filter-out $(CORE_CC_EXCLUDE_SRCS), $(CORE_CC_ALL_SRCS))
 # Add in any extra files that don't fit the patterns easily
@@ -490,10 +471,11 @@ TF_CC_SRCS += $(shell cat $(MAKEFILE_DIR)/tf_op_files.txt)
 PBT_CC_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_pb_text_files.txt)
 PROTO_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_proto_files.txt)
 BENCHMARK_SRCS := \
-tensorflow/contrib/makefile/samples/classification.cc
-#tensorflow/core/util/reporter.cc \
-#tensorflow/tools/benchmark/benchmark_model.cc \
-#tensorflow/tools/benchmark/benchmark_model_main.cc
+tensorflow/core/util/reporter.cc \
+tensorflow/tools/benchmark/benchmark_model.cc \
+tensorflow/tools/benchmark/benchmark_model_main.cc
+
+#tensorflow/contrib/makefile/samples/classification.cc \
 
 # File names of the intermediate files target compilation generates.
 TF_CC_OBJS := $(addprefix $(OBJDIR), $(TF_CC_SRCS:.cc=.o))

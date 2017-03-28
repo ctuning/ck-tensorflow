@@ -35,14 +35,14 @@ limitations under the License.
 #include <vector>
 #include <iomanip>
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(TF_VIA_MAKE)
 #include <stdio.h>
 #include <setjmp.h>
 #include <iostream>
 #include <jpeglib.h>
 #endif
 
-#ifndef __ANDROID__
+#if defined(__ANDROID__)
 #include "tensorflow/cc/ops/const_op.h"
 #include "tensorflow/cc/ops/image_ops.h"
 #include "tensorflow/cc/ops/standard_ops.h"
@@ -63,7 +63,9 @@ limitations under the License.
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/core/util/command_line_flags.h"
 
+#ifdef XOPENME
 #include <xopenme.h>
+#endif
 // These are all common classes it's handy to reference with no namespace.
 using tensorflow::Flag;
 using tensorflow::Tensor;
@@ -73,15 +75,23 @@ using tensorflow::int32;
 
 
 void x_clock_start(int timer) {
+#ifdef XOPENME
   xopenme_clock_start(timer);
+#endif
 }
 
 void x_clock_end(int timer) {
+#ifdef XOPENME
   xopenme_clock_end(timer);
+#endif
 }
 
 double x_get_time(int timer) {
+#ifdef XOPENME
   return xopenme_get_timer(timer);
+#else
+  return 0;
+#endif
 }
 // Takes a file name, and loads a list of labels from it, one per line, and
 // returns a vector of the strings. It pads with empty strings so the length
@@ -101,7 +111,7 @@ Status ReadLabelsFile(std::istream& file, std::vector<string>* result,
   return Status::OK();
 }
 
-#ifdef __ANDROID__   
+#if defined(__ANDROID__) || defined(TF_VIA_MAKE)
 // Error handling for JPEG decoding.
 void CatchError(j_common_ptr cinfo) {
   (*cinfo->err->output_message)(cinfo);
@@ -165,7 +175,7 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
                                const int input_width, const float input_mean,
                                const float input_std,
                                std::vector<Tensor>* out_tensors) {
-  #ifdef __ANDROID__    
+  #if defined(__ANDROID__) || defined(TF_VIA_MAKE)
   std::vector<tensorflow::uint8> image_data;
   int image_width;
   int image_height;
@@ -304,7 +314,7 @@ Status LoadGraph(string graph_file_name,
 // their positions in the tensor, which correspond to categories.
 Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
                     Tensor* out_indices, Tensor* out_scores) {
-  #ifdef __ANDROID__
+  #if defined(__ANDROID__) || defined(TF_VIA_MAKE)
   const Tensor& unsorted_scores_tensor = outputs[0];
   auto unsorted_scores_flat = unsorted_scores_tensor.flat<float>();
   std::vector<std::pair<int, float>> scores;
@@ -405,8 +415,11 @@ int main(int argc, char* argv[]) {
   // They define where the graph and input data is located, and what kind of
   // input the model expects. If you train your own model, or use something
   // other than GoogLeNet you'll need to update these.
-  xopenme_init(1,0);
+#ifdef XOPENME
+  xopenme_init(3,0);
+#endif
 
+  x_clock_start(0);
   string image = "tensorflow/examples/label_image/data/grace_hopper.jpg";
   string graph = "data/tensorflow_inception_graph.pb";
   string labels =
@@ -471,16 +484,37 @@ int main(int argc, char* argv[]) {
   }
   const Tensor& resized_tensor = resized_tensors[0];
 
-  // Actually run the image through the model.
-  std::vector<Tensor> outputs;
-
-  x_clock_start(0);
-  Status run_status = session->Run({{input_layer, resized_tensor}},
-                                   {output_layer}, {}, &outputs);
   x_clock_end(0);
+  // Actually run the image through the model.
 
+  long ct_repeat=0;
+  long ct_repeat_max=1;
+  int ct_return=0;
+
+  if (getenv("CT_REPEAT_MAIN")!=NULL) ct_repeat_max=atol(getenv("CT_REPEAT_MAIN"));
+  
+  x_clock_start(2);
+
+  std::vector<Tensor> outputs;
+  Status run_status;
+  for (ct_repeat=0; ct_repeat<ct_repeat_max; ct_repeat++) {
+    run_status = session->Run({{input_layer, resized_tensor}},
+                                   {output_layer}, {}, &outputs);
+  }
+
+  x_clock_end(2);  
   if (!run_status.ok()) {
     LOG(ERROR) << "Running model failed: " << run_status;
+    return -1;
+  }
+
+  // Do something interesting with the results we've generated.
+  std::ifstream labels_file;
+  labels_file.open(labels, std::ifstream::in);
+  Status print_status = PrintTopLabels(outputs, labels_file, image);
+
+  if (!print_status.ok()) {
+    LOG(ERROR) << "Running print failed: " << print_status;
     return -1;
   }
 
@@ -500,17 +534,10 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  // Do something interesting with the results we've generated.
-  std::ifstream labels_file;
-  labels_file.open(labels, std::ifstream::in);
-  Status print_status = PrintTopLabels(outputs, labels_file, image);
-  if (!print_status.ok()) {
-    LOG(ERROR) << "Running print failed: " << print_status;
-    return -1;
-  }
-
+#ifdef XOPENME
   xopenme_dump_state();
   xopenme_finish();
+#endif
 
   return 0;
 }

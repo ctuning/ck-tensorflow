@@ -20,7 +20,11 @@
       "local": "yes", 
       "name": "Bazel", 
       "sort": 10, 
-      "tags": "tool,bazel,v0.4.2"
+      "only_for_target_os_tags": [
+        "linux",
+        "windows"
+      ],
+      "tags": "tool,bazel"
     },
     "python": {
       "local": "yes", 
@@ -28,11 +32,35 @@
       "sort": 20, 
       "tags": "compiler,python"
     },
-    "compiler.gcc": {
+    "compiler": {
       "local": "yes", 
       "sort": 30, 
       "name": "GCC compiler", 
-      "tags": "compiler,lang-c,gcc"
+      "tags": "compiler,lang-c"
+    },
+    "lib-protobuf": {
+      "local": "yes",
+      "name": "ProtoBuf library",
+      "only_for_target_os_tags": [
+        "android"
+      ],
+      "skip_installed": {
+        "android": "yes",
+        "win": "yes"
+      },
+      "sort": 110,
+      "tags": "lib,protobuf,v3.1.0"
+    },
+    "lib-protobuf-host": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ProtoBuf host compiler",
+      "skip_installed": {
+        "android": "yes",
+        "win": "yes"
+      },
+      "sort": 115,
+      "tags": "lib,protobuf-host,v3.1.0"
     }
   }, 
   "end_full_path": {
@@ -54,6 +82,7 @@
   "tags": [
     "lib",
     "tensorflow",
-    "tensorflow-cpu"
+    "tensorflow-cpu",
+    "vcpu"
   ]
 }
