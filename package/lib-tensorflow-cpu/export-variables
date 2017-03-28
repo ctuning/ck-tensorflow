@@ -3,9 +3,9 @@ export USE_DEFAULT_PYTHON_LIB_PATH=1
 
 export CK_PYTHON3=0
 
-export GCC_HOST_COMPILER_PATH="/usr/bin/gcc-6"
-export HOST_C_COMPILER="/usr/bin/gcc-6"
-export HOST_CXX_COMPILER="/usr/bin/g++-6"
+export GCC_HOST_COMPILER_PATH=""
+export HOST_C_COMPILER=""
+export HOST_CXX_COMPILER=""
 
 export TF_NEED_CUDA=0
 export CUDA_HOME=""

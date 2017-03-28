@@ -20,6 +20,26 @@
     "params": {
     }
   },
+  "deps": {
+    "tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow framework",
+      "sort": 10,
+      "tags": "lib,tensorflow,tensorflow-cuda"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 20,
+      "tags": "compiler,python"
+    },
+    "opencv": {
+      "local": "yes",
+      "sort": 30,
+      "name": "OpenCV library",
+      "tags": "lib,opencv"
+    }
+  },
   "end_full_path": {
      "linux":"squeezeDet/README.md"
   },

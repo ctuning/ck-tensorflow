@@ -12,7 +12,7 @@
       "local": "yes",
       "name": "TensorFlow model (net and weights)",
       "sort": 20,
-      "tags": "tensorflowmodel"
+      "tags": "tensorflowmodel,native"
     }
   }, 
   "data_name": "tensorflow-classification", 

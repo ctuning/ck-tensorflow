@@ -15,12 +15,13 @@
     "android": "classify_image_graph_def.pb",
     "win": "classify_image_graph_def.pb"
   }, 
-  "package_extra_name": " (imagenet, inception)", 
+  "package_extra_name": " (imagenet, inception, 20151205)", 
   "process_script": "download", 
   "soft_uoa": "a8ec2e23cc4027b8", 
-  "suggested_path": "tensorflow-model-imagenet-inception", 
+  "suggested_path": "tensorflow-model-imagenet-inception-20151205", 
   "tags": [
     "tensorflow", 
+    "native",
     "weights", 
     "tensorflowmodel", 
     "google", 

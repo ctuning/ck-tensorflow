@@ -32,6 +32,47 @@ if [ "${?}" != "0" ] ; then
   exit 1
 fi
 
+if [ "${CK_ANDROID_ABI}" != "" ] ; then
+  cd ${TENSORFLOW_SRC_DIR}
+
+  MAKEFILE_DIR=tensorflow/contrib/makefile
+  FULL_MAKEFILE_DIR=${TENSORFLOW_SRC_DIR}/${MAKEFILE_DIR}
+
+  ####################################################################
+  if [ ! -d "${MAKEFILE_DIR}/downloads" ]; then
+    echo ""
+    echo "Downloading extra dependencies via TF ..."
+    echo ""
+
+    ${MAKEFILE_DIR}/download_dependencies.sh
+    if [ "${?}" != "0" ]; then
+      echo ""
+      echo "Error: Downloading dependencies for '${CK_ENV_LIB_TF}/src/${MAKEFILE_DIR}' failed!"
+      exit 1
+    fi
+  fi
+
+  cp -f ${ORIGINAL_PACKAGE_DIR}/classification.cpp ${MAKEFILE_DIR}/samples/classification.cc
+  cp -f ${ORIGINAL_PACKAGE_DIR}/Makefile.android ${MAKEFILE_DIR}/Makefile
+  if [ "${?}" != "0" ] ; then
+    echo ""
+    echo "Error: Makefile copying failed!"
+    exit 1
+  fi
+
+  ####################################################################
+  export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
+  make -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} -f ${MAKEFILE_DIR}/Makefile VERBOSE=1 AR="${CK_ENV_COMPILER_GCC_BIN}/${CK_AR}" LD="${CK_ENV_COMPILER_GCC_BIN}/${CK_LD}" CXX="${CK_ENV_COMPILER_GCC_BIN}/${CK_CXX}" CK_INCLUDE="-I${CK_ENV_LIB_PROTOBUF_INCLUDE}" PROTOC=${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc TARGET=ANDROID V=1
+  if [ "${?}" != "0" ] ; then
+    echo ""
+    echo "Error: make for android classification failed!"
+    exit 1
+  fi
+
+  cp -f ${CK_ENV_LIB_TF}/src/${MAKEFILE_DIR}/gen/bin/benchmark ${TMP_DIR}/classification
+  exit 0
+fi
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   #hack to make it work on mac os
   cd ${TENSORFLOW_INSTALL_DIR} && mkdir -p lib/tensorflow && echo '' > lib/tensorflow/__init__.py
