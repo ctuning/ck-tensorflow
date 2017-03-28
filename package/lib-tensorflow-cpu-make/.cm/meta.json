@@ -4,7 +4,7 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",

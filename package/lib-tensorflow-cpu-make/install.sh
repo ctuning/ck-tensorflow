@@ -3,7 +3,6 @@
 # CK installation script for TensorFlow package from Makefiles
 # http://cKnowledge.org/ai
 
-TMP_DIR=$(pwd)
 TENSORFLOW_SRC=${INSTALL_DIR}/src
 
 cd ${TENSORFLOW_SRC}
@@ -37,6 +36,8 @@ if [ ! -d "${MAKEFILE_DIR}/downloads" ]; then
   echo ""
   echo "Downloading extra dependencies via TF ..."
   echo ""
+
+  patch -p0 < ${ORIGINAL_PACKAGE_DIR}/patch
 
   ${MAKEFILE_DIR}/download_dependencies.sh
   if [ "${?}" != "0" ]; then
