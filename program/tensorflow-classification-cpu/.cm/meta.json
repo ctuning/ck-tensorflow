@@ -101,7 +101,8 @@
         ],
         "run_output_files": [
           "tmp-output1.tmp",
-          "tmp-output2.tmp"
+          "tmp-output2.tmp",
+          "tmp-ck-timer.json"
         ]
       }
     }
