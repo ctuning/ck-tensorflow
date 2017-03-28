@@ -187,9 +187,6 @@ ifeq ($(TARGET),PI)
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 endif
 
-
-CK_EXCLUDE_EXTRA := $(wildcard tensorflow/core/grappler/devices.*)
-
 # Set up Android building
 # LINT.IfChange
 ifeq ($(TARGET),ANDROID)
@@ -199,8 +196,6 @@ ifeq ($(TARGET),ANDROID)
 # You need to have an Android version of the protobuf libraries compiled to link
 # in. The compile_android_protobuf.sh script may help.
 # TODO(satok): Support all CPU architectures (Currently only armv7 is supported)
-
-    CK_EXCLUDE_EXTRA := ""
 
 	OS_PATH :=
 	ifeq ($(HOST_OS),LINUX)
@@ -467,7 +462,6 @@ $(wildcard tensorflow/core/common_runtime/gpu/*) \
 $(wildcard tensorflow/core/common_runtime/gpu_device_factory.*) \
 $(wildcard tensorflow/core/grappler/inputs/trivial_test_graph_input_yielder.*) \
 $(wildcard tensorflow/core/grappler/clusters/single_machine.*) \
-$(CK_EXCLUDE_EXTRA)
 #$(wildcard tensorflow/core/grappler/devices.*) \
 
 # Filter out all the excluded files.

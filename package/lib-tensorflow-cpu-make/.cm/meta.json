@@ -4,7 +4,7 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
@@ -22,22 +22,6 @@
     "version": "master"
   }, 
   "deps": {
-    "bazel": {
-      "local": "yes", 
-      "name": "Bazel", 
-      "only_for_target_os_tags": [
-        "linux", 
-        "windows"
-      ], 
-      "sort": 10, 
-      "tags": "tool,bazel"
-    }, 
-    "python": {
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 20, 
-      "tags": "compiler,python"
-    },
     "compiler": {
       "local": "yes", 
       "name": "GCC compiler", 
@@ -70,19 +54,19 @@
     }
   }, 
   "end_full_path": {
-    "android": "src/tensorflow/tensorflow.bzl", 
-    "linux": "src/tensorflow/tensorflow.bzl", 
-    "win": "src\\tensorflow\\tensorflow.bzl"
+    "android": "src/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a", 
+    "linux": "src/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a", 
+    "win": "src\\tensorflow\\contrib\\makefile\\gen\\lib\\libtensorflow-core.a"
   }, 
-  "package_extra_name": " (src)", 
+  "package_extra_name": " (via make)", 
   "process_script": "install", 
   "soft_uoa": "1441754bd574b689", 
   "suggested_path": "tensorflow-src", 
   "tags": [
     "lib", 
     "tensorflow", 
-    "tensorflow-src", 
-    "tensorflow-cpu-src", 
+    "tensorflow-make", 
+    "tensorflow-cpu-make", 
     "vsrc"
   ], 
   "use_scripts_from_another_entry": {
