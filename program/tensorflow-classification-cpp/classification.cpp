@@ -63,6 +63,7 @@ limitations under the License.
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/core/util/command_line_flags.h"
 
+#include <xopenme.h>
 // These are all common classes it's handy to reference with no namespace.
 using tensorflow::Flag;
 using tensorflow::Tensor;
@@ -70,6 +71,18 @@ using tensorflow::Status;
 using tensorflow::string;
 using tensorflow::int32;
 
+
+void x_clock_start(int timer) {
+  xopenme_clock_start(timer);
+}
+
+void x_clock_end(int timer) {
+  xopenme_clock_end(timer);
+}
+
+double x_get_time(int timer) {
+  return xopenme_get_timer(timer);
+}
 // Takes a file name, and loads a list of labels from it, one per line, and
 // returns a vector of the strings. It pads with empty strings so the length
 // of the result is a multiple of 16, because our model expects that.
@@ -392,6 +405,8 @@ int main(int argc, char* argv[]) {
   // They define where the graph and input data is located, and what kind of
   // input the model expects. If you train your own model, or use something
   // other than GoogLeNet you'll need to update these.
+  xopenme_init(1,0);
+
   string image = "tensorflow/examples/label_image/data/grace_hopper.jpg";
   string graph = "data/tensorflow_inception_graph.pb";
   string labels =
@@ -458,8 +473,12 @@ int main(int argc, char* argv[]) {
 
   // Actually run the image through the model.
   std::vector<Tensor> outputs;
+
+  x_clock_start(0);
   Status run_status = session->Run({{input_layer, resized_tensor}},
                                    {output_layer}, {}, &outputs);
+  x_clock_end(0);
+
   if (!run_status.ok()) {
     LOG(ERROR) << "Running model failed: " << run_status;
     return -1;
@@ -489,6 +508,9 @@ int main(int argc, char* argv[]) {
     LOG(ERROR) << "Running print failed: " << print_status;
     return -1;
   }
+
+  xopenme_dump_state();
+  xopenme_finish();
 
   return 0;
 }

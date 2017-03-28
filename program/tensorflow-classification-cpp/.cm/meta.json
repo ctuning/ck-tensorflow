@@ -1,8 +1,6 @@
 {
   "backup_data_uid": "a8addbb39edc4398", 
   "build_compiler_vars": {
-    "CPU_ONLY": "ON",
-    "XOPENME":""
   }, 
   "compile_cmds": {
     "default": {
@@ -44,9 +42,9 @@
   "program": "yes", 
   "run_cmds": {
     "default": {
-      "hot_functions": [], 
       "ignore_return_code": "no", 
       "run_time": { 
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa": "a8addbb39edc4398",
           "script_name": "preprocess"
@@ -60,7 +58,8 @@
           "$<<CK_ENV_DATASET_TENSORFLOW_AUX_IMG>>$"
         ],
         "run_output_files": [
-          "tmp-output1.tmp"
+          "tmp-output1.tmp",
+          "tmp-ck-timer.json"
         ]
       }
     }
