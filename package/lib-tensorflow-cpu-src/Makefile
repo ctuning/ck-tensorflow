@@ -141,6 +141,7 @@ endif
 INCLUDES += -I/usr/local/include
 
 LIBS := \
+$(CK_LIBS) \
 -lstdc++ \
 -lprotobuf \
 -lz \
@@ -186,6 +187,9 @@ ifeq ($(TARGET),PI)
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 endif
 
+
+CK_EXCLUDE_EXTRA := $(wildcard tensorflow/core/grappler/devices.*)
+
 # Set up Android building
 # LINT.IfChange
 ifeq ($(TARGET),ANDROID)
@@ -195,6 +199,8 @@ ifeq ($(TARGET),ANDROID)
 # You need to have an Android version of the protobuf libraries compiled to link
 # in. The compile_android_protobuf.sh script may help.
 # TODO(satok): Support all CPU architectures (Currently only armv7 is supported)
+
+    CK_EXCLUDE_EXTRA := ""
 
 	OS_PATH :=
 	ifeq ($(HOST_OS),LINUX)
@@ -228,8 +234,6 @@ $(CK_INCLUDE) \
 -I$(PROTOGENDIR) \
 -I$(PBTGENDIR)
 
-#INCLUDES += -I$(CK_LIB_LIBJPEG_TENSORFLOW)
-
 	LIBS := \
 $(CK_LIBS) \
 ${CK_ENV_LIB_STDCPP_STATIC} \
@@ -237,8 +241,6 @@ ${CK_ENV_LIB_STDCPP_STATIC} \
 -llog \
 -lz \
 -lm 
-#-L$(CK_LIB_LIBJPEG_TENSORFLOW)/obj/local/armeabi-v7a -ljpeg \
-#-lgnustl_static 
 
 	LD := $(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(OS_PATH)-x86_64/arm-linux-androideabi/bin/ld
 
@@ -426,6 +428,7 @@ $(wildcard tensorflow/core/platform/*/*/*.cc) \
 $(wildcard tensorflow/core/util/*.cc) \
 $(wildcard tensorflow/core/util/*/*.cc) \
 tensorflow/core/util/version_info.cc
+
 # Remove duplicates (for version_info.cc)
 CORE_CC_ALL_SRCS := $(sort $(CORE_CC_ALL_SRCS))
 CORE_CC_EXCLUDE_SRCS := \
@@ -463,7 +466,8 @@ $(wildcard tensorflow/core/user_ops/*.cu.cc) \
 $(wildcard tensorflow/core/common_runtime/gpu/*) \
 $(wildcard tensorflow/core/common_runtime/gpu_device_factory.*) \
 $(wildcard tensorflow/core/grappler/inputs/trivial_test_graph_input_yielder.*) \
-$(wildcard tensorflow/core/grappler/clusters/single_machine.*)
+$(wildcard tensorflow/core/grappler/clusters/single_machine.*) \
+$(CK_EXCLUDE_EXTRA)
 #$(wildcard tensorflow/core/grappler/devices.*) \
 
 # Filter out all the excluded files.
@@ -475,11 +479,9 @@ TF_CC_SRCS += $(shell cat $(MAKEFILE_DIR)/tf_op_files.txt)
 PBT_CC_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_pb_text_files.txt)
 PROTO_SRCS := $(shell cat $(MAKEFILE_DIR)/tf_proto_files.txt)
 BENCHMARK_SRCS := \
-tensorflow/contrib/makefile/samples/classification.cc
-
-#tensorflow/core/util/reporter.cc 
-#tensorflow/tools/benchmark/benchmark_model.cc \
-#tensorflow/tools/benchmark/benchmark_model_main.cc
+tensorflow/core/util/reporter.cc \
+tensorflow/tools/benchmark/benchmark_model.cc \
+tensorflow/tools/benchmark/benchmark_model_main.cc
 
 # File names of the intermediate files target compilation generates.
 TF_CC_OBJS := $(addprefix $(OBJDIR), $(TF_CC_SRCS:.cc=.o))

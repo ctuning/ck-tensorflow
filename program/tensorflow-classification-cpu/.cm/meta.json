@@ -23,6 +23,12 @@
       "sort": 0, 
       "tags": "tool,bazel"
     },
+    "compiler": {
+      "local": "yes", 
+      "name": "GCC compiler", 
+      "sort": 30, 
+      "tags": "compiler,lang-cpp"
+    }, 
     "lib-protobuf": {
       "local": "yes",
       "name": "ProtoBuf library",
@@ -51,7 +57,7 @@
       "local": "yes",
       "name": "Tensorflow library (CPU)",
       "sort": 0,
-      "tags": "lib,tensorflow-src"
+      "tags": "lib,tensorflow-cpu-src"
     },
     "libjpeg": {
       "local": "yes",

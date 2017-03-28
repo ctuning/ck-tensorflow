@@ -35,14 +35,14 @@ limitations under the License.
 #include <vector>
 #include <iomanip>
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(TF_VIA_MAKE)
 #include <stdio.h>
 #include <setjmp.h>
 #include <iostream>
 #include <jpeglib.h>
 #endif
 
-#ifndef __ANDROID__
+#if defined(__ANDROID__)
 #include "tensorflow/cc/ops/const_op.h"
 #include "tensorflow/cc/ops/image_ops.h"
 #include "tensorflow/cc/ops/standard_ops.h"
@@ -111,7 +111,7 @@ Status ReadLabelsFile(std::istream& file, std::vector<string>* result,
   return Status::OK();
 }
 
-#ifdef __ANDROID__   
+#if defined(__ANDROID__) || defined(TF_VIA_MAKE)
 // Error handling for JPEG decoding.
 void CatchError(j_common_ptr cinfo) {
   (*cinfo->err->output_message)(cinfo);
@@ -175,7 +175,7 @@ Status ReadTensorFromImageFile(string file_name, const int input_height,
                                const int input_width, const float input_mean,
                                const float input_std,
                                std::vector<Tensor>* out_tensors) {
-  #ifdef __ANDROID__    
+  #if defined(__ANDROID__) || defined(TF_VIA_MAKE)
   std::vector<tensorflow::uint8> image_data;
   int image_width;
   int image_height;
@@ -314,7 +314,7 @@ Status LoadGraph(string graph_file_name,
 // their positions in the tensor, which correspond to categories.
 Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
                     Tensor* out_indices, Tensor* out_scores) {
-  #ifdef __ANDROID__
+  #if defined(__ANDROID__) || defined(TF_VIA_MAKE)
   const Tensor& unsorted_scores_tensor = outputs[0];
   auto unsorted_scores_flat = unsorted_scores_tensor.flat<float>();
   std::vector<std::pair<int, float>> scores;
@@ -416,7 +416,7 @@ int main(int argc, char* argv[]) {
   // input the model expects. If you train your own model, or use something
   // other than GoogLeNet you'll need to update these.
 #ifdef XOPENME
-  xopenme_init(2,0);
+  xopenme_init(3,0);
 #endif
 
   x_clock_start(0);
@@ -493,7 +493,7 @@ int main(int argc, char* argv[]) {
 
   if (getenv("CT_REPEAT_MAIN")!=NULL) ct_repeat_max=atol(getenv("CT_REPEAT_MAIN"));
   
-  x_clock_start(1);
+  x_clock_start(2);
 
   std::vector<Tensor> outputs;
   Status run_status;
@@ -502,7 +502,7 @@ int main(int argc, char* argv[]) {
                                    {output_layer}, {}, &outputs);
   }
 
-  x_clock_end(1);  
+  x_clock_end(2);  
   if (!run_status.ok()) {
     LOG(ERROR) << "Running model failed: " << run_status;
     return -1;
