@@ -33,6 +33,12 @@
       "sort": 20,
       "tags": "compiler,python"
     },
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    },
     "opencv": {
       "local": "yes",
       "sort": 30,
