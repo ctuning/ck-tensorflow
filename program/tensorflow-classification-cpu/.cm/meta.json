@@ -47,24 +47,11 @@
       "sort": 115,
       "tags": "lib,protobuf-host,v3.1.0"
     },
-    "lib-tensorflow-src": {
-      "local": "yes",
-      "name": "Tensorflow library (sources)",
-      "only_for_target_os_tags": [
-        "android"
-      ],
-      "sort": 0,
-      "tags": "lib, tensorflow-src"
-    },
     "lib-tensorflow-cpu": {
       "local": "yes",
       "name": "Tensorflow library (CPU)",
       "sort": 0,
-      "only_for_target_os_tags": [
-        "linux",
-        "windows"
-      ],
-      "tags": "lib, tensorflow,vcpu"
+      "tags": "lib,tensorflow-src"
     },
     "libjpeg": {
       "local": "yes",
