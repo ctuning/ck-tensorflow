@@ -26,11 +26,9 @@ You can even participate in collaborative evaluation and optimization of TF usin
 [Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments). 
 You can see and use all public results in the [Collective Knowledge repository](http://cKnowledge.org/repo).
 
-# Contributors
-
-* Grigori Fursin, [dividiti](http://dividiti.com) / [cTuning foundation](http://ctuning.org)
-* Anton Lokhmotov, [dividiti](http://dividiti.com)
-* Vladislav Zaborovskiy
+# Coordination of development
+* [cTuning Foundation](http://cTuning.org)
+* [dividiti](http://dividiti.com)
 
 # License
 * [BSD](https://github.com/dividiti/ck-caffe/blob/master/LICENSE) (3 clause)
