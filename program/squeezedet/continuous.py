@@ -30,11 +30,11 @@ tf.app.flags.DEFINE_string(
     'checkpoint', './data/model_checkpoints/squeezeDet/model.ckpt-87000',
     """Path to the model parameter file.""")
 tf.app.flags.DEFINE_string(
-    'input_path', './data/sample.png',
-    """Input image or video to be detected. Can process glob input such as """
-    """./data/00000*.png.""")
-tf.app.flags.DEFINE_string(
     'out_dir', './data/out/', """Directory to dump output image or video.""")
+tf.app.flags.DEFINE_string(
+    'image_dir', './', """Directory with images""")
+tf.app.flags.DEFINE_string(
+    'label_dir', './', """Directory with image labels""")
 
 def image_demo():
   """Detect image."""
@@ -52,7 +52,10 @@ def image_demo():
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
       saver.restore(sess, FLAGS.checkpoint)
 
-      for f in glob.iglob(FLAGS.input_path):
+      d = FLAGS.image_dir
+      image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
+
+      for f in image_list:
         im = cv2.imread(f)
         im = im.astype(np.float32, copy=False)
         im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
@@ -98,6 +101,26 @@ def image_demo():
         
         print('File: {}'.format(out_file_name))
         print('Duration: {} sec'.format(duration))
+
+        class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
+        for k in final_class:
+            class_count[mc.CLASS_NAMES[k].lower()] += 1
+        for k, v in class_count.items():
+            print('Recognized {}: {}'.format(k, v))
+
+        class_count = dict((k, 0) for k in mc.CLASS_NAMES)
+        label_file_name = os.path.join(FLAGS.label_dir, file_name)
+        label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
+        with open(label_file_name) as lf:
+            label_lines = [x.strip() for x in lf.readlines()]
+            classes = [l.split(' ', 1)[0].strip().lower() for l in label_lines]
+            for c in classes:
+                if c in class_count.keys():
+                    class_count[c] += 1
+
+        for k, v in class_count.items():
+            print('Expected {}: {}'.format(k, v))
+
         print('')
         sys.stdout.flush()
 
