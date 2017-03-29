@@ -28,9 +28,9 @@ You can see and use all public results in the [Collective Knowledge repository](
 
 # Contributors
 
-* Vladislav Zaborovskiy
 * Grigori Fursin, [dividiti](http://dividiti.com) / [cTuning foundation](http://ctuning.org)
 * Anton Lokhmotov, [dividiti](http://dividiti.com)
+* Vladislav Zaborovskiy
 
 # License
 * [BSD](https://github.com/dividiti/ck-caffe/blob/master/LICENSE) (3 clause)
