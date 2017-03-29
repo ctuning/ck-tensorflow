@@ -152,7 +152,7 @@ and other DNN frameworks to our
 [Android application](https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments) 
 soon - please, stay tuned!
 
-## Installing TensorFlow for constrained devices (Raspberry Pi, odroid) via CK
+## Preparing TensorFlow via CK for constrained devices (Raspberry Pi, odroid)
 
 You can install tensorflow for devices with constrained resources using Makefile via CK as following:
 
@@ -166,7 +166,7 @@ $ ck compile program:tensorflow-classification-cpu
 $ ck run program:tensorflow-classification-cpu
 ```
 
-## Installing TensorFlow for Android devices via CK
+## Preparing TensorFlow via CK for Android devices
 
 * for ARM64-based platforms (should be connected to your host via adb):
 
