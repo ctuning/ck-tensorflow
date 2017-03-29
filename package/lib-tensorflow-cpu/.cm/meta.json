@@ -5,13 +5,11 @@
       "TENSORFLOW_URL":"https://github.com/tensorflow/tensorflow",
       "USE_CUDA":0
     }, 
-    "use_git_revision": "yes", 
-    "version": "master",
-    "git_src_dir":"src",
+    "version": "0.10",
     "params": {
-      "tf_need_cuda":0,
-      "tf_need_opencl":0,
+      "python_bin_path":"${CK_ENV_COMPILER_PYTHON}/bin/python",
       "tf_need_gcp":0,
+      "tf_need_cuda":0,
       "tf_need_hdfs":0
     }
   }, 
@@ -20,10 +18,6 @@
       "local": "yes", 
       "name": "Bazel", 
       "sort": 10, 
-      "only_for_target_os_tags": [
-        "linux",
-        "windows"
-      ],
       "tags": "tool,bazel"
     },
     "python": {
@@ -31,58 +25,26 @@
       "name": "Python", 
       "sort": 20, 
       "tags": "compiler,python"
-    },
-    "compiler": {
-      "local": "yes", 
-      "sort": 30, 
-      "name": "GCC compiler", 
-      "tags": "compiler,lang-c"
-    },
-    "lib-protobuf": {
-      "local": "yes",
-      "name": "ProtoBuf library",
-      "only_for_target_os_tags": [
-        "android"
-      ],
-      "skip_installed": {
-        "android": "yes",
-        "win": "yes"
-      },
-      "sort": 110,
-      "tags": "lib,protobuf,v3.1.0"
-    },
-    "lib-protobuf-host": {
-      "force_target_as_host": "yes",
-      "local": "yes",
-      "name": "ProtoBuf host compiler",
-      "skip_installed": {
-        "android": "yes",
-        "win": "yes"
-      },
-      "sort": 115,
-      "tags": "lib,protobuf-host,v3.1.0"
     }
   }, 
   "end_full_path": {
-     "linux":"lib/tensorflow/__init__.py",
-     "android":"lib/tensorflow/__init__.py"
+     "linux":"lib/tensorflow/__init__.py"
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [
     "linux"
   ], 
   "only_for_target_os_tags": [
-    "linux",
-    "android"
+    "linux"
   ], 
   "package_extra_name":" (cpu)",
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178",
-  "suggested_path": "tensorflow", 
+  "suggested_path": "tensorflow-cpu", 
   "tags": [
     "lib",
     "tensorflow",
-    "tensorflow-cpu",
-    "vcpu"
+    "v0.10",
+    "python"
   ]
 }

@@ -42,11 +42,11 @@ limitations under the License.
 #include <jpeglib.h>
 #endif
 
-#if defined(__ANDROID__)
-#include "tensorflow/cc/ops/const_op.h"
-#include "tensorflow/cc/ops/image_ops.h"
-#include "tensorflow/cc/ops/standard_ops.h"
-#endif
+//#if defined(__ANDROID__)
+//#include "tensorflow/cc/ops/const_op.h"
+//#include "tensorflow/cc/ops/image_ops.h"
+//#include "tensorflow/cc/ops/standard_ops.h"
+//#endif
 
 #include "tensorflow/core/framework/graph.pb.h"
 #include "tensorflow/core/framework/tensor.h"

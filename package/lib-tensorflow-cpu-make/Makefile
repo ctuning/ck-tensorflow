@@ -114,10 +114,14 @@ $(shell mkdir -p $(DEPDIR) >/dev/null)
 
 # Settings for the target compiler.
 CXX := $(CC_PREFIX) gcc
-OPTFLAGS := -O2
 
+ifeq (${OPTFLAGS},)
+ OPTFLAGS := -O2
 ifneq ($(TARGET),ANDROID)
   OPTFLAGS += -march=native
+endif
+else
+ OPTFLAGS := ${OPTFLAGS}
 endif
 
 CXXFLAGS := --std=c++11 -DIS_SLIM_BUILD -fno-exceptions -DNDEBUG $(OPTFLAGS) ${CK_COMPILER_FLAGS_OBLIGATORY}
@@ -187,9 +191,6 @@ ifeq ($(TARGET),PI)
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 endif
 
-
-CK_EXCLUDE_EXTRA := $(wildcard tensorflow/core/grappler/devices.*)
-
 # Set up Android building
 # LINT.IfChange
 ifeq ($(TARGET),ANDROID)
@@ -199,8 +200,6 @@ ifeq ($(TARGET),ANDROID)
 # You need to have an Android version of the protobuf libraries compiled to link
 # in. The compile_android_protobuf.sh script may help.
 # TODO(satok): Support all CPU architectures (Currently only armv7 is supported)
-
-    CK_EXCLUDE_EXTRA := ""
 
 	OS_PATH :=
 	ifeq ($(HOST_OS),LINUX)
@@ -467,7 +466,6 @@ $(wildcard tensorflow/core/common_runtime/gpu/*) \
 $(wildcard tensorflow/core/common_runtime/gpu_device_factory.*) \
 $(wildcard tensorflow/core/grappler/inputs/trivial_test_graph_input_yielder.*) \
 $(wildcard tensorflow/core/grappler/clusters/single_machine.*) \
-$(CK_EXCLUDE_EXTRA)
 #$(wildcard tensorflow/core/grappler/devices.*) \
 
 # Filter out all the excluded files.

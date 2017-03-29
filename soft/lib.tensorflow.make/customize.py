@@ -66,10 +66,24 @@ def setup(i):
     env=i['env']
     ep=cus['env_prefix']
 
-    p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-    pi=os.path.dirname(pl)
+    pl=os.path.dirname(fp)
+    ff=os.path.basename(fp)
+    p1=os.path.dirname(pl)
+    p2=os.path.dirname(p1)
+    p3=os.path.dirname(p2)
+    p4=os.path.dirname(p3)
+    p5=os.path.dirname(p4)
 
-    env[ep]=pi
+    pp=os.path.join(p1,'proto')
+
+    env[ep]=p5
+    env[ep+'_INCLUDE']=p5
+    env[ep+'_BIN']=os.path.join(p1,'bin')
+    env[ep+'_PROTO']=pp
+    env[ep+'_STATIC_NAME']=ff
+
+    cus['path_lib']=pl
+    cus['path_include']=p5
+    cus['static_lib']=ff
 
     return {'return':0, 'bat':s}
