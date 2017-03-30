@@ -1,5 +1,5 @@
-Collective Knowledge repository for evaluating and optimising performance of TensorFlow
-=======================================================================================
+Unified building, evaluation and optimization of TensorFlow via Collective Knowledge with JSON API
+==================================================================================================
 
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
@@ -9,9 +9,9 @@ Collective Knowledge repository for evaluating and optimising performance of Ten
 
 We need to have easily customizable TensorFlow builds 
 via JSON API to be able to plug it to our framework 
-for collaborative benchmarking and optimization of workloads 
-across diverse inputs and hardware provided by volunteers 
-(see [cKnowledge.org/ai](http://cKnowledge.org/ai), 
+for collaborative benchmarking and optimization of realistic
+workloads and models (such as deep learning) across diverse inputs 
+and hardware provided by volunteers (see [cKnowledge.org/ai](http://cKnowledge.org/ai), 
 [live repo](http://cKnowledge.org/repo)
 and papers [1](https://arxiv.org/abs/1506.06256), 
 [2](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:maZDTaKrznsC), 
@@ -20,38 +20,55 @@ for more details).
 
 ![](http://cKnowledge.org/images/ai-cloud-resize.png)
 
-# Contributors
+We can now build TensorFlow library and run classification via CK for various Android and Linux platforms. 
+You can even participate in collaborative evaluation and optimization of TF using your Android device
+(mobile phone, tablet, etc) via this engaging 
+[Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments). 
+You can see and use all public results in the [Collective Knowledge repository](http://cKnowledge.org/repo).
 
-* Vladislav Zaborovskiy
-* Grigori Fursin, [dividiti](http://dividiti.com) / [cTuning foundation](http://ctuning.org)
-* Anton Lokhmotov, [dividiti](http://dividiti.com)
+# Coordination of development
+* [cTuning Foundation](http://cTuning.org)
+* [dividiti](http://dividiti.com)
 
 # License
 * [BSD](https://github.com/dividiti/ck-caffe/blob/master/LICENSE) (3 clause)
 
-# Status
-Under development.
+# Prerequisites
 
-# Installing CK-TensorFlow dependencies
+* Python 2.7+ or 3.3+
+* [Collective Knowledge Framework](http://github.com/ctuning/ck)
+* Java 8 JDK (though can be automatically installed via CK)
+* CUDA/cuDNN if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus)
+* Android NDK if you want to compile and run TF for Android devices
 
-## Installing CK
+## Installation on Ubuntu
 
-### Ubuntu
+### Python
+
+* Python 2.x:
+```
+$ sudo apt-get install python-dev python-pip python-setuptools python-opencv git
+```
+
+* Python 3.x:
+
+```
+$ sudo apt-get install python3-dev python3-pip python3-setuptools
+$ sudo pip3 install wheel
+```
+
+* Extras for Python
+```
+$ sudo pip install protobuf easydict joblib image
+```
+
+### CK and this repository
+
+You can install all basic dependencies and CK as following
 ```
 $ sudo pip install ck
-```
-
-### Windows
-```
-$ pip install ck
-```
-
-## Installing CK-TensorFlow with all its dependencies
-```
 $ ck pull repo:ck-tensorflow
 ```
-
-## Installing TensorFlow dependencies on Ubuntu
 
 ### Java
 ```
@@ -72,45 +89,10 @@ If you want to use the GPU and pip, please install CUDA toolkit >= v8.0 and cuDN
 
 - [More detailed instructions](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#optional-install-cuda-gpus-on-linux).
 
-### For installation via pip
+# Installing TensorFlow on your host via CK
 
-For python 2.7, install:
-```
-$ sudo apt-get install  \
-    python-dev \
-    python-pip \
-    python-setuptools
-
-$ sudo pip install wheel
-```
-
-For python 3.5, install:
-
-```
-$ sudo apt-get install  \
-    python3-dev \
-    python3-pip \
-    python3-setuptools
-$ sudo pip3 install wheel
-```
-
-### Python
-```
-$ sudo pip install \
-    protobuf \
-    easydict \
-    joblib \
-    image
-```
-
-```
-$ sudo apt install \
-    python-opencv
-```
-
-# Installing TensorFlow via CK
-
-You should now be ready to install the CPU version of CK-TensorFlow:
+You should now be ready to install the CPU version of CK-TensorFlow 
+(CK will automatically download and install Bazel and JDK if they are not already installed):
 ```
 $ ck install package:lib-tensorflow-cpu
 ```
@@ -169,6 +151,45 @@ We also plan to add crowd-benchmarking and crowd-tuning of Caffe, TensorFlow
 and other DNN frameworks to our 
 [Android application](https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments) 
 soon - please, stay tuned!
+
+## Preparing TensorFlow via CK for constrained devices (Raspberry Pi, odroid)
+
+You can install tensorflow for devices with constrained resources using Makefile via CK as following:
+
+```
+$ ck install package:lib-tensorflow-cpu-make --env.OPTFLAGS="-O2"
+```
+
+You can then compile and run C++ classification example as following:
+```
+$ ck compile program:tensorflow-classification-cpu
+$ ck run program:tensorflow-classification-cpu
+```
+
+## Preparing TensorFlow via CK for Android devices
+
+* for ARM64-based platforms (should be connected to your host via adb):
+
+```
+$ ck install package:lib-tensorflow-cpu-make --target_os=android21-arm64
+$ ck compile program:tensorflow-classification-cpu --target_os=android21-arm64
+$ ck run program:tensorflow-classification-cpu --target_os=android21-arm64
+```
+
+* for ARM32-based platforms:
+
+```
+$ ck install package:lib-tensorflow-cpu-make --target_os=android21-arm-v7a
+$ ck compile program:tensorflow-classification-cpu --target_os=android21-arm-v7a --env.OPTFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon"
+$ ck run program:tensorflow-classification-cpu --target_os=android21-arm-v7a
+```
+
+Note, that you can build and run TensorFlow on older Android 4.2+ devices - 
+just substitute "android21-arm-v7a" with "android19-arm-v7a" above.
+
+Above method is used to prepare [CK-based crowd-scenarios](https://github.com/ctuning/ck-crowd-scenarios) 
+for our [Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments) 
+to crowdsource deep learning optimization!
 
 # Troubleshooting
 
