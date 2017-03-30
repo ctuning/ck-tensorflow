@@ -77,17 +77,18 @@ def setup(i):
 
     pi=os.path.dirname(fp)
     p1=os.path.dirname(pi)
-    
+    p2=os.path.dirname(p1)
+
     ep=cus.get('env_prefix','')
 
-    full_path = pi
-
+    full_path = p2
     if 'KITTI-min' in cus.get('full_path', ''):
       full_path = p1
-      image_dir =  cus.get('install_env', '').get('IMAGE_DIR', '')
-      labels_dir =  cus.get('install_env', '').get('LABELS_DIR', '')
-      env[ep + "_IMAGE_DIR"] = os.path.join(p1, image_dir)
-      env[ep + "_LABELS_DIR"] = os.path.join(p1, labels_dir)
+    image_dir =  cus.get('install_env', '').get('IMAGE_DIR', '')
+    labels_dir =  cus.get('install_env', '').get('LABELS_DIR', '')
+
+    env[ep + "_IMAGE_DIR"] = os.path.join(full_path, image_dir)
+    env[ep + "_LABELS_DIR"] = os.path.join(full_path, labels_dir)
     env[ep]=full_path
     env['CK_SQUEEZENET_KITTI']=full_path
     
