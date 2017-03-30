@@ -23,6 +23,7 @@ import tensorflow as tf
 from config import *
 from train import _draw_box
 from nets import *
+from utils.util import bbox_transform
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -35,6 +36,31 @@ tf.app.flags.DEFINE_string(
     'image_dir', './', """Directory with images""")
 tf.app.flags.DEFINE_string(
     'label_dir', './', """Directory with image labels""")
+tf.app.flags.DEFINE_float(
+    'iou_threshold', 0.7, """Threshold for IoU metric to determine false positives""")
+
+def bb_intersection_over_union(boxA, boxB):
+    # determine the (x, y)-coordinates of the intersection rectangle
+    xA = max(boxA[0], boxB[0])
+    yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2])
+    yB = min(boxA[3], boxB[3])
+
+    # compute the area of intersection rectangle
+    interArea = (xB - xA + 1) * (yB - yA + 1)
+
+    # compute the area of both the prediction and ground-truth
+    # rectangles
+    boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+    boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+
+    # compute the intersection over union by taking the intersection
+    # area and dividing it by the sum of prediction + ground-truth
+    # areas - the interesection area
+    iou = interArea / float(boxAArea + boxBArea - interArea)
+
+    # return the intersection over union value
+    return iou
 
 def image_demo():
   """Detect image."""
@@ -105,21 +131,47 @@ def image_demo():
         class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
         for k in final_class:
             class_count[mc.CLASS_NAMES[k].lower()] += 1
+
         for k, v in class_count.items():
             print('Recognized {}: {}'.format(k, v))
 
+        expected_boxes = []
         class_count = dict((k, 0) for k in mc.CLASS_NAMES)
         label_file_name = os.path.join(FLAGS.label_dir, file_name)
         label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
         with open(label_file_name) as lf:
             label_lines = [x.strip() for x in lf.readlines()]
-            classes = [l.split(' ', 1)[0].strip().lower() for l in label_lines]
-            for c in classes:
-                if c in class_count.keys():
-                    class_count[c] += 1
+            for l in label_lines:
+                parts = l.strip().lower().split(' ')
+                klass = parts[0]
+                if klass in class_count.keys():
+                    class_count[klass] += 1
+                bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
+                expected_boxes.append(bbox)
 
         for k, v in class_count.items():
             print('Expected {}: {}'.format(k, v))
+
+        false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
+        threshold = FLAGS.iou_threshold
+        for klass, final_box in zip(final_class, final_boxes):
+            remove_index = -1
+            transformed = bbox_transform(final_box)
+            
+            for i, expected_box in enumerate(expected_boxes):
+                iou = bb_intersection_over_union(transformed, expected_box)
+                if iou >= threshold:
+                    remove_index = i
+                    break
+
+            if -1 == remove_index:
+                false_positives_count[mc.CLASS_NAMES[klass]] += 1
+            else:
+                # remove found box to not pick it up in the future
+                del expected_boxes[remove_index]
+
+        for k, v in false_positives_count.items():
+            print('False positive {}: {}'.format(k, v))
 
         print('')
         sys.stdout.flush()
