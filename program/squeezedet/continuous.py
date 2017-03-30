@@ -62,6 +62,34 @@ def bb_intersection_over_union(boxA, boxB):
     # return the intersection over union value
     return iou
 
+def my_draw_box(im, box_list, label_list, color=(0,255,0), cdict=None, form='center', label_placement='bottom'):
+    assert form == 'center' or form == 'diagonal', \
+        'bounding box format not accepted: {}.'.format(form)
+
+    assert label_placement == 'bottom' or label_placement == 'top', \
+        'label_placement format not accepted: {}.'.format(label_placement)
+
+    for bbox, label in zip(box_list, label_list):
+        if form == 'center':
+            bbox = bbox_transform(bbox)
+
+        xmin, ymin, xmax, ymax = [int(b) for b in bbox]
+
+        l = label.split(':')[0] # text before "CLASS: (PROB)"
+        if cdict and l in cdict:
+            c = cdict[l]
+        else:
+            c = color
+
+        # draw box
+        cv2.rectangle(im, (xmin, ymin), (xmax, ymax), c, 1)
+        # draw label
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        if label_placement == 'bottom':
+            cv2.putText(im, label, (xmin, ymax), font, 0.3, c, 1)
+        else:
+            cv2.putText(im, label, (xmin, ymin), font, 0.3, c, 1)
+
 def image_demo():
   """Detect image."""
 
@@ -113,28 +141,9 @@ def image_demo():
             'pedestrian':(255, 0, 191)
         }
 
-        # Draw boxes
-        _draw_box(
-            im, final_boxes,
-            [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
-                for idx, prob in zip(final_class, final_probs)],
-            cdict=cls2clr,
-        )
-
         file_name = os.path.split(f)[1]
-        out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
-        cv2.imwrite(out_file_name, im)
-        
-        print('File: {}'.format(out_file_name))
-        print('Duration: {} sec'.format(duration))
 
-        class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
-        for k in final_class:
-            class_count[mc.CLASS_NAMES[k].lower()] += 1
-
-        for k, v in class_count.items():
-            print('Recognized {}: {}'.format(k, v))
-
+        expected_classes = []
         expected_boxes = []
         class_count = dict((k, 0) for k in mc.CLASS_NAMES)
         label_file_name = os.path.join(FLAGS.label_dir, file_name)
@@ -148,6 +157,35 @@ def image_demo():
                     class_count[klass] += 1
                 bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
                 expected_boxes.append(bbox)
+                expected_classes.append(klass)
+
+        # Draw original boxes
+        my_draw_box(
+            im, expected_boxes,
+            [k+': (TRUE)' for k in expected_classes],
+            form='diagonal', label_placement='top', color=(200,200,200)
+        )
+
+        # Draw recognized boxes
+        my_draw_box(
+            im, final_boxes,
+            [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
+                for idx, prob in zip(final_class, final_probs)],
+            cdict=cls2clr,
+        )
+
+        out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
+        cv2.imwrite(out_file_name, im)
+        
+        print('File: {}'.format(out_file_name))
+        print('Duration: {} sec'.format(duration))
+
+        class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
+        for k in final_class:
+            class_count[mc.CLASS_NAMES[k].lower()] += 1
+
+        for k, v in class_count.items():
+            print('Recognized {}: {}'.format(k, v))
 
         for k, v in class_count.items():
             print('Expected {}: {}'.format(k, v))
