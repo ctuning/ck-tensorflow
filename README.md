@@ -184,6 +184,9 @@ $ ck compile program:tensorflow-classification-cpu --target_os=android21-arm-v7a
 $ ck run program:tensorflow-classification-cpu --target_os=android21-arm-v7a
 ```
 
+Note, that you can build and run TensorFlow on older Android 4.2+ devices - 
+just substitute "android21-arm-v7a" with "android19-arm-v7a" above.
+
 Above method is used to prepare [CK-based crowd-scenarios](https://github.com/ctuning/ck-crowd-scenarios) 
 for our [Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments) 
 to crowdsource deep learning optimization!
