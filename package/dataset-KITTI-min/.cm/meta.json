@@ -27,6 +27,7 @@
     "kitti",
     "KITTI",
     "KITTImin",
-    "small_dataset"
+    "small_dataset",
+    "val"
   ]
 }
