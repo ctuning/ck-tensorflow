@@ -27,6 +27,7 @@
     "dataset",
     "kitti",
     "KITTI",
-    "val"
+    "val",
+    "KITTIfull"
   ]
 }
