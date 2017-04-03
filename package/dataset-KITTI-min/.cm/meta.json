@@ -7,7 +7,7 @@
     "no_ver_in_suggested_path": "yes",
     "install_env": {
       "IMAGE_DIR": "image-min",
-      "LABELS_DIR": "labels-min",
+      "LABELS_DIR": "label-min",
       "KITTI_MD5": "5ce0da610dbc0588892094d11c769287",
       "KITTI_ARCHIVE": "kitti-min.tar",
       "KITTI_URL": "https://www.dropbox.com/s/uvl210b3f71zono/kitti-min.tar?dl=0"
