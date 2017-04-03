@@ -4,6 +4,7 @@
     "extra_dir": "",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
+    "force_ask_path":"yes",
     "install_env": {
       "IMAGE_DIR": "image_2",
       "LABELS_DIR": "labels_2",
@@ -11,7 +12,8 @@
       "KITTI_LABELS_ARCHIVE": "data_object_label_2.zip",
       "KITTI_IMAGES_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_image_2.zip",
       "KITTI_LABELS_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_label_2.zip"
-    }
+    },
+    "version": "2012"
   },
   "deps": {},
   "need_cpu_info": "no",
