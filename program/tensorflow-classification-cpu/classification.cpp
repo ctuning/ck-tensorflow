@@ -327,8 +327,8 @@ Status GetTopLabels(const std::vector<Tensor>& outputs, int how_many_labels,
 	      return left.second > right.second;
 	    });
   scores.resize(how_many_labels);
-  Tensor sorted_indices(tensorflow::DT_INT32, {scores.size()});
-  Tensor sorted_scores(tensorflow::DT_FLOAT, {scores.size()});
+  Tensor sorted_indices(tensorflow::DT_INT32, {(long long)scores.size()});
+  Tensor sorted_scores(tensorflow::DT_FLOAT, {(long long)scores.size()});
   for (int i = 0; i < scores.size(); ++i) {
     sorted_indices.flat<int>()(i) = scores[i].first;
     sorted_scores.flat<float>()(i) = scores[i].second;
