@@ -25,12 +25,6 @@
       "name": "SqueezeDet artifact",
       "sort": 30,
       "tags": "model,tensorflow,squeezedet"
-    },
-    "dataset-kitti": {
-      "local": "yes",
-      "name": "KITTI dataset",
-      "sort": 40,
-      "tags": "dataset,kitti"
     }
   },
   "data_name": "TensorFlow SqueezeDet",
@@ -46,12 +40,28 @@
         "dataset",
         "script"
       ],
+      "run_deps": {
+        "dataset-kitti": {
+          "local": "yes",
+          "name": "KITTI dataset",
+          "sort": 40,
+          "tags": "dataset,kitti"
+        }
+      },
       "ignore_return_code": "no",
       "run_time":{
         "run_cmd_main": "sh $#dataset_path#$$#dataset_filename#$ "
       }
     },
     "use_continuous":{
+      "run_deps": {
+        "dataset-kitti-val": {
+          "local": "yes",
+          "name": "KITTI dataset",
+          "sort": 10,
+          "tags": "dataset,kitti,val"
+        }
+      },
       "ignore_return_code": "no",
       "run_time":{
         "run_cmd_main": "../continuous.sh",
