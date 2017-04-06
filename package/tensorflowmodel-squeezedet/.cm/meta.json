@@ -2,7 +2,7 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
-      "SQUEEZEDET_URL": "https://github.com/BichenWuUCB/squeezeDet",
+      "SQUEEZEDET_URL": "https://github.com/dsavenko/squeezeDet",
       "DEMO_URL": "https://www.dropbox.com/s/a6t3er8f03gdl4z/model_checkpoints.tgz",
       "SQUEEZENET_INCLUDED" : 1,
       "CNN_SQUEEZENET_URL": "https://www.dropbox.com/s/fzvtkc42hu3xw47/SqueezeNet.tgz",
@@ -21,14 +21,17 @@
     }
   },
   "end_full_path": {
-     "linux":"squeezeDet/README.md"
+     "linux":"squeezeDet/README.md",
+     "win":"squeezeDet/README.md"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [
-    "linux"
+    "linux",
+    "windows"
   ],
   "only_for_target_os_tags": [
-    "linux"
+    "linux",
+    "windows"
   ],
   "process_script": "install",
   "soft_uoa": "00ea54addb99aab8",

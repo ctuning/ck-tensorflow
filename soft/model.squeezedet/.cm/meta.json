@@ -5,10 +5,12 @@
     "check_that_exists": "yes",
     "ck_version": 10,
     "limit_recursion_dir_search": {
-      "linux": 5
+      "linux": 5,
+      "win": 5
     },
     "soft_file": {
-      "linux": "squeezeDet/README.md"
+      "linux": "squeezeDet/README.md",
+      "win": "squeezeDet/README.md"
     }
   },
   "soft_name": "TensorFlow model - SqueezeDet",
