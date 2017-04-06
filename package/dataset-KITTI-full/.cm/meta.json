@@ -18,7 +18,8 @@
   "deps": {},
   "need_cpu_info": "no",
   "end_full_path": {
-    "linux": "training/image_2/000000.png"
+    "linux": "training/image_2/000000.png",
+    "win": "training/image_2/000000.png"
   },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
