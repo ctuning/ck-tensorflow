@@ -6,12 +6,11 @@
       "sort": 5,
       "tags": "compiler,python"
     },
-    "lib-opencv": {
+    "lib-tensorflow": {
       "local": "yes",
-      "name": "OpenCV library",
+      "name": "TensorFlow library",
       "sort": 20,
-      "tags": "lib,opencv",
-      "skip_pruning_by_other_deps": "yes"
+      "tags": "lib,tensorflow,vprebuilt"
     },
     "squeezedet": {
       "local": "yes",
@@ -61,7 +60,8 @@
         "run_cmd_out1": "tmp-output1.tmp",
         "run_cmd_out2": "tmp-output2.tmp",
         "run_output_files": [
-          "tmp-output1.tmp"
+          "tmp-output1.tmp",
+          "tmp-output2.tmp"
         ]
       }
     }

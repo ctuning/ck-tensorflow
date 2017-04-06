@@ -12,6 +12,9 @@
       "KITTI_ARCHIVE": "kitti-min.tar",
       "KITTI_URL": "https://www.dropbox.com/s/uvl210b3f71zono/kitti-min.tar?dl=0"
     },
+    "params": {
+      "min":"yes"
+    },
     "version": "2012"
   },
   "deps": {},
