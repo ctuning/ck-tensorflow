@@ -6,13 +6,6 @@
       "sort": 5,
       "tags": "compiler,python"
     },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "skip_pruning_by_other_deps": "yes",
-      "sort": 10,
-      "tags": "lib,tensorflow"
-    },
     "lib-opencv": {
       "local": "yes",
       "name": "OpenCV library",
@@ -64,7 +57,7 @@
       },
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "../continuous.sh",
+        "run_cmd_main": "../continuous$#script_ext#$",
         "run_cmd_out1": "tmp-output1.tmp",
         "run_cmd_out2": "tmp-output2.tmp",
         "run_output_files": [

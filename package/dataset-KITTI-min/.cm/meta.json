@@ -17,7 +17,8 @@
   "deps": {},
   "need_cpu_info": "no",
   "end_full_path": {
-    "linux": "image-min/000000.png"
+    "linux": "image-min/000000.png",
+    "win": "image-min/000000.png"
   },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
