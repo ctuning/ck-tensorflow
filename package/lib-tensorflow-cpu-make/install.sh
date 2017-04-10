@@ -16,6 +16,7 @@ if [ "${CK_ANDROID_ABI}" != "" ] ; then
   CK_TF_TARGET="TARGET=ANDROID"
 else
   CK_INCLUDE="-I${CK_ENV_LIB_PROTOBUF_HOST_INCLUDE}"
+  CK_LIBS="${CK_LIBS} -L${CK_ENV_LIB_PROTOBUF_HOST_LIB}"
   if [ "$TF_MAKE_TARGET" != "" ] ; then
     CK_TF_TARGET="TARGET=${TF_MAKE_TARGET}"
   fi
@@ -61,6 +62,7 @@ make ${CK_MAKE_OPTS} \
      LD="${CK_FULL_LD}" \
      CXX="${CK_FULL_CXX}" \
      CK_INCLUDE="${CK_INCLUDE}" \
+     CK_LIBS="${CK_LIBS}" \
      PROTOC=${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc \
      ${CK_TF_TARGET} \
      V=1
