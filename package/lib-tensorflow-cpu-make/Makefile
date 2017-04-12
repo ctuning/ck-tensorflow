@@ -162,7 +162,7 @@ $(info CC_PREFIX = "$(CC_PREFIX)")
 
 PROTOCFLAGS :=
 AR := ar
-ARFLAGS := -r
+ARFLAGS := r
 LIBFLAGS :=
 
 # If we're on OS X, make sure that globals aren't stripped out.
