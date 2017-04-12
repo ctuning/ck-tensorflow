@@ -5,13 +5,14 @@
       "name": "Python interpreter",
       "sort": 5,
       "tags": "compiler,python"
-    },
-    "lib-opencv": {
+    }
+  },
+  "run_deps": {
+    "squeezedet": {
       "local": "yes",
-      "name": "OpenCV library",
-      "sort": 20,
-      "tags": "lib,opencv",
-      "skip_pruning_by_other_deps": "yes"
+      "name": "SqueezeDet model",
+      "sort": 30,
+      "tags": "model,tensorflow,squeezedetmodel,squeezedet"
     }
   },
   "data_name": "TensorFlow SqueezeDet",
@@ -21,14 +22,6 @@
   "no_target_file": "yes",
   "run_cmds": {
     "default":{
-      "run_deps": {
-        "squeezedet": {
-          "local": "yes",
-          "name": "SqueezeDet model",
-          "sort": 30,
-          "tags": "model,tensorflow,squeezedetmodel,squeezedet"
-        }
-      },
       "ignore_return_code": "no",
       "run_time":{
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../src/demo.py --input_path=../data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
@@ -41,12 +34,6 @@
           "name": "KITTI dataset",
           "sort": 10,
           "tags": "dataset,kitti,val"
-        },
-        "squeezedetmodel": {
-          "local": "yes",
-          "name": "SqueezeDet model",
-          "sort": 20,
-          "tags": "model,tensorflow,squeezedetmodel,squeezedet"
         }
       },
       "ignore_return_code": "no",
