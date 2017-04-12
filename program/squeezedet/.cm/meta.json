@@ -6,12 +6,6 @@
       "sort": 5,
       "tags": "compiler,python"
     },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "sort": 20,
-      "tags": "lib,tensorflow,vprebuilt"
-    },
     "demo-squeezedet": {
       "local": "yes",
       "name": "SqueezeDet demo sources",
