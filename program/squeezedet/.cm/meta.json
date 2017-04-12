@@ -12,12 +12,6 @@
       "sort": 20,
       "tags": "lib,opencv",
       "skip_pruning_by_other_deps": "yes"
-    },
-    "squeezedet": {
-      "local": "yes",
-      "name": "SqueezeDet artifact",
-      "sort": 30,
-      "tags": "model,tensorflow,squeezedet"
     }
   },
   "data_name": "TensorFlow SqueezeDet",
@@ -39,6 +33,12 @@
           "name": "KITTI dataset",
           "sort": 40,
           "tags": "dataset,kitti"
+        },
+        "squeezedet": {
+          "local": "yes",
+          "name": "SqueezeDet artifact",
+          "sort": 30,
+          "tags": "model,tensorflow,squeezedet"
         }
       },
       "ignore_return_code": "no",
@@ -53,6 +53,12 @@
           "name": "KITTI dataset",
           "sort": 10,
           "tags": "dataset,kitti,val"
+        },
+        "squeezedetmodel": {
+          "local": "yes",
+          "name": "SqueezeDet model",
+          "sort": 20,
+          "tags": "tensorflow,squeezedetmodel"
         }
       },
       "ignore_return_code": "no",
