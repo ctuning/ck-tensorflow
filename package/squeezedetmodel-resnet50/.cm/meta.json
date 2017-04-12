@@ -12,6 +12,7 @@
     },
     "meta_file": "model.ckpt-65000.meta",
     "model_file": "model.ckpt-65000",
+    "model_id": "resnet50",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "version": "20161209"

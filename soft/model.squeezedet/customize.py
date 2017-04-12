@@ -78,6 +78,8 @@ def setup(i):
 
     env[ep+'_META'] = os.path.join(p1, cus.get('meta_file',''))
     env[ep+'_META_FILE']=cus.get('meta_file','')
+    
+    env[ep+'_ID']=cus.get('model_id','')
 
     return {'return':0, 'bat':s}
 

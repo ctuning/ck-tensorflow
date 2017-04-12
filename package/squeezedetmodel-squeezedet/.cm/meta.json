@@ -5,6 +5,7 @@
     "force_ask_path": "yes",
     "model_file": "model.ckpt-87000",
     "meta_file": "model.ckpt-87000.meta",
+    "model_id": "squeezeDet",
     "install_env": {
       "PACKAGE_URL": "https://www.dropbox.com/s/r01iqs9weopfjh9",
       "PACKAGE_NAME": "SqueezeDet.zip",

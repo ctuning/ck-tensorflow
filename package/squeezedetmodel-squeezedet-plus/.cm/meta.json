@@ -12,6 +12,7 @@
     },
     "meta_file": "model.ckpt-95000.meta",
     "model_file": "model.ckpt-95000",
+    "model_id": "squeezeDet+",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "version": "20161209"
