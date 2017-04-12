@@ -3,31 +3,32 @@
   "customize": {
     "extra_dir": "",
     "force_ask_path": "yes",
-    "model_file": "model.ckpt-87000",
-    "meta_file": "model.ckpt-87000.meta",
     "install_env": {
-      "PACKAGE_URL": "https://www.dropbox.com/s/r01iqs9weopfjh9",
-      "PACKAGE_NAME": "SqueezeDet.zip",
+      "PACKAGE_NAME": "ResNet50.zip",
       "PACKAGE_UNZIP": "YES",
+      "PACKAGE_URL": "https://www.dropbox.com/s/aesfxr1mxdrc7zl",
       "PACKAGE_WGET": "YES",
-      "PACKAGE_WGET_EXTRA": "-O SqueezeDet.zip"
+      "PACKAGE_WGET_EXTRA": "-O ResNet50.zip"
     },
+    "meta_file": "model.ckpt-65000.meta",
+    "model_file": "model.ckpt-65000",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "version": "20161209"
   },
   "end_full_path": {
-    "linux": "model.ckpt-87000",
-    "win": "model.ckpt-87000"
+    "linux": "model.ckpt-65000",
+    "win": "model.ckpt-65000"
   },
-  "package_extra_name":" (SqueezeDet)",
+  "package_extra_name": " (ResNet50)",
   "process_script": "install",
   "soft_uoa": "00ea54addb99aab8",
-  "suggested_path": "squeezedetmodel-squeezedet",
+  "suggested_path": "squeezedetmodel-resnet50",
   "tags": [
     "tensorflow",
     "model",
-    "squeezedet",
+    "resnet",
+    "resnet50",
     "squeezedetmodel"
   ],
   "use_scripts_from_another_entry": {
