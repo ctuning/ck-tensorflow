@@ -8,6 +8,7 @@
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/t8gvsyou0hbfnqk",
       "PACKAGE_WGET": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET_EXTRA": "-O SqueezeDetPlus.zip"
     },
     "meta_file": "model.ckpt-95000.meta",

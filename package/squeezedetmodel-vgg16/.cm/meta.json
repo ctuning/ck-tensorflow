@@ -8,6 +8,7 @@
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/ztg6id2hn1i99bh",
       "PACKAGE_WGET": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET_EXTRA": "-O VGG16.zip"
     },
     "meta_file": "model.ckpt-101500.meta",

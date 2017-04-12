@@ -11,6 +11,7 @@
       "PACKAGE_NAME": "SqueezeDet.zip",
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_WGET": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET_EXTRA": "-O SqueezeDet.zip"
     },
     "no_os_in_suggested_path": "yes",
