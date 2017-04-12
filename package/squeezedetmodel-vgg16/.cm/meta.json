@@ -4,31 +4,31 @@
     "extra_dir": "",
     "force_ask_path": "yes",
     "install_env": {
-      "PACKAGE_NAME": "ResNet50.zip",
+      "PACKAGE_NAME": "VGG16.zip",
       "PACKAGE_UNZIP": "YES",
-      "PACKAGE_URL": "https://www.dropbox.com/s/aesfxr1mxdrc7zl",
+      "PACKAGE_URL": "https://www.dropbox.com/s/ztg6id2hn1i99bh",
       "PACKAGE_WGET": "YES",
-      "PACKAGE_WGET_EXTRA": "-O ResNet50.zip"
+      "PACKAGE_WGET_EXTRA": "-O VGG16.zip"
     },
-    "meta_file": "model.ckpt-65000.meta",
-    "model_file": "model.ckpt-65000",
+    "meta_file": "model.ckpt-101500.meta",
+    "model_file": "model.ckpt-101500",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "version": "20161209"
   },
   "end_full_path": {
-    "linux": "model.ckpt-65000",
-    "win": "model.ckpt-65000"
+    "linux": "model.ckpt-101500",
+    "win": "model.ckpt-101500"
   },
-  "package_extra_name": " (ResNet50)",
+  "package_extra_name": " (VGG16)",
   "process_script": "install",
   "soft_uoa": "00ea54addb99aab8",
-  "suggested_path": "squeezedetmodel-resnet50",
+  "suggested_path": "squeezedetmodel-vgg16",
   "tags": [
     "tensorflow",
     "model",
-    "resnet",
-    "resnet50",
+    "vgg16",
+    "vgg",
     "squeezedetmodel"
   ],
   "use_scripts_from_another_entry": {
