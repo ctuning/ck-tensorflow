@@ -1,9 +1,7 @@
-set ROOT=%cd%\..
-
 set OUT_DIR=%cd%\out
 rm -rf %OUT_DIR%
 
-set PYTHONPATH=%PYTHONPATH%;%ROOT%\src
+set PYTHONPATH=%PYTHONPATH%;%CK_ENV_DEMO_SQUEEZEDET_SRC%
 
 rem supress TF debug output
 set TF_CPP_MIN_LOG_LEVEL=3

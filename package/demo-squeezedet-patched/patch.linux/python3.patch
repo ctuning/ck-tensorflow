@@ -1,0 +1,196 @@
+From 215fa7949ddf6cf65e8b4ca38173e930c47e7ad3 Mon Sep 17 00:00:00 2001
+From: Dmitry Savenko <dsavenko@xored.com>
+Date: Thu, 6 Apr 2017 15:51:34 +0700
+Subject: [PATCH] Make it compatible with Python 3
+
+---
+ src/config/__init__.py                    | 12 +++++++-----
+ src/config/kitti_model_config.py          |  4 +++-
+ src/config/kitti_res50_config.py          |  4 +++-
+ src/config/kitti_squeezeDetPlus_config.py |  4 +++-
+ src/config/kitti_squeezeDet_config.py     |  4 +++-
+ src/config/kitti_vgg16_config.py          |  4 +++-
+ src/dataset/__init__.py                   |  6 ++++--
+ src/dataset/voc_eval.py                   | 10 ++++++----
+ src/nets/__init__.py                      | 10 ++++++----
+ src/nets/squeezeDet.py                    | 11 ++++++++++-
+ 10 files changed, 48 insertions(+), 21 deletions(-)
+
+diff --git a/src/config/__init__.py b/src/config/__init__.py
+index dbe4fbd..bde4104 100644
+--- a/src/config/__init__.py
++++ b/src/config/__init__.py
+@@ -1,5 +1,7 @@
+-from kitti_model_config import kitti_model_config
+-from kitti_vgg16_config import kitti_vgg16_config
+-from kitti_res50_config import kitti_res50_config
+-from kitti_squeezeDet_config import kitti_squeezeDet_config
+-from kitti_squeezeDetPlus_config import kitti_squeezeDetPlus_config
++from __future__ import absolute_import
++
++from .kitti_model_config import kitti_model_config
++from .kitti_vgg16_config import kitti_vgg16_config
++from .kitti_res50_config import kitti_res50_config
++from .kitti_squeezeDet_config import kitti_squeezeDet_config
++from .kitti_squeezeDetPlus_config import kitti_squeezeDetPlus_config
+diff --git a/src/config/kitti_model_config.py b/src/config/kitti_model_config.py
+index 3bbcd49..2decddf 100644
+--- a/src/config/kitti_model_config.py
++++ b/src/config/kitti_model_config.py
+@@ -2,9 +2,11 @@
+ 
+ """Model configuration for pascal dataset"""
+ 
++from __future__ import absolute_import
++
+ import numpy as np
+ 
+-from config import base_model_config
++from .config import base_model_config
+ 
+ def kitti_model_config():
+   """Specify the parameters to tune below."""
+diff --git a/src/config/kitti_res50_config.py b/src/config/kitti_res50_config.py
+index 6e0cca4..f0a69ef 100644
+--- a/src/config/kitti_res50_config.py
++++ b/src/config/kitti_res50_config.py
+@@ -2,9 +2,11 @@
+ 
+ """Model configuration for pascal dataset"""
+ 
++from __future__ import absolute_import
++
+ import numpy as np
+ 
+-from config import base_model_config
++from .config import base_model_config
+ 
+ def kitti_res50_config():
+   """Specify the parameters to tune below."""
+diff --git a/src/config/kitti_squeezeDetPlus_config.py b/src/config/kitti_squeezeDetPlus_config.py
+index 0ae3c21..e48981a 100644
+--- a/src/config/kitti_squeezeDetPlus_config.py
++++ b/src/config/kitti_squeezeDetPlus_config.py
+@@ -2,9 +2,11 @@
+ 
+ """Model configuration for pascal dataset"""
+ 
++from __future__ import absolute_import
++
+ import numpy as np
+ 
+-from config import base_model_config
++from .config import base_model_config
+ 
+ def kitti_squeezeDetPlus_config():
+   """Specify the parameters to tune below."""
+diff --git a/src/config/kitti_squeezeDet_config.py b/src/config/kitti_squeezeDet_config.py
+index eb3973d..19117d4 100644
+--- a/src/config/kitti_squeezeDet_config.py
++++ b/src/config/kitti_squeezeDet_config.py
+@@ -2,9 +2,11 @@
+ 
+ """Model configuration for pascal dataset"""
+ 
++from __future__ import absolute_import
++
+ import numpy as np
+ 
+-from config import base_model_config
++from .config import base_model_config
+ 
+ def kitti_squeezeDet_config():
+   """Specify the parameters to tune below."""
+diff --git a/src/config/kitti_vgg16_config.py b/src/config/kitti_vgg16_config.py
+index 371f203..1e63e72 100644
+--- a/src/config/kitti_vgg16_config.py
++++ b/src/config/kitti_vgg16_config.py
+@@ -2,9 +2,11 @@
+ 
+ """Model configuration for pascal dataset"""
+ 
++from __future__ import absolute_import
++
+ import numpy as np
+ 
+-from config import base_model_config
++from .config import base_model_config
+ 
+ def kitti_vgg16_config():
+   """Specify the parameters to tune below."""
+diff --git a/src/dataset/__init__.py b/src/dataset/__init__.py
+index 82614c8..7f8bfbb 100644
+--- a/src/dataset/__init__.py
++++ b/src/dataset/__init__.py
+@@ -1,2 +1,4 @@
+-from kitti import kitti
+-from pascal_voc import pascal_voc
++from __future__ import absolute_import
++
++from .kitti import kitti
++from .pascal_voc import pascal_voc
+diff --git a/src/dataset/voc_eval.py b/src/dataset/voc_eval.py
+index 3c995b9..fc72eda 100644
+--- a/src/dataset/voc_eval.py
++++ b/src/dataset/voc_eval.py
+@@ -6,9 +6,11 @@
+ # Written by Bharath Hariharan
+ # --------------------------------------------------------
+ 
++from __future__ import print_function
++
+ import xml.etree.ElementTree as ET
+ import os
+-import cPickle
++from six.moves import cPickle
+ import numpy as np
+ 
+ def parse_rec(filename):
+@@ -110,10 +112,10 @@ def voc_eval(detpath,
+         for i, imagename in enumerate(imagenames):
+             recs[imagename] = parse_rec(annopath.format(imagename))
+             if i % 100 == 0:
+-                print 'Reading annotation for {:d}/{:d}'.format(
+-                    i + 1, len(imagenames))
++                print('Reading annotation for {:d}/{:d}'.format(
++                    i + 1, len(imagenames)))
+         # save
+-        print 'Saving cached annotations to {:s}'.format(cachefile)
++        print('Saving cached annotations to {:s}'.format(cachefile))
+         with open(cachefile, 'w') as f:
+             cPickle.dump(recs, f)
+     else:
+diff --git a/src/nets/__init__.py b/src/nets/__init__.py
+index a8da158..b8825a6 100644
+--- a/src/nets/__init__.py
++++ b/src/nets/__init__.py
+@@ -1,4 +1,6 @@
+-from squeezeDet import SqueezeDet
+-from squeezeDetPlus import SqueezeDetPlus
+-from resnet50_convDet import ResNet50ConvDet
+-from vgg16_convDet import VGG16ConvDet
++from __future__ import absolute_import
++
++from .squeezeDet import SqueezeDet
++from .squeezeDetPlus import SqueezeDetPlus
++from .resnet50_convDet import ResNet50ConvDet
++from .vgg16_convDet import VGG16ConvDet
+diff --git a/src/nets/squeezeDet.py b/src/nets/squeezeDet.py
+index bc3af79..be8531c 100644
+--- a/src/nets/squeezeDet.py
++++ b/src/nets/squeezeDet.py
+@@ -102,4 +102,13 @@ def _fire_layer(self, layer_name, inputs, s1x1, e1x1, e3x3, freeze=False):
+         layer_name+'/expand3x3', sq1x1, filters=e3x3, size=3, stride=1,
+         padding='SAME', freeze=freeze)
+ 
+-    return tf.concat([ex1x1, ex3x3], 3, name=layer_name+'/concat')
++    values = [ex1x1, ex3x3]
++    axis = 3
++    name = layer_name+'/concat'
++
++    try:
++      # calling the new concat, if available
++      return tf.concat(axis, values, name=name)
++    except TypeError:
++      # fallback to the old concat
++      return tf.concat(values, axis, name=name)

@@ -1,10 +1,8 @@
 #! /bin/bash
-ROOT=$PWD/..
-
 OUT_DIR="$PWD/out"
 rm -rf "$OUT_DIR"
 
-export PYTHONPATH="$PYTHONPATH:$ROOT/src"
+export PYTHONPATH="$PYTHONPATH:$CK_ENV_DEMO_SQUEEZEDET_SRC"
 export TF_CPP_MIN_LOG_LEVEL=3 # supress TF debug output
 
 IMAGES=$CK_ENV_DATASET_KITTI_IMAGE_DIR

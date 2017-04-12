@@ -11,6 +11,12 @@
       "name": "TensorFlow library",
       "sort": 20,
       "tags": "lib,tensorflow,vprebuilt"
+    },
+    "demo-squeezedet": {
+      "local": "yes",
+      "name": "SqueezeDet demo sources",
+      "sort": 20,
+      "tags": "tensorflow,demo,squeezedet"
     }
   },
   "run_deps": {
@@ -30,7 +36,7 @@
     "default":{
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../src/demo.py --input_path=../data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
       }
     },
     "use_continuous":{
