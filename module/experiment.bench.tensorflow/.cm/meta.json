@@ -11,7 +11,7 @@
     }
   }, 
   "copyright": "See CK COPYRIGHT.txt for copyright details", 
-  "desc": "crowd-benchmark TensorFlow library", 
+  "desc": "crowd-benchmark DNN libraries and models (TensorFlow)", 
   "developer": "Grigori Fursin", 
   "developer_email": "Grigori.Fursin@cTuning.org", 
   "developer_webpage": "http://fursin.net/research.html", 
