@@ -73,13 +73,7 @@ def setup(i):
     env[ep]=pl
     env[ep+'_ROOT']=p1
 
-    env[ep+'_MODEL'] = os.path.join(p1, cus.get('model_file',''))
-    env[ep+'_MODEL_FILE']=cus.get('model_file','')
-
-    env[ep+'_META'] = os.path.join(p1, cus.get('meta_file',''))
-    env[ep+'_META_FILE']=cus.get('meta_file','')
-    
-    env[ep+'_ID']=cus.get('model_id','')
+    env[ep+'_SRC']=os.path.join(p1, cus.get('source_dir', 'src'))
 
     return {'return':0, 'bat':s}
 

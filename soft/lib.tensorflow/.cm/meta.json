@@ -8,7 +8,8 @@
       "linux": 5
     },
     "soft_file": {
-      "linux": "tensorflow/__init__.py"
+      "linux": "tensorflow/__init__.py",
+      "win": "tensorflow/__init__.py"
     }
   },
   "soft_name": "TensorFlow library",

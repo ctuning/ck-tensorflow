@@ -1,0 +1,37 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "",
+    "force_ask_path": "yes", 
+    "source_dir": "src",
+    "install_env": {
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_URL": "https://github.com/BichenWuUCB/squeezeDet.git",
+      "PACKAGE_GIT_CHECKOUT": "05e9de1c6ad4d0b53ccf1c4194da57769f191c88",
+      "PACKAGE_SUB_DIR": "squeezeDet",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_PATCH": "YES"
+    }, 
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "master-05e9de1"
+  }, 
+  "end_full_path": {
+    "linux": "squeezeDet/README.md",
+    "win": "squeezeDet/README.md"
+  }, 
+  "package_extra_name": " (patched)",
+  "process_script": "install", 
+  "soft_uoa": "76551749a9854388",
+  "suggested_path": "demo-squeezedet-patched",
+  "tags": [
+    "tensorflow", 
+    "demo", 
+    "squeezedet",
+    "patched"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}

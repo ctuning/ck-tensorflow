@@ -1,23 +1,22 @@
 {
-"auto_detect": "yes",
+  "auto_detect": "yes",
   "customize": {
-    "env_prefix": "CK_ENV_MODEL_SQUEEZEDET",
     "check_that_exists": "yes",
     "ck_version": 10,
+    "env_prefix": "CK_ENV_DEMO_SQUEEZEDET",
     "limit_recursion_dir_search": {
       "linux": 5,
       "win": 5
-    },
+    }, 
     "soft_file": {
       "linux": "squeezeDet/README.md",
       "win": "squeezeDet/README.md"
     }
-  },
-  "soft_name": "TensorFlow model - SqueezeDet",
+  }, 
+  "soft_name": "SqueezeDet demo",
   "tags": [
-    "tensorflow",
-    "model",
-    "squeezedetmodel"
+    "tensorflow", 
+    "demo", 
+    "squeezedet"
   ]
 }
-

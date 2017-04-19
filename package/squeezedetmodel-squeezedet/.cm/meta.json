@@ -1,0 +1,39 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "force_ask_path": "yes",
+    "model_file": "model.ckpt-87000",
+    "meta_file": "model.ckpt-87000.meta",
+    "model_id": "squeezeDet",
+    "install_env": {
+      "PACKAGE_URL": "https://www.dropbox.com/s/r01iqs9weopfjh9",
+      "PACKAGE_NAME": "SqueezeDet.zip",
+      "PACKAGE_UNZIP": "YES",
+      "PACKAGE_WGET": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_WGET_EXTRA": "-O SqueezeDet.zip"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "20161209"
+  },
+  "end_full_path": {
+    "linux": "model.ckpt-87000",
+    "win": "model.ckpt-87000"
+  },
+  "package_extra_name":" (SqueezeDet)",
+  "process_script": "install",
+  "soft_uoa": "00ea54addb99aab8",
+  "suggested_path": "squeezedetmodel-squeezedet",
+  "tags": [
+    "tensorflow",
+    "model",
+    "squeezedet",
+    "squeezedetmodel"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  }
+}

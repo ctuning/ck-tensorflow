@@ -6,17 +6,19 @@
       "sort": 5,
       "tags": "compiler,python"
     },
-    "lib-tensorflow": {
+    "demo-squeezedet": {
       "local": "yes",
-      "name": "TensorFlow library",
+      "name": "SqueezeDet demo sources",
       "sort": 20,
-      "tags": "lib,tensorflow,vprebuilt"
-    },
+      "tags": "tensorflow,demo,squeezedet"
+    }
+  },
+  "run_deps": {
     "squeezedet": {
       "local": "yes",
-      "name": "SqueezeDet artifact",
+      "name": "SqueezeDet model",
       "sort": 30,
-      "tags": "model,tensorflow,squeezedet"
+      "tags": "model,tensorflow,squeezedetmodel,squeezedet"
     }
   },
   "data_name": "TensorFlow SqueezeDet",
@@ -25,24 +27,10 @@
   "no_compile": "yes",
   "no_target_file": "yes",
   "run_cmds": {
-    "squeezedet":{
-      "dataset_tags": [
-        "squeezedet",
-        "model",
-        "dataset",
-        "script"
-      ],
-      "run_deps": {
-        "dataset-kitti": {
-          "local": "yes",
-          "name": "KITTI dataset",
-          "sort": 40,
-          "tags": "dataset,kitti"
-        }
-      },
+    "default":{
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "sh $#dataset_path#$$#dataset_filename#$ "
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
       }
     },
     "use_continuous":{
