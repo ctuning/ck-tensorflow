@@ -47,7 +47,6 @@
   "only_for_target_os_tags": [
     "linux"
   ], 
-  "need_cpu_info": "yes",
   "package_extra_name": " (via CMake)",
   "process_script": "install",
   "soft_uoa": "1441754bd574b689", 
