@@ -53,7 +53,7 @@
   ], 
   "package_extra_name": " (via CMake)",
   "process_script": "install",
-  "soft_uoa": "1441754bd574b689", 
+  "soft_uoa": "30db354f469bb178", 
   "suggested_path": "lib-tensorflow-cmake", 
   "tags": [
     "lib", 
