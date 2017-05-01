@@ -17,9 +17,6 @@
     }, 
     "version": "1.1.0-rc2"
   }, 
-  "env": {
-    "PYTHONPATH": "$<<PYTHONPATH>>$$#sep#$$<<INSTALL_DIR>>$/obj/tf_python"
-  },
   "deps": {
     "cmake": {
       "force_target_as_host": "yes",
