@@ -12,10 +12,14 @@
       "PACKAGE_GIT_CHECKOUT": "v1.1.0-rc2",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_BUILD_TYPE": "cmake",
-      "PACKAGE_SUB_DIR1": "src/tensorflow/contrib/cmake/"
+      "PACKAGE_SUB_DIR1": "src/tensorflow/contrib/cmake/",
+      "PACKAGE_CONFIGURE_FLAGS": "-DPYTHON_EXECUTABLE:FILEPATH=\"$<<CK_ENV_COMPILER_PYTHON_FILE>>$\""
     }, 
     "version": "1.1.0-rc2"
   }, 
+  "env": {
+    "PYTHONPATH": "$<<PYTHONPATH>>$$#sep#$$<<INSTALL_DIR>>$/obj/tf_python"
+  },
   "deps": {
     "cmake": {
       "force_target_as_host": "yes",
