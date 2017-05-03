@@ -19,6 +19,12 @@
       "name": "SqueezeDet model",
       "sort": 30,
       "tags": "model,tensorflow,squeezedetmodel,squeezedet"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "Tensorflow library",
+      "sort": 40,
+      "tags": "lib,tensorflow"
     }
   },
   "data_name": "TensorFlow SqueezeDet",
