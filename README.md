@@ -7,6 +7,14 @@ Unified building, evaluation and optimization of TensorFlow via Collective Knowl
 
 # Introduction
 
+CK-TensorFlow is an open-source suite of convenient wrappers and workflows with unified 
+JSON API for simple and customized building, evaluation and multi-objective optimisation 
+of various TensorFlow implementations (CPU,CUDA,OpenCL) across diverse platforms
+from mobile devices and IoT to supercomputers.
+
+See [cKnowledge.org/ai](http://cKnowledge.org/ai), [shared optimization statistics](http://cKnowledge.org/repo) 
+and [online demo of CK AI API with self-optimizing DNN](http://cKnowledge.org/ai/ck-api-demo) for more details.
+
 We need to have easily customizable TensorFlow builds 
 via JSON API to be able to plug it to our framework 
 for collaborative benchmarking and optimization of realistic
