@@ -11,7 +11,7 @@
       "PACKAGE_URL": "http://kitti.is.tue.mpg.de/kitti/raw_data/2011_09_26_drive_0009", 
       "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
       "PACKAGE_UNZIP": "YES",
-      "IMAGE_DIR": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data",
+      "IMAGE_DIR": "image_00/data",
       "LABELS_DIR": ""
     }, 
     "no_os_in_suggested_path": "yes", 
