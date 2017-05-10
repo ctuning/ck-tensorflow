@@ -146,18 +146,20 @@ def image_demo():
         expected_classes = []
         expected_boxes = []
         class_count = dict((k, 0) for k in mc.CLASS_NAMES)
-        label_file_name = os.path.join(FLAGS.label_dir, file_name)
-        label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
-        with open(label_file_name) as lf:
-            label_lines = [x.strip() for x in lf.readlines()]
-            for l in label_lines:
-                parts = l.strip().lower().split(' ')
-                klass = parts[0]
-                if klass in class_count.keys():
-                    class_count[klass] += 1
-                bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
-                expected_boxes.append(bbox)
-                expected_classes.append(klass)
+        
+        if FLAGS.label_dir:
+            label_file_name = os.path.join(FLAGS.label_dir, file_name)
+            label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
+            with open(label_file_name) as lf:
+                label_lines = [x.strip() for x in lf.readlines()]
+                for l in label_lines:
+                    parts = l.strip().lower().split(' ')
+                    klass = parts[0]
+                    if klass in class_count.keys():
+                        class_count[klass] += 1
+                    bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
+                    expected_boxes.append(bbox)
+                    expected_classes.append(klass)
 
         # Draw original boxes
         my_draw_box(

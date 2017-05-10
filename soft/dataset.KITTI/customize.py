@@ -90,7 +90,8 @@ def setup(i):
     labels_dir =  cus.get('install_env', '').get('LABELS_DIR', '')
 
     env[ep + "_IMAGE_DIR"] = os.path.join(full_path, image_dir)
-    env[ep + "_LABELS_DIR"] = os.path.join(full_path, labels_dir)
+    if labels_dir:
+      env[ep + "_LABELS_DIR"] = os.path.join(full_path, labels_dir)
     env[ep]=full_path
     env['CK_SQUEEZENET_KITTI']=full_path
 

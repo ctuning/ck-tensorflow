@@ -1,0 +1,42 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "force_ask_path": "yes", 
+    "install_env": {
+      "PACKAGE_WGET": "YES", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
+      "PACKAGE_URL": "http://kitti.is.tue.mpg.de/kitti/raw_data/2011_09_26_drive_0009", 
+      "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
+      "PACKAGE_UNZIP": "YES",
+      "IMAGE_DIR": "image_02/data",
+      "LABELS_DIR": ""
+    }, 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "version": "2011"
+  }, 
+  "deps": {}, 
+  "end_full_path": {
+    "linux": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png", 
+    "win": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png"
+  }, 
+  "need_cpu_info": "no", 
+  "process_script": "install", 
+  "soft_uoa": "dd47415baf24025e", 
+  "suggested_path": "KITTI-drive-0009", 
+  "tags": [
+    "dataset", 
+    "kitti", 
+    "KITTI", 
+    "val",
+    "KITTI-drive-0009",
+    "KITTI-continuous"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
