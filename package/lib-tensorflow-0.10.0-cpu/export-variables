@@ -1,7 +1,7 @@
 export PYTHON_BIN_PATH="${CK_ENV_COMPILER_PYTHON}/bin/python"
 export USE_DEFAULT_PYTHON_LIB_PATH=1
 
-export CK_PYTHON3=1
+export CK_PYTHON3=0
 
 export GCC_HOST_COMPILER_PATH=""
 export HOST_C_COMPILER=""
