@@ -1,0 +1,45 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "GPU_ENABLED": 0,
+      "TENSORFLOW_PACKAGE_VER": "1.1.0"
+    },
+    "version": "1.1.0"
+  },
+  "deps": {
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " (prebuilt, cpu)",
+  "process_script": "install",
+  "soft_uoa": "30db354f469bb178",
+  "suggested_path": "tensorflow-prebuilt",
+  "tags": [
+    "lib",
+    "tensorflow",
+    "tensorflow-cpu",
+    "v1",
+    "v1.1",
+    "v1.1.0",
+    "vprebuilt",
+    "vcpu"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "1bb541bb2330badd"
+  }
+}
