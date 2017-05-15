@@ -3,19 +3,20 @@
   "customize": {
     "extra_dir": "", 
     "install_env": {
-      "PACKAGE_WGET": "YES",
-      "PACKAGE_NAME": "inception-2015-12-05.tgz",
-      "PACKAGE_NAME1": "inception-2015-12-05.tar",
-      "PACKAGE_URL": "http://download.tensorflow.org/models/image/imagenet",
-      "PACKAGE_UNGZIP":"YES",
-      "PACKAGE_UNTAR":"YES"
+      "PACKAGE_NAME": "inception-2015-12-05.tgz", 
+      "PACKAGE_NAME1": "inception-2015-12-05.tar", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_UNGZIP": "YES", 
+      "PACKAGE_UNTAR": "YES", 
+      "PACKAGE_URL": "http://download.tensorflow.org/models/image/imagenet", 
+      "PACKAGE_WGET": "YES"
     }, 
-    "no_os_in_suggested_path": "yes",
+    "no_os_in_suggested_path": "yes", 
     "version": "20151205"
   }, 
   "end_full_path": {
-    "linux": "classify_image_graph_def.pb",
-    "android": "classify_image_graph_def.pb",
+    "android": "classify_image_graph_def.pb", 
+    "linux": "classify_image_graph_def.pb", 
     "win": "classify_image_graph_def.pb"
   }, 
   "package_extra_name": " (imagenet, inception, 20151205)", 
@@ -24,14 +25,14 @@
   "suggested_path": "tensorflow-model-imagenet-inception", 
   "tags": [
     "tensorflow", 
-    "native",
+    "native", 
     "weights", 
     "tensorflowmodel", 
     "google", 
-    "imagenet",
-    "inception",
+    "imagenet", 
+    "inception", 
     "v20151205"
-  ],
+  ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 
     "module_uoa": "script"
