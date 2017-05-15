@@ -1,0 +1,71 @@
+{
+  "backup_data_uid": "62de6ce26934e3eb",
+  "data_name": "tensorflow",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "print_files_after_run": [
+    "stderr2.log",
+    "stderr.log"
+  ],
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "run_cmds": {
+    "classify": {
+      "dataset_tags": [
+        "image",
+        "jpeg",
+        "dataset"
+      ],
+      "ignore_return_code": "no",
+      "run_deps": {
+        "tensorflow": {
+          "local": "yes",
+          "name": "TensorFlow library",
+          "skip_pruning_by_other_deps": "yes",
+          "sort": 10,
+          "tags": "lib,tensorflow"
+        },
+        "tensorflow-model": {
+          "local": "yes",
+          "name": "TensorFlow model (net and weights)",
+          "sort": 20,
+          "tags": "tensorflowmodel,native"
+        }
+      },
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$#dataset_path#$$#dataset_filename#$",
+        "run_cmd_out1": "stderr.log",
+        "run_cmd_out2": "stderr2.log"
+      }
+    },
+    "classify_ck_ai_api": {
+      "ignore_return_code": "no",
+      "run_deps": {
+        "tensorflow": {
+          "local": "yes",
+          "name": "TensorFlow library",
+          "skip_pruning_by_other_deps": "yes",
+          "sort": 10,
+          "tags": "lib,tensorflow"
+        },
+        "tensorflow-model": {
+          "local": "yes",
+          "name": "TensorFlow model (net and weights)",
+          "sort": 20,
+          "tags": "tensorflowmodel,native"
+        }
+      },
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$<<CK_AI_API_IMAGE_FILE>>$",
+        "run_cmd_out1": "stderr.log",
+        "run_cmd_out2": "stderr2.log"
+      }
+    }
+  },
+  "run_vars": {},
+  "tags": [
+    "tensorflow-classification",
+    "ck-ai-image-classification",
+    "demo"
+  ]
+}
