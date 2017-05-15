@@ -32,7 +32,7 @@
   "package_extra_name": " (prebuilt, cpu)",
   "process_script": "install",
   "soft_uoa": "30db354f469bb178",
-  "suggested_path": "tensorflow-prebuilt",
+  "suggested_path": "tensorflow-prebuilt-cpu",
   "tags": [
     "lib",
     "tensorflow",

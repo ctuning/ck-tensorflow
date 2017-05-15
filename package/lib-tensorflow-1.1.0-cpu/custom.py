@@ -119,9 +119,9 @@ def setup(i):
        tp='gpu'
        tp1='_gpu'
 
-    p+='/'+tp+'/'
+    proto=p+'/cpu/'
 
-    proto=p
+    p+='/'+tp+'/'
 
     p+='tensorflow'+tp1+'-'+ie['TENSORFLOW_PACKAGE_VER']
 
