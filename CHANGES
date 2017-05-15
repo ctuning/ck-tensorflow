@@ -1,3 +1,5 @@
+2017.05.15 - providing Windows support and unifying API (caffe/caffe2/tf)
+
 2017.03.28 - major update to support unified Android/Linux compilation of classification with xOpenME
 
 2017.03.23 - added tensorflow src universal package (to build Android scenarios)

@@ -75,7 +75,9 @@ def setup(i):
     env[ep]=pi
     env[ep+'_LIB']=pl
 
-    if winh!='yes':
+    if winh=='yes':
+        s+='\nset PYTHONPATH='+pl+';%PYTHONPATH%\n'
+    else:
         s+='\nexport PYTHONPATH='+pl+':${PYTHONPATH}\n'
 
     return {'return':0, 'bat':s}
