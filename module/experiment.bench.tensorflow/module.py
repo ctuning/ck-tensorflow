@@ -200,7 +200,7 @@ def crowdsource(i):
     sn=fos.get('serial_number','')
 
     # Ask for cmd
-    tp=['cpu', 'cuda', 'opencl']
+    tp=['cpu', 'cuda'] #, 'opencl']
 
     ck.out(line)
     ck.out('Select TensorFlow library type:')
@@ -209,10 +209,11 @@ def crowdsource(i):
                  'module_uoa':cfg['module_deps']['choice'],
                  'choices':tp})
     if r['return']>0: return r
-    xtp=r['choice']
+    xtp=r['choice'].strip()
 
     # Get extra platform features if "cuda" or "opencl"
-    run_cmd='default'
+    run_cmd='time_'+xtp
+
     tags='lib,tensorflow,tensorflow-'+xtp
     gpgpu_uid=''
     if xtp=='cuda' or xtp=='opencl':
@@ -240,11 +241,7 @@ def crowdsource(i):
     if r['return']>0: return r
 
     dd=r['dict']
-    deps=dd['compile_deps']
     pp=r['path']
-
-    lib_dep=deps['lib-tensorflow']
-    lib_dep['tags']=tags
 
     # Get explicit choices (batch size, num batches)
     env=i.get('env',{})
@@ -252,17 +249,6 @@ def crowdsource(i):
     for k in echoices:
         if env.get(k,'')!='':
             echoices[k]=env[k]
-
-    # Check environment for selected type
-    r=ck.access({'action':'resolve',
-                 'module_uoa':cfg['module_deps']['env'],
-                 'deps':deps,
-                 'host_os':hos,
-                 'target_os':tos,
-                 'device_id':tdid,
-                 'out':o})
-    if r['return']>0: return r
-    deps=r['deps']
 
     # Prepare CK pipeline for a given workload
     ii={'action':'pipeline',
@@ -274,7 +260,6 @@ def crowdsource(i):
 
         'env':env,
         'choices':choices,
-        'dependencies':deps,
         'cmd_key':run_cmd,
         'no_state_check':'yes',
         'no_compiler_description':'yes',
@@ -302,6 +287,8 @@ def crowdsource(i):
     ready=rr.get('ready','')
     if ready!='yes':
         return {'return':11, 'error':'couldn\'t prepare universal CK program workflow'}
+
+    deps=rr.get('dependencies',{})
 
     state=rr['state']
     tmp_dir=state['tmp_dir']
@@ -399,6 +386,10 @@ def crowdsource(i):
     fail_reason=ls.get('fail_reason','')
 
     ch=ls.get('characteristics',{})
+
+    ck.save_json_to_file({'json_file':'/tmp/xyz5.json','dict':rr})
+    exit(1)
+
 
     # Save pipeline
     ddd['state']={'fail':fail, 'fail_reason':fail_reason}
