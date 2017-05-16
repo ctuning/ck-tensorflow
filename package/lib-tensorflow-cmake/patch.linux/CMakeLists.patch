@@ -1,0 +1,23 @@
+diff --git a/tensorflow/contrib/cmake/CMakeLists.txt b/tensorflow/contrib/cmake/CMakeLists.txt
+index 7fd903d..64cc89b 100644
+--- a/tensorflow/contrib/cmake/CMakeLists.txt
++++ b/tensorflow/contrib/cmake/CMakeLists.txt
+@@ -199,12 +199,12 @@ endif()
+ include(tf_core_framework.cmake)
+ include(tf_tools.cmake)
+ # NOTE: Disabled until issue #3996 is fixed.
+-# include(tf_stream_executor.cmake)
+-if (tensorflow_ENABLE_GPU)
+-  if (WIN32)
+-    include(tf_stream_executor.cmake)
+-  endif()
+-endif()
++include(tf_stream_executor.cmake)
++# if (tensorflow_ENABLE_GPU)
++#   if (WIN32)
++#     include(tf_stream_executor.cmake)
++#   endif()
++# endif()
+ 
+ include(tf_core_cpu.cmake)
+ include(tf_core_ops.cmake)
