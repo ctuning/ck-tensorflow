@@ -33,6 +33,10 @@
         }
       },
       "run_time": {
+        "run_output_files": [
+          "stderr.log", 
+          "stderr2.log"
+        ],
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$#dataset_path#$$#dataset_filename#$",
         "run_cmd_out1": "stderr.log",
         "run_cmd_out2": "stderr2.log"
@@ -56,6 +60,10 @@
         }
       },
       "run_time": {
+        "run_output_files": [
+          "stderr.log", 
+          "stderr2.log"
+        ],
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$<<CK_AI_API_IMAGE_FILE>>$",
         "run_cmd_out1": "stderr.log",
         "run_cmd_out2": "stderr2.log"
@@ -79,6 +87,10 @@
         }
       },
       "run_time": {
+        "run_output_files": [
+          "stderr.log", 
+          "stderr2.log"
+        ],
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       }
     },
@@ -100,6 +112,10 @@
         }
       },
       "run_time": {
+        "run_output_files": [
+          "stderr.log", 
+          "stderr2.log"
+        ],
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       }
     }
