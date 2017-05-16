@@ -188,9 +188,9 @@ def time_tensorflow_run(session, target, info_string):
   print ('%s: %s across %d steps, %.3f +/- %.3f sec / batch' %
          (datetime.now(), info_string, FLAGS.num_batches, mn, sd))
 
+  return mn
 
-
-def run_benchmark():
+def run_benchmark(dd):
   """Run the benchmark on AlexNet."""
   with tf.Graph().as_default():
     # Generate some dummy images.
@@ -218,27 +218,33 @@ def run_benchmark():
     sess.run(init)
 
     # Run the forward benchmark.
-    time_tensorflow_run(sess, pool5, "Forward")
+    dd['time_fw_norm']=time_tensorflow_run(sess, pool5, "Forward")
 
     # Add a simple objective so we can calculate the backward pass.
     objective = tf.nn.l2_loss(pool5)
     # Compute the gradient with respect to all the parameters.
     grad = tf.gradients(objective, parameters)
     # Run the backward benchmark.
-    time_tensorflow_run(sess, grad, "Forward-backward")
-
+    dd['time_fwbw_norm']=time_tensorflow_run(sess, grad, "Forward-backward")
+    dd['execution_time']=dd['time_fwbw_norm']
 
 def main(_):
   import time
+  import json
 
   print ("")
 
+  dd={}
+
   t1=time.time()
-  run_benchmark()
+  run_benchmark(dd)
   tt=time.time()-t1
 
   print ("")
   print ("Elapsed time: "+("%.2f"%tt)+" sec.")
+
+  with open('tmp-ck-timer.json', 'w') as o:
+     json.dump(dd, o)
 
 if __name__ == '__main__':
   tf.app.run()
