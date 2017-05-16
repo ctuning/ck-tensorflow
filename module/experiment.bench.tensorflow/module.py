@@ -47,10 +47,11 @@ hextra+='<br>\n'
 
 
 selector=[{'name':'Type', 'key':'tensorflow_type'},
-          {'name':'Network', 'key':'nn_type'},
-          {'name':'Platform', 'key':'plat_name'},
-          {'name':'CPU', 'key':'cpu_name', 'new_line':'yes'},
-          {'name':'OS', 'key':'os_name'},
+          {'name':'DNN engine', 'key':'dnn_engine_name'},
+          {'name':'Network', 'key':'dataset_uoa'},
+          {'name':'Platform', 'key':'plat_name', 'new_line':'yes'},
+          {'name':'CPU', 'key':'cpu_name'},
+          {'name':'OS', 'key':'os_name', 'new_line':'yes'},
           {'name':'GPGPU', 'key':'gpgpu_name'}]
 
 ##############################################################################
@@ -750,10 +751,12 @@ def show(i):
     h+='  <tr style="background-color:#dddddd">\n'
     h+='   <td '+ha+'><b>All raw files</b></td>\n'
     h+='   <td '+ha+'><b>Type</b></td>\n'
+    h+='   <td '+ha+'><b>DNN engine</b></td>\n'
     h+='   <td '+ha+'><b>Network</b></td>\n'
     h+='   <td '+ha+'><b>Batch size</b></td>\n'
     h+='   <td '+ha+'><b>Num batches</b></td>\n'
-    h+='   <td '+ha+'><b>Total time (sec.)</b></td>\n'
+    h+='   <td '+ha+'><b>FWBW time (sec.)</b></td>\n'
+    h+='   <td '+ha+'><b>FW time (sec.)</b></td>\n'
     h+='   <td '+ha+'><b>Chars</b></td>\n'
     h+='   <td '+ha+'><b>Platform</b></td>\n'
     h+='   <td '+ha+'><b>CPU</b></td>\n'
@@ -772,8 +775,28 @@ def show(i):
     if hi_uid!='':
         bgraph['1']=[]
 
+    # Load min stat
+    for q in plst:
+        pmin=os.path.join(q['path'],ffmin)
+        dx={'##characteristics#run#time_fwbw_norm#min':1e99}
+
+        if os.path.isfile(pmin):
+           rx=ck.load_json_file({'json_file':pmin})
+           if rx['return']==0:
+              dx=rx['dict']
+
+              # Fix
+              x=dx.get('##characteristics#run#time_fwbw_norm#min','')
+              if x==None or x=='' or x>50000: 
+                 dx['##characteristics#run#time_fwbw_norm#min']=1e99
+                 if q.get('meta',{}).get('state',{}).get('fail_reason','')=='':
+                    q['meta']['state']['fail']='yes'
+                    q['meta']['state']['fail_reason']='strange timing'
+
+        q['min_stat']=dx
+
     # Sort
-    splst=sorted(plst, key=lambda x: x.get('meta',{}).get('characteristics',{}).get('run',{}).get('total_execution_time',0))
+    splst=sorted(plst, key=lambda x: x.get('min_stat',{}).get('##characteristics#run#time_fwbw_norm#min',0))
 
     for q in splst:
         ix+=1
@@ -801,10 +824,19 @@ def show(i):
         gpu_uid=meta.get('gpu_uid','')
         gpgpu_uid=meta.get('gpgpu_uid','')
 
+        ds=meta.get('dataset_uoa','')
+
         echoices=meta.get('echoices',{})
 
         bs=echoices.get('BATCH_SIZE','')
         nb=echoices.get('NUM_BATCHES','')
+
+        xdeps=meta.get('xdeps',{})
+
+        d_engine=xdeps.get('lib-tensorflow',{})
+        d_engine_name=d_engine.get('data_name','')
+        d_engine_package_uoa=d_engine.get('package_uoa','')
+        d_engine_ver=d_engine.get('ver','')
 
         user=meta.get('user','')
 
@@ -819,8 +851,8 @@ def show(i):
             bgc='ffafaf'
         elif hi_uid!='' and duid==hi_uid:
             bgc='9fff9f'
-            bgraph['0'].append([ix,None])
-            bgraph['1'].append([ix,x0])
+#            bgraph['0'].append([ix,None])
+#            bgraph['1'].append([ix,x0])
 
         bg=' style="background-color:#'+bgc+';"'
 
@@ -832,7 +864,9 @@ def show(i):
 
         h+='   <td '+ha+'>'+tp+'</a></td>\n'
 
-        h+='   <td '+ha+'>'+nn+'</a></td>\n'
+        h+='   <td '+ha+'>'+d_engine_name+'<br><i>('+d_engine_ver+')</i></a></td>\n'
+
+        h+='   <td '+ha+'>'+ds+'</a></td>\n'
 
         # Characteristics
         # Check if has statistics
@@ -849,17 +883,47 @@ def show(i):
         x=''
 
         # Check if has stats
-        x0=dstat.get("##characteristics#run#total_execution_time#min",None)
-        x0e=dstat.get("##characteristics#run#total_execution_time#exp",None)
-        x1=dstat.get("##characteristics#run#total_execution_time#center",None)
-        x2=dstat.get("##characteristics#run#total_execution_time#halfrange",None)
-        if x1!=None and x2!=None:
-            x=('%.2f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.2f'%x2)
+        x0=dstat.get("##characteristics#run#time_fwbw_norm#min",None)
+        x0e=dstat.get("##characteristics#run#time_fwbw_norm#exp",None)
+        x1=dstat.get("##characteristics#run#time_fwbw_norm#center",None)
+        xr=dstat.get("##characteristics#run#time_fwbw_norm#repeats",None)
+        x2=dstat.get("##characteristics#run#time_fwbw_norm#halfrange",None)
+        x=''
+        if x0!=None:
+            x='<b>'+('%.3f'%x0)+'&nbsp;</b>\n'
+
+        if x0e!=None and x2!=None:
+            x+='<br><br>('+('%.3f'%x0e)+'&nbsp;&PlusMinus;&nbsp;'+('%.3f'%x2)+')\n'
+
+        if xr!=None:
+            x+='<br><i>'+str(xr)+'&nbsp;repetitions</i>\n'
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
+        x0=dstat.get("##characteristics#run#time_fw_norm#min",None)
+        x0e=dstat.get("##characteristics#run#time_fw_norm#exp",None)
+        x1=dstat.get("##characteristics#run#time_fw_norm#center",None)
+        xr=dstat.get("##characteristics#run#time_fw_norm#repeats",None)
+        x2=dstat.get("##characteristics#run#time_fw_norm#halfrange",None)
+        x=''
+        if x0!=None:
+            x='<b>'+('%.3f'%x0)+'&nbsp;</b>\n'
+
+        if x0e!=None and x2!=None:
+            x+='<br><br>('+('%.3f'%x0e)+'&nbsp;&PlusMinus;&nbsp;'+('%.3f'%x2)+')\n'
+
+        if xr!=None:
+            x+='<br><i>'+str(xr)+'&nbsp;repetitions</i>\n'
+
+        h+='   <td '+ha+'>'+x+'</td>\n'
+
+#        if fail!='yes' and x0!=None and duid!=hi_uid:
+#            bgraph['0'].append([ix,x0])
+#            if hi_uid!='': bgraph['1'].append([ix,None])
+
+        if fail=='yes': x0=0
+        bgraph['0'].append([ix,x0])
         if fail!='yes' and x0!=None and duid!=hi_uid:
-            bgraph['0'].append([ix,x0])
             if hi_uid!='': bgraph['1'].append([ix,None])
 
         # Check all characteristics
@@ -944,7 +1008,7 @@ def show(i):
 
         h+='   <td '+ha+'><a href="'+url0+'&action=index&module_uoa=wfe&native_action=show&native_module_uoa=experiment.user">'+user+'</a></td>\n'
 
-        h+='   <td '+ha+'><input type="button" class="ck_small_button" onClick="copyToClipboard(\'ck replay tensorflow\');" value="Replay"></td>\n'
+        h+='   <td '+ha+'><input type="button" class="ck_small_button" onClick="copyToClipboard(\'TBD\');" value="Replay"></td>\n'
 
         h+='  <tr>\n'
 
