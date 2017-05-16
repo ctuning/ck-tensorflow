@@ -190,7 +190,7 @@ def time_tensorflow_run(session, target, info_string):
 
   return mn
 
-def run_benchmark(dd):
+def run_benchmark(openme):
   """Run the benchmark on AlexNet."""
   with tf.Graph().as_default():
     # Generate some dummy images.
@@ -218,15 +218,15 @@ def run_benchmark(dd):
     sess.run(init)
 
     # Run the forward benchmark.
-    dd['time_fw_norm']=time_tensorflow_run(sess, pool5, "Forward")
+    openme['time_fw_norm']=time_tensorflow_run(sess, pool5, "Forward")
 
     # Add a simple objective so we can calculate the backward pass.
     objective = tf.nn.l2_loss(pool5)
     # Compute the gradient with respect to all the parameters.
     grad = tf.gradients(objective, parameters)
     # Run the backward benchmark.
-    dd['time_fwbw_norm']=time_tensorflow_run(sess, grad, "Forward-backward")
-    dd['execution_time']=dd['time_fwbw_norm']
+    openme['time_fwbw_norm']=time_tensorflow_run(sess, grad, "Forward-backward")
+    openme['execution_time']=openme['time_fwbw_norm']
 
 def main(_):
   import time
@@ -234,17 +234,17 @@ def main(_):
 
   print ("")
 
-  dd={}
+  openme={}
 
   t1=time.time()
-  run_benchmark(dd)
+  run_benchmark(openme)
   tt=time.time()-t1
 
   print ("")
   print ("Elapsed time: "+("%.2f"%tt)+" sec.")
 
   with open('tmp-ck-timer.json', 'w') as o:
-     json.dump(dd, o)
+     json.dump(openme, o)
 
 if __name__ == '__main__':
   tf.app.run()
