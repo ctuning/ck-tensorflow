@@ -220,8 +220,9 @@ def run_benchmark(openme):
 
     if run_forward:
       # Run the forward benchmark.
-      openme['time_fw_norm']=time_tensorflow_run(sess, last_layer, "Forward")
-      timing_entries.append(openme['time_fw_norm'])
+      x=time_tensorflow_run(sess, last_layer, "Forward")
+      openme['time_fw_norm']=x.mean
+      timing_entries.append(x)
 
     if run_forward_backward:
       # Add a simple objective so we can calculate the backward pass.
@@ -229,9 +230,11 @@ def run_benchmark(openme):
       # Compute the gradient with respect to all the parameters.
       grad = tf.gradients(objective, parameters)
       # Run the backward benchmark.
-      openme['time_fwbw_norm']=time_tensorflow_run(sess, grad, "Forward-backward")
-      openme['execution_time']=openme['time_fwbw_norm']
-      timing_entries.append(openme['time_fwbw_norm'])
+      x=time_tensorflow_run(sess, grad, "Forward-backward")
+      openme['time_fwbw_norm']=x.mean
+      openme['execution_time']=x.mean
+      timing_entries.append(x)
+
 
   if FLAGS.csv_file:
     store_data_in_csv(timing_entries)
