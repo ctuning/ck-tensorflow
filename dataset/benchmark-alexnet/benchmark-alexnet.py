@@ -230,7 +230,6 @@ def run_benchmark(openme):
 
 def main(_):
   import time
-  import json
 
   print ("")
 
@@ -243,6 +242,7 @@ def main(_):
   print ("")
   print ("Elapsed time: "+("%.2f"%tt)+" sec.")
 
+  import json
   with open('tmp-ck-timer.json', 'w') as o:
      json.dump(openme, o)
 

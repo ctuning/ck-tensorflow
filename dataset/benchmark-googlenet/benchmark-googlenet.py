@@ -264,6 +264,7 @@ def main(_):
 
   run_benchmark(openme)
 
+  import json
   with open('tmp-ck-timer.json', 'w') as o:
      json.dump(openme, o)
 
