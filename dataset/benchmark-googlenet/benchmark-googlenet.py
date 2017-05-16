@@ -202,7 +202,7 @@ def store_data_in_csv(timing_entries):
           [timing_entry.info_string, timing_entry.timestamp,
            timing_entry.num_batches, timing_entry.mean, timing_entry.sd])
 
-def run_benchmark():
+def run_benchmark(openme):
   global parameters
   timing_entries = []
   with tf.Graph().as_default():
@@ -242,7 +242,8 @@ def run_benchmark():
 
     if run_forward:
       # Run the forward benchmark.
-      timing_entries.append(time_tensorflow_run(sess, last_layer, "Forward"))
+      openme['time_fw_norm']=time_tensorflow_run(sess, last_layer, "Forward")
+      timing_entries.append(openme['time_fw_norm'])
 
     if run_forward_backward:
       # Add a simple objective so we can calculate the backward pass.
@@ -250,14 +251,21 @@ def run_benchmark():
       # Compute the gradient with respect to all the parameters.
       grad = tf.gradients(objective, parameters)
       # Run the backward benchmark.
-      timing_entries.append(time_tensorflow_run(sess, grad, "Forward-backward"))
+      openme['time_fwbw_norm']=time_tensorflow_run(sess, grad, "Forward-backward")
+      openme['execution_time']=openme['time_fwbw_norm']
+      timing_entries.append(openme['time_fwbw_norm'])
 
   if FLAGS.csv_file:
     store_data_in_csv(timing_entries)
 
 
 def main(_):
-  run_benchmark()
+  openme={}
+
+  run_benchmark(openme)
+
+  with open('tmp-ck-timer.json', 'w') as o:
+     json.dump(openme, o)
 
 
 if __name__ == '__main__':
