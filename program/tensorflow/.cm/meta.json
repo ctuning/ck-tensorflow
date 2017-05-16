@@ -18,7 +18,7 @@
       ],
       "ignore_return_code": "no",
       "run_deps": {
-        "tensorflow": {
+        "lib-tensorflow": {
           "local": "yes",
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
@@ -45,7 +45,7 @@
     "classify_ck_ai_api": {
       "ignore_return_code": "no",
       "run_deps": {
-        "tensorflow": {
+        "lib-tensorflow": {
           "local": "yes",
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
@@ -78,7 +78,7 @@
       ],
       "ignore_return_code": "no",
       "run_deps": {
-        "tensorflow": {
+        "lib-tensorflow": {
           "local": "yes",
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
@@ -105,7 +105,7 @@
       ],
       "ignore_return_code": "no",
       "run_deps": {
-        "tensorflow": {
+        "lib-tensorflow": {
           "local": "yes",
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
