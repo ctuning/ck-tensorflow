@@ -106,7 +106,7 @@ Select one of the `test_cpu` and `test_cuda` commands;  select an available vers
 if prompted (more than one choice); select an available benchmark, if prompted (more than one choice),
 and select TensorFlow model.
 
-## Example of Caffe and Caffe2 unified classification on Ubuntu via CK
+## Example of TensorFlow unified classification on Ubuntu via CK
 
 ```
 $ ck run program:tensorflow --cmd_key=classify
@@ -123,7 +123,7 @@ You can list them via
 
 ## Crowd-benchmarking
 
-It is now possible to participate in crowd-benchmarking of Caffe
+It is now possible to participate in crowd-benchmarking of TensorFlow
 (early prototype):
 ```
 $ ck crowdbench tensorflow --user={your email or ID to acknowledge contributions} (--env.BATCH_SIZE=128 --env.NUM_BATCHES=100)
