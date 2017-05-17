@@ -1,14 +1,20 @@
-Unified building, evaluation and optimization of TensorFlow via Collective Knowledge with JSON API
-==================================================================================================
+# AI unification and collaborative optimization using Collective Knowledge workflow framework with common JSON API
 
-[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](http://cKnowledge.org)
+[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](https://github.com/ctuning/ck)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # Introduction
 
-CK-TensorFlow is an open-source suite of convenient wrappers and workflows with unified 
-JSON API for simple and customized building, evaluation and multi-objective optimisation 
+After spending most of our "research" time not on AI innovation but on dealing with numerous 
+and ever changing AI engines, their API, and the whole software and hardware stack, 
+we decided to take an alternative approach. 
+
+[![logo](http://cknowledge.org/images/ai-cloud-resize.png)](http://cKnowledge.org/ai)
+
+We are developing CK-TensorFlow which is an open-source suite of convenient wrappers and workflows 
+powered by [Collective Knowledge](https://github.com/ctuning/ck) with unified JSON API for simple 
+and customized installation/recompilation, usage, evaluation and multi-objective optimisation 
 of various TensorFlow implementations (CPU,CUDA,OpenCL) across diverse platforms
 from mobile devices and IoT to supercomputers.
 
@@ -49,26 +55,34 @@ You can see and use all public results in the [Collective Knowledge repository](
 * CUDA/cuDNN if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus)
 * Android NDK if you want to compile and run TF for Android devices
 
-## Installation on Ubuntu
+## Prerequisites for Ubuntu
 
 ### Python
 
 * Python 2.x:
 ```
 $ sudo apt-get install python-dev python-pip python-setuptools python-opencv git
+$ sudo pip install --upgrade pip
+$ sudo pip install protobuf easydict joblib image numpy scipy
 ```
 
 * Python 3.x:
 
 ```
 $ sudo apt-get install python3-dev python3-pip python3-setuptools
-$ sudo pip3 install wheel
+$ sudo pip3 install --upgrade pip
+$ sudo pip3 install protobuf easydict joblib image wheel numpy scipy
 ```
 
-* Extras for Python
+## Prerequisites for Windows
+
 ```
-$ sudo pip install protobuf easydict joblib image
+$ pip install --upgrade pip
+$ pip install protobuf easydict joblib image numpy scipy
 ```
+
+You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
+Rapsberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
 
 ### CK and this repository
 
@@ -78,55 +92,26 @@ $ sudo pip install ck
 $ ck pull repo:ck-tensorflow
 ```
 
-### Java
+## Example of TensorFlow unified installation on Ubuntu or Windows via CK (pre-build binaries)
+
 ```
-$ sudo apt install openjdk-8-jdk-headless
-```
-**NB:** Installation fails with `openjdk-9-jdk-headless` (cf. [this](https://github.com/bazelbuild/bazel/issues/1456)).
-
-### CUDA, cuDNN (GPU version only)
-
-If you want to use the GPU, please install CUDA toolkit >= v7.0 and cuDNN >= v2.
-If you want to use the GPU and pip, please install CUDA toolkit >= v8.0 and cuDNN >= v5.
-
-- Check if you have a [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus).
-
-- [Download and install CUDA](https://developer.nvidia.com/cuda-downloads).
-
-- [Download and install cuDNN](https://developer.nvidia.com/rdp/cudnn-download) (requires registration).
-
-- [More detailed instructions](https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#optional-install-cuda-gpus-on-linux).
-
-# Installing TensorFlow on your host via CK
-
-You should now be ready to install the CPU version of CK-TensorFlow 
-(CK will automatically download and install Bazel and JDK if they are not already installed):
-```
-$ ck install package:lib-tensorflow-cpu
-```
-
-You can also install the CUDA version of TensorFlow 
-(which when installed via CK can co-exist with the CPU version):
-```
-$ ck install package:lib-tensorflow-cuda
-```
-
-Finally, you can try to install the OpenCL version of TensorFlow
-(which requires ComputeCPP; unfortunately, at the time of this writing we were not able to run it):
-```
-$ ck install package:lib-tensorflow-opencl
+$ ck install package:lib-tensorflow-1.1.0-cpu
+$ ck install package:lib-tensorflow-1.1.0-cuda
 ```
 
 # Benchmarking
 ```
  $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
 ```
-Select one of the `benchmark_cpu` and `benchmark_cuda` commands;  select an available version of TensorFlow, if prompted (more than one choice); select an available benchmark, if prompted (more than one choice).  
 
-# Testing (image classification)
+Select one of the `test_cpu` and `test_cuda` commands;  select an available version of TensorFlow, 
+if prompted (more than one choice); select an available benchmark, if prompted (more than one choice),
+and select TensorFlow model.
+
+## Example of Caffe and Caffe2 unified classification on Ubuntu via CK
 
 ```
- $ ck run program:tensorflow-classification
+$ ck run program:tensorflow --cmd_key=classify
 ```
 
 Note, that you will be asked to select a jpeg image from available CK data sets.
@@ -139,6 +124,7 @@ You can list them via
 ```
 
 ## Crowd-benchmarking
+
 It is now possible to participate in crowd-benchmarking of Caffe
 (early prototype):
 ```
@@ -160,82 +146,107 @@ and other DNN frameworks to our
 [Android application](https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments) 
 soon - please, stay tuned!
 
-## Preparing TensorFlow via CK for constrained devices (Raspberry Pi, odroid)
+## Collaborative and unified optimization of DNN
 
-You can install tensorflow for devices with constrained resources using Makefile via CK as following:
+We are now working to add our [universal, customizable and multi-objective CK autotuner](https://github.com/ctuning/ck/wiki/Autotuning)
+to crowdsource optimization of the whole SW/HW/model/data set stack ([paper 1](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:maZDTaKrznsC), 
+[paper 2](https://arxiv.org/abs/1506.06256)).
 
-```
-$ ck install package:lib-tensorflow-cpu-make --env.OPTFLAGS="-O2"
-```
+We would like to thank the community for their interest and feedback about 
+this collaborative AI optimization approach powered by CK 
+at [ARM TechCon'16](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems)
+and the Embedded Vision Summit'17 - so please stay tuned ;) !
 
-You can then compile and run C++ classification example as following:
-```
-$ ck compile program:tensorflow-classification-cpu
-$ ck run program:tensorflow-classification-cpu
-```
+[![logo](http://cKnowledge.org/images/dividiti_arm_stand.jpg)](https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability)
 
-## Preparing TensorFlow via CK for Android devices
+## Other DNN
 
-* for ARM64-based platforms (should be connected to your host via adb):
-
-```
-$ ck install package:lib-tensorflow-cpu-make --target_os=android21-arm64
-$ ck compile program:tensorflow-classification-cpu --target_os=android21-arm64
-$ ck run program:tensorflow-classification-cpu --target_os=android21-arm64
-```
-
-* for ARM32-based platforms:
+We added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) via CK:
 
 ```
-$ ck install package:lib-tensorflow-cpu-make --target_os=android21-arm-v7a
-$ ck compile program:tensorflow-classification-cpu --target_os=android21-arm-v7a --env.OPTFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon"
-$ ck run program:tensorflow-classification-cpu --target_os=android21-arm-v7a
+$ ck pull repo:ck-caffe2
+
+$ ck pull repo --url=https://github.com/dividiti/ck-caffe
+$ ck pull repo:ck-caffe2
+
+$ ck install package:lib-caffe-bvlc-master-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
+$ ck install package:lib-caffe2-master-eigen-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
+
+$ ck run program:caffe --cmd_key=classify
+$ ck run program:caffe2 --cmd_key=classify
+
+$ ck crowdbench caffe --env.BATCH_SIZE=5
+$ ck crowdbench caffe2 --env.BATCH_SIZE=5 --user=i_want_to_ack_my_contribution
 ```
 
-Note, that you can build and run TensorFlow on older Android 4.2+ devices - 
-just substitute "android21-arm-v7a" with "android19-arm-v7a" above.
+## Online demo of a unified CK-AI API 
 
-Above method is used to prepare [CK-based crowd-scenarios](https://github.com/ctuning/ck-crowd-scenarios) 
-for our [Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments) 
-to crowdsource deep learning optimization!
+* [Simple demo](http://cknowledge.org/repo/web.php?template=ck-ai-basic) to classify images with
+continuous optimization of DNN engines underneath, sharing of mispredictions and creation of a community training set;
+and to predict compiler optimizations based on program features.
 
-# Troubleshooting
+## Long term vision
 
-TensorFlow installation may occasionally fail due to failing to download
-some dependencies from GitHub. Restart package installation several times
-until Bazel downloads all necessary files.
-
-Sometimes, after installation, TensorFlow crashes with undefined "syntax".
-It is usually related to outdated default protobuf (you need version >=3.0.0a4).
-To fix this problem upgrade protobuf via
-```
- $ sudo pip install protobuf --upgrade
-  or
- $ sudo pip3 install protobuf --upgrade
-```
-
-It may also fail with the following message "can't combine user with prefix, exec_prefix/home, or install_(plat)base".
-The following fix may help:
-```
- $ sudo pip install --upgrade pip"
-```
-
-# Related projects and initiatives
+CK-Caffe, CK-Caffe2, CK-Tensorflow are part of an ambitious long-term and community-driven 
+project to enable collaborative and systematic optimization 
+of realistic workloads across diverse hardware 
+in terms of performance, energy usage, accuracy, reliability,
+hardware price and other costs
+([ARM TechCon'16 talk](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), 
+[ARM TechCon'16 demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), 
+[DATE'16](http://tinyurl.com/zyupd5v), 
+[CPC'15](http://arxiv.org/abs/1506.06256)).
 
 We are working with the community to unify and crowdsource performance analysis 
 and tuning of various DNN frameworks (or any realistic workload) 
 using Collective Knowledge Technology:
-* [CK-Caffe](https://github.com/dividiti/ck-caffe)
-* [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
 * [Android app for DNN crowd-benchmarking and crowd-tuning](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments)
-* [CK-powered ARM workload automation](https://github.com/ctuning/ck-wa)
+* [CK-TensorFlow](https://github.com/ctuning/ck-tensorflow)
+* [CK-Caffe](https://github.com/dividiti/ck-caffe)
+* [CK-Caffe2](https://github.com/ctuning/ck-caffe2)
 
-# Open R&D challenges
+We continue gradually exposing various design and optimization
+choices including full parameterization of existing models.
+
+## Open R&D challenges
 
 We use crowd-benchmarking and crowd-tuning of such realistic workloads across diverse hardware for 
 [open academic and industrial R&D challenges](https://github.com/ctuning/ck/wiki/Research-and-development-challenges.mediawiki) - 
 join this community effort!
 
-# Related Publications with long term vision
+## Related Publications with long term vision
 
-* <a href="https://github.com/ctuning/ck/wiki/Publications">All references with BibTex</a>
+```
+@inproceedings{ck-date16,
+    title = {{Collective Knowledge}: towards {R\&D} sustainability},
+    author = {Fursin, Grigori and Lokhmotov, Anton and Plowman, Ed},
+    booktitle = {Proceedings of the Conference on Design, Automation and Test in Europe (DATE'16)},
+    year = {2016},
+    month = {March},
+    url = {https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability}
+}
+
+@inproceedings{cm:29db2248aba45e59:cd11e3a188574d80,
+    url = {http://arxiv.org/abs/1506.06256},
+    title = {{Collective Mind, Part II: Towards Performance- and Cost-Aware Software Engineering as a Natural Science.}},
+    author = {Fursin, Grigori and Memon, Abdul and Guillon, Christophe and Lokhmotov, Anton},
+    booktitle = {{18th International Workshop on Compilers for Parallel Computing (CPC'15)}},
+    publisher = {ArXiv},
+    year = {2015},
+    month = January,
+    pdf = {http://arxiv.org/pdf/1506.06256v1}
+}
+
+```
+
+* [All references with BibTex related to CK concept](https://github.com/ctuning/ck/wiki/Publications)
+
+## Testimonials and awards
+
+* 2017: We received [CGO test of time award](http://dividiti.blogspot.fr/2017/02/we-received-test-of-time-award-for-our.html) for our CGO'07 paper which later motivated creation of [Collective Knowledge](https://github.com/ctuning/ck)
+* 2015: ARM and the cTuning foundation use CK to accelerate computer engineering: [HiPEAC Info'45 page 17](https://www.hipeac.net/assets/public/publications/newsletter/hipeacinfo45.pdf), [ARM TechCon'16 presentation and demo](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), [public CK repo](https://github.com/ctuning/ck-wa)
+
+## Feedback
+
+Get in touch with CK-AI developers [here](https://github.com/ctuning/ck/wiki/Contacts). Also feel free to engage with our community via this mailing list:
+* http://groups.google.com/group/collective-knowledge
