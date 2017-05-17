@@ -15,7 +15,11 @@ ck=None # Will be updated by CK (initialized CK kernel)
 
 line='================================================================'
 
+ck_url='http://cknowledge.org/repo/web.php?native_action=show&native_module_uoa=program.optimization&scenario=bca33b04b438d756'
+ck_url1='http://cknowledge.org/repo/web.php?wcid=bca33b04b438d756:'
+
 ffstat='ck-stat-flat-characteristics.json'
+ffmin='ck-stat-flat-min.json'
 
 form_name='wa_web_form'
 onchange='document.'+form_name+'.submit();'
@@ -31,22 +35,23 @@ onchange='document.'+form_name+'.submit();'
 #hextra+='<br>\n'
 
 hextra='<i><center>\n'
-hextra+='This is a community-driven R&D: \n'
-hextra+=' [ <a href="http://cKnowledge.org/ai">collaborative AI optimization</a> ], '
+hextra+=' [ <a href="http://cKnowledge.org/ai">Collaborative unification of AI</a> ], '
+hextra+=' [ <a href="https://github.com/ctuning/ck-caffe2">CK-Caffe2</a> / <a href="https://github.com/dividiti/ck-caffe">CK-Caffe</a> ], '
 hextra+=' [ <a href="https://github.com/ctuning/ck-tensorflow">CK-Tensorflow</a> ], '
+hextra+=' [ <a href="https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments&hl=en">Android app</a> ], '
 hextra+=' [ <a href="https://en.wikipedia.org/wiki/Collective_Knowledge_(software)">CK intro</a>, \n'
-hextra+='CK papers: <a href="https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability">1</a> and \n'
-hextra+='<a href="https://arxiv.org/abs/1506.06256">2</a>; \n'
-hextra+='<a href="https://www.youtube.com/watch?v=Q94yWxXUMP0">YouTube intro</a> ] \n'
+hextra+='<a href="https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability">vision</a> and \n'
+hextra+='<a href="https://arxiv.org/abs/1506.06256">crowd-tuning</a>; \n'
+hextra+='<a href="https://www.youtube.com/watch?v=Q94yWxXUMP0">YouTube lecture</a> ] \n'
 hextra+='</center></i>\n'
 hextra+='<br>\n'
 
-
 selector=[{'name':'Type', 'key':'tensorflow_type'},
-          {'name':'Network', 'key':'nn_type'},
-          {'name':'Platform', 'key':'plat_name'},
-          {'name':'CPU', 'key':'cpu_name', 'new_line':'yes'},
-          {'name':'OS', 'key':'os_name'},
+          {'name':'DNN engine', 'key':'dnn_engine_name'},
+          {'name':'Network', 'key':'dataset_uoa'},
+          {'name':'Platform', 'key':'plat_name', 'new_line':'yes'},
+          {'name':'CPU', 'key':'cpu_name'},
+          {'name':'OS', 'key':'os_name', 'new_line':'yes'},
           {'name':'GPGPU', 'key':'gpgpu_name'}]
 
 ##############################################################################
@@ -200,7 +205,7 @@ def crowdsource(i):
     sn=fos.get('serial_number','')
 
     # Ask for cmd
-    tp=['cpu', 'cuda', 'opencl']
+    tp=['cpu', 'cuda'] #, 'opencl']
 
     ck.out(line)
     ck.out('Select TensorFlow library type:')
@@ -209,10 +214,11 @@ def crowdsource(i):
                  'module_uoa':cfg['module_deps']['choice'],
                  'choices':tp})
     if r['return']>0: return r
-    xtp=r['choice']
+    xtp=r['choice'].strip()
 
     # Get extra platform features if "cuda" or "opencl"
-    run_cmd='default'
+    run_cmd='time_'+xtp
+
     tags='lib,tensorflow,tensorflow-'+xtp
     gpgpu_uid=''
     if xtp=='cuda' or xtp=='opencl':
@@ -240,11 +246,7 @@ def crowdsource(i):
     if r['return']>0: return r
 
     dd=r['dict']
-    deps=dd['compile_deps']
     pp=r['path']
-
-    lib_dep=deps['lib-tensorflow']
-    lib_dep['tags']=tags
 
     # Get explicit choices (batch size, num batches)
     env=i.get('env',{})
@@ -252,17 +254,6 @@ def crowdsource(i):
     for k in echoices:
         if env.get(k,'')!='':
             echoices[k]=env[k]
-
-    # Check environment for selected type
-    r=ck.access({'action':'resolve',
-                 'module_uoa':cfg['module_deps']['env'],
-                 'deps':deps,
-                 'host_os':hos,
-                 'target_os':tos,
-                 'device_id':tdid,
-                 'out':o})
-    if r['return']>0: return r
-    deps=r['deps']
 
     # Prepare CK pipeline for a given workload
     ii={'action':'pipeline',
@@ -274,7 +265,6 @@ def crowdsource(i):
 
         'env':env,
         'choices':choices,
-        'dependencies':deps,
         'cmd_key':run_cmd,
         'no_state_check':'yes',
         'no_compiler_description':'yes',
@@ -292,8 +282,7 @@ def crowdsource(i):
     rr=ck.access(ii)
     if rr['return']>0: return rr
 
-#    ck.save_json_to_file({'json_file':'/tmp/xyz3.json','dict':rr, 'sort_keys':'yes'})
-#    exit(1)
+    ds=choices.get('dataset_uoa','')
 
     fail=rr.get('fail','')
     if fail=='yes':
@@ -302,6 +291,32 @@ def crowdsource(i):
     ready=rr.get('ready','')
     if ready!='yes':
         return {'return':11, 'error':'couldn\'t prepare universal CK program workflow'}
+
+    deps=rr.get('dependencies',{})
+    ydeps=deps
+
+    # Check saved deps (if from bin package)
+    xk=deps['lib-tensorflow']
+    pfull=xk.get('cus',{}).get('full_path','')
+    pbin=os.path.dirname(os.path.dirname(os.path.dirname(pfull)))
+    if pbin!='':
+       rx=ck.access({'action':'find_config_file',
+                     'module_uoa':cfg['module_deps']['soft'],
+                     'full_path':pbin,
+                     'filename':'ck-install-saved.json'})
+       if rx['return']>0: return rx
+       if rx['found']=='yes':
+          if o=='con':
+             ck.out('')
+             ck.out('Found saved config file for CK binary distribution - reusing deps ...')
+             ck.out('')
+
+          ydeps=copy.deepcopy(deps)
+          dname=deps['lib-caffe']['dict']['data_name']
+
+          ydeps['lib-tensorflow']['dict']=copy.deepcopy(rx['dict'])
+          ydeps['lib-tensorflow']['dict']['data_name']=dname
+
 
     state=rr['state']
     tmp_dir=state['tmp_dir']
@@ -322,20 +337,49 @@ def crowdsource(i):
           'tensorflow_type':xtp,
           'gpgpu_name':gpgpu_name,
           'cmd_key':run_cmd,
+          'dataset_uoa':ds,
           'echoices':echoices}
 
     # Process deps
     xdeps={}
     xnn=''
     xblas=''
-    for k in deps:
-        dp=deps[k]
-        xdeps[k]={'name':dp.get('name',''), 
-                  'data_name':dp.get('dict',{}).get('data_name',''), 
-                  'ver':dp.get('ver','')}
+    for k in ydeps:
+        dp=ydeps[k]
 
+        dpd=dp.get('dict',{})
+
+        ptags=dpd.get('tags',[])
+
+        puoa=dpd.get('package_uoa','')
+        if puoa=='':
+           puoa=dp.get('cus',{}).get('used_package_uid','')
+
+        dname=dpd.get('data_name','')
+
+        xdeps[k]={'name':dp.get('name',''), 'data_name':dname, 'ver':dp.get('ver',''), 'package_uoa':puoa, 'package_tags':ptags}
+
+    # versions of engine sub deps
+    dvers={}
+    mdep=ydeps.get('lib-tensorflow',{})
+    mdeps=mdep.get('dict',{}).get('deps',{})
+
+    for k in mdeps:
+        dvers[k]=mdeps[k].get('ver','')
+
+    # Checking engine name
+    d_engine=xdeps.get('lib-tensorflow',{})
+    d_engine_name=d_engine.get('data_name','')
+    d_engine_package_uoa=d_engine.get('package_uoa','')
+    d_engine_ver=d_engine.get('ver','')
+
+    meta['xversions']=dvers
     meta['xdeps']=xdeps
-    meta['nn_type']='alexnet'
+    meta['nn_type']=xnn
+    meta['choices']=xchoices
+
+    meta['dnn_engine_name']=d_engine_name
+    meta['dnn_engine_package_uoa']=d_engine_package_uoa
 
     mmeta=copy.deepcopy(meta)
 
@@ -346,8 +390,52 @@ def crowdsource(i):
     mmeta['gpgpu_uid']=gpgpu_uid
     mmeta['user']=user
 
-    # Check if already exists
-    # tbd
+    # Check if already exists (to aggregate stats)
+    aggregated_stats={}
+    rduid=''
+    found=False
+
+    if o=='con':
+        ck.out('')
+        ck.out('Checking if results already exists in a public repo (to aggregate statistics) ...')
+
+    record_module_uoa=work['self_module_uid']
+
+    # Find remote entry
+    ii={'action':'search',
+        'module_uoa':record_module_uoa,
+        'repo_uoa':er,
+        'remote_repo_uoa':esr,
+        'search_dict':{'meta':meta}}
+    rx=ck.access(ii)
+    if rx['return']>0: return rx
+
+    lst=rx['lst']
+
+    if len(lst)==1:
+        rduid=lst[0]['data_uid']
+        found=True
+
+        if o=='con':
+           ck.out('')
+           ck.out('Results found. Pre-loading aggregated stats from '+rduid+' ...')
+
+        # Load stats
+        rx=ck.access({'action':'load',
+                      'module_uoa':record_module_uoa,
+                      'data_uoa':rduid,
+                      'repo_uoa':er,
+                      'remote_repo_uoa':esr,
+                      'load_extra_json_files':[ffstat]})
+        if rx['return']==0:
+           aggregated_stats=rx.get('extra_json_files',{}).get(ffstat,{})
+        else:
+           ck.out('')
+           ck.out('WARNING: couldn\'t load data ('+rx['error']+')')
+    else:
+       rx=ck.gen_uid({})
+       if rx['return']>0: return rx
+       rduid=rx['data_uid']
 
     # Run CK pipeline *****************************************************
     pipeline=copy.deepcopy(rr)
@@ -384,8 +472,7 @@ def crowdsource(i):
     ls=rrr.get('last_iteration_output',{})
     state=ls.get('state',{})
     xchoices=copy.deepcopy(ls.get('choices',{}))
-    lsa=rrr.get('last_stat_analysis',{})
-    lsad=lsa.get('dict_flat',{})
+    lsaf=rrr.get('last_stat_analysis',{}).get('dict_flat',{})
 
     ddd={'meta':mmeta}
 
@@ -406,69 +493,88 @@ def crowdsource(i):
 
     ddd['user']=user
 
-    if o=='con':
-        ck.out('')
-        ck.out('Saving results to the remote public repo ...')
-        ck.out('')
+    if not found:
+       if o=='con':
+          ck.out('')
+          ck.out('Saving results to the remote public repo ('+rduid+') ...')
 
-        # Find remote entry
-        rduid=''
+       # Update meta
+       rx=ck.access({'action':'add',
+                     'module_uoa':record_module_uoa,
+                     'data_uoa':rduid,
+                     'repo_uoa':er,
+                     'remote_repo_uoa':esr,
+                     'dict':ddd,
+                     'sort_keys':'yes'})
+       if rx['return']>0: return rx
 
-        ii={'action':'search',
-            'module_uoa':work['self_module_uid'],
-            'repo_uoa':er,
-            'remote_repo_uoa':esr,
-            'search_dict':{'meta':meta}}
-        rx=ck.access(ii)
-        if rx['return']>0: return rx
 
-        lst=rx['lst']
+    # Push statistical characteristics
+    x0=lsaf.get("##characteristics#run#time_fwbw_norm#min",None)
 
-        if len(lst)==1:
-            rduid=lst[0]['data_uid']
-        else:
-            rx=ck.gen_uid({})
-            if rx['return']>0: return rx
-            rduid=rx['data_uid']
+    if x0!=None and x0>0:
+       if o=='con':
+          ck.out('')
+          ck.out('Pushing file with statistics to server ...')
 
-        # Update meta
-        rx=ck.access({'action':'update',
-                      'module_uoa':work['self_module_uid'],
-                      'data_uoa':rduid,
-                      'repo_uoa':er,
-                      'remote_repo_uoa':esr,
-                      'dict':ddd,
-                      'substitute':'yes',
-                      'sort_keys':'yes'})
-        if rx['return']>0: return rx
+       fstat=os.path.join(pp,tmp_dir,ffstat)
 
-        # Push statistical characteristics
-        fstat=os.path.join(pp,tmp_dir,ffstat)
+       r=ck.save_json_to_file({'json_file':fstat, 'dict':lsaf, 'sort_keys':'yes'})
+       if r['return']>0: return r
 
-        r=ck.save_json_to_file({'json_file':fstat, 'dict':lsad})
-        if r['return']>0: return r
+       rx=ck.access({'action':'push',
+                     'module_uoa':record_module_uoa,
+                     'data_uoa':rduid,
+                     'repo_uoa':er,
+                     'remote_repo_uoa':esr,
+                     'filename':fstat,
+                     'overwrite':'yes'})
+       if rx['return']>0: return rx
 
-        rx=ck.access({'action':'push',
-                      'module_uoa':work['self_module_uid'],
-                      'data_uoa':rduid,
-                      'repo_uoa':er,
-                      'remote_repo_uoa':esr,
-                      'filename':fstat,
-                      'overwrite':'yes'})
-        if rx['return']>0: return rx
+       os.remove(fstat)
 
-        os.remove(fstat)
+       # Push statistical characteristics
 
-        # Info
-        if o=='con':
-            ck.out('Succesfully recorded results in remote repo (Entry UID='+rduid+')')
+       dmin={"##characteristics#run#time_fwbw_norm#min":x0}
 
-            # Check host URL prefix and default module/action
-            url='http://cknowledge.org/repo/web.php?template=cknowledge&action=index&module_uoa=wfe&native_action=show&native_module_uoa=program.optimization&scenario=155b6fa5a4012a93&highlight_uid='+rduid
-            ck.out('')
-            ck.out('You can see your results at the following URL:')
-            ck.out('')
-            ck.out(url)
+       if o=='con':
+          ck.out('')
+          ck.out('Pushing file with min stats to server ...')
+
+       fmin=os.path.join(pp,tmp_dir,ffmin)
+
+       r=ck.save_json_to_file({'json_file':fmin, 'dict':dmin, 'sort_keys':'yes'})
+       if r['return']>0: return r
+
+       rx=ck.access({'action':'push',
+                     'module_uoa':record_module_uoa,
+                     'data_uoa':rduid,
+                     'repo_uoa':er,
+                     'remote_repo_uoa':esr,
+                     'filename':fmin,
+                     'overwrite':'yes'})
+       if rx['return']>0: return rx
+
+       os.remove(fmin)
+
+       if o=='con':
+           ck.out('')
+           ck.out('Succesfully recorded results in remote repo (Entry UID='+rduid+')')
+    else:
+       if o=='con':
+           ck.out('')
+           ck.out('WARNING: did not record results to remote repo (Entry UID='+rduid+')')
+
+    # Check host URL prefix and default module/action
+    url=ck_url+'&highlight_uid='+rduid+'#'+rduid
+    ck.out('')
+    r=ck.inp({'text':'Would you like to open a browser to see results "'+url+'" (y/N)? '})
+    if r['return']>0: return r
+
+    x=r['string'].strip().lower()
+    if x=='y' or x=='yes':
+       import webbrowser
+       webbrowser.open(url)
 
     return {'return':0}
 
@@ -645,10 +751,12 @@ def show(i):
     h+='  <tr style="background-color:#dddddd">\n'
     h+='   <td '+ha+'><b>All raw files</b></td>\n'
     h+='   <td '+ha+'><b>Type</b></td>\n'
+    h+='   <td '+ha+'><b>DNN engine</b></td>\n'
     h+='   <td '+ha+'><b>Network</b></td>\n'
     h+='   <td '+ha+'><b>Batch size</b></td>\n'
     h+='   <td '+ha+'><b>Num batches</b></td>\n'
-    h+='   <td '+ha+'><b>Total time (sec.)</b></td>\n'
+    h+='   <td '+ha+'><b>FWBW time (sec.)</b></td>\n'
+    h+='   <td '+ha+'><b>FW time (sec.)</b></td>\n'
     h+='   <td '+ha+'><b>Chars</b></td>\n'
     h+='   <td '+ha+'><b>Platform</b></td>\n'
     h+='   <td '+ha+'><b>CPU</b></td>\n'
@@ -667,8 +775,28 @@ def show(i):
     if hi_uid!='':
         bgraph['1']=[]
 
+    # Load min stat
+    for q in plst:
+        pmin=os.path.join(q['path'],ffmin)
+        dx={'##characteristics#run#time_fwbw_norm#min':1e99}
+
+        if os.path.isfile(pmin):
+           rx=ck.load_json_file({'json_file':pmin})
+           if rx['return']==0:
+              dx=rx['dict']
+
+              # Fix
+              x=dx.get('##characteristics#run#time_fwbw_norm#min','')
+              if x==None or x=='' or x>50000: 
+                 dx['##characteristics#run#time_fwbw_norm#min']=1e99
+                 if q.get('meta',{}).get('state',{}).get('fail_reason','')=='':
+                    q['meta']['state']['fail']='yes'
+                    q['meta']['state']['fail_reason']='strange timing'
+
+        q['min_stat']=dx
+
     # Sort
-    splst=sorted(plst, key=lambda x: x.get('meta',{}).get('characteristics',{}).get('run',{}).get('total_execution_time',0))
+    splst=sorted(plst, key=lambda x: x.get('min_stat',{}).get('##characteristics#run#time_fwbw_norm#min',0))
 
     for q in splst:
         ix+=1
@@ -696,10 +824,19 @@ def show(i):
         gpu_uid=meta.get('gpu_uid','')
         gpgpu_uid=meta.get('gpgpu_uid','')
 
+        ds=meta.get('dataset_uoa','')
+
         echoices=meta.get('echoices',{})
 
         bs=echoices.get('BATCH_SIZE','')
         nb=echoices.get('NUM_BATCHES','')
+
+        xdeps=meta.get('xdeps',{})
+
+        d_engine=xdeps.get('lib-tensorflow',{})
+        d_engine_name=d_engine.get('data_name','')
+        d_engine_package_uoa=d_engine.get('package_uoa','')
+        d_engine_ver=d_engine.get('ver','')
 
         user=meta.get('user','')
 
@@ -714,8 +851,8 @@ def show(i):
             bgc='ffafaf'
         elif hi_uid!='' and duid==hi_uid:
             bgc='9fff9f'
-            bgraph['0'].append([ix,None])
-            bgraph['1'].append([ix,x0])
+#            bgraph['0'].append([ix,None])
+#            bgraph['1'].append([ix,x0])
 
         bg=' style="background-color:#'+bgc+';"'
 
@@ -727,7 +864,9 @@ def show(i):
 
         h+='   <td '+ha+'>'+tp+'</a></td>\n'
 
-        h+='   <td '+ha+'>'+nn+'</a></td>\n'
+        h+='   <td '+ha+'>'+d_engine_name+'<br><i>('+d_engine_ver+')</i></a></td>\n'
+
+        h+='   <td '+ha+'>'+ds+'</a></td>\n'
 
         # Characteristics
         # Check if has statistics
@@ -744,17 +883,47 @@ def show(i):
         x=''
 
         # Check if has stats
-        x0=dstat.get("##characteristics#run#total_execution_time#min",None)
-        x0e=dstat.get("##characteristics#run#total_execution_time#exp",None)
-        x1=dstat.get("##characteristics#run#total_execution_time#center",None)
-        x2=dstat.get("##characteristics#run#total_execution_time#halfrange",None)
-        if x1!=None and x2!=None:
-            x=('%.2f'%x1)+'&nbsp;&PlusMinus;&nbsp;'+('%.2f'%x2)
+        x0=dstat.get("##characteristics#run#time_fwbw_norm#min",None)
+        x0e=dstat.get("##characteristics#run#time_fwbw_norm#exp",None)
+        x1=dstat.get("##characteristics#run#time_fwbw_norm#center",None)
+        xr=dstat.get("##characteristics#run#time_fwbw_norm#repeats",None)
+        x2=dstat.get("##characteristics#run#time_fwbw_norm#halfrange",None)
+        x=''
+        if x0!=None:
+            x='<b>'+('%.3f'%x0)+'&nbsp;</b>\n'
+
+        if x0e!=None and x2!=None:
+            x+='<br><br>('+('%.3f'%x0e)+'&nbsp;&PlusMinus;&nbsp;'+('%.3f'%x2)+')\n'
+
+        if xr!=None:
+            x+='<br><i>'+str(xr)+'&nbsp;repetitions</i>\n'
 
         h+='   <td '+ha+'>'+x+'</td>\n'
 
+        x0=dstat.get("##characteristics#run#time_fw_norm#min",None)
+        x0e=dstat.get("##characteristics#run#time_fw_norm#exp",None)
+        x1=dstat.get("##characteristics#run#time_fw_norm#center",None)
+        xr=dstat.get("##characteristics#run#time_fw_norm#repeats",None)
+        x2=dstat.get("##characteristics#run#time_fw_norm#halfrange",None)
+        x=''
+        if x0!=None:
+            x='<b>'+('%.3f'%x0)+'&nbsp;</b>\n'
+
+        if x0e!=None and x2!=None:
+            x+='<br><br>('+('%.3f'%x0e)+'&nbsp;&PlusMinus;&nbsp;'+('%.3f'%x2)+')\n'
+
+        if xr!=None:
+            x+='<br><i>'+str(xr)+'&nbsp;repetitions</i>\n'
+
+        h+='   <td '+ha+'>'+x+'</td>\n'
+
+#        if fail!='yes' and x0!=None and duid!=hi_uid:
+#            bgraph['0'].append([ix,x0])
+#            if hi_uid!='': bgraph['1'].append([ix,None])
+
+        if fail=='yes': x0=0
+        bgraph['0'].append([ix,x0])
         if fail!='yes' and x0!=None and duid!=hi_uid:
-            bgraph['0'].append([ix,x0])
             if hi_uid!='': bgraph['1'].append([ix,None])
 
         # Check all characteristics
@@ -839,7 +1008,7 @@ def show(i):
 
         h+='   <td '+ha+'><a href="'+url0+'&action=index&module_uoa=wfe&native_action=show&native_module_uoa=experiment.user">'+user+'</a></td>\n'
 
-        h+='   <td '+ha+'><input type="button" class="ck_small_button" onClick="copyToClipboard(\'ck replay tensorflow\');" value="Replay"></td>\n'
+        h+='   <td '+ha+'><input type="button" class="ck_small_button" onClick="copyToClipboard(\'TBD\');" value="Replay"></td>\n'
 
         h+='  <tr>\n'
 

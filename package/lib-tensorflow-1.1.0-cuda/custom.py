@@ -1,16 +1,17 @@
 #
-# Collective Knowledge (individual environment - setup)
+# CK configuration script for TensorFlow package
 #
-# See CK LICENSE.txt for licensing details
-# See CK COPYRIGHT.txt for copyright details
-#
-# Developer: Zaborovskiy Vladislav, vladzab@yandex.ru
+# Developer(s): 
+#  * Vladislav Zaborovskiy, vladzab@yandex.ru
+#  * Grigori Fursin, dividiti/cTuning foundation
 #
 
 import os
+import sys
+import json
 
 ##############################################################################
-# setup environment setup
+# customize installation
 
 def setup(i):
     """
@@ -37,47 +38,32 @@ def setup(i):
               deps             - resolved dependencies for this soft
 
               interactive      - if 'yes', can ask questions, otherwise quiet
+
+              path             - path to entry (with scripts)
+              install_path     - installation path
             }
 
     Output: {
-              return       - return code =  0, if successful
-                                         >  0, if error
-              (error)      - error text if return > 0
-
-              bat          - prepared string for bat file
+              return        - return code =  0, if successful
+                                          >  0, if error
+              (error)       - error text if return > 0
+              (install-env) - prepare environment to be used before the install script
             }
 
     """
 
-    import os
-
     # Get variables
     ck=i['ck_kernel']
-    s=''
 
-    iv=i.get('interactive','')
+    # Find entry with script to reuse
+    r=ck.access({'action':'find', 'cid':'package:4b44e797606a9488'})
+    if r['return']>0: return r
 
-    cus=i.get('customize',{})
-    fp=cus.get('full_path','')
+    ppp=r['path']
 
-    hosd=i['host_os_dict']
-    tosd=i['target_os_dict']
+    r=ck.load_module_from_path({'path':ppp, 'module_code_name':'custom', 'skip_init':'yes'})
+    if r['return']>0: return r
 
-    winh=hosd.get('windows_base','')
+    script=r['code']
 
-    env=i['env']
-    ep=cus['env_prefix']
-
-    p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-    pi=os.path.dirname(pl)
-
-    env[ep]=pi
-    env[ep+'_LIB']=pl
-
-    if winh=='yes':
-        s+='\nset PYTHONPATH='+pl+';%PYTHONPATH%\n'
-    else:
-        s+='\nexport PYTHONPATH='+pl+':${PYTHONPATH}\n'
-
-    return {'return':0, 'bat':s}
+    return script.setup(i)

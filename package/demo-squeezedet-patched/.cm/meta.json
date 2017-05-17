@@ -16,6 +16,14 @@
     "no_ver_in_suggested_path": "yes",
     "version": "master-05e9de1"
   }, 
+  "deps": {
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
+      "tags": "compiler,python"
+    }
+  },
   "end_full_path": {
     "linux": "squeezeDet/README.md",
     "win": "squeezeDet/README.md"

@@ -1,3 +1,8 @@
+2017.05.16 - removing outdated packages
+
+2017.05.15 - provided Windows support and unifying API (caffe/caffe2/tf)
+           - added unified tensorflow classification program (with CK-AI API)
+
 2017.03.28 - major update to support unified Android/Linux compilation of classification with xOpenME
 
 2017.03.23 - added tensorflow src universal package (to build Android scenarios)

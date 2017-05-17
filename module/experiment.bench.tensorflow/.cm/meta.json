@@ -38,6 +38,7 @@
     "wfe": "1e4e644996b7f2a0"
   }, 
   "priority": -205, 
+  "record_module_uoa":"1eb2f50d4620903e",
   "program_tags": "crowd-benchmarking,tensorflow", 
   "tags": [
     "crowdsource", 
