@@ -11,8 +11,6 @@
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
       "PACKAGE_GIT_CHECKOUT": "v1.1.0",
       "PACKAGE_PATCH": "YES",
-      "PACKAGE_BUILD_TYPE": "cmake",
-      "PACKAGE_SUB_DIR1": "src/tensorflow/contrib/cmake/",
       "PACKAGE_CONFIGURE_FLAGS": "-DPYTHON_EXECUTABLE:FILEPATH=\"$<<CK_ENV_COMPILER_PYTHON_FILE>>$\""
     }, 
     "version": "1.1.0"
@@ -40,7 +38,7 @@
     }
   }, 
   "end_full_path": {
-    "linux": "obj/tf_python/tensorflow/__init__.py"
+    "linux": "src/tensorflow/contrib/cmake/build/tf_python/tensorflow/__init__.py"
   }, 
   "only_for_host_os_tags": [
     "linux"
