@@ -32,8 +32,6 @@ and papers [1](https://arxiv.org/abs/1506.06256),
 [3](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:LkGwnXOMwfcC) 
 for more details).
 
-![](http://cKnowledge.org/images/ai-cloud-resize.png)
-
 We can now build TensorFlow library and run classification via CK for various Android and Linux platforms. 
 You can even participate in collaborative evaluation and optimization of TF using your Android device
 (mobile phone, tablet, etc) via this engaging 
@@ -84,7 +82,7 @@ $ pip install protobuf easydict joblib image numpy scipy
 You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
 Rapsberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
 
-### CK and this repository
+### Installing CK and this repository
 
 You can install all basic dependencies and CK as following
 ```
