@@ -80,7 +80,7 @@ $ pip install protobuf easydict joblib image numpy scipy
 ```
 
 You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
-Rapsberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
+Raspberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
 
 ### Installing CK and this repository
 
@@ -144,10 +144,22 @@ and other DNN frameworks to our
 [Android application](https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments) 
 soon - please, stay tuned!
 
+## Unified, multi-dimensional and multi-objective autotuning
+
+It is now possible to take advantage of our [universal multi-objective CK autotuner](https://github.com/ctuning/ck/wiki/Autotuning)
+to optimize TensorFlow. As a first simple example, we added batch size tuning via CK. You can invoke it as following:
+
+```
+$ ck autotune tensorflow
+```
+
+All results will be recorded in the local CK repository and 
+you will be given command lines to plot graphs or replay experiments.
+
 ## Collaborative and unified optimization of DNN
 
-We are now working to add our [universal, customizable and multi-objective CK autotuner](https://github.com/ctuning/ck/wiki/Autotuning)
-to crowdsource optimization of the whole SW/HW/model/data set stack ([paper 1](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:maZDTaKrznsC), 
+We are now working to extend above autotuner and crowdsource optimization 
+of the whole SW/HW/model/data set stack ([paper 1](https://scholar.google.com/citations?view_op=view_citation&hl=en&user=IwcnpkwAAAAJ&citation_for_view=IwcnpkwAAAAJ:maZDTaKrznsC), 
 [paper 2](https://arxiv.org/abs/1506.06256)).
 
 We would like to thank the community for their interest and feedback about 
@@ -175,6 +187,9 @@ $ ck run program:caffe2 --cmd_key=classify
 
 $ ck crowdbench caffe --env.BATCH_SIZE=5
 $ ck crowdbench caffe2 --env.BATCH_SIZE=5 --user=i_want_to_ack_my_contribution
+
+$ ck autotune caffe
+$ ck autotune caffe2
 ```
 
 ## Online demo of a unified CK-AI API 
