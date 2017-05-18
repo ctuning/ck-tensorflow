@@ -69,3 +69,28 @@ def replay(i):
 
     i['module_uoa']=cfg['module_deps']['experiment.bench.tensorflow']
     return ck.access(i)
+
+##############################################################################
+# autotune TensorFlow workloads
+
+def autotune(i):
+    """
+    Input:  {
+            }
+
+    Output: {
+              return       - return code =  0, if successful
+                                         >  0, if error
+              (error)      - error text if return > 0
+            }
+
+    """
+
+    i['module_uoa']=cfg['module_deps']['program']
+    i['data_uoa']='tensorflow'
+    i['explore']='yes'
+    i['extra_tags']='dnn'
+    i['skip_collaborative']='yes'
+    i['cmd_keys']=['time_cpu','time_cuda']
+
+    return ck.access(i)

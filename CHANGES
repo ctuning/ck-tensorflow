@@ -1,3 +1,5 @@
+2017.05.18 - added customizable autotuning example (script:explore-batch-size-unified-and-customized ; ck autotune tensorflow)
+
 2017.05.16 - removing outdated packages
 
 2017.05.15 - provided Windows support and unifying API (caffe/caffe2/tf)
