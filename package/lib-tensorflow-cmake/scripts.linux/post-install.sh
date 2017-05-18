@@ -5,7 +5,7 @@ set -e
 cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
 cd "tensorflow/contrib/cmake"
-mkdir build
+mkdir -p build
 cd build
 
 XCMAKE_AR=""
