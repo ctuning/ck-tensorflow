@@ -154,7 +154,10 @@ $ ck autotune tensorflow
 ```
 
 All results will be recorded in the local CK repository and 
-you will be given command lines to plot graphs or replay experiments.
+you will be given command lines to plot graphs or replay experiments such as:
+```
+$ ck plot graph:{experiment UID}
+$ ck replay experiment:{experiment UID} --point={specific optimization point}
 
 ## Collaborative and unified optimization of DNN
 
