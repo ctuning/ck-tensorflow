@@ -91,6 +91,8 @@ def autotune(i):
     i['explore']='yes'
     i['extra_tags']='dnn'
     i['skip_collaborative']='yes'
+    i['skip_pruning']='yes'
+    i['iterations']=-1
     i['cmd_keys']=['time_cpu','time_cuda']
 
     return ck.access(i)
