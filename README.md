@@ -16,7 +16,7 @@ We are developing CK-TensorFlow which is an open-source suite of convenient wrap
 powered by [Collective Knowledge](https://github.com/ctuning/ck) with unified JSON API for simple 
 and customized installation/recompilation, usage, evaluation and multi-objective optimisation 
 of various TensorFlow implementations (CPU,CUDA,OpenCL) across diverse platforms
-from mobile devices and IoT to supercomputers.
+from mobile devices and IoT to supercomputers and TPU cloud.
 
 See [cKnowledge.org/ai](http://cKnowledge.org/ai), [shared optimization statistics](http://cKnowledge.org/repo) 
 and [online demo of CK AI API with self-optimizing DNN](http://cKnowledge.org/ai/ck-api-demo) for more details.
