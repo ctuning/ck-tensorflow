@@ -172,15 +172,14 @@ and the Embedded Vision Summit'17 - so please stay tuned ;) !
 
 [![logo](http://cKnowledge.org/images/dividiti_arm_stand.jpg)](https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability)
 
-## Other DNN
+## Other DNN with unified CK API
 
-We added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) via CK:
+CK allows us to unify AI interfaces while collaboratively optimizing underneath engines.
+For example, we added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) via CK:
 
 ```
 $ ck pull repo:ck-caffe2
-
 $ ck pull repo --url=https://github.com/dividiti/ck-caffe
-$ ck pull repo:ck-caffe2
 
 $ ck install package:lib-caffe-bvlc-master-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
 $ ck install package:lib-caffe2-master-eigen-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
@@ -194,6 +193,14 @@ $ ck crowdbench caffe2 --env.BATCH_SIZE=5 --user=i_want_to_ack_my_contribution
 $ ck autotune caffe
 $ ck autotune caffe2
 ```
+
+## Realistic/representative training sets
+
+We provided an option in all our AI crowd-tuning tools to let the community report 
+and share mispredictions (images, correct label and wrong misprediction) 
+to gradually and collaboratively build realistic data/training sets:
+* [Public repository (see "mispredictions and unexpected behavior)](http://cknowledge.org/repo/web.php?action=index&module_uoa=wfe&native_action=show&native_module_uoa=program.optimization)
+* [Misclassified images via CK-based AI web-service](http://cknowledge.org/repo/web.php?action=index&module_uoa=wfe&native_action=show&native_module_uoa=program.optimization)
 
 ## Online demo of a unified CK-AI API 
 
