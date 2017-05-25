@@ -63,6 +63,7 @@
   "tags": [
     "tensorflow",
     "squeezedet",
-    "continuous"
+    "continuous",
+    "object-detection"
   ]
 }
