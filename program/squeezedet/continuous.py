@@ -161,6 +161,8 @@ def image_demo():
                     expected_boxes.append(bbox)
                     expected_classes.append(klass)
 
+        expected_class_count = class_count
+
         # Draw original boxes
         my_draw_box(
             im, expected_boxes,
@@ -189,7 +191,7 @@ def image_demo():
         for k, v in class_count.items():
             print('Recognized {}: {}'.format(k, v))
 
-        for k, v in class_count.items():
+        for k, v in expected_class_count.items():
             print('Expected {}: {}'.format(k, v))
 
         false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
