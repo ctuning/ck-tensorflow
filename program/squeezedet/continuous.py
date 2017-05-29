@@ -157,9 +157,9 @@ def image_demo():
                     klass = parts[0]
                     if klass in class_count.keys():
                         class_count[klass] += 1
-                    bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
-                    expected_boxes.append(bbox)
-                    expected_classes.append(klass)
+                        bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
+                        expected_boxes.append(bbox)
+                        expected_classes.append(klass)
 
         expected_class_count = class_count
 
@@ -197,20 +197,19 @@ def image_demo():
         false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
         threshold = FLAGS.iou_threshold
         for klass, final_box in zip(final_class, final_boxes):
-            remove_index = -1
+            remove_indices = []
             transformed = bbox_transform(final_box)
             
             for i, expected_box in enumerate(expected_boxes):
                 iou = bb_intersection_over_union(transformed, expected_box)
                 if iou >= threshold:
-                    remove_index = i
-                    break
+                    remove_indices.append(i)
 
-            if -1 == remove_index:
-                false_positives_count[mc.CLASS_NAMES[klass]] += 1
+            if remove_indices:
+                for to_remove in sorted(remove_indices, reverse=True):
+                    del expected_boxes[to_remove]
             else:
-                # remove found box to not pick it up in the future
-                del expected_boxes[remove_index]
+                false_positives_count[mc.CLASS_NAMES[klass]] += 1
 
         for k, v in false_positives_count.items():
             print('False positive {}: {}'.format(k, v))
