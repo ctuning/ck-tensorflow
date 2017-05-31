@@ -18,7 +18,7 @@
       "local": "yes",
       "name": "SqueezeDet model",
       "sort": 30,
-      "tags": "model,tensorflow,squeezedetmodel,squeezedet"
+      "tags": "model,tensorflow,squeezedetmodel"
     },
     "lib-tensorflow": {
       "local": "yes",

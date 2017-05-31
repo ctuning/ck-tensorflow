@@ -9,5 +9,6 @@ IMAGES=$CK_ENV_DATASET_IMAGE_DIR
 LABELS=$CK_ENV_DATASET_LABELS_DIR
 
 CHECKPOINT=$CK_ENV_MODEL_SQUEEZEDET_MODEL
+NET=$CK_ENV_MODEL_SQUEEZEDET_ID
 
-${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --image_dir="$IMAGES" --label_dir="$LABELS" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT"
+${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --image_dir="$IMAGES" --label_dir="$LABELS" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT" --demo_net="$NET"
