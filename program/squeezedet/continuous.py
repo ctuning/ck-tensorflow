@@ -1,5 +1,32 @@
 # Author: Bichen Wu (bichen@berkeley.edu) 08/25/2016
 
+# Original license text is below
+# BSD 2-Clause License
+#
+# Copyright (c) 2016, Bichen Wu
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+# 
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 """SqueezeDet Demo.
 
 In image detection mode, for a given image, detect objects and draw bounding
@@ -38,6 +65,8 @@ tf.app.flags.DEFINE_string(
     'label_dir', './', """Directory with image labels""")
 tf.app.flags.DEFINE_float(
     'iou_threshold', 0.7, """Threshold for IoU metric to determine false positives""")
+tf.app.flags.DEFINE_string(
+    'demo_net', 'squeezeDet', """Neural net architecture.""")
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -93,13 +122,32 @@ def my_draw_box(im, box_list, label_list, color=(0,255,0), cdict=None, form='cen
 def image_demo():
   """Detect image."""
 
+  assert FLAGS.demo_net == 'squeezeDet' or FLAGS.demo_net == 'squeezeDet+' or FLAGS.demo_net == 'resnet50' or FLAGS.demo_net == 'vgg16', \
+    'Selected nueral net architecture not supported: {}'.format(FLAGS.demo_net)
+
   with tf.Graph().as_default():
     # Load model
-    mc = kitti_squeezeDet_config()
-    mc.BATCH_SIZE = 1
-    # model parameters will be restored from checkpoint
-    mc.LOAD_PRETRAINED_MODEL = False
-    model = SqueezeDet(mc, FLAGS.gpu)
+    if FLAGS.demo_net == 'squeezeDet':
+      mc = kitti_squeezeDet_config()
+      mc.BATCH_SIZE = 1
+      # model parameters will be restored from checkpoint
+      mc.LOAD_PRETRAINED_MODEL = False
+      model = SqueezeDet(mc, FLAGS.gpu)
+    elif FLAGS.demo_net == 'squeezeDet+':
+      mc = kitti_squeezeDetPlus_config()
+      mc.BATCH_SIZE = 1
+      mc.LOAD_PRETRAINED_MODEL = False
+      model = SqueezeDetPlus(mc, FLAGS.gpu)
+    elif FLAGS.demo_net == 'resnet50':
+      mc = kitti_res50_config()
+      mc.BATCH_SIZE = 1
+      mc.LOAD_PRETRAINED_MODEL = False
+      model = ResNet50ConvDet(mc, FLAGS.gpu)
+    elif FLAGS.demo_net == 'vgg16':
+      mc = kitti_vgg16_config()
+      mc.BATCH_SIZE = 1
+      mc.LOAD_PRETRAINED_MODEL = False
+      model = VGG16ConvDet(mc, FLAGS.gpu)
 
     saver = tf.train.Saver(model.model_params)
 
@@ -120,7 +168,7 @@ def image_demo():
         # Detect
         det_boxes, det_probs, det_class = sess.run(
             [model.det_boxes, model.det_probs, model.det_class],
-            feed_dict={model.image_input:[input_image], model.keep_prob: 1.0})
+            feed_dict={model.image_input:[input_image]})
 
         # Filter
         final_boxes, final_probs, final_class = model.filter_prediction(
@@ -157,9 +205,11 @@ def image_demo():
                     klass = parts[0]
                     if klass in class_count.keys():
                         class_count[klass] += 1
-                    bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
-                    expected_boxes.append(bbox)
-                    expected_classes.append(klass)
+                        bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
+                        expected_boxes.append(bbox)
+                        expected_classes.append(klass)
+
+        expected_class_count = class_count
 
         # Draw original boxes
         my_draw_box(
@@ -189,26 +239,25 @@ def image_demo():
         for k, v in class_count.items():
             print('Recognized {}: {}'.format(k, v))
 
-        for k, v in class_count.items():
+        for k, v in expected_class_count.items():
             print('Expected {}: {}'.format(k, v))
 
         false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
         threshold = FLAGS.iou_threshold
         for klass, final_box in zip(final_class, final_boxes):
-            remove_index = -1
+            remove_indices = []
             transformed = bbox_transform(final_box)
             
             for i, expected_box in enumerate(expected_boxes):
                 iou = bb_intersection_over_union(transformed, expected_box)
                 if iou >= threshold:
-                    remove_index = i
-                    break
+                    remove_indices.append(i)
 
-            if -1 == remove_index:
-                false_positives_count[mc.CLASS_NAMES[klass]] += 1
+            if remove_indices:
+                for to_remove in sorted(remove_indices, reverse=True):
+                    del expected_boxes[to_remove]
             else:
-                # remove found box to not pick it up in the future
-                del expected_boxes[remove_index]
+                false_positives_count[mc.CLASS_NAMES[klass]] += 1
 
         for k, v in false_positives_count.items():
             print('False positive {}: {}'.format(k, v))

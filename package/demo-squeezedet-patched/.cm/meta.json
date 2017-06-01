@@ -7,7 +7,7 @@
     "install_env": {
       "PACKAGE_GIT": "YES",
       "PACKAGE_URL": "https://github.com/BichenWuUCB/squeezeDet.git",
-      "PACKAGE_GIT_CHECKOUT": "05e9de1c6ad4d0b53ccf1c4194da57769f191c88",
+      "PACKAGE_GIT_CHECKOUT": "4c78fa350f9c11ab9a5b620e78286846a7ee66de",
       "PACKAGE_SUB_DIR": "squeezeDet",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_PATCH": "YES"

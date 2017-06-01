@@ -18,7 +18,7 @@
       "local": "yes",
       "name": "SqueezeDet model",
       "sort": 30,
-      "tags": "model,tensorflow,squeezedetmodel,squeezedet"
+      "tags": "model,tensorflow,squeezedetmodel"
     },
     "lib-tensorflow": {
       "local": "yes",
@@ -41,11 +41,11 @@
     },
     "use_continuous":{
       "run_deps": {
-        "dataset-kitti-val": {
+        "detection-dataset": {
           "local": "yes",
-          "name": "KITTI dataset",
+          "name": "Detection dataset",
           "sort": 10,
-          "tags": "dataset,kitti,val"
+          "tags": "dataset,images,object-detection"
         }
       },
       "ignore_return_code": "no",
@@ -63,6 +63,7 @@
   "tags": [
     "tensorflow",
     "squeezedet",
-    "continuous"
+    "continuous",
+    "object-detection"
   ]
 }
