@@ -67,6 +67,8 @@ tf.app.flags.DEFINE_float(
     'iou_threshold', 0.7, """Threshold for IoU metric to determine false positives""")
 tf.app.flags.DEFINE_string(
     'demo_net', 'squeezeDet', """Neural net architecture.""")
+tf.app.flags.DEFINE_string(
+    'finisher_file', '', """Finisher file. If present, the app stops. Useful to interrupt the continuous mode.""")
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -158,6 +160,9 @@ def image_demo():
       image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
 
       for f in image_list:
+        if '' != FLAGS.finisher_file and os.path.isfile(FLAGS.finisher_file):
+            break
+
         im = cv2.imread(f)
         im = im.astype(np.float32, copy=False)
         im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
