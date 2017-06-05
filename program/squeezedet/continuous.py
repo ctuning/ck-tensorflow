@@ -48,7 +48,6 @@ import numpy as np
 import tensorflow as tf
 
 from config import *
-from train import _draw_box
 from nets import *
 from utils.util import bbox_transform
 
@@ -65,6 +64,8 @@ tf.app.flags.DEFINE_string(
     'label_dir', './', """Directory with image labels""")
 tf.app.flags.DEFINE_float(
     'iou_threshold', 0.7, """Threshold for IoU metric to determine false positives""")
+tf.app.flags.DEFINE_integer(
+    'gpu', 0, """GPU ID""")
 tf.app.flags.DEFINE_string(
     'demo_net', 'squeezeDet', """Neural net architecture.""")
 tf.app.flags.DEFINE_string(
