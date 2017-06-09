@@ -76,6 +76,10 @@ tf.app.flags.DEFINE_integer(
     'input_device', -1, """Input device (like webcam) ID. If specified, images are taken from this device instead of image dir.""")
 tf.app.flags.DEFINE_integer(
     "webcam_max_image_count", 10000, "Maximum image count generated in the webcam mode.");
+tf.app.flags.DEFINE_integer(
+    "webcam_max_skipped_frames", 20, "Maximum frames skipped.");
+tf.app.flags.DEFINE_float(
+    "webcam_skip_frames_delay", 0.009, "Maximum frame skipped frame delay.");
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -236,10 +240,21 @@ def detect_image(mc, sess, model, im, file_name):
 def should_finish():
     return '' != FLAGS.finisher_file and os.path.isfile(FLAGS.finisher_file)
 
+def flush(camera):
+    skipped = 0
+    while (skipped < FLAGS.webcam_max_skipped_frames):
+        skipped += 1
+        start_clock = time.clock()
+        camera.grab();
+        delay = time.clock() - start_clock
+        if delay > FLAGS.webcam_skip_frames_delay:
+            break
+
 def detect_webcam(fn, device_id):
     cap = cv2.VideoCapture(device_id)
     i = 0
     while not should_finish():
+        flush(cap)
         ret, im = cap.read()
         if not ret:
             break
