@@ -38,6 +38,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from functools import partial
+
 import cv2
 import time
 import sys
@@ -70,6 +72,10 @@ tf.app.flags.DEFINE_string(
     'demo_net', 'squeezeDet', """Neural net architecture.""")
 tf.app.flags.DEFINE_string(
     'finisher_file', '', """Finisher file. If present, the app stops. Useful to interrupt the continuous mode.""")
+tf.app.flags.DEFINE_integer(
+    'input_device', -1, """Input device (like webcam) ID. If specified, images are taken from this device instead of image dir.""")
+tf.app.flags.DEFINE_integer(
+    "webcam_max_image_count", 10000, "Maximum image count generated in the webcam mode.");
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -122,6 +128,133 @@ def my_draw_box(im, box_list, label_list, color=(0,255,0), cdict=None, form='cen
         else:
             cv2.putText(im, label, (xmin, ymin), font, 0.3, c, 1)
 
+def detect_image(mc, sess, model, im, file_name):
+    im = im.astype(np.float32, copy=False)
+    im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
+    input_image = im - mc.BGR_MEANS
+
+    start_clock = time.clock()
+
+    # Detect
+    det_boxes, det_probs, det_class = sess.run(
+        [model.det_boxes, model.det_probs, model.det_class],
+        feed_dict={model.image_input:[input_image]})
+
+    # Filter
+    final_boxes, final_probs, final_class = model.filter_prediction(det_boxes[0], det_probs[0], det_class[0])
+
+    duration = time.clock() - start_clock
+
+    keep_idx    = [idx for idx in range(len(final_probs)) \
+                      if final_probs[idx] > mc.PLOT_PROB_THRESH]
+    final_boxes = [final_boxes[idx] for idx in keep_idx]
+    final_probs = [final_probs[idx] for idx in keep_idx]
+    final_class = [final_class[idx] for idx in keep_idx]
+
+    # TODO(bichen): move this color dict to configuration file
+    cls2clr = {
+        'car': (255, 191, 0),
+        'cyclist': (0, 191, 255),
+        'pedestrian':(255, 0, 191)
+    }
+
+    expected_classes = []
+    expected_boxes = []
+    class_count = dict((k, 0) for k in mc.CLASS_NAMES)
+    
+    if FLAGS.label_dir:
+        label_file_name = os.path.join(FLAGS.label_dir, file_name)
+        label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
+        if os.path.isfile(label_file_name):
+            with open(label_file_name) as lf:
+                label_lines = [x.strip() for x in lf.readlines()]
+                for l in label_lines:
+                    parts = l.strip().lower().split(' ')
+                    klass = parts[0]
+                    if klass in class_count.keys():
+                        class_count[klass] += 1
+                        bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
+                        expected_boxes.append(bbox)
+                        expected_classes.append(klass)
+
+    expected_class_count = class_count
+
+    # Draw original boxes
+    my_draw_box(
+        im, expected_boxes,
+        [k+': (TRUE)' for k in expected_classes],
+        form='diagonal', label_placement='top', color=(200,200,200)
+    )
+
+    # Draw recognized boxes
+    my_draw_box(
+        im, final_boxes,
+        [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
+            for idx, prob in zip(final_class, final_probs)],
+        cdict=cls2clr,
+    )
+
+    out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
+    cv2.imwrite(out_file_name, im)
+    
+    print('File: {}'.format(out_file_name))
+    print('Duration: {} sec'.format(duration))
+
+    class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
+    for k in final_class:
+        class_count[mc.CLASS_NAMES[k].lower()] += 1
+
+    for k, v in class_count.items():
+        print('Recognized {}: {}'.format(k, v))
+
+    for k, v in expected_class_count.items():
+        print('Expected {}: {}'.format(k, v))
+
+    false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
+    threshold = FLAGS.iou_threshold
+    for klass, final_box in zip(final_class, final_boxes):
+        remove_indices = []
+        transformed = bbox_transform(final_box)
+        
+        for i, expected_box in enumerate(expected_boxes):
+            iou = bb_intersection_over_union(transformed, expected_box)
+            if iou >= threshold:
+                remove_indices.append(i)
+
+        if remove_indices:
+            for to_remove in sorted(remove_indices, reverse=True):
+                del expected_boxes[to_remove]
+        else:
+            false_positives_count[mc.CLASS_NAMES[klass]] += 1
+
+    for k, v in false_positives_count.items():
+        print('False positive {}: {}'.format(k, v))
+
+    print('')
+    sys.stdout.flush()
+
+def should_finish():
+    return '' != FLAGS.finisher_file and os.path.isfile(FLAGS.finisher_file)
+
+def detect_webcam(fn, device_id):
+    cap = cv2.VideoCapture(device_id)
+    i = 0
+    while not should_finish():
+        ret, im = cap.read()
+        if not ret:
+            break
+        fn(im, 'webcam_%06d.jpg' % i)
+        i = (i + 1) % FLAGS.webcam_max_image_count
+    cap.release()
+
+def detect_dir(fn, d):
+    image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
+    for f in image_list:
+        if should_finish():
+            break
+        im = cv2.imread(f)
+        fn(im, os.path.split(f)[1])
+
 def image_demo():
   """Detect image."""
 
@@ -153,123 +286,13 @@ def image_demo():
       model = VGG16ConvDet(mc, FLAGS.gpu)
 
     saver = tf.train.Saver(model.model_params)
-
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
       saver.restore(sess, FLAGS.checkpoint)
-
-      d = FLAGS.image_dir
-      image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
-
-      for f in image_list:
-        if '' != FLAGS.finisher_file and os.path.isfile(FLAGS.finisher_file):
-            break
-
-        im = cv2.imread(f)
-        im = im.astype(np.float32, copy=False)
-        im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
-        input_image = im - mc.BGR_MEANS
-
-        start_clock = time.clock()
-
-        # Detect
-        det_boxes, det_probs, det_class = sess.run(
-            [model.det_boxes, model.det_probs, model.det_class],
-            feed_dict={model.image_input:[input_image]})
-
-        # Filter
-        final_boxes, final_probs, final_class = model.filter_prediction(
-            det_boxes[0], det_probs[0], det_class[0])
-
-        duration = time.clock() - start_clock
-
-        keep_idx    = [idx for idx in range(len(final_probs)) \
-                          if final_probs[idx] > mc.PLOT_PROB_THRESH]
-        final_boxes = [final_boxes[idx] for idx in keep_idx]
-        final_probs = [final_probs[idx] for idx in keep_idx]
-        final_class = [final_class[idx] for idx in keep_idx]
-
-        # TODO(bichen): move this color dict to configuration file
-        cls2clr = {
-            'car': (255, 191, 0),
-            'cyclist': (0, 191, 255),
-            'pedestrian':(255, 0, 191)
-        }
-
-        file_name = os.path.split(f)[1]
-
-        expected_classes = []
-        expected_boxes = []
-        class_count = dict((k, 0) for k in mc.CLASS_NAMES)
-        
-        if FLAGS.label_dir:
-            label_file_name = os.path.join(FLAGS.label_dir, file_name)
-            label_file_name = os.path.splitext(label_file_name)[0] + '.txt'
-            with open(label_file_name) as lf:
-                label_lines = [x.strip() for x in lf.readlines()]
-                for l in label_lines:
-                    parts = l.strip().lower().split(' ')
-                    klass = parts[0]
-                    if klass in class_count.keys():
-                        class_count[klass] += 1
-                        bbox = [float(parts[i]) for i in [4, 5, 6, 7]]
-                        expected_boxes.append(bbox)
-                        expected_classes.append(klass)
-
-        expected_class_count = class_count
-
-        # Draw original boxes
-        my_draw_box(
-            im, expected_boxes,
-            [k+': (TRUE)' for k in expected_classes],
-            form='diagonal', label_placement='top', color=(200,200,200)
-        )
-
-        # Draw recognized boxes
-        my_draw_box(
-            im, final_boxes,
-            [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
-                for idx, prob in zip(final_class, final_probs)],
-            cdict=cls2clr,
-        )
-
-        out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
-        cv2.imwrite(out_file_name, im)
-        
-        print('File: {}'.format(out_file_name))
-        print('Duration: {} sec'.format(duration))
-
-        class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
-        for k in final_class:
-            class_count[mc.CLASS_NAMES[k].lower()] += 1
-
-        for k, v in class_count.items():
-            print('Recognized {}: {}'.format(k, v))
-
-        for k, v in expected_class_count.items():
-            print('Expected {}: {}'.format(k, v))
-
-        false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
-        threshold = FLAGS.iou_threshold
-        for klass, final_box in zip(final_class, final_boxes):
-            remove_indices = []
-            transformed = bbox_transform(final_box)
-            
-            for i, expected_box in enumerate(expected_boxes):
-                iou = bb_intersection_over_union(transformed, expected_box)
-                if iou >= threshold:
-                    remove_indices.append(i)
-
-            if remove_indices:
-                for to_remove in sorted(remove_indices, reverse=True):
-                    del expected_boxes[to_remove]
-            else:
-                false_positives_count[mc.CLASS_NAMES[klass]] += 1
-
-        for k, v in false_positives_count.items():
-            print('False positive {}: {}'.format(k, v))
-
-        print('')
-        sys.stdout.flush()
+      fn = partial(detect_image, mc, sess, model)
+      if 0 <= FLAGS.input_device:
+        detect_webcam(fn, FLAGS.input_device)
+      else:
+        detect_dir(fn, FLAGS.image_dir)
 
 def main(argv=None):
   if not tf.gfile.Exists(FLAGS.out_dir):

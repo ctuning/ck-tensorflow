@@ -58,12 +58,25 @@
           "tmp-output2.tmp"
         ]
       }
+    },
+    "use_webcam":{
+      "ignore_return_code": "no",
+      "run_time":{
+        "run_cmd_main": "../webcam$#script_ext#$",
+        "run_cmd_out1": "tmp-output1.tmp",
+        "run_cmd_out2": "tmp-output2.tmp",
+        "run_output_files": [
+          "tmp-output1.tmp",
+          "tmp-output2.tmp"
+        ]
+      }
     }
   },
   "tags": [
     "tensorflow",
     "squeezedet",
     "continuous",
-    "object-detection"
+    "object-detection",
+    "webcam"
   ]
 }
