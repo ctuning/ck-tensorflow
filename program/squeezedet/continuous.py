@@ -132,8 +132,19 @@ def my_draw_box(im, box_list, label_list, color=(0,255,0), cdict=None, form='cen
         else:
             cv2.putText(im, label, (xmin, ymin), font, 0.3, c, 1)
 
-def detect_image(mc, sess, model, im, file_name):
-    im = im.astype(np.float32, copy=False)
+def rescale(x, orig_scale, target_scale):
+    return float(target_scale) * (float(x) / float(orig_scale))
+
+def rescale_boxes(boxes, boxes_shape, target_shape):
+    ret = []
+    bh, bw = boxes_shape[:2]
+    th, tw = target_shape[:2]
+    for b in boxes:
+        ret.append([rescale(b[0], bw, tw), rescale(b[1], bh, th), rescale(b[2], bw, tw), rescale(b[3], bh, th)])
+    return ret
+
+def detect_image(mc, sess, model, orig_im, file_name):
+    im = orig_im.astype(np.float32, copy=True)
     im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
     input_image = im - mc.BGR_MEANS
 
@@ -185,21 +196,21 @@ def detect_image(mc, sess, model, im, file_name):
 
     # Draw original boxes
     my_draw_box(
-        im, expected_boxes,
+        orig_im, rescale_boxes(expected_boxes, im.shape, orig_im.shape),
         [k+': (TRUE)' for k in expected_classes],
         form='diagonal', label_placement='top', color=(200,200,200)
     )
 
     # Draw recognized boxes
     my_draw_box(
-        im, final_boxes,
+        orig_im, rescale_boxes(final_boxes, im.shape, orig_im.shape),
         [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
             for idx, prob in zip(final_class, final_probs)],
         cdict=cls2clr,
     )
 
     out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
-    cv2.imwrite(out_file_name, im)
+    cv2.imwrite(out_file_name, orig_im)
     
     print('File: {}'.format(out_file_name))
     print('Duration: {} sec'.format(duration))
@@ -242,7 +253,7 @@ def should_finish():
 
 def flush(camera):
     skipped = 0
-    while (skipped < FLAGS.webcam_max_skipped_frames):
+    while skipped < FLAGS.webcam_max_skipped_frames:
         skipped += 1
         start_clock = time.clock()
         camera.grab();
