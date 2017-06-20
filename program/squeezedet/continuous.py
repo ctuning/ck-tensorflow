@@ -80,6 +80,8 @@ tf.app.flags.DEFINE_integer(
     "webcam_max_skipped_frames", 20, "Maximum frames skipped.");
 tf.app.flags.DEFINE_float(
     "webcam_skip_frames_delay", 0.009, "Maximum frame skipped frame delay.");
+tf.app.flags.DEFINE_integer(
+    "draw_boxes", 1, "Draw bounding boxes");
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -194,20 +196,23 @@ def detect_image(mc, sess, model, orig_im, file_name):
 
     expected_class_count = class_count
 
-    # Draw original boxes
-    my_draw_box(
-        orig_im, rescale_boxes(expected_boxes, im.shape, orig_im.shape),
-        [k+': (TRUE)' for k in expected_classes],
-        form='diagonal', label_placement='top', color=(200,200,200)
-    )
+    expected_boxes = rescale_boxes(expected_boxes, im.shape, orig_im.shape)
+    final_boxes = rescale_boxes(final_boxes, im.shape, orig_im.shape)
 
-    # Draw recognized boxes
-    my_draw_box(
-        orig_im, rescale_boxes(final_boxes, im.shape, orig_im.shape),
-        [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
-            for idx, prob in zip(final_class, final_probs)],
-        cdict=cls2clr,
-    )
+    if FLAGS.draw_boxes == 1:
+        # Draw original boxes
+        my_draw_box(
+            orig_im, expected_boxes,
+            [k+': (TRUE)' for k in expected_classes],
+            form='diagonal', label_placement='top', color=(200,200,200)
+        )
+        # Draw recognized boxes
+        my_draw_box(
+            orig_im, final_boxes,
+            [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
+                for idx, prob in zip(final_class, final_probs)],
+            cdict=cls2clr,
+        )
 
     out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
     cv2.imwrite(out_file_name, orig_im)
@@ -224,6 +229,12 @@ def detect_image(mc, sess, model, orig_im, file_name):
 
     for k, v in expected_class_count.items():
         print('Expected {}: {}'.format(k, v))
+
+    for k, b, p in zip(final_class, [bbox_transform(b) for b in final_boxes], final_probs):
+        print('Detection {}: {:.3f} {:.3f} {:.3f} {:.3f} {:.3f}'.format(mc.CLASS_NAMES[k], b[0], b[1], b[2], b[3], p))
+
+    for kname, b in zip(expected_classes, expected_boxes):
+        print('Ground truth {}: {:.3f} {:.3f} {:.3f} {:.3f} 1'.format(kname, b[0], b[1], b[2], b[3]))
 
     false_positives_count = dict((k, 0) for k in mc.CLASS_NAMES)
     threshold = FLAGS.iou_threshold

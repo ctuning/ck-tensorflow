@@ -9,4 +9,12 @@ set TF_CPP_MIN_LOG_LEVEL=3
 set CHECKPOINT=%CK_ENV_MODEL_SQUEEZEDET_MODEL%
 set NET=%CK_ENV_MODEL_SQUEEZEDET_ID%
 
-"%CK_ENV_COMPILER_PYTHON_FILE%" "..\continuous.py" --out_dir="%OUT_DIR%" --checkpoint="%CHECKPOINT%" --demo_net="%NET%" --finisher_file="%FINISHER_FILE%" --input_device=0
+if "%IMAGE_SOURCE_DEVICE%" == "" (
+    set IMAGE_SOURCE_DEVICE=0
+)
+
+if "%DRAW_BOXES%" == "" (
+    set DRAW_BOXES=1
+)
+
+"%CK_ENV_COMPILER_PYTHON_FILE%" "..\continuous.py" --out_dir="%OUT_DIR%" --checkpoint="%CHECKPOINT%" --demo_net="%NET%" --finisher_file="%FINISHER_FILE%" --input_device=%IMAGE_SOURCE_DEVICE% --draw_boxes=%DRAW_BOXES%

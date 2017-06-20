@@ -10,6 +10,6 @@ LABELS=$CK_ENV_DATASET_LABELS_DIR
 
 CHECKPOINT=$CK_ENV_MODEL_SQUEEZEDET_MODEL
 NET=$CK_ENV_MODEL_SQUEEZEDET_ID
-DEVICE=${IMAGE_SOURCE_DEVICE:--1}
+DB=${DRAW_BOXES:-1}
 
-${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --image_dir="$IMAGES" --label_dir="$LABELS" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT" --demo_net="$NET" --finisher_file="$FINISHER_FILE" --input_device=$DEVICE
+${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --image_dir="$IMAGES" --label_dir="$LABELS" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT" --demo_net="$NET" --finisher_file="$FINISHER_FILE" --draw_boxes=$DB

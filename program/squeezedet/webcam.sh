@@ -7,5 +7,7 @@ export TF_CPP_MIN_LOG_LEVEL=3 # supress TF debug output
 
 CHECKPOINT=$CK_ENV_MODEL_SQUEEZEDET_MODEL
 NET=$CK_ENV_MODEL_SQUEEZEDET_ID
+DEVICE=${IMAGE_SOURCE_DEVICE:-0}
+DB=${DRAW_BOXES:-1}
 
-${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT" --demo_net="$NET" --finisher_file="$FINISHER_FILE" --input_device=0
+${CK_ENV_COMPILER_PYTHON_FILE} "../continuous.py" --out_dir="$OUT_DIR" --checkpoint="$CHECKPOINT" --demo_net="$NET" --finisher_file="$FINISHER_FILE" --input_device=$DEVICE --draw_boxes=$DB
