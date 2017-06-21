@@ -82,6 +82,8 @@ tf.app.flags.DEFINE_float(
     "webcam_skip_frames_delay", 0.009, "Maximum frame skipped frame delay.");
 tf.app.flags.DEFINE_integer(
     "draw_boxes", 1, "Draw bounding boxes");
+tf.app.flags.DEFINE_string(
+    "skip_files_including", "", "Skip files from the beginning to the given one (inclusive)");
 
 def bb_intersection_over_union(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -145,7 +147,7 @@ def rescale_boxes(boxes, boxes_shape, target_shape):
         ret.append([rescale(b[0], bw, tw), rescale(b[1], bh, th), rescale(b[2], bw, tw), rescale(b[3], bh, th)])
     return ret
 
-def detect_image(mc, sess, model, orig_im, file_name):
+def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
     im = orig_im.astype(np.float32, copy=True)
     im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
     input_image = im - mc.BGR_MEANS
@@ -218,6 +220,8 @@ def detect_image(mc, sess, model, orig_im, file_name):
     cv2.imwrite(out_file_name, orig_im)
     
     print('File: {}'.format(out_file_name))
+    if '' != original_file_path:
+        print('Original file: {}'.format(original_file_path))
     print('Duration: {} sec'.format(duration))
 
     class_count = dict((k.lower(), 0) for k in mc.CLASS_NAMES)
@@ -280,17 +284,23 @@ def detect_webcam(fn, device_id):
         ret, im = cap.read()
         if not ret:
             break
-        fn(im, 'webcam_%06d.jpg' % i)
+        fn(im, 'webcam_%06d.jpg' % i, '')
         i = (i + 1) % FLAGS.webcam_max_image_count
     cap.release()
 
 def detect_dir(fn, d):
     image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
+    if '' != FLAGS.skip_files_including:
+        try:
+            i = image_list.index(FLAGS.skip_files_including)
+            image_list = image_list[i+1:]
+        except ValueError:
+            pass
     for f in image_list:
         if should_finish():
             break
         im = cv2.imread(f)
-        fn(im, os.path.split(f)[1])
+        fn(im, os.path.split(f)[1], f)
 
 def image_demo():
   """Detect image."""
