@@ -149,7 +149,7 @@ def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
     im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
     input_image = im - mc.BGR_MEANS
 
-    start_clock = time.clock()
+    start_clock = time.time()
 
     # Detect
     det_boxes, det_probs, det_class = sess.run(
@@ -159,7 +159,7 @@ def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
     # Filter
     final_boxes, final_probs, final_class = model.filter_prediction(det_boxes[0], det_probs[0], det_class[0])
 
-    duration = time.clock() - start_clock
+    duration = time.time() - start_clock
 
     keep_idx    = [idx for idx in range(len(final_probs)) \
                       if final_probs[idx] > mc.PLOT_PROB_THRESH]
