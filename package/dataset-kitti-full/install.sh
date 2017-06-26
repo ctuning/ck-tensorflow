@@ -10,7 +10,7 @@ KITTI_LABELS_NAMES="${KITTI_NAME} labels"
 echo ""
 echo "Downloading ${KITTI_IMAGES_NAMES} from '${KITTI_IMAGES_URL}' ..."
 
-wget -c ${KITTI_IMAGES_URL} -O ${KITTI_IMAGES_ARCHIVE}
+wget --no-check-certificate -c ${KITTI_IMAGES_URL} -O ${KITTI_IMAGES_ARCHIVE}
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ${KITTI_IMAGES_NAMES} from '${KITTI_IMAGES_URL}' failed!"
@@ -21,7 +21,7 @@ fi
 echo ""
 echo "Downloading ${KITTI_LABELS_NAMES} from '${KITTI_LABELS_URL}' ..."
 
-wget -c ${KITTI_LABELS_URL} -O ${KITTI_LABELS_ARCHIVE}
+wget --no-check-certificate -c ${KITTI_LABELS_URL} -O ${KITTI_LABELS_ARCHIVE}
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ${KITTI_LABELS_NAMES} from '${KITTI_LABELS_URL}' failed!"

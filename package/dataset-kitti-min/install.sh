@@ -10,7 +10,7 @@ KITTI_NAME="KITTI minimal validation dataset"
 echo ""
 echo "Downloading ${KITTI_NAME} from '${KITTI_URL}' ..."
 
-wget -c ${KITTI_URL} -O ${KITTI_ARCHIVE}
+wget --no-check-certificate -c ${KITTI_URL} -O ${KITTI_ARCHIVE}
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Downloading ${KITTI_NAME} from '${KITTI_URL}' failed!"
