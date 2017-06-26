@@ -39,6 +39,7 @@ from __future__ import division
 from __future__ import print_function
 
 from functools import partial
+from threading import Thread
 
 import cv2
 import time
@@ -76,10 +77,6 @@ tf.app.flags.DEFINE_integer(
     'input_device', -1, """Input device (like webcam) ID. If specified, images are taken from this device instead of image dir.""")
 tf.app.flags.DEFINE_integer(
     "webcam_max_image_count", 10000, "Maximum image count generated in the webcam mode.");
-tf.app.flags.DEFINE_integer(
-    "webcam_max_skipped_frames", 20, "Maximum frames skipped.");
-tf.app.flags.DEFINE_float(
-    "webcam_skip_frames_delay", 0.009, "Maximum frame skipped frame delay.");
 tf.app.flags.DEFINE_integer(
     "draw_boxes", 1, "Draw bounding boxes");
 tf.app.flags.DEFINE_string(
@@ -266,27 +263,77 @@ def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
 def should_finish():
     return '' != FLAGS.finisher_file and os.path.isfile(FLAGS.finisher_file)
 
-def flush(camera):
-    skipped = 0
-    while skipped < FLAGS.webcam_max_skipped_frames:
-        skipped += 1
-        start_clock = time.clock()
-        camera.grab();
-        delay = time.clock() - start_clock
-        if delay > FLAGS.webcam_skip_frames_delay:
-            break
+class WebcamVideoStream:
+    """This class is a modified version of the class taken from the 'imutils' library
+
+    The MIT License (MIT)
+
+    Copyright (c) 2015-2016 Adrian Rosebrock, http://www.pyimagesearch.com
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+    """
+    def __init__(self, src=0):
+        # initialize the video camera stream and read the first frame
+        # from the stream
+        self.stream = cv2.VideoCapture(src)
+        (self.grabbed, self.frame) = self.stream.read()
+
+        # initialize the variable used to indicate if the thread should
+        # be stopped
+        self.stopped = False
+
+    def start(self):
+        # start the thread to read frames from the video stream
+        t = Thread(target=self.update, args=())
+        t.daemon = True
+        t.start()
+        return self
+
+    def update(self):
+        # keep looping infinitely until the thread is stopped
+        while True:
+            # if the thread indicator variable is set, stop the thread
+            if self.stopped:
+                self.stream.release()
+                return
+
+            # otherwise, read the next frame from the stream
+            (self.grabbed, self.frame) = self.stream.read()
+
+    def read(self):
+        # return the frame most recently read
+        return (self.grabbed, self.frame)
+
+    def stop(self):
+        # indicate that the thread should be stopped
+        self.stopped = True
 
 def detect_webcam(fn, device_id):
-    cap = cv2.VideoCapture(device_id)
+    vs = WebcamVideoStream(device_id).start()
     i = 0
     while not should_finish():
-        flush(cap)
-        ret, im = cap.read()
+        ret, im = vs.read()
         if not ret:
             break
         fn(im, 'webcam_%06d.jpg' % i, '')
         i = (i + 1) % FLAGS.webcam_max_image_count
-    cap.release()
+    vs.stop()
 
 def detect_dir(fn, d):
     image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
