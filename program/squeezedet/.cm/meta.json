@@ -1,5 +1,5 @@
 {
-  "compile_deps": {
+  "run_deps": {
     "python": {
       "local": "yes",
       "name": "Python interpreter",
@@ -11,9 +11,7 @@
       "name": "SqueezeDet demo sources",
       "sort": 20,
       "tags": "tensorflow,demo,squeezedet"
-    }
-  },
-  "run_deps": {
+    },
     "squeezedet": {
       "local": "yes",
       "name": "SqueezeDet model",
