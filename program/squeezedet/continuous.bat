@@ -1,5 +1,8 @@
 set OUT_DIR=%cd%\out
-rm -rf %OUT_DIR%
+
+if "%SKIP_FILES_INCLUDING%" == "" (
+    rm -rf %OUT_DIR%
+)
 
 set PYTHONPATH=%PYTHONPATH%;%CK_ENV_DEMO_SQUEEZEDET_SRC%
 

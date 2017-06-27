@@ -1,6 +1,9 @@
 #! /bin/bash
 OUT_DIR="$PWD/out"
-rm -rf "$OUT_DIR"
+
+if [ -z "$SKIP_FILES_INCLUDING" ]; then
+    rm -rf "$OUT_DIR"
+fi
 
 export PYTHONPATH="$PYTHONPATH:$CK_ENV_DEMO_SQUEEZEDET_SRC"
 export TF_CPP_MIN_LOG_LEVEL=3 # supress TF debug output
