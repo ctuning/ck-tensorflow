@@ -77,8 +77,6 @@ tf.app.flags.DEFINE_integer(
     'input_device', -1, """Input device (like webcam) ID. If specified, images are taken from this device instead of image dir.""")
 tf.app.flags.DEFINE_integer(
     "webcam_max_image_count", 10000, "Maximum image count generated in the webcam mode.");
-tf.app.flags.DEFINE_integer(
-    "draw_boxes", 1, "Draw bounding boxes");
 tf.app.flags.DEFINE_string(
     "skip_files_including", "", "Skip files from the beginning to the given one (inclusive)");
 
@@ -145,6 +143,7 @@ def rescale_boxes(boxes, boxes_shape, target_shape):
     return ret
 
 def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
+    boxed_img = orig_im.copy()
     im = orig_im.astype(np.float32, copy=True)
     im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
     input_image = im - mc.BGR_MEANS
@@ -198,23 +197,25 @@ def detect_image(mc, sess, model, orig_im, file_name, original_file_path):
     expected_boxes = rescale_boxes(expected_boxes, im.shape, orig_im.shape)
     final_boxes = rescale_boxes(final_boxes, im.shape, orig_im.shape)
 
-    if FLAGS.draw_boxes == 1:
-        # Draw original boxes
-        my_draw_box(
-            orig_im, expected_boxes,
-            [k+': (TRUE)' for k in expected_classes],
-            form='diagonal', label_placement='top', color=(200,200,200)
-        )
-        # Draw recognized boxes
-        my_draw_box(
-            orig_im, final_boxes,
-            [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
-                for idx, prob in zip(final_class, final_probs)],
-            cdict=cls2clr,
-        )
+    # Draw original boxes
+    my_draw_box(
+        boxed_img, expected_boxes,
+        [k+': (TRUE)' for k in expected_classes],
+        form='diagonal', label_placement='top', color=(200,200,200)
+    )
+    # Draw recognized boxes
+    my_draw_box(
+        boxed_img, final_boxes,
+        [mc.CLASS_NAMES[idx]+': (%.2f)'% prob \
+            for idx, prob in zip(final_class, final_probs)],
+        cdict=cls2clr,
+    )
 
-    out_file_name = os.path.join(FLAGS.out_dir, 'out_'+file_name)
+    out_file_name = os.path.join(FLAGS.out_dir, file_name)
     cv2.imwrite(out_file_name, orig_im)
+
+    boxed_out_file_name = os.path.join(FLAGS.out_dir, 'boxed_' + file_name)
+    cv2.imwrite(boxed_out_file_name, boxed_img)
     
     print('File: {}'.format(out_file_name))
     if '' != original_file_path:
