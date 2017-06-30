@@ -306,19 +306,19 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
     # Draw dontcare boxes
     my_draw_box(
         boxed_img, [b.bbox for b in dontcare],
-        ['dontcare ' + str(b.id) for b in dontcare],
+        ['dontcare' for b in dontcare],
         label_placement='top', color=(255,255,255)
     )
     # Draw original boxes
     my_draw_box(
         boxed_img, [b.bbox for b in expected],
-        [box.klass + ': (TRUE) ' + str(box.id) for box in expected],
+        [box.klass + ': (TRUE)' for box in expected],
         label_placement='top', color=(200,200,200)
     )
     # Draw recognized boxes
     my_draw_box(
         boxed_img, [b.bbox for b in rescaled_recognized],
-        [b.klass + ': (%.2f) ' % b.prob + str(b.id) for b in rescaled_recognized],
+        [b.klass + ': (%.2f)' % b.prob for b in rescaled_recognized],
         cdict=cls2clr,
     )
 
