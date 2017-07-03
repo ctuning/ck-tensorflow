@@ -204,6 +204,9 @@ def eval_boxes(expected, recognized, klass, difficulty):
 
     return (tp, len(gt))
 
+def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+
 class Stat:
     def __init__(self):
         self.avg = 0.0
@@ -213,12 +216,18 @@ class Stat:
         self.count += 1
         self.avg = (self.avg * (self.count - 1) + v) / float(self.count)
 
+    def addIf(self, v, condition):
+        if condition or not isclose(v, 0):
+            self.add(v)
+
 def calc_mAP(avg_precision):
     s = 0.0
     count = 0
     for v in avg_precision.values():
-        s += v[EASY].avg + v[MODERATE].avg + v[HARD].avg
-        count += 3
+        for stat in v:
+            if 0 < stat.count:
+                s += stat.avg
+                count += 1
     return 0 if 0 == count else s / float(count)
 
 def rescale(x, orig_scale, target_scale):
@@ -234,13 +243,8 @@ def rescale_boxes(boxes, boxes_shape, target_shape):
         ret.append(Box(box.klass, nb, occlusion=box.occlusion, truncation=box.truncation, prob=box.prob))
     return ret
 
-def safe_div(all_rec, all_gt, tp):
-    ret = 0.0
-    if 0 == all_rec:
-        ret = 1.0 if 0 == all_gt else 0.0
-    else:
-        ret = float(tp) / float(all_rec)
-    return ret
+def safe_div(all_rec, tp):
+    return 0 if 0 == all_rec else (float(tp) / float(all_rec))
 
 def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name, original_file_path):
     global box_counter
@@ -354,21 +358,26 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
     expected = [b for b in expected if care(b, dontcare)]
     recognized = [b for b in recognized if care(b, dontcare)]
     for k in class_names:
+        all_rec = len([b for b in recognized if b.klass == k])
+        all_gt = len([b for b in expected if b.klass == k])
+
+        report = 0 != all_rec or 0 != all_gt # don't report not found and actually unexpected labels, but still count them for mAP
+
         eval_boxes(expected, recognized, k, UNKNOWN)
         tp_easy, all_gt_easy = eval_boxes(expected, recognized, k, EASY)
         tp_mod, all_gt_mod = eval_boxes(expected, recognized, k, MODERATE)
         tp_hard, all_gt_hard = eval_boxes(expected, recognized, k, HARD)
         tp = tp_easy + tp_mod + tp_hard
-        all_rec = len([b for b in recognized if b.klass == k])
-        all_gt = len([b for b in expected if b.klass == k])
         fp = all_rec - tp
-        print('True positive {}: {} easy, {} moderate, {} hard'.format(k, tp_easy, tp_mod, tp_hard))
-        print('False positive {}: {}'.format(k, fp))
+
+        if report:
+            print('True positive {}: {} easy, {} moderate, {} hard'.format(k, tp_easy, tp_mod, tp_hard))
+            print('False positive {}: {}'.format(k, fp))
 
         precision = [
-            safe_div(tp_easy + fp, all_gt_easy, tp_easy),
-            safe_div(tp_mod + fp, all_gt_mod, tp_mod),
-            safe_div(tp_hard + fp, all_gt_hard, tp_hard),
+            safe_div(tp_easy + fp, tp_easy),
+            safe_div(tp_mod + fp, tp_mod),
+            safe_div(tp_hard + fp, tp_hard)
         ]
 
         recall = 0.0
@@ -377,13 +386,17 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
         else:
             recall = float(tp) / float(all_gt)
 
-        print('Precision {}: {:.2f} easy, {:.2f} moderate, {:.2f} hard'.format(k, precision[EASY], precision[MODERATE], precision[HARD]))
-        print('Recall {}: {:.2f}'.format(k, recall))
+        if report:
+            print('Precision {}: {:.2f} easy, {:.2f} moderate, {:.2f} hard'.format(k, precision[EASY], precision[MODERATE], precision[HARD]))
+            print('Recall {}: {:.2f}'.format(k, recall))
+
         ap = avg_precision[k]
-        ap[EASY].add(precision[EASY])
-        ap[MODERATE].add(precision[MODERATE])
-        ap[HARD].add(precision[HARD])
-        print('Rolling AP {}: {:.2f} easy, {:.2f} moderate, {:.2f} hard'.format(k, ap[EASY].avg, ap[MODERATE].avg, ap[HARD].avg))
+        ap[EASY].addIf(precision[EASY], 0 < all_gt_easy)
+        ap[MODERATE].addIf(precision[MODERATE], 0 < all_gt_mod)
+        ap[HARD].addIf(precision[HARD], 0 < all_gt_hard)
+
+        if report:
+            print('Rolling AP {}: {:.2f} easy, {:.2f} moderate, {:.2f} hard'.format(k, ap[EASY].avg, ap[MODERATE].avg, ap[HARD].avg))
 
     print('Rolling mAP: {:.4f}'.format(calc_mAP(avg_precision)))
     print('')
