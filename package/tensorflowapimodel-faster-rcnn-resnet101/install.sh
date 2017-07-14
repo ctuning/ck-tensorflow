@@ -11,7 +11,7 @@ cd $DATA_DIR
 #####################################################################
 echo ""
 echo "Generating TFRecord files for training and validation... "
-echo "$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_ROOT/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_PASCAL_ROOT --year=VOC2012 --set=train --output_path=pascal_train.record"
+
 #from $INSTALL_DIR/data
 $CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_ROOT/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_PASCAL_ROOT --year=VOC2012 --set=train --output_path=pascal_train.record
 
