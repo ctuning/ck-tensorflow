@@ -1,0 +1,23 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_DATASET_PASCAL",
+    "limit_recursion_dir_search": {
+      "linux": 5
+    },
+    "soft_file": {
+      "linux": "VOCdevkit/VOC2012/JPEGImages/2007_000027.jpg"
+    }
+  },
+  "deps": {
+  },
+  "soft_name": "Pascal Dataset",
+  "tags": [
+    "dataset",
+    "pascal",
+    "images"
+  ]
+}
+

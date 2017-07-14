@@ -1,0 +1,29 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "TENSORFLOW_MODELS_URL": "https://github.com/tensorflow/models.git"
+    },
+    "no_ver_in_suggested_path": "yes",
+    "version": "20170714"
+  },
+  "deps": {
+    "tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow Library",
+      "tags": "lib,tensorflow,tensorflow-cuda"
+    }
+  },
+  "end_full_path": {
+    "linux": "object_detection/README.md"
+  },
+  "process_script": "install",
+  "soft_uoa": "72ca45fb219ff46c",
+  "suggested_path": "tensorflowmodel-api",
+  "tags": [
+    "tensorflow",
+    "model",
+    "api"
+  ]
+}
+
