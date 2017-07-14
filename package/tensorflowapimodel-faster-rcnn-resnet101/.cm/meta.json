@@ -36,11 +36,11 @@
   "tags": [
     "tensorflow",
     "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
     "fasterRCNN",
     "resnet",
-    "resnet101",
-    "tensorflowapi",
-    "tensorflowapimodel"
+    "resnet101"
   ]
 }
 
