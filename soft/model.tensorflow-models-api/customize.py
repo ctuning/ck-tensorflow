@@ -120,6 +120,6 @@ def setup(i):
     pl=os.path.dirname(p1)
 
     env[ep]=pl
-    env[ep+'_ROOT']=p1
+    env[ep+'_OBJ_DET_DIR']=p1
 
     return {'return':0, 'bat':s}
