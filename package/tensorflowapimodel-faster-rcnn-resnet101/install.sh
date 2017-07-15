@@ -38,6 +38,7 @@ if [ "${?}" != "0" ] ; then
   echo "Error: Generating pipeline.config file failed!"
   exit 1
 fi
+
 #####################################################################
 echo ""
 echo "Successfully installed Faster RCNN resnet101 tensorflow model ..."

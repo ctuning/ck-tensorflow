@@ -70,7 +70,6 @@ def setup(i):
     p1=os.path.dirname(fp)
     pl=os.path.dirname(p1)
 
-    env[ep]=pl
     env[ep+'_ROOT']=p1
 
 
