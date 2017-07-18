@@ -15,10 +15,10 @@
       "name": "TensorFlow Library",
       "tags": "lib,tensorflow,tensorflow-cuda"
     },
-    "pascal": {
+    "voc": {
       "local":"yes",
-      "name": "Pascal dataset",
-      "tags": "dataset,pascal,val"
+      "name": "Pascal VOC dataset(2012)",
+      "tags": "dataset,voc,2012"
     },
     "tensorflow-model-api": {
       "local": "yes",
