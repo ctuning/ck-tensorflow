@@ -70,7 +70,8 @@ def setup(i):
     p1=os.path.dirname(fp)
     pl=os.path.dirname(p1)
 
-    env[ep+'_ROOT']=p1
+    env[ep+'_ROOT']=pl
+    env[ep+'_MODEL']=p1
 
 
     return {'return':0, 'bat':s}

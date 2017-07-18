@@ -7,6 +7,12 @@ rm -rf $INSTALL_DIR/*
 mkdir $INSTALL_DIR/data
 export DATA_DIR=$INSTALL_DIR/data
 cd $DATA_DIR
+export MODEL_DIR=$INSTALL_DIR/model
+export TRAIN_DIR=$MODEL_DIR/train
+export EVAL_DIR=$MODEL_DIR/eval
+mkdir $MODEL_DIR
+mkdir $EVAL_DIR
+mkdir $TRAIN_DIR
 
 #####################################################################
 echo ""
@@ -29,10 +35,10 @@ echo ""
 echo "Generating pipeline.config file ..."
 cd $PACKAGE_DIR
 cp -f pipeline.template pipeline.config
-sed -i "s|_PATH_TO_CHECKPOINT_|$DATA_DIR|g" pipeline.config
+sed -i "s|_PATH_TO_CHECKPOINT_|$TRAIN_DIR|g" pipeline.config
 sed -i "s|_PATH_TO_INPUT_|$DATA_DIR|g" pipeline.config
 sed -i "s|_PATH_TO_LABEL_MAP_|$DATA_DIR|g" pipeline.config
-cp -f pipeline.config $INSTALL_DIR/
+cp -f pipeline.config $MODEL_DIR/
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Generating pipeline.config file failed!"

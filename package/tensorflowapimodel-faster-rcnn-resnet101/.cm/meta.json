@@ -27,7 +27,7 @@
     }
   },
   "end_full_path": {
-    "linux": "pipeline.config"
+    "linux": "model/pipeline.config"
   },
   "package_extra_name": " (Faster RCNN resnet101)",
   "process_script": "install",

@@ -9,7 +9,7 @@
       "win": 5
     },
     "soft_file": {
-      "linux": "pipeline.config"
+      "linux": "model/pipeline.config"
     }
   },
   "soft_name": "TensorFlow model(from API)",
