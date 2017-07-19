@@ -17,8 +17,8 @@
     },
     "voc": {
       "local":"yes",
-      "name": "Pascal VOC dataset(2012)",
-      "tags": "dataset,voc,2012"
+      "name": "Pascal VOC dataset(2007)",
+      "tags": "dataset,voc,2007"
     },
     "tensorflow-model-api": {
       "local": "yes",
