@@ -27,12 +27,12 @@
     }
   },
   "end_full_path": {
-    "linux": "model/pipeline.config"
+    "linux": "model/faster_rcnn_resnet101_voc.config"
   },
-  "package_extra_name": " (Faster RCNN resnet101)",
+  "package_extra_name": " (Faster RCNN resnet101, VOC)",
   "process_script": "install",
   "soft_uoa": "68b0b66df81fdc1d",
-  "suggested_path": "tensorflowapimodel-faster-rcnn-resnet101",
+  "suggested_path": "tensorflowapimodel-faster-rcnn-resnet101-voc",
   "tags": [
     "tensorflow",
     "model",
@@ -40,7 +40,8 @@
     "tensorflowapimodel",
     "fasterRCNN",
     "resnet",
-    "resnet101"
+    "resnet101",
+    "voc"
   ]
 }
 

@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "4aeaae6fba48cd8c", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-07-21T13:49:45.288327", 
+    "version": [
+      "1", 
+      "9", 
+      "1", 
+      "1"
+    ]
+  }, 
+  "data_name": "tensorflowapimodel-faster-rcnn-resnet101-pets"
+}

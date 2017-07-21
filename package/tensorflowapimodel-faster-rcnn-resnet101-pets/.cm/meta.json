@@ -1,0 +1,47 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+    },
+    "model_id": "resnet101",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "20170714"
+  },
+  "deps": {
+    "tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow Library",
+      "tags": "lib,tensorflow,tensorflow-cuda"
+    },
+    "pet": {
+      "local":"yes",
+      "name": "PET OXFORD-IIIT dataset(2012)",
+      "tags": "dataset,pet,2012"
+    },
+    "tensorflow-model-api": {
+      "local": "yes",
+      "name": "Tensorflow models api",
+      "tags": "tensorflow,model,api"   
+    }
+  },
+  "end_full_path": {
+    "linux": "model/faster_rcnn_resnet101_pets.config"
+  },
+  "package_extra_name": " (Faster RCNN resnet101, pet)",
+  "process_script": "install",
+  "soft_uoa": "68b0b66df81fdc1d",
+  "suggested_path": "tensorflowapimodel-faster-rcnn-resnet101-pet",
+  "tags": [
+    "tensorflow",
+    "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
+    "fasterRCNN",
+    "resnet",
+    "resnet101",
+    "pet"
+  ]
+}
+

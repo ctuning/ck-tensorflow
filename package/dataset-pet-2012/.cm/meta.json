@@ -1,0 +1,33 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "force_ask_path": "yes",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "install_env": {
+      "PET_LABELS_ARCHIVE": "annotations.tar.gz",
+      "PET_LABELS_URL": "http://www.robots.ox.ac.uk/~vgg/data/pets/data/annotations.tar.gz",
+      "PET_IMAGES_ARCHIVE": "images.tar.gz",
+      "PET_IMAGES_URL": "http://www.robots.ox.ac.uk/~vgg/data/pets/data/images.tar.gz"
+    },
+    "version": "2012"
+  },
+  "deps": {},
+  "need_cpu_info": "no",
+  "end_full_path": {
+    "linux": "images/havanese_1.jpg"
+  },
+  "process_script": "install",
+  "soft_uoa": "747be85833bb4f4e",
+  "suggested_path": "dataset-voc-2012",
+  "tags": [
+    "dataset",
+    "pet",
+    "oxford-iii",
+    "2012",
+    "images"
+  ]
+}
+
+

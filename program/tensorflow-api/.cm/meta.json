@@ -30,7 +30,7 @@
       "name":"Training Job",
       "sort":5,
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_TENSORFLOW_MODELS_ROOT>>$/train.py --logtostderr --pipeline_config_path=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/pipeline.config --train_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/train"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_TENSORFLOW_MODELS_ROOT>>$/train.py --logtostderr --pipeline_config_path=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/$<<CK_ENV_MODEL_TENSORFLOW_API_PIPELINE_NAME>>$ --train_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/train"
       }
     },
     "evaluation":{
@@ -38,7 +38,7 @@
       "name":"Evaluation Job",
       "sort":10,
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_TENSORFLOW_MODELS_ROOT>>$/eval.py --logtostderr --pipeline_config_path=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/pipeline.config --checkpoint_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/train --eval_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/eval"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_TENSORFLOW_MODELS_ROOT>>$/eval.py --logtostderr --pipeline_config_path=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/$<<CK_ENV_MODEL_TENSORFLOW_API_PIPELINE_NAME>>$ --checkpoint_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/train --eval_dir=$<<CK_ENV_MODEL_TENSORFLOW_API_MODEL>>$/eval"
       } 
     }
   },

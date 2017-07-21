@@ -13,6 +13,8 @@ export EVAL_DIR=$MODEL_DIR/eval
 mkdir $MODEL_DIR
 mkdir $EVAL_DIR
 mkdir $TRAIN_DIR
+export PIPELINE_NAME="faster_rcnn_resnet101_voc"
+export MODEL_NAME="Faster RCNN resnet101 with VOC dataset"
 
 #####################################################################
 echo ""
@@ -32,13 +34,14 @@ fi
 
 ######################################################################################
 echo ""
-echo "Generating pipeline.config file ..."
+echo "Generating '${PIPELINE_NAME}'.config file ..."
 cd $PACKAGE_DIR
-cp -f pipeline.template pipeline.config
-sed -i "s|_PATH_TO_CHECKPOINT_|$TRAIN_DIR|g" pipeline.config
-sed -i "s|_PATH_TO_INPUT_|$DATA_DIR|g" pipeline.config
-sed -i "s|_PATH_TO_LABEL_MAP_|$DATA_DIR|g" pipeline.config
-cp -f pipeline.config $MODEL_DIR/
+cp -f $PIPELINE_NAME.template $PIPELINE_NAME.config
+sed -i "s|_PATH_TO_CHECKPOINT_|$TRAIN_DIR|g" $PIPELINE_NAME.config
+sed -i "s|_PATH_TO_INPUT_|$DATA_DIR|g" $PIPELINE_NAME.config
+sed -i "s|_PATH_TO_LABEL_MAP_|$DATA_DIR|g" $PIPELINE_NAME.config
+cp -f $PIPELINE_NAME.config $MODEL_DIR/
+rm $PIPELINE_NAME.config
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Generating pipeline.config file failed!"
@@ -47,7 +50,7 @@ fi
 
 #####################################################################
 echo ""
-echo "Successfully installed Faster RCNN resnet101 tensorflow model ..."
+echo "Successfully installed '${MODEL_NAME}' tensorflow model ..."
 exit 0
 
 
