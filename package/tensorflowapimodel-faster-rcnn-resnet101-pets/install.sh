@@ -23,7 +23,7 @@ echo "Generating TFRecord files for training and validation... "
 #from $INSTALL_DIR/data
 $CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_ROOT/create_pet_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_ROOT/data/pet_label_map.pbtxt --data_dir=$CK_ENV_DATASET_PET --output_dir=$DATA_DIR
 
-cp -f $CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt $DATA_DIR
+cp -f $CK_ENV_TENSORFLOW_MODELS_ROOT/data/pet_label_map.pbtxt $DATA_DIR
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Generating TFRecord files for training and validation failed!"
