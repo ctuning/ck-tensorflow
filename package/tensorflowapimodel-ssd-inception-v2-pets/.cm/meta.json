@@ -1,0 +1,46 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "20170714"
+  },
+  "deps": {
+    "tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow Library",
+      "tags": "lib,tensorflow,tensorflow-cuda"
+    },
+    "pet": {
+      "local":"yes",
+      "name": "PET OXFORD-IIIT dataset(2012)",
+      "tags": "dataset,pet,2012"
+    },
+    "tensorflow-model-api": {
+      "local": "yes",
+      "name": "Tensorflow models api",
+      "tags": "tensorflow,model,api"   
+    }
+  },
+  "end_full_path": {
+    "linux": "model/ssd_inception_v2_pets.config"
+  },
+  "package_extra_name": " (SSD Inception v2, pet)",
+  "process_script": "install",
+  "soft_uoa": "68b0b66df81fdc1d",
+  "suggested_path": "tensorflowapimodel-ssd-inception-v2-pets",
+  "tags": [
+    "tensorflow",
+    "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
+    "ssd",
+    "inception",
+    "inceptionv2",
+    "pet"
+  ]
+}
+
