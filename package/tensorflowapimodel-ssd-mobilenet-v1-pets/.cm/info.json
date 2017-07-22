@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "b0875d04894951a1", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-07-22T15:29:47.236019", 
+    "version": [
+      "1", 
+      "9", 
+      "1", 
+      "1"
+    ]
+  }, 
+  "data_name": "tensorflowapimodel-ssd-mobilenet-v1-pets"
+}
