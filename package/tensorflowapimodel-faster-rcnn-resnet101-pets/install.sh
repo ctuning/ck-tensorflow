@@ -2,6 +2,8 @@
 
 # PACKAGE_DIR
 # INSTALL_DIR
+# PIPELINE_NAME
+# MODEL_NAME
 
 rm -rf $INSTALL_DIR/*
 mkdir $INSTALL_DIR/data
@@ -13,8 +15,6 @@ export EVAL_DIR=$MODEL_DIR/eval
 mkdir $MODEL_DIR
 mkdir $EVAL_DIR
 mkdir $TRAIN_DIR
-export PIPELINE_NAME="faster_rcnn_resnet101_pets"
-export MODEL_NAME="Faster RCNN resnet101 with PET OXFORD-III dataset"
 
 #####################################################################
 echo ""
@@ -42,7 +42,7 @@ cp -f $PIPELINE_NAME.config $MODEL_DIR/
 rm $PIPELINE_NAME.config
 
 if [ "${?}" != "0" ] ; then
-  echo "Error: Generating pipeline.config file failed!"
+  echo "Error: Generating '${PIPELINE_NAME}'.config file failed!"
   exit 1
 fi
 

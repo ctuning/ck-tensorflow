@@ -3,6 +3,8 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "PIPELINE_NAME":"ssd_inception_v2_pets",
+      "MODEL_NAME":"SSD Inception v2 with PET OXFORD-III dataset"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -30,6 +32,9 @@
   },
   "package_extra_name": " (SSD Inception v2, pet)",
   "process_script": "install",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "4aeaae6fba48cd8c"
+  },
   "soft_uoa": "68b0b66df81fdc1d",
   "suggested_path": "tensorflowapimodel-ssd-inception-v2-pets",
   "tags": [

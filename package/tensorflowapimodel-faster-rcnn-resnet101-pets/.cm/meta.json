@@ -3,6 +3,8 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "PIPELINE_NAME":"faster_rcnn_resnet101_pets",
+      "MODEL_NAME":"Faster RCNN resnet101 with PET OXFORD-III dataset"
     },
     "model_id": "resnet101",
     "no_os_in_suggested_path": "yes",
