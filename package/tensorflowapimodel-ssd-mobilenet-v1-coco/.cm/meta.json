@@ -1,0 +1,52 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "PIPELINE_NAME":"ssd_mobilenet_v1_coco",
+      "MODEL_NAME":"SSD mobilenet v1 with COCO 2014 dataset"
+    },
+    "model_id": "resnet101",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "20170714"
+  },
+  "deps": {
+    "tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow Library",
+      "tags": "lib,tensorflow,tensorflow-cuda"
+    },
+    "coco": {
+      "local":"yes",
+      "name": "COCO dataset(2014)",
+      "tags": "dataset,coco,2014"
+    },
+    "tensorflow-model-api": {
+      "local": "yes",
+      "name": "Tensorflow models api",
+      "tags": "tensorflow,model,api"   
+    }
+  },
+  "end_full_path": {
+    "linux": "model/ssd_mobilenet_v1_coco.config"
+  },
+  "package_extra_name": " (SSD mobilenet v1, coco)",
+  "process_script": "install",
+  "soft_uoa": "68b0b66df81fdc1d",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "184e4abca6a3589e"
+  },
+  "suggested_path": "tensorflowapimodel-ssd-mobilenet-v1-coco",
+  "tags": [
+    "tensorflow",
+    "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
+    "ssd",
+    "mobilenet",
+    "mobilenetv1",
+    "coco"
+  ]
+}
+
