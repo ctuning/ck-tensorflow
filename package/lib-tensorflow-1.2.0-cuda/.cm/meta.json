@@ -3,31 +3,31 @@
     "extra_dir": "", 
     "install_env": {
       "GPU_ENABLED": 0, 
-      "TENSORFLOW_PACKAGE_VER": "1.1.0", 
+      "TENSORFLOW_PACKAGE_VER": "1.2.0", 
       "TF_CUDA": "YES"
     }, 
-    "version": "1.1.0"
+    "version": "1.2.0"
   }, 
   "deps": {
-    "python": {
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 20, 
-      "tags": "compiler,python"
-    },
     "compiler.cuda": {
-      "local": "yes",
-      "add_to_path": "yes",
-      "name": "CUDA compiler >=7.0",
-      "sort": 40,
+      "add_to_path": "yes", 
+      "local": "yes", 
+      "name": "CUDA compiler >=7.0", 
+      "sort": 40, 
       "tags": "compiler,lang-c-cuda"
-    },
+    }, 
     "lib.cudnn": {
       "add_to_path": "yes", 
       "local": "yes", 
       "name": "cuDNN library", 
       "sort": 50, 
       "tags": "lib,cudnn,dnn,cuda"
+    }, 
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
     }
   }, 
   "end_full_path": {
@@ -52,13 +52,13 @@
     "tensorflow", 
     "tensorflow-cuda", 
     "v1", 
-    "v1.1", 
-    "v1.1.0", 
+    "v1.2", 
+    "v1.2.0", 
     "vprebuilt", 
     "vcuda"
-  ],
+  ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "4b44e797606a9488",
+    "data_uoa": "4b44e797606a9488", 
     "module_uoa": "package"
   }
 }
