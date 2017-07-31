@@ -55,7 +55,7 @@
     "v1.1", 
     "v1.1.0", 
     "vprebuilt", 
-    "vcpu"
+    "vcuda"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "4b44e797606a9488",
