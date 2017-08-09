@@ -21,16 +21,16 @@ echo ""
 echo "Generating TFRecord files for training and validation... "
 
 #from $INSTALL_DIR/data
-$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_ROOT/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_VOC/train/VOCdevkit --year=VOC2007 --set=train --output_path=pascal_train.record
+$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_VOC/train/VOCdevkit --year=VOC2007 --set=train --output_path=pascal_train.record
 
-$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_ROOT/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_VOC/train/VOCdevkit --year=VOC2007 --set=val --output_path=pascal_val.record
-
-cp -f $CK_ENV_TENSORFLOW_MODELS_ROOT/data/pascal_label_map.pbtxt ./
+$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/create_pascal_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/data/pascal_label_map.pbtxt --data_dir=$CK_ENV_DATASET_VOC/train/VOCdevkit --year=VOC2007 --set=val --output_path=pascal_val.record
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Generating TFRecord files for training and validation failed!"
   exit 1
 fi
+
+cp -f $CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/data/pascal_label_map.pbtxt ./
 
 ######################################################################################
 echo ""

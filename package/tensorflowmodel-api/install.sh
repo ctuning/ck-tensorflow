@@ -17,12 +17,21 @@ rm -rf *
 
 ######################################################################################
 echo ""
-echo "Downloading models into '${INSTALL_DIR}' ..."
+echo "Downloading Tensorflow Models api into '${INSTALL_DIR}' ..."
 git clone $TENSORFLOW_MODELS_URL $INSTALL_DIR
 
-######################################################################################
 if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
+  echo "Error: Downloading Tensorflow Models api failed!"
   exit 1
 fi
 
+######################################################################################
+echo ""
+echo "Protobuf compilation... "
+cd $INSTALL_DIR
+protoc object_detection/protos/*.proto --python_out=./
+
+if [ "${?}" != "0" ] ; then
+  echo "Error: Protobuf compilation failed!"
+  exit 1
+fi

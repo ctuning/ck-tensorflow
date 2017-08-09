@@ -118,8 +118,10 @@ def setup(i):
 
     p1=os.path.dirname(fp)
     pl=os.path.dirname(p1)
+    p2=os.path.dirname(pl)
 
     env[ep]=pl
     env[ep+'_OBJ_DET_DIR']=p1
+    env['PYTHONPATH']=pl+'/slim:'+pl+':$PYTHONPATH'
 
     return {'return':0, 'bat':s}
