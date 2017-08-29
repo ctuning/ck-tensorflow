@@ -1,3 +1,10 @@
+## Install dependencies on Ubuntu
+
+```
+$ sudo apt install swig3.0
+
+```
+
 ## Prevent running out of memory
 
 To prevent running out of memory during a build, restrict the build to use
