@@ -136,8 +136,7 @@ under 'crowd-benchmark TensorFlow library' scenario.
 Note, that this is an on-going, heavily evolving and long-term project
 to enable collaborative and systematic benchmarking
 and tuning of realistic workloads across diverse hardware 
-([ARM TechCon'16 talk](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), 
-[ARM TechCon'16 demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), 
+([ARM TechCon'16 talk and demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), 
 [DATE'16](http://tinyurl.com/zyupd5v), [CPC'15](http://arxiv.org/abs/1506.06256)).
 We also plan to add crowd-benchmarking and crowd-tuning of Caffe, TensorFlow 
 and other DNN frameworks to our 
@@ -168,7 +167,7 @@ of the whole SW/HW/model/data set stack ([paper 1](https://scholar.google.com/ci
 
 We would like to thank the community for their interest and feedback about 
 this collaborative AI optimization approach powered by CK 
-at [ARM TechCon'16](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems)
+at [ARM TechCon'16](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16)
 and the Embedded Vision Summit'17 - so please stay tuned ;) !
 
 [![logo](http://cKnowledge.org/images/dividiti_arm_stand.jpg)](https://www.researchgate.net/publication/304010295_Collective_Knowledge_Towards_RD_Sustainability)
@@ -216,8 +215,7 @@ project to enable collaborative and systematic optimization
 of realistic workloads across diverse hardware 
 in terms of performance, energy usage, accuracy, reliability,
 hardware price and other costs
-([ARM TechCon'16 talk](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), 
-[ARM TechCon'16 demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), 
+([ARM TechCon'16 talk and demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), 
 [DATE'16](http://tinyurl.com/zyupd5v), 
 [CPC'15](http://arxiv.org/abs/1506.06256)).
 
@@ -268,7 +266,7 @@ join this community effort!
 ## Testimonials and awards
 
 * 2017: We received [CGO test of time award](http://dividiti.blogspot.fr/2017/02/we-received-test-of-time-award-for-our.html) for our CGO'07 paper which later motivated creation of [Collective Knowledge](https://github.com/ctuning/ck)
-* 2015: ARM and the cTuning foundation use CK to accelerate computer engineering: [HiPEAC Info'45 page 17](https://www.hipeac.net/assets/public/publications/newsletter/hipeacinfo45.pdf), [ARM TechCon'16 presentation and demo](http://schedule.armtechcon.com/session/know-your-workloads-design-more-efficient-systems), [public CK repo](https://github.com/ctuning/ck-wa)
+* 2015: ARM and the cTuning foundation use CK to accelerate computer engineering: [HiPEAC Info'45 page 17](https://www.hipeac.net/assets/public/publications/newsletter/hipeacinfo45.pdf), [ARM TechCon'16 presentation and demo](https://github.com/ctuning/ck/wiki/Demo-ARM-TechCon'16), [public CK repo](https://github.com/ctuning/ck-wa)
 
 
 ## Feedback
