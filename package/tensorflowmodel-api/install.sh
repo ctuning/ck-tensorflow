@@ -12,8 +12,7 @@
 
 echo ""
 echo "Removing everything in '${INSTALL_DIR}' ..."
-cd $INSTALL_DIR
-rm -rf *
+rm -rf $INSTALL_DIR/*
 
 ######################################################################################
 echo ""
@@ -28,7 +27,7 @@ fi
 ######################################################################################
 echo ""
 echo "Protobuf compilation... "
-cd $INSTALL_DIR
+cd $INSTALL_DIR/research/
 protoc object_detection/protos/*.proto --python_out=./
 
 if [ "${?}" != "0" ] ; then

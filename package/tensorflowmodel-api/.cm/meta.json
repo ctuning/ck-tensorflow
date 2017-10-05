@@ -15,7 +15,7 @@
     }
   },
   "end_full_path": {
-    "linux": "object_detection/README.md"
+    "linux": "research/object_detection/README.md"
   },
   "process_script": "install",
   "soft_uoa": "72ca45fb219ff46c",
