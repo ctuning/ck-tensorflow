@@ -1,0 +1,55 @@
+{
+  "FIXME: SHOULD BE compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP1Z>>$", 
+  "backup_data_uid": "b36bf6b4ffda2f2c", 
+  "build_compiler_vars": {}, 
+  "compile_deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "C++ compiler", 
+      "sort": 10, 
+      "tags": "compiler,lang-cpp"
+    }, 
+    "tensorflow_cc": {
+      "local": "yes", 
+      "name": "TensorFlow C++ API", 
+      "sort": 20, 
+      "tags": "lib,tensorflow_cc"
+    }
+  }, 
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE0", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE1", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE2", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE3", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE4", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE5"
+  ], 
+  "compiler_env": "CK_CXX", 
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
+  "data_name": "tensorflow-examples-label_image", 
+  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_COMPILER_FLAG_PTHREAD_LIB>>$", 
+  "linker_add_lib_as_env": [
+    "CK_ENV_LIB_TENSORFLOW_CC_LIBPROTOBUF"
+  ], 
+  "main_language": "cpp", 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "run_cmd_main": "$#BIN_FILE#$"
+      }
+    }
+  }, 
+  "source_files": [
+    "main.cc"
+  ], 
+  "tags": [
+    "label_image", 
+    "tensorflow_cc", 
+    "tensorflow", 
+    "example"
+  ], 
+  "target_file": "main"
+}

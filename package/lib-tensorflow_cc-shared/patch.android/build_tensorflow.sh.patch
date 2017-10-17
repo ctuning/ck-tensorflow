@@ -1,0 +1,11 @@
+diff --git a/tensorflow_cc/cmake/build_tensorflow.sh b/tensorflow_cc/cmake/build_tensorflow.sh
+index 7f2917e..b2f6e0a 100755
+--- a/tensorflow_cc/cmake/build_tensorflow.sh
++++ b/tensorflow_cc/cmake/build_tensorflow.sh
+@@ -38,5 +38,5 @@ fi
+ 
+ # configure and build
+ ./configure
+-bazel build -c opt $cuda_config_opts --copt=${CC_OPT_FLAGS} tensorflow:libtensorflow_cc.so
++bazel build -c opt $cuda_config_opts --copt=${CC_OPT_FLAGS} --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} tensorflow:libtensorflow_cc.so
+ bazel shutdown

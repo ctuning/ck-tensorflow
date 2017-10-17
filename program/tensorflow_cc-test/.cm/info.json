@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "b36bf6b4ffda2f2c", 
+  "backup_module_uid": "b0ac08fe1d3c2615", 
+  "backup_module_uoa": "program", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-08-10T14:17:47.692314", 
+    "version": [
+      "1", 
+      "9", 
+      "1", 
+      "1"
+    ]
+  }, 
+  "data_name": "tensorflow_cc-test"
+}

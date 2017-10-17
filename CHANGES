@@ -1,3 +1,5 @@
+2017.10.17 - added tensorflow_cc soft and package (to build C++ API)
+
 2017.05.18 - added customizable autotuning example (script:explore-batch-size-unified-and-customized ; ck autotune tensorflow)
 
 2017.05.16 - removing outdated packages

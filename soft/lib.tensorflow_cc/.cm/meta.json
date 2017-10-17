@@ -1,0 +1,21 @@
+{
+  "auto_detect": "yes", 
+  "customize": {
+    "check_that_exists": "yes", 
+    "ck_version": 10, 
+    "env_prefix": "CK_ENV_LIB_TENSORFLOW_CC", 
+    "limit_recursion_dir_search": {
+      "linux": 5, 
+      "win": 4
+    }, 
+    "soft_file": {
+      "android": "tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a", 
+      "linux": "install/lib/tensorflow_cc/libtensorflow_cc.so"
+    }
+  }, 
+  "soft_name": "TensorFlow C++ API", 
+  "tags": [
+    "lib", 
+    "tensorflow_cc"
+  ]
+}
