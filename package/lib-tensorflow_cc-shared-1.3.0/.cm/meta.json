@@ -20,7 +20,7 @@
       "PACKAGE_SKIP_CMAKE_TARGET": "NO", 
       "PACKAGE_SUB_DIR": "tensorflow_cc", 
       "PACKAGE_SUB_DIR1": "tensorflow_cc/tensorflow_cc", 
-      "PACKAGE_URL": "https://github.com/FloopCZ/tensorflow_cc.git"
+      "PACKAGE_URL": "https://github.com/ctuning/tensorflow_cc.git"
     }, 
     "use_git_revision": "yes", 
     "version": "master"
@@ -31,7 +31,9 @@
       "local": "no", 
       "name": "Bazel tool", 
       "sort": 40, 
-      "tags": "tool,bazel"
+      "tags": "tool,bazel",
+      "version_from":[0,5],
+      "version_to":[0,5,9]
     }, 
     "cmake": {
       "force_target_as_host": "yes", 
@@ -72,7 +74,11 @@
     "tensorflow", 
     "tensorflow_cc", 
     "vmaster", 
-    "vdev"
+    "vshared",
+    "v1.3.0",
+    "v1.3",
+    "v1",
+    "channel-stable"
   ], 
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f", 

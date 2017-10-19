@@ -35,6 +35,9 @@
     "tensorflow", 
     "tensorflow_cc", 
     "prebuilt",
+    "v1.3.0",
+    "v1.3",
+    "v1",
     "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
