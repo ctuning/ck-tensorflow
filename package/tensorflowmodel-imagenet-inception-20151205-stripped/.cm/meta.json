@@ -27,6 +27,7 @@
     "imagenet", 
     "stripped", 
     "inception", 
-    "v201512"
+    "v201512",
+    "channel-stable"
   ]
 }

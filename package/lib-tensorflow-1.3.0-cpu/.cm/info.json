@@ -1,0 +1,21 @@
+{
+  "backup_data_uid": "574129423a8a50c9",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "author": "cTuning foundation",
+    "author_email": "admin@cTuning.org",
+    "author_webpage": "http://cTuning.org",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2017-10-19T10:43:43.230590",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "9",
+      "3",
+      "1"
+    ]
+  },
+  "data_name": "lib-tensorflow-1.3.0-cpu"
+}

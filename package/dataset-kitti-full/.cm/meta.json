@@ -29,6 +29,7 @@
     "kitti",
     "KITTI",
     "val",
-    "KITTIfull"
+    "KITTIfull",
+    "channel-stable"
   ]
 }

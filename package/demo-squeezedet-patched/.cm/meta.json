@@ -36,7 +36,8 @@
     "tensorflow", 
     "demo", 
     "squeezedet",
-    "patched"
+    "patched",
+    "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 

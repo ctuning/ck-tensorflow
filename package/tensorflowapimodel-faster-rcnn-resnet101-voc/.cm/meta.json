@@ -41,7 +41,8 @@
     "fasterRCNN",
     "resnet",
     "resnet101",
-    "voc"
+    "voc",
+    "channel-stable"
   ]
 }
 

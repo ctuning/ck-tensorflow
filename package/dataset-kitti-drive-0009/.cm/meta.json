@@ -35,7 +35,8 @@
     "kitt-continuous",
     "KITTI",
     "KITTI-drive-0009",
-    "KITTI-continuous"
+    "KITTI-continuous",
+    "channel-stable"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 

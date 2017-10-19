@@ -45,7 +45,8 @@
     "ssd",
     "inception",
     "inceptionv2",
-    "pet"
+    "pet",
+    "channel-stable"
   ]
 }
 

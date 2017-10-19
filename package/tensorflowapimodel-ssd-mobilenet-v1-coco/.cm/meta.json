@@ -46,7 +46,8 @@
     "ssd",
     "mobilenet",
     "mobilenetv1",
-    "coco"
+    "coco",
+    "channel-stable"
   ]
 }
 

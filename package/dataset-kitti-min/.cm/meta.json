@@ -32,6 +32,7 @@
     "KITTI",
     "val",
     "KITTImin",
-    "small_dataset"
+    "small_dataset",
+    "channel-stable"
   ]
 }

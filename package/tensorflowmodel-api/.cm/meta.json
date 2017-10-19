@@ -23,7 +23,8 @@
   "tags": [
     "tensorflow",
     "model",
-    "api"
+    "api",
+    "channel-stable"
   ]
 }
 

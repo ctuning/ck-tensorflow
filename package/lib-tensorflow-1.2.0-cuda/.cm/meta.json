@@ -55,7 +55,8 @@
     "v1.2", 
     "v1.2.0", 
     "vprebuilt", 
-    "vcuda"
+    "vcuda",
+    "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "4b44e797606a9488", 

@@ -45,7 +45,8 @@
     "ssd",
     "mobilenet",
     "mobilenetv2",
-    "pet"
+    "pet",
+    "channel-stable"
   ]
 }
 

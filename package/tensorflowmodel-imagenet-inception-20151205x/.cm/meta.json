@@ -26,6 +26,7 @@
     "aux", 
     "imagenet", 
     "inception", 
-    "v201512"
+    "v201512",
+    "channel-stable"
   ]
 }
