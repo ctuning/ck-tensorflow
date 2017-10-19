@@ -4,23 +4,23 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT":"v1.2.1",
+      "PACKAGE_GIT_CHECKOUT": "v1.2.1", 
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "NO", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_SUB_DIR": "src", 
-      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
-      "USE_DEFAULT_PYTHON_LIB_PATH":1,
-      "TF_NEED_CUDA":0,
-      "TF_NEED_GCP":0,
-      "TF_NEED_HDFS":0,
-      "TF_ENABLE_XLA":0,
-      "TF_NEED_JEMALLOC":1,
-      "PYTHON_BIN_PATH":"$<<CK_ENV_COMPILER_PYTHON_FILE>>$",
-      "TF_NEED_MKL":0,
-      "TF_NEED_OPENCL":0
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow", 
+      "PYTHON_BIN_PATH": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$", 
+      "TF_ENABLE_XLA": 0, 
+      "TF_NEED_CUDA": 0, 
+      "TF_NEED_GCP": 0, 
+      "TF_NEED_HDFS": 0, 
+      "TF_NEED_JEMALLOC": 1, 
+      "TF_NEED_MKL": 0, 
+      "TF_NEED_OPENCL": 0, 
+      "USE_DEFAULT_PYTHON_LIB_PATH": 1
     }, 
-    "use_git_revision": "yes", 
-    "version": "master"
+    "use_git_revision": "no", 
+    "version": "1.2.1"
   }, 
   "deps": {
     "compiler": {
@@ -68,7 +68,10 @@
     "tensorflow", 
     "tensorflow-make", 
     "tensorflow-cpu-make", 
-    "vsrc"
+    "v1.2.1",
+    "v1.2",
+    "v1",
+    "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 

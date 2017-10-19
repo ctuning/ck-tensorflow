@@ -1,5 +1,6 @@
 2017.10.19 - added TF 1.3.0 stable CPU/CUDA
            - added "channel-stable" tag for stable packages
+           - added stable 1.2.1 package to compile TF via make
 
 2017.10.17 - added tensorflow_cc soft and package (to build C++ API)
 

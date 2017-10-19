@@ -1,0 +1,12 @@
+diff -ruN tensorflow/contrib/makefile/download_dependencies.sh tensorflow.new/contrib/makefile/download_dependencies.sh
+--- tensorflow/contrib/makefile/download_dependencies.sh	2017-03-28 21:18:41.598729290 +0200
++++ tensorflow.new/contrib/makefile/download_dependencies.sh	2017-03-28 21:22:53.186719485 +0200
+@@ -43,7 +43,7 @@
+   local dir="${2:?${usage}}"
+   echo "downloading ${url}" >&2
+   mkdir -p "${dir}"
+-  curl -Ls "${url}" | tar -C "${dir}" --strip-components=1 -xz
++  curl -Lk "${url}" | tar -C "${dir}" --strip-components=1 -xz
+ 
+   # Delete any potential BUILD files, which would interfere with Bazel builds.
+   find "${dir}" -type f -name '*BUILD' -delete

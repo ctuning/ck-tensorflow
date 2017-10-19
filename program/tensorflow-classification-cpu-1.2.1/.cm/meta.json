@@ -1,0 +1,128 @@
+{
+  "backup_data_uid": "cabe5c1c202f403b", 
+  "build_compiler_vars": {
+    "CPU_ONLY": "ON", 
+    "TF_VIA_MAKE": "", 
+    "XOPENME": ""
+  }, 
+  "compile_deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "GCC compiler", 
+      "sort": 0, 
+      "tags": "compiler,lang-cpp"
+    }, 
+    "lib-protobuf": {
+      "local": "yes", 
+      "name": "ProtoBuf library", 
+      "only_for_target_os_tags": [
+        "android"
+      ], 
+      "sort": 110, 
+      "tags": "lib,protobuf"
+    }, 
+    "lib-protobuf-host": {
+      "force_target_as_host": "yes", 
+      "local": "yes", 
+      "name": "ProtoBuf host compiler", 
+      "skip_installed": {
+        "android": "yes", 
+        "win": "yes"
+      }, 
+      "sort": 115, 
+      "tags": "lib,protobuf-host,v3.1.0"
+    }, 
+    "lib-tensorflow-make": {
+      "add_dict": "yes", 
+      "local": "yes", 
+      "name": "Tensorflow library 1.2.1 (via make)", 
+      "skip_default": "yes", 
+      "sort": 5, 
+      "tags": "lib,tensorflow-cpu-make,v1.2.1"
+    }, 
+    "libjpeg": {
+      "local": "yes", 
+      "name": "Jpeg library", 
+      "sort": 10, 
+      "tags": "lib,libjpeg"
+    }, 
+    "xopenme": {
+      "local": "yes", 
+      "name": "xOpenME library", 
+      "sort": 20, 
+      "tags": "lib,xopenme"
+    }
+  }, 
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_STDCPP_INCLUDE", 
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA", 
+    "CK_ENV_LIB_TF_PROTO", 
+    "$<<CK_ENV_LIB_TF_INCLUDE>>$/tensorflow/contrib/makefile/downloads/eigen"
+  ], 
+  "compiler_env": "CK_CXX", 
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
+  "data_name": "tensorflow-classification-cpu-1.2.1", 
+  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_EXTRA_LIB_M>>$ $<<CK_ENV_LIB_STDCPP_STATIC>>$ $<<CK_EXTRA_LIB_LOG>>$ $<<CK_CUSTOM_LIBS>>$", 
+  "extra_ld_vars_first": "", 
+  "main_language": "cpp", 
+  "only_for_target_os_tags": [
+    "windows", 
+    "linux", 
+    "android"
+  ], 
+  "print_files_after_run": [
+    "tmp-output1.tmp", 
+    "tmp-output2.tmp"
+  ], 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "dataset_tags": [
+        "image", 
+        "jpeg", 
+        "dataset"
+      ], 
+      "hot_functions": [], 
+      "ignore_return_code": "no", 
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json", 
+        "pre_process_via_ck": {
+          "data_uoa": "1c1cc5d6a4944be7", 
+          "script_name": "preprocess"
+        }, 
+        "run_cmd_main": "$#BIN_FILE#$ --labels=${CK_DATASET_TENSORFLOW_AUX_TXT} --graph=${CK_DATASET_TENSORFLOW_AUX_PB} --image=$#dataset_path#$$#dataset_filename#$", 
+        "run_cmd_out1": "tmp-output1.tmp", 
+        "run_cmd_out2": "tmp-output2.tmp", 
+        "run_correctness_output_files": [], 
+        "run_input_files": [
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_PB>>$", 
+          "$<<CK_ENV_DATASET_TENSORFLOW_AUX_TXT>>$"
+        ], 
+        "run_output_files": [
+          "tmp-output1.tmp", 
+          "tmp-output2.tmp", 
+          "tmp-ck-timer.json"
+        ]
+      }
+    }
+  }, 
+  "run_deps": {
+    "tensorflow-model": {
+      "local": "yes", 
+      "name": "Tensorflow aux", 
+      "sort": 1, 
+      "tags": "tensorflowmodel,stripped"
+    }
+  }, 
+  "skip_bin_ext": "yes", 
+  "source_files": [
+    "classification.cpp"
+  ], 
+  "tags": [
+    "tensorflow-classification-cpp", 
+    "demo", 
+    "vcpu"
+  ], 
+  "target_file": "classification"
+}
