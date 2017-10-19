@@ -133,9 +133,13 @@ def setup(i):
 
     elif hname=='win':
        if python3==1:
-          if sver2!=5:
-             return {'return':1, 'error':'this package supports only Python 3.5 on Windows'}
-          px='cp35-cp35m-win_amd64.whl'
+
+          supported_python_ver2_on_win=cus.get('supported_python_ver2_on_win',[])
+
+          if len(supported_python_ver2_on_win)>0 and sver2 not in supported_python_ver2_on_win:
+             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_win)+' on Windows'}
+
+          px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-win_amd64.whl'
        else:
           return {'return':1, 'error':'Python 2 is not supported for this package on Windows'}
 
@@ -146,7 +150,6 @@ def setup(i):
              px='cp35-cp35m-linux_x86_64.whl'
           elif sver2==6:
              px='cp36-cp36m-linux_x86_64.whl'
-
        else:
           px='cp27-none-linux_x86_64.whl'
 
