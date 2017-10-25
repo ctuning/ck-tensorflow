@@ -36,16 +36,34 @@
   "program": "yes", 
   "run_cmds": {
     "default": {
+      "dataset_tags": [
+        "image", 
+        "jpeg", 
+        "dataset"
+      ], 
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$#BIN_FILE#$"
+        "run_cmd_main": "$#BIN_FILE#$ --box_priors=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_location_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$ --output_score_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_SCORE_LAYER>>$"
       }
     }, 
     "image_out": {
+      "dataset_tags": [
+        "image", 
+        "jpeg", 
+        "dataset"
+      ], 
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$#BIN_FILE#$ --image_out=surfers_labeled.png"
+        "run_cmd_main": "$#BIN_FILE#$ --box_priors=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_location_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$ --output_score_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_SCORE_LAYER>>$ --image_out=labeled.png"
       }
+    }
+  }, 
+  "run_deps": {
+    "tensorflow-model": {
+      "local": "yes", 
+      "name": "Tensorflow aux", 
+      "sort": 1, 
+      "tags": "tensorflowmodel,multibox"
     }
   }, 
   "source_files": [

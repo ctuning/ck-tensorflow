@@ -1,0 +1,42 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "add_to_env": {
+      "_INPUT_LAYER": "ResizeBilinear", 
+      "_OUTPUT_LAYER": "output_locations/Reshape",
+      "_SCORE_LAYER": "output_scores/Reshape",
+    }, 
+    "extra_dir": "", 
+    "file_labels": "multibox_location_priors.txt",
+    "file_model": "multibox_model.pb", 
+    "install_env": {
+      "PACKAGE_NAME": "mobile_multibox_v1a.zip", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_UNZIP": "YES", 
+      "PACKAGE_URL": "https://storage.googleapis.com/download.tensorflow.org/models", 
+      "PACKAGE_WGET": "YES"
+    }, 
+    "no_os_in_suggested_path": "yes", 
+    "version": "v1a"
+  }, 
+  "end_full_path_universal": "multibox_model.pb", 
+  "package_extra_name": " (object detection, mobile, multibox)", 
+  "process_script": "install", 
+  "soft_uoa": "13a3e54526868246", 
+  "suggested_path": "tensorflow-model-mobile-multibox-v1a", 
+  "tags": [
+    "tensorflow", 
+    "weights", 
+    "tensorflowmodel", 
+    "google", 
+    "object_detection", 
+    "mobile", 
+    "multibox", 
+    "v1a", 
+    "channel-stable"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
