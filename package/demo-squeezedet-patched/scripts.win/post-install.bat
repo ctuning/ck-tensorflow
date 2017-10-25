@@ -13,3 +13,9 @@ rem PACKAGE_DIR
 rem INSTALL_DIR
 
 %CK_PYTHON_PIP_BIN% install --upgrade opencv-python easydict image joblib
+
+rem Sometimes issues with OpenCV on Anaconda
+if NOT "%CK_CONDA_BIN_FULL%" == "" (
+ %CK_CONDA_BIN_FULL% install -c conda-forge opencv
+)
+ 
