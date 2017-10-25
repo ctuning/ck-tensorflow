@@ -10,6 +10,14 @@ set TENSORFLOW_LIB_DIR=%INSTALL_DIR%\lib
 
 rem ######################################################################################
 echo.
+echo Downloading and installing misc deps ...
+echo.
+
+%CK_PYTHON_PIP_BIN% install --upgrade pip
+%CK_PYTHON_PIP_BIN% install easydict joblib image numpy scipy
+
+rem ######################################################################################
+echo.
 echo Downloading and installing ProtoBuf (%PROTOBUF_PYTHON_URL%) ...
 echo.
 

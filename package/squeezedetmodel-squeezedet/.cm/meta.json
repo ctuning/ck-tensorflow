@@ -1,5 +1,6 @@
 {
   "check_exit_status": "yes",
+  "comment": "RECOMMENDED for tests",
   "customize": {
     "extra_dir": "",
     "force_ask_path": "yes",
@@ -16,6 +17,7 @@
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
+    "sort":1000,
     "version": "20161209"
   },
   "end_full_path": {
