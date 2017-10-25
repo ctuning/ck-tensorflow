@@ -1,0 +1,12 @@
+diff -ruN a/src/train.py b/src/train.py
+--- a/src/train.py	Wed Oct 25 15:12:17 2017
++++ b/src/train.py	Wed Oct 25 15:17:26 2017
+@@ -232,7 +232,7 @@
+             print ("added to the queue")
+         if mc.DEBUG_MODE:
+           print ("Finished enqueue")
+-      except Exception, e:
++      except Exception as e:
+         coord.request_stop(e)
+ 
+     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
