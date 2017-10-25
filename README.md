@@ -263,6 +263,14 @@ join this community effort!
 
 * [All references with BibTex related to CK concept](https://github.com/ctuning/ck/wiki/Publications)
 
+## Troublesooting
+
+* SqueezeDet demo currently work well with Python 3.5 and package:squeezedetmodel-squeezedet, so install it first:
+```
+$ ck install package:squeezedetmodel-squeezedet
+$ ck run program:squeezedet
+```
+
 ## Testimonials and awards
 
 * 2017: We received [CGO test of time award](http://dividiti.blogspot.fr/2017/02/we-received-test-of-time-award-for-our.html) for our CGO'07 paper which later motivated creation of [Collective Knowledge](https://github.com/ctuning/ck)
