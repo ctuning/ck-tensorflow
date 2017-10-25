@@ -35,6 +35,7 @@
     "tensorflow", 
     "tensorflow_cc", 
     "prebuilt",
+    "vsrc",
     "v1.3.0",
     "v1.3",
     "v1",

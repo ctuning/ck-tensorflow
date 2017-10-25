@@ -1,3 +1,6 @@
+2017.10.25 - stabilized various packages across Linux and Windows
+           - added package:tensorflowmodel-imagenet-inception-v3-20160828-frozen-stripped
+
 2017.10.19 - added TF 1.3.0 stable CPU/CUDA
            - added "channel-stable" tag for stable packages
            - added stable 1.2.1 package to compile TF via make

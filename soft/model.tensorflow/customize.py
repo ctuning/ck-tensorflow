@@ -81,4 +81,19 @@ def setup(i):
     ep=cus['env_prefix']
     env[ep]=pi
 
+    x=cus.get('file_model','')
+    if x!='': 
+       env[ep+'_PB_NAME']=x
+       env[ep+'_PB']=pi+sdirs+x
+
+    x=cus.get('file_model_pbtxt','')
+    if x!='': 
+       env[ep+'_PBTXT_NAME']=x
+       env[ep+'_PBTXT']=pi+sdirs+x
+
+    x=cus.get('file_labels','')
+    if x!='': 
+       env[ep+'_LABELS_NAME']=x
+       env[ep+'_LABELS']=pi+sdirs+x
+
     return {'return':0, 'bat':s}

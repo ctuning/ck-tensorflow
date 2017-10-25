@@ -36,10 +36,23 @@
   "program": "yes", 
   "run_cmds": {
     "default": {
+      "dataset_tags": [
+        "image", 
+        "jpeg", 
+        "dataset"
+      ], 
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$#BIN_FILE#$"
+        "run_cmd_main": "$#BIN_FILE#$ --labels=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$"
       }
+    }
+  }, 
+  "run_deps": {
+    "tensorflow-model": {
+      "local": "yes", 
+      "name": "Tensorflow aux", 
+      "sort": 1, 
+      "tags": "tensorflowmodel,stripped"
     }
   }, 
   "source_files": [

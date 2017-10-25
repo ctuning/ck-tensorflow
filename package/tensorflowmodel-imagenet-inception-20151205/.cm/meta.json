@@ -2,6 +2,9 @@
   "check_exit_status": "yes", 
   "customize": {
     "extra_dir": "", 
+    "file_model":"classify_image_graph_def.pb",
+    "file_model_pbtxt":"imagenet_2012_challenge_label_map_proto.pbtxt",
+    "file_labels":"imagenet_synset_to_human_label_map.txt",
     "install_env": {
       "PACKAGE_NAME": "inception-2015-12-05.tgz", 
       "PACKAGE_NAME1": "inception-2015-12-05.tar", 

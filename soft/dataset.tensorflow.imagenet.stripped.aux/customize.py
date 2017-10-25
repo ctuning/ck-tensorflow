@@ -80,7 +80,20 @@ def setup(i):
 
     ep=cus['env_prefix']
     env[ep]=pi
-    env[ep + '_PB']=pi+sdirs+'tensorflow_inception_stripped.pb'
-    env[ep + '_LABELS']=pi+sdirs+'imagenet_comp_graph_label_strings.txt'
+
+    x=cus.get('file_model','')
+    if x!='': 
+       env[ep+'_PB_NAME']=x
+       env[ep+'_PB']=pi+sdirs+x
+
+    x=cus.get('file_labels','')
+    if x!='': 
+       env[ep+'_LABELS_NAME']=x
+       env[ep+'_LABELS']=pi+sdirs+x
+
+    x=cus.get('add_to_env',{})
+    for k in x:
+        v=x[k]
+        env[ep+k]=v
 
     return {'return':0, 'bat':s}

@@ -75,6 +75,7 @@
     "tensorflow_cc", 
     "vmaster", 
     "vshared",
+    "vsrc",
     "v1.3.0",
     "v1.3",
     "v1",

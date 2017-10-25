@@ -23,7 +23,8 @@
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
           "sort": 10,
-          "tags": "lib,tensorflow"
+          "tags": "lib,tensorflow",
+          "no_tags":"vsrc"
         },
         "tensorflow-model": {
           "local": "yes",
@@ -50,7 +51,8 @@
           "name": "TensorFlow library",
           "skip_pruning_by_other_deps": "yes",
           "sort": 10,
-          "tags": "lib,tensorflow"
+          "tags": "lib,tensorflow",
+          "no_tags":"vsrc"
         },
         "tensorflow-model": {
           "local": "yes",

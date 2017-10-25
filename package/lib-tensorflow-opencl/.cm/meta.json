@@ -68,7 +68,8 @@
   "tags": [
     "lib", 
     "tensorflow", 
-    "tensorflow-opencl"
+    "tensorflow-opencl",
+    "vsrc"
   ], 
   "use_scripts_from_another_entry": {
     "data_uoa": "939b484199d4d7da"
