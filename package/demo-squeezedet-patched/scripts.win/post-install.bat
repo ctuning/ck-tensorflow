@@ -16,6 +16,7 @@ rem INSTALL_DIR
 
 rem Sometimes issues with OpenCV on Anaconda
 if NOT "%CK_CONDA_BIN_FULL%" == "" (
+ %CK_PYTHON_PIP_BIN% uninstall opencv-python
  %CK_CONDA_BIN_FULL% install -c conda-forge opencv
 )
  
