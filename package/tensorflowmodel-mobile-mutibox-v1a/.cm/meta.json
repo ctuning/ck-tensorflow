@@ -4,7 +4,7 @@
     "add_to_env": {
       "_INPUT_LAYER": "ResizeBilinear", 
       "_OUTPUT_LAYER": "output_locations/Reshape",
-      "_SCORE_LAYER": "output_scores/Reshape",
+      "_SCORE_LAYER": "output_scores/Reshape"
     }, 
     "extra_dir": "", 
     "file_labels": "multibox_location_priors.txt",
