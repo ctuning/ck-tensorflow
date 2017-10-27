@@ -4,7 +4,8 @@
     "extra_dir": "",
     "install_env": {
       "PIPELINE_NAME":"ssd_mobilenet_v1_pets",
-      "MODEL_NAME":"SSD Mobilenet v1 with PET OXFORD-III dataset"
+      "MODEL_NAME":"SSD Mobilenet v1 with PET OXFORD-III dataset",
+      "DATASET_NAME":"pets"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -24,7 +25,7 @@
     "tensorflow-model-api": {
       "local": "yes",
       "name": "Tensorflow models api",
-      "tags": "tensorflow,model,api"   
+      "tags": "tensorflow,model,api"
     }
   },
   "end_full_path": {
@@ -33,7 +34,8 @@
   "package_extra_name": " (SSD Mobilenet v1, pet)",
   "process_script": "install",
   "use_scripts_from_another_entry": {
-    "data_uoa": "4aeaae6fba48cd8c"
+    "module_uoa":"script",
+    "data_uoa": "c412930408fb8271"
   },
   "soft_uoa": "68b0b66df81fdc1d",
   "suggested_path": "tensorflowapimodel-ssd-mobilenet-v1-pets",
@@ -49,4 +51,3 @@
     "channel-stable"
   ]
 }
-

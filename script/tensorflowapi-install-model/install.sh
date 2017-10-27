@@ -4,7 +4,10 @@
 # INSTALL_DIR
 # PIPELINE_NAME
 # MODEL_NAME
+# DATASET_NAME
 
+
+#####################################################################
 rm -rf $INSTALL_DIR/*
 mkdir $INSTALL_DIR/data
 export DATA_DIR=$INSTALL_DIR/data
@@ -19,21 +22,21 @@ mkdir $TRAIN_DIR
 #####################################################################
 echo ""
 echo "Generating TFRecord files for training and validation... "
-
-#from $INSTALL_DIR/data
-$CK_PYTHON_BIN $CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/create_pet_tf_record.py --label_map_path=$CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/data/pet_label_map.pbtxt --data_dir=$CK_ENV_DATASET_PET --output_dir=$DATA_DIR
-
-cp -f $CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR/data/pet_label_map.pbtxt $DATA_DIR
-
-if [ "${?}" != "0" ] ; then
-  echo "Error: Generating TFRecord files for training and validation failed!"
-  exit 1
+if [ $DATASET_NAME == 'coco' ] || [ $DATASET_NAME == 'pets' ] || [ $DATASET_NAME == 'voc' ];
+then
+    echo ""
+    echo "Runnin install_$DATASET_NAME.sh script."
+    sh $PACKAGE_DIR/install_$DATASET_NAME.sh
+else
+    echo ""
+    echo "Error: Set Dataset name parameter from ['pets', 'voc', 'coco'] in your meta file."
+    exit 1
 fi
 
-######################################################################################
+#####################################################################
 echo ""
 echo "Generating '${PIPELINE_NAME}'.config file ..."
-cd $PACKAGE_DIR
+cd $PACKAGE_DIR/configs
 cp -f $PIPELINE_NAME.template $PIPELINE_NAME.config
 sed -i "s|_PATH_TO_CHECKPOINT_|$TRAIN_DIR|g" $PIPELINE_NAME.config
 sed -i "s|_PATH_TO_INPUT_|$DATA_DIR|g" $PIPELINE_NAME.config
@@ -50,7 +53,3 @@ fi
 echo ""
 echo "Successfully installed '${MODEL_NAME}' tensorflow model ..."
 exit 0
-
-
-exit 0
-

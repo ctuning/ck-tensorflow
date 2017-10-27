@@ -3,6 +3,9 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+        "PIPELINE_NAME":"faster_rcnn_resnet101_voc",
+        "MODEL_NAME":"Faster RCNN resnet101 with VOC2007 dataset",
+        "DATASET_NAME":"voc"
     },
     "model_id": "resnet101",
     "no_os_in_suggested_path": "yes",
@@ -23,11 +26,15 @@
     "tensorflow-model-api": {
       "local": "yes",
       "name": "Tensorflow models api",
-      "tags": "tensorflow,model,api"   
+      "tags": "tensorflow,model,api"
     }
   },
   "end_full_path": {
     "linux": "model/faster_rcnn_resnet101_voc.config"
+  },
+  "use_scripts_from_another_entry": {
+    "module_uoa":"script",
+    "data_uoa": "c412930408fb8271"
   },
   "package_extra_name": " (Faster RCNN resnet101, VOC)",
   "process_script": "install",
@@ -45,4 +52,3 @@
     "channel-stable"
   ]
 }
-

@@ -4,7 +4,8 @@
     "extra_dir": "",
     "install_env": {
       "PIPELINE_NAME":"ssd_mobilenet_v1_coco",
-      "MODEL_NAME":"SSD mobilenet v1 with COCO 2014 dataset"
+      "MODEL_NAME":"SSD mobilenet v1 with COCO 2014 dataset",
+      "DATASET_NAME":"coco"
     },
     "model_id": "resnet101",
     "no_os_in_suggested_path": "yes",
@@ -25,7 +26,7 @@
     "tensorflow-model-api": {
       "local": "yes",
       "name": "Tensorflow models api",
-      "tags": "tensorflow,model,api"   
+      "tags": "tensorflow,model,api"
     }
   },
   "end_full_path": {
@@ -35,7 +36,8 @@
   "process_script": "install",
   "soft_uoa": "68b0b66df81fdc1d",
   "use_scripts_from_another_entry": {
-    "data_uoa": "184e4abca6a3589e"
+    "module_uoa":"script",
+    "data_uoa": "c412930408fb8271"
   },
   "suggested_path": "tensorflowapimodel-ssd-mobilenet-v1-coco",
   "tags": [
@@ -50,4 +52,3 @@
     "channel-stable"
   ]
 }
-
