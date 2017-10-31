@@ -1,0 +1,46 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "YAD2K_URL": "https://github.com/allanzelener/YAD2K",
+      "INSTALL_DEMO":"yes",
+      "WEIGHTS_URL":"http://pjreddie.com/media/files/yolo.weights",
+      "CFG_URL":"https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolo.cfg"
+    },
+    "version":"1.0"
+  },
+  "deps": {
+    "python": {
+      "local": "yes",
+      "name": "Python 3",
+      "sort": 20,
+      "tags": "compiler,python,v3"
+    },
+    "lib.tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow Library",
+      "sort": 25,
+      "tags": "lib,tensorflow-cuda"
+    },
+    "lib.keras": {
+      "local": "yes",
+      "name": "Keras library, TensorFlow based",
+      "sort": 30,
+      "tags": "keras,lib"
+    }
+  },
+  "end_full_path": {
+    "linux": "yad2k.py"
+  },
+  "package_extra_name": "",
+  "process_script": "install",
+  "soft_uoa": "d7aa2c2374f7bbd4",
+  "suggested_path": "yad2k",
+  "tags": [
+    "darknet",
+    "yad2k-src",
+    "yolo",
+    "keras",
+    "dnn"
+  ]
+}
