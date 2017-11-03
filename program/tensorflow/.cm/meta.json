@@ -124,6 +124,21 @@
         ],
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
       }
+    },
+    "ipython": {
+      "ignore_return_code": "yes",
+      "run_deps": {
+        "lib-tensorflow": {
+          "local": "yes",
+          "name": "TensorFlow library",
+          "skip_pruning_by_other_deps": "yes",
+          "sort": 10,
+          "tags": "lib,tensorflow"
+        }
+      },
+      "run_time": {
+        "run_cmd_main": "$<<CK_PYTHON_IPYTHON_BIN_FULL>>$"
+      }
     }
   },
   "run_vars": {

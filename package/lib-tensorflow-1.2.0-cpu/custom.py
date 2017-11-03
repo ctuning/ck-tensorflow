@@ -2,7 +2,6 @@
 # CK configuration script for TensorFlow package
 #
 # Developer(s): 
-#  * Vladislav Zaborovskiy, vladzab@yandex.ru
 #  * Grigori Fursin, dividiti/cTuning foundation
 #
 

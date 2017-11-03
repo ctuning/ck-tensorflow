@@ -14,7 +14,8 @@ echo Downloading and installing misc deps ...
 echo.
 
 %CK_PYTHON_PIP_BIN% install --upgrade pip
-%CK_PYTHON_PIP_BIN% install easydict joblib image numpy scipy 
+%CK_PYTHON_PIP_BIN% install easydict joblib image numpy scipy enum-compat
+%CK_PYTHON_PIP_BIN% uninstall enum34
 
 rem ######################################################################################
 echo.
@@ -33,6 +34,10 @@ echo Downloading and installing TensorFlow prebuilt binaries (%TF_PYTHON_URL%) .
 echo.
 
 %CK_PYTHON_PIP_BIN% install --ignore-installed --upgrade %TF_PYTHON_URL% -t %TENSORFLOW_LIB_DIR% --trusted-host storage.googleapis.com
+
+cd /D %INSTALL_DIR%\lib
+rmdir /Q /S enum
+
 if %errorlevel% neq 0 (
  echo.
  echo Error: Failed instaling TF ...
