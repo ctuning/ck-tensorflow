@@ -1,0 +1,51 @@
+{
+  "run_deps": {
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "compiler,python,v3"
+    },
+    "yad2k": {
+      "local": "yes",
+      "name": "YAD2K",
+      "sort": 30,
+      "tags": "yad2k-src"
+    },
+    "lib.keras": {
+      "local": "yes",
+      "name": "Keras library",
+      "sort": 40,
+      "tags": "lib,keras"
+    }
+  },
+  "data_name": "TensorFlow API Models",
+  "program": "yes",
+  "process_in_tmp": "yes",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "run_cmds": {
+    "convert":{
+      "ignore_return_code": "no",
+      "name":"Convert demo model",
+      "sort":5,
+      "run_time":{
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/yad2k.py $<<CK_ENV_YAD2K>>$/yolo.cfg $<<CK_ENV_YAD2K>>$/yolo.weights $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
+      }
+    },
+    "test":{
+      "ignore_return_code": "no",
+      "name":"Test demo model",
+      "sort":10,
+      "run_time":{
+        "run_cmd_main": "cd $<<CK_ENV_YAD2K>>$; $<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/test_yolo.py $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
+      }
+    }
+  },
+  "tags": [
+    "tensorflow",
+    "keras",
+    "yad2k",
+    "demo"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "KERAS_URL": "https://github.com/fchollet/keras"
+    },
+    "version": "2.0.8"
+  },
+  "deps": {
+    "lib.tensorflow": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "CUDA compiler >=7.0",
+      "sort": 40,
+      "tags": "lib,tensorflow-cuda"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path": {
+    "linux": "keras/__init__.py"
+  },
+  "package_extra_name": " (tensorflow based)",
+  "process_script": "install",
+  "soft_uoa": "04698bcbc46c246f",
+  "suggested_path": "keras-tensorflow",
+  "tags": [
+    "lib",
+    "keras",
+    "tensorflow-based"
+  ]
+}
