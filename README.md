@@ -18,8 +18,11 @@ and customized installation/recompilation, usage, evaluation and multi-objective
 of various TensorFlow implementations (CPU,CUDA,OpenCL) across diverse platforms
 from mobile devices and IoT to supercomputers and TPU cloud.
 
-See [cKnowledge.org/ai](http://cKnowledge.org/ai), [shared optimization statistics](http://cKnowledge.org/repo) 
+See [cKnowledge.org/ai](http://cKnowledge.org/ai), 
+[shared optimization statistics](http://cKnowledge.org/repo),
+[reusable AI artifact in the CK format](http://cKnowledge.org/ai-artifacts)
 and [online demo of CK AI API with self-optimizing DNN](http://cKnowledge.org/ai/ck-api-demo) for more details.
+
 
 We need to have easily customizable TensorFlow builds 
 via JSON API to be able to plug it to our framework 
@@ -43,7 +46,7 @@ You can see and use all public results in the [Collective Knowledge repository](
 * [dividiti](http://dividiti.com)
 
 # License
-* [BSD](https://github.com/dividiti/ck-caffe/blob/master/LICENSE) (3 clause)
+* [BSD](https://github.com/ctuning/ck-tensorflow/blob/master/LICENSE) (3 clause)
 
 # Prerequisites
 
@@ -180,12 +183,15 @@ For example, we added similar support to install, use and evaluate [Caffe/Caffe2
 ```
 $ ck pull repo:ck-caffe2
 $ ck pull repo --url=https://github.com/dividiti/ck-caffe
+$ ck pull repo:ck-mxnet
 
 $ ck install package:lib-caffe-bvlc-master-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
 $ ck install package:lib-caffe2-master-eigen-cpu-universal --env.CAFFE_BUILD_PYTHON=ON
+$ ck install package --tags=mxnet
 
 $ ck run program:caffe --cmd_key=classify
 $ ck run program:caffe2 --cmd_key=classify
+$ ck run program:mxnet --cmd_key=classify
 
 $ ck crowdbench caffe --env.BATCH_SIZE=5
 $ ck crowdbench caffe2 --env.BATCH_SIZE=5 --user=i_want_to_ack_my_contribution
