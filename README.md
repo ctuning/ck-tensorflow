@@ -23,7 +23,6 @@ See [cKnowledge.org/ai](http://cKnowledge.org/ai),
 [reusable AI artifact in the CK format](http://cKnowledge.org/ai-artifacts)
 and [online demo of CK AI API with self-optimizing DNN](http://cKnowledge.org/ai/ck-api-demo) for more details.
 
-
 We need to have easily customizable TensorFlow builds 
 via JSON API to be able to plug it to our framework 
 for collaborative benchmarking and optimization of realistic
@@ -178,7 +177,8 @@ and the Embedded Vision Summit'17 - so please stay tuned ;) !
 ## Other DNN with unified CK API
 
 CK allows us to unify AI interfaces while collaboratively optimizing underneath engines.
-For example, we added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) via CK:
+For example, we added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) 
+and [MXNet](https://github.com/ctuning/ck-mxnet) via CK:
 
 ```
 $ ck pull repo:ck-caffe2
