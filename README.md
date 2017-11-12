@@ -232,6 +232,11 @@ using Collective Knowledge Technology:
 * [CK-TensorFlow](https://github.com/ctuning/ck-tensorflow)
 * [CK-Caffe](https://github.com/dividiti/ck-caffe)
 * [CK-Caffe2](https://github.com/ctuning/ck-caffe2)
+* [CK-CNTK](https://github.com/ctuning/ck-cntk)
+* [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
+* [CK-MVNC (Movidius Neural Compute Stick)](https://github.com/ctuning/ck-mvnc)
+* [CK-TensorRT](https://github.com/dividiti/ck-tensorrt)
+* [CK-KaNN](https://github.com/dividiti/ck-kann)
 
 We continue gradually exposing various design and optimization
 choices including full parameterization of existing models.
