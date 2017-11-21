@@ -13,6 +13,7 @@
       "tags": "tensorflow,demo,squeezedet"
     },
     "squeezedet": {
+      "skip_default": "yes",
       "local": "yes",
       "name": "SqueezeDet model",
       "sort": 30,
