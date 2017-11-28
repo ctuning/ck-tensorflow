@@ -11,7 +11,7 @@
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "", 
       "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "", 
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "master", 
+      "PACKAGE_GIT_CHECKOUT": "lib-tensorflow_cc-shared-1.3.0",
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
       "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
@@ -22,8 +22,7 @@
       "PACKAGE_SUB_DIR1": "tensorflow_cc/tensorflow_cc", 
       "PACKAGE_URL": "https://github.com/ctuning/tensorflow_cc.git"
     }, 
-    "use_git_revision": "yes", 
-    "version": "master"
+    "version": "1.3"
   }, 
   "deps": {
     "bazel": {
