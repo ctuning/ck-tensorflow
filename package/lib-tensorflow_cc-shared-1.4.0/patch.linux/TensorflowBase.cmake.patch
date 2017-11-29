@@ -5,7 +5,7 @@ index a95ea69..fc80ca2 100644
 @@ -4,13 +4,15 @@ ExternalProject_Add(
    tensorflow_base
    GIT_REPOSITORY http://github.com/tensorflow/tensorflow.git
-   GIT_TAG v1.3.0
+   GIT_TAG v1.4.0
 -  TMP_DIR "/tmp"
 +  TMP_DIR "tmp"
    STAMP_DIR "tensorflow-stamp"
