@@ -4,7 +4,7 @@
     "extra_dir": "", 
     "force_ask_path": "yes", 
     "install_env": {
-      "PACKAGE_NAME_64_BIT": "tf_cc-1.3.0-install.tar.gz",
+      "PACKAGE_NAME_64_BIT": "tf_cc-1.3.0-install-aarch64-linux-64.tar.gz",
       "PACKAGE_NAME_32_BIT": "tf_cc-1.3.0-install-aarch64-linux-32.tar.gz",
       "PACKAGE_SKIP_CLEAN_INSTALL": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
