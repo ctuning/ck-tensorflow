@@ -1,0 +1,49 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "force_ask_path": "yes", 
+    "install_env": {
+      "PACKAGE_NAME_32_BIT": "tf_cc-1.4.0-install-aarch64-linux-32.tar.gz",
+      "PACKAGE_NAME_64_BIT": "tf_cc-1.4.0-install-aarch64-linux-64.tar.gz",
+      "PACKAGE_SKIP_CLEAN_INSTALL": "YES", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_UNTAR": "YES", 
+      "PACKAGE_UNTAR_EXTRA": "--strip=1", 
+      "PACKAGE_URL": "http://cknowledge.org/ai/data", 
+      "PACKAGE_WGET": "YES"
+    }, 
+    "version": "1.4.0"
+  }, 
+  "deps": {}, 
+  "end_full_path": {
+    "linux": "install/lib/tensorflow_cc/libtensorflow_cc.so"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "0cdc7594d430ab2b", 
+  "suggested_path": "lib-tensorflow_cc-prebuilt-aarch64", 
+  "tags": [
+    "lib", 
+    "api", 
+    "tensorflow", 
+    "tensorflow_cc", 
+    "prebuilt", 
+    "aarch64", 
+    "vsrc", 
+    "v1.4.0",
+    "v1.4",
+    "v1", 
+    "channel-stable"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
