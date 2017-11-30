@@ -1,5 +1,5 @@
 diff --git a/tensorflow/core/platform/platform.h b/tensorflow/core/platform/platform.h
-index 7c44b22ef..1d51bc30e 100644
+index 12120c4..cadeaa6 100644
 --- a/tensorflow/core/platform/platform.h
 +++ b/tensorflow/core/platform/platform.h
 @@ -40,12 +40,12 @@ limitations under the License.
@@ -10,10 +10,10 @@ index 7c44b22ef..1d51bc30e 100644
 +#elif defined(__arm__) || defined(__aarch64__)
  #define PLATFORM_POSIX
  
- // Since there's no macro for the Raspberry Pi, assume we're on a mobile
- // platform if we're compiling for the ARM CPU.
+ // Require an outside macro to tell us if we're building for Raspberry Pi.
+ #if !defined(RASPBERRY_PI)
 -#define IS_MOBILE_PLATFORM
 +//#define IS_MOBILE_PLATFORM
+ #endif  // !defined(RASPBERRY_PI)
  
  #else
- // If no platform specified, use:
