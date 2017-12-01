@@ -22,12 +22,13 @@
     "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE2", 
     "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE3", 
     "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE4", 
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE5"
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE5",
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE6"
   ], 
   "compiler_env": "CK_CXX", 
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
   "data_name": "tensorflow-examples-multibox_detector", 
-  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_COMPILER_FLAG_PTHREAD_LIB>>$", 
+  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_COMPILER_FLAG_PTHREAD_LIB>>$ $<<CK_ENV_LIB_TENSORFLOW_CC_LINK_EXTRA_LIBS>>$", 
   "linker_add_lib_as_env": [
     "CK_ENV_LIB_TENSORFLOW_CC_LIBPROTOBUF"
   ], 

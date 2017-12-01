@@ -89,7 +89,12 @@ def setup(i):
     # Path to libtensorflow_cc.so.
     env[ep+'_LIBTENSORFLOW_CC']=os.path.join(p2,'lib','tensorflow_cc','libtensorflow_cc.so') 
     # Path to libprotobuf.a.
-    env[ep+'_LIBPROTOBUF']=os.path.join(p2,'lib','tensorflow_cc','libprotobuf.a') 
+    env[ep+'_LIBPROTOBUF']=os.path.join(p2,'lib','tensorflow_cc','libprotobuf.a')
+
+    # Tensorflow 1.4 includes additional lib that need to be linked to programs
+    if os.path.isfile(os.path.join(p0, 'libtensorflow_framework.so')):
+        env[ep+'_LINK_EXTRA_LIBS']='-ltensorflow_framework'
+
     # Path to $CK_TOOLS/install/lib/cmake/TensorflowCC.
     env[ep+'_CMAKE']=os.path.join(p2,'cmake')
     # TensorFlow_CC-specific include paths from TensorflowCCSharedTargets.cmake.
@@ -99,5 +104,10 @@ def setup(i):
     env[ep+'_INCLUDE3']=os.path.join(p2,'include','tensorflow','tensorflow','contrib','makefile','downloads','eigen')
     env[ep+'_INCLUDE4']=os.path.join(p2,'include','tensorflow','tensorflow','contrib','makefile','downloads','gemmlowp')
     env[ep+'_INCLUDE5']=os.path.join(p2,'include','tensorflow','tensorflow','contrib','makefile','gen','protobuf-host','include')
+
+    # Tensorflow 1.4 requires additional include path
+    include6 = os.path.join(p2,'include','tensorflow','tensorflow','contrib','makefile','downloads','nsync','public')
+    if os.path.isdir(include6):
+        env[ep+'_INCLUDE6']=include6
 
     return {'return':0, 'bat':s}
