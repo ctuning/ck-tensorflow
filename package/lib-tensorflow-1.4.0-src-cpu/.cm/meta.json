@@ -54,7 +54,7 @@
   "package_extra_name": " (from sources, cpu)",
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178", 
-  "suggested_path": "lib-tensorflow-src", 
+  "suggested_path": "lib-tensorflow-src-cpu", 
   "tags": [
     "lib", 
     "bazel", 
