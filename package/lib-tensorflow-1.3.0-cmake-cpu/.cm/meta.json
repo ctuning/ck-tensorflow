@@ -55,7 +55,10 @@
     "lib",
     "tensorflow",
     "tensorflow-cmake",
-    "vsrc"
+    "vsrc",
+    "v1.3.0",
+    "v1.3",
+    "v1"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
