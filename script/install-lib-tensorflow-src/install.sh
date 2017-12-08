@@ -71,7 +71,8 @@ if [ ${TF_NEED_CUDA} == 1 ] ; then
   export CUDA_TOOLKIT_PATH=${CK_ENV_COMPILER_CUDA}
   export CUDNN_INSTALL_PATH=${CK_ENV_LIB_CUDNN}
   export TF_CUDA_VERSION="$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')"
-  export TF_CUDNN_VERSION="$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)" 
+  export TF_CUDNN_VERSION="$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)"
+  export GCC_HOST_COMPILER_PATH=${CK_ENV_COMPILER_GCC}/bin/${CK_CC}
 fi
 
 TARGET_OBJ_DIR=${INSTALL_DIR}/obj
