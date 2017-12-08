@@ -64,6 +64,16 @@ else
   echo "XLA disabled"
 fi
 
+if [ ${TF_NEED_CUDA} == 1 ] ; then
+  stage "Configure environment variables for CUDA"
+  CUDA_CONFIG_OPTS="--config=cuda "
+  export TF_CUDA_COMPUTE_CAPABILITIES="3.5,5.2,6.1,6.2"
+  export CUDA_TOOLKIT_PATH=${CK_ENV_COMPILER_CUDA}
+  export CUDNN_INSTALL_PATH=${CK_ENV_LIB_CUDNN}
+  export TF_CUDA_VERSION="$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')"
+  export TF_CUDNN_VERSION="$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)" 
+fi
+
 TARGET_OBJ_DIR=${INSTALL_DIR}/obj
 TARGET_LIB_DIR=${INSTALL_DIR}/lib
 
@@ -73,7 +83,7 @@ cd ${INSTALL_DIR}/src
 exit_if_error
 
 stage "Build with bazel"
-bazel build --config=opt --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} //tensorflow/tools/pip_package:build_pip_package
+bazel build --config=opt ${CUDA_CONFIG_OPTS} --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} //tensorflow/tools/pip_package:build_pip_package
 bazel shutdown
 exit_if_error
 # Seems bazel does not set error code when build process is interrupted 
