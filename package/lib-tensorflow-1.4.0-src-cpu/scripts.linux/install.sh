@@ -60,7 +60,7 @@ echo "Building pip package"
 
 echo "--------------------------------"
 echo "Installing pip package"
-# There is only one whl file in the obj dir and we do not care its name
+# There should be only one whl file in the obj dir; it does not matter how it is called.
 for WHL in ${TARGET_OBJ_DIR}/*.whl ; do
   echo "Processing ${WHL}"
   unzip -qo ${WHL} -d ${TARGET_OBJ_DIR}
