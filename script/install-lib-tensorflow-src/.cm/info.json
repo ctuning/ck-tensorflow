@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "9024d3aaf2cdc47d", 
+  "backup_module_uid": "84e27ad9dd12e734", 
+  "backup_module_uoa": "script", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2017-12-08T11:44:14.928587", 
+    "version": [
+      "1", 
+      "9", 
+      "3", 
+      "1"
+    ]
+  }, 
+  "data_name": "install-lib-tensorflow-src"
+}

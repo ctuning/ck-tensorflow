@@ -4,14 +4,9 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES",
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
-      "PACKAGE_SKIP_LINUX_MAKE": "YES",
-      "PACKAGE_SKIP_CLEAN_OBJ": "NO",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
       "PACKAGE_GIT_CHECKOUT": "v1.4.0",
-      "PACKAGE_PATCH": "YES",
-      "PACKAGE_CONFIGURE_FLAGS": "-DPYTHON_EXECUTABLE:FILEPATH=\"$<<CK_ENV_COMPILER_PYTHON_FILE>>$\"",
       "CK_TF_NEED_CUDA": "NO",
       "CK_TF_ENABLE_XLA": "NO"
     }, 
@@ -68,7 +63,7 @@
     "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "9024d3aaf2cdc47d", 
     "module_uoa": "script"
   }
 }
