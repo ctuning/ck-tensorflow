@@ -35,7 +35,7 @@
     "default":{
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$ --demo_net=$<<CK_ENV_MODEL_SQUEEZEDET_ID>>$"
       }
     },
     "use_continuous":{
