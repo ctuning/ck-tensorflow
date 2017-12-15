@@ -87,6 +87,10 @@
       }
     }    
   },
+  "run_vars": {
+    "BATCH_SIZE": 5, 
+    "BATCH_COUNT": 5
+  },
   "tags": [
     "tensorflow",
     "squeezedet",
