@@ -88,8 +88,9 @@
     }    
   },
   "run_vars": {
-    "BATCH_SIZE": 5, 
-    "BATCH_COUNT": 5
+    "CK_BATCH_SIZE": 5, 
+    "CK_BATCH_COUNT": 5,
+    "CK_TF_GPU_MEMORY_PERCENT": 33
   },
   "tags": [
     "tensorflow",

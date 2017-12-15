@@ -28,6 +28,7 @@ tf.app.flags.DEFINE_string('input_file', '', """Input image to be detected.""")
 tf.app.flags.DEFINE_string('demo_net', 'squeezeDet', """Neural net architecture.""")
 tf.app.flags.DEFINE_integer('batch_size', 5, """Batch size.""")
 tf.app.flags.DEFINE_integer('batch_count', 5, """Number of batches to run.""")
+tf.app.flags.DEFINE_integer('gpu_mem_limit', 33, """Limit GPU memory allocated by TF, %""")
 
 COLORS = {
     'car': (255, 191, 0),
@@ -75,8 +76,11 @@ def main(_):
   print('Input image: ' + FLAGS.input_file)
   print('Batch size: %d' % FLAGS.batch_size)
   print('Batch count: %d' % FLAGS.batch_count)
+  print('Memory limit: %d%%' % FLAGS.gpu_mem_limit)
 
-  config = tf.ConfigProto(allow_soft_placement=True)
+  gpu_mem_limit = FLAGS.gpu_mem_limit / 100.0
+  gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_mem_limit)
+  config = tf.ConfigProto(allow_soft_placement=True, gpu_options=gpu_options)
   
   with tf.Graph().as_default(), tf.Session(config=config) as sess:
     # Make model config and implementation
@@ -120,9 +124,9 @@ def main(_):
       det_boxes, det_probs, det_class = sess.run(
         [MODEL.det_boxes, MODEL.det_probs, MODEL.det_class], feed_dict=feed)
       detect_time = time.time() - begin_time
-
-      # Process batch results
       print('Batch detected in %fs' % detect_time)
+
+      # Exclude first batch from averaging
       if batch_index > 0 or FLAGS.batch_count == 1:
         total_time += detect_time
         images_processed += FLAGS.batch_size
