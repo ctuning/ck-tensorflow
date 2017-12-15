@@ -54,6 +54,7 @@ def main(_):
   
   with tf.Graph().as_default(), tf.Session(config=config) as sess:
     # Make model config and implementation
+    begin_time = time.time()
     if FLAGS.demo_net == 'squeezeDet':
       mc, model = make_model(kitti_squeezeDet_config, SqueezeDet)
     elif FLAGS.demo_net == 'squeezeDet+':
@@ -65,10 +66,13 @@ def main(_):
     else:
       print('Selected neural net architecture is not supported: %s' % FLAGS.demo_net)
       exit(1)
+    print('Model created in %fs' % (time.time() - begin_time))
 
     # Restore model parameters
+    begin_time = time.time()
     saver = tf.train.Saver(model.model_params)
     saver.restore(sess, FLAGS.checkpoint)
+    print('Params restored in %fs' % (time.time() - begin_time))
 
     # Load and preprocess image
     im = cv2.imread(FLAGS.input_file)
