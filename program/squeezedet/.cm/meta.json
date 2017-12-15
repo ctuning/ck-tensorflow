@@ -31,6 +31,10 @@
   "program": "yes",
   "no_compile": "yes",
   "no_target_file": "yes",
+  "print_files_after_run": [
+    "tmp-output1.tmp", 
+    "tmp-output2.tmp"
+  ],
   "run_cmds": {
     "default":{
       "ignore_return_code": "no",
@@ -69,7 +73,19 @@
           "tmp-output2.tmp"
         ]
       }
-    }
+    },
+    "image_benchmark":{
+      "ignore_return_code": "no",
+      "run_time":{
+        "run_cmd_main": "../image_benchmark$#script_ext#$",
+        "run_cmd_out1": "tmp-output1.tmp",
+        "run_cmd_out2": "tmp-output2.tmp",
+        "run_output_files": [
+          "tmp-output1.tmp",
+          "tmp-output2.tmp"
+        ]
+      }
+    }    
   },
   "tags": [
     "tensorflow",
