@@ -26,8 +26,8 @@ FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('checkpoint', '', """Path to the model parameter file.""")
 tf.app.flags.DEFINE_string('input_file', '', """Input image to be detected.""")
 tf.app.flags.DEFINE_string('demo_net', 'squeezeDet', """Neural net architecture.""")
-tf.app.flags.DEFINE_integer('batch_size', 5, """Batch size.""")
-tf.app.flags.DEFINE_integer('batch_count', 5, """Number of batches to run.""")
+tf.app.flags.DEFINE_integer('batch_size', 1, """Batch size.""")
+tf.app.flags.DEFINE_integer('batch_count', 1, """Number of batches to run.""")
 tf.app.flags.DEFINE_integer('gpu_mem_limit', 33, """Limit GPU memory allocated by TF, %""")
 
 COLORS = {

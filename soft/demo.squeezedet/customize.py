@@ -73,7 +73,13 @@ def setup(i):
     env[ep]=pl
     env[ep+'_ROOT']=p1
 
-    env[ep+'_SRC']=os.path.join(p1, cus.get('source_dir', 'src'))
+    src_dir=os.path.join(p1, cus.get('source_dir', 'src'))
+    env[ep+'_SRC']=src_dir
+
+    if winh=='yes':
+        s+='\nset PYTHONPATH='+src_dir+';%PYTHONPATH%\n'
+    else:
+        s+='\nexport PYTHONPATH='+src_dir+':${PYTHONPATH}\n'
 
     return {'return':0, 'bat':s}
 

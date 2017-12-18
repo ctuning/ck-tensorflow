@@ -77,20 +77,16 @@
     "image_benchmark":{
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "../image_benchmark$#script_ext#$",
-        "run_cmd_out1": "tmp-output1.tmp",
-        "run_cmd_out2": "tmp-output2.tmp",
-        "run_output_files": [
-          "tmp-output1.tmp",
-          "tmp-output2.tmp"
-        ]
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../image_benchmark.py --input_file=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$ --demo_net=$<<CK_ENV_MODEL_SQUEEZEDET_ID>>$ --batch_count=$<<CK_BATCH_COUNT>>$ --batch_size=$<<CK_BATCH_SIZE>>$ --gpu_mem_limit=$<<CK_TF_GPU_MEMORY_PERCENT>>$"
       }
     }    
   },
   "run_vars": {
-    "CK_BATCH_SIZE": 5, 
-    "CK_BATCH_COUNT": 5,
-    "CK_TF_GPU_MEMORY_PERCENT": 33
+    "CK_BATCH_SIZE": 1, 
+    "CK_BATCH_COUNT": 1,
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "TF_CPP_MIN_LOG_LEVEL": 3,
+    "TF_CPP_MIN_LOG_LEVEL_COMMENT": "Supress TF debug output"
   },
   "tags": [
     "tensorflow",

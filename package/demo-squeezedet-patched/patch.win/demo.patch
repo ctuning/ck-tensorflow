@@ -1,16 +1,18 @@
 diff --git a/src/demo.py b/src/demo.py
-index 3ddafab..3b4a7de 100644
+index 3ddafab..dd0482e 100644
 --- a/src/demo.py
 +++ b/src/demo.py
-@@ -55,7 +55,7 @@ def video_demo():
+@@ -55,8 +55,8 @@ def video_demo():
    # out = VideoWriter(out_file_name, frameSize=(1242, 375))
    # out.open()
  
 -  assert FLAGS.demo_net == 'squeezeDet' or FLAGS.demo_net == 'squeezeDet+', \
+-      'Selected nueral net architecture not supported: {}'.format(FLAGS.demo_net)
 +  assert FLAGS.demo_net == 'squeezeDet' or FLAGS.demo_net == 'squeezeDet+' or FLAGS.demo_net == 'resnet50' or FLAGS.demo_net == 'vgg16', \
-       'Selected nueral net architecture not supported: {}'.format(FLAGS.demo_net)
++      'Selected neural net architecture not supported: {}'.format(FLAGS.demo_net)
  
    with tf.Graph().as_default():
+     # Load model
 @@ -71,6 +71,16 @@ def video_demo():
        mc.BATCH_SIZE = 1
        mc.LOAD_PRETRAINED_MODEL = False
@@ -28,15 +30,17 @@ index 3ddafab..3b4a7de 100644
  
      saver = tf.train.Saver(model.model_params)
  
-@@ -161,7 +171,7 @@ def video_demo():
+@@ -161,8 +171,8 @@ def video_demo():
  def image_demo():
    """Detect image."""
  
 -  assert FLAGS.demo_net == 'squeezeDet' or FLAGS.demo_net == 'squeezeDet+', \
+-      'Selected nueral net architecture not supported: {}'.format(FLAGS.demo_net)
 +  assert FLAGS.demo_net == 'squeezeDet' or FLAGS.demo_net == 'squeezeDet+' or FLAGS.demo_net == 'resnet50' or FLAGS.demo_net == 'vgg16', \
-       'Selected nueral net architecture not supported: {}'.format(FLAGS.demo_net)
++      'Selected neural net architecture not supported: {}'.format(FLAGS.demo_net)
  
    with tf.Graph().as_default():
+     # Load model
 @@ -177,6 +187,16 @@ def image_demo():
        mc.BATCH_SIZE = 1
        mc.LOAD_PRETRAINED_MODEL = False
