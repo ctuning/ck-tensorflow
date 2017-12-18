@@ -31,10 +31,6 @@
   "program": "yes",
   "no_compile": "yes",
   "no_target_file": "yes",
-  "print_files_after_run": [
-    "tmp-output1.tmp", 
-    "tmp-output2.tmp"
-  ],
   "run_cmds": {
     "default":{
       "ignore_return_code": "no",
