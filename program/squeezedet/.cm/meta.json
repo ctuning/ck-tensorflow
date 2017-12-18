@@ -35,7 +35,7 @@
     "default":{
       "ignore_return_code": "no",
       "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_DEMO_SQUEEZEDET_SRC>>$/demo.py --input_path=$<<CK_ENV_DEMO_SQUEEZEDET_ROOT>>$/data/sample.png --out_dir=out --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$ --demo_net=$<<CK_ENV_MODEL_SQUEEZEDET_ID>>$"
       }
     },
     "use_continuous":{
@@ -69,7 +69,28 @@
           "tmp-output2.tmp"
         ]
       }
-    }
+    },
+    "image_benchmark":{
+      "run_deps": {
+        "detection-dataset": {
+          "local": "yes",
+          "name": "Detection dataset",
+          "sort": 10,
+          "tags": "dataset,images,object-detection"
+        }
+      },
+      "ignore_return_code": "no",
+      "run_time":{
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../image_benchmark.py --image_dir=$<<CK_ENV_DATASET_IMAGE_DIR>>$ --checkpoint=$<<CK_ENV_MODEL_SQUEEZEDET_MODEL>>$ --demo_net=$<<CK_ENV_MODEL_SQUEEZEDET_ID>>$ --batch_count=$<<CK_BATCH_COUNT>>$ --batch_size=$<<CK_BATCH_SIZE>>$ --gpu_mem_limit=$<<CK_TF_GPU_MEMORY_PERCENT>>$"
+      }
+    }    
+  },
+  "run_vars": {
+    "CK_BATCH_SIZE": 1, 
+    "CK_BATCH_COUNT": 1,
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "TF_CPP_MIN_LOG_LEVEL": 3,
+    "TF_CPP_MIN_LOG_LEVEL_COMMENT": "Supress TF debug output"
   },
   "tags": [
     "tensorflow",
