@@ -9,7 +9,7 @@
     "yad2k": {
       "local": "yes",
       "name": "YAD2K",
-      "sort": 30,
+      "sort": 50,
       "tags": "yad2k-src"
     },
     "lib-cudart": {
@@ -17,6 +17,12 @@
       "name": "CUDA runtime",
       "sort": 25,
       "tags": "compiler,cuda,lang-c-cuda"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 20,
+      "tags": "lib,tensorflow"
     },
     "lib-keras": {
       "local": "yes",
