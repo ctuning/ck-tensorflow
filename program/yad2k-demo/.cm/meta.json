@@ -12,14 +12,20 @@
       "sort": 30,
       "tags": "yad2k-src"
     },
-    "lib.keras": {
+    "lib-cudart": {
+      "local": "yes",
+      "name": "CUDA runtime",
+      "sort": 25,
+      "tags": "compiler,cuda,lang-c-cuda"
+    },
+    "lib-keras": {
       "local": "yes",
       "name": "Keras library",
       "sort": 40,
       "tags": "lib,keras"
     }
   },
-  "data_name": "TensorFlow API Models",
+  "data_name": "YAD2K",
   "program": "yes",
   "process_in_tmp": "yes",
   "no_compile": "yes",
