@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for RensorFlow library.
+# Installation script for the TensorFlow library.
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
