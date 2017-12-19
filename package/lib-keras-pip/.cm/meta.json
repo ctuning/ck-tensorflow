@@ -4,7 +4,7 @@
     "install_env": {
       "KERAS_URL": "https://github.com/fchollet/keras"
     },
-    "version": "2.0.8"
+    "version": "pip"
   },
   "deps": {
     "lib.tensorflow": {
@@ -31,6 +31,7 @@
   "tags": [
     "lib",
     "keras",
-    "tensorflow-based"
+    "tensorflow-based",
+    "vpip"
   ]
 }
