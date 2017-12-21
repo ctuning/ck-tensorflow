@@ -84,3 +84,10 @@ $ ck install package:lib-tensorflow-1.4.0-src-cuda
 $ ck install package:model-yad2k
 $ ck run program:yad2k-demo --cmd_key=convert
 ```
+
+
+# Run YAD2K demo
+
+```
+$ ck run program:yad2k-demo --cmd_key=test
+```
