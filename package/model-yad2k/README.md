@@ -23,7 +23,8 @@ CK package for [YAD2K](https://github.com/allanzelener/YAD2K).
   keras                  \
   matplotlib             \
   h5py                   \
-  pillow
+  pillow                 \
+  wheel
 ```
 
 **NB:** The dependencies are needed for:
