@@ -45,7 +45,7 @@
     "cudnn": {
       "add_to_path": "no",
       "local": "yes",
-      "name": "cuDNN library >= 6.0)",
+      "name": "cuDNN library >=6.0",
       "sort": 50,
       "tags": "lib,cudnn"
     },
