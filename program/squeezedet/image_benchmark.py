@@ -160,11 +160,10 @@ def main(_):
     print('Average time: %fs' % avg_time);
     print('Average FPS: %f' % (1 / avg_time))
 
-  openme = {}
-  openme['detect_time_ave'] = avg_time
-  with open('tmp-ck-timer.json', 'w') as o:
-    json.dump(openme, o)
-
+  xopenme = {}
+  xopenme['avg_time_s'] = avg_time
+  with open('tmp-ck-timer.json', 'w') as f:
+    json.dump(xopenme, f, indent=2)
 
 if __name__ == '__main__':
     tf.app.run()
