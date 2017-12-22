@@ -30,7 +30,7 @@
     }
   },
   "end_full_path": {
-    "linux": "yad2k.py"
+    "linux": "src/yad2k.py"
   },
   "package_extra_name": "",
   "process_script": "install",
