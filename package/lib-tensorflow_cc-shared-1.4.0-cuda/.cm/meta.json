@@ -68,7 +68,7 @@
       "name": "cuDNN library >=6.0",
       "sort": 50,
       "tags": "lib,cudnn"
-    },    
+    }    
   }, 
   "end_full_path": {
     "linux": "install/lib/tensorflow_cc/libtensorflow_cc.so", 
