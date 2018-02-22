@@ -1,0 +1,55 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "install_env": {
+      "GPU_ENABLED": 0, 
+      "TENSORFLOW_PACKAGE_VER": "1.5.0", 
+      "TF_CUDA": "NO"
+    }, 
+    "supported_python_ver2_on_win": [
+      5, 
+      6
+    ], 
+    "version": "1.5.0"
+  }, 
+  "deps": {
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py", 
+    "win": "lib/tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux", 
+    "windows"
+  ], 
+  "only_for_target_os_tags": [
+    "linux", 
+    "windows"
+  ], 
+  "package_extra_name": " (prebuilt, cpu)", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "tensorflow-prebuilt-cpu", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "tensorflow-cpu", 
+    "v1", 
+    "v1.5", 
+    "v1.5.0", 
+    "vprebuilt", 
+    "vcpu", 
+    "channel-stable"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "94a780371b44f0db",
+    "module_uoa": "package"
+  }
+}

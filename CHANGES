@@ -1,3 +1,5 @@
+2018.02.22 - added TF 1.5.0 (CPU & GPU). Also added check for version ranges for CUDA/CuDNN via CK package manager!
+
 2017.11.21 - improved installation on Ubuntu 17+
 
 2017.11.04 - added TF 1.4.0 stable CPU/CUDA
