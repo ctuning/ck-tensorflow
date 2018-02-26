@@ -10,7 +10,7 @@ $ sudo apt-get install libcupti-dev
 ## Prevent running out of memory
 
 To prevent running out of memory during a build, restrict the build to use
-e.g. 2 processors:
+e.g. 1 processor:
 
 ```
 $ ck install package:lib-tensorflow-1.5.0-src-cpu --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
