@@ -1,0 +1,19 @@
+diff --git a/tensorflow/core/platform/platform.h b/tensorflow/core/platform/platform.h
+index 12120c4..cadeaa6 100644
+--- a/tensorflow/core/platform/platform.h
++++ b/tensorflow/core/platform/platform.h
+@@ -40,12 +40,12 @@ limitations under the License.
+ #elif defined(_WIN32)
+ #define PLATFORM_WINDOWS
+ 
+-#elif defined(__arm__)
++#elif defined(__arm__) || defined(__aarch64__)
+ #define PLATFORM_POSIX
+ 
+ // Require an outside macro to tell us if we're building for Raspberry Pi.
+ #if !defined(RASPBERRY_PI)
+-#define IS_MOBILE_PLATFORM
++//#define IS_MOBILE_PLATFORM
+ #endif  // !defined(RASPBERRY_PI)
+ 
+ #else
