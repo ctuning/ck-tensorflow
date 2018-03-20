@@ -81,9 +81,8 @@
   ], 
   "only_for_target_os_tags": [
     "windows", 
-    "linux", 
-    "android"
-  ], 
+    "linux"
+  ],
   "process_script": "install", 
   "soft_uoa": "0cdc7594d430ab2b", 
   "suggested_path": "lib-tensorflow_cc-shared", 
