@@ -1,0 +1,13 @@
+diff --git a/tensorflow_cc/cmake/TensorflowStatic.cmake b/tensorflow_cc/cmake/TensorflowStatic.cmake
+index 7e90e31..67dd947 100644
+--- a/tensorflow_cc/cmake/TensorflowStatic.cmake
++++ b/tensorflow_cc/cmake/TensorflowStatic.cmake
+@@ -3,7 +3,7 @@ include(ExternalProject)
+ ExternalProject_Add(
+   tensorflow_static
+   DEPENDS tensorflow_base
+-  TMP_DIR "/tmp"
++  TMP_DIR "tmp"
+   STAMP_DIR "tensorflow-stamp"
+   SOURCE_DIR "tensorflow"
+   BUILD_IN_SOURCE 1
