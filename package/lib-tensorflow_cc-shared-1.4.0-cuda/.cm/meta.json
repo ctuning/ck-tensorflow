@@ -11,7 +11,7 @@
       "PACKAGE_CONFIGURE_FLAGS_LINUX": "", 
       "PACKAGE_CONFIGURE_FLAGS_WINDOWS": "", 
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "lib-tensorflow_cc-shared-1.4.0",
+      "PACKAGE_GIT_CHECKOUT": "lib-tensorflow_cc-shared-1.4.0", 
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_SKIP_CLEAN_INSTALL": "NO", 
       "PACKAGE_SKIP_CLEAN_OBJ": "YES", 
@@ -37,7 +37,7 @@
       ], 
       "version_to": [
         0, 
-        7,
+        7, 
         0
       ]
     }, 
@@ -54,7 +54,21 @@
       "name": "C++ compiler", 
       "sort": 10, 
       "tags": "compiler,lang-cpp"
-    }
+    },
+    "cuda": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "CUDA compiler >=7.0",
+      "sort": 40,
+      "tags": "compiler,cuda"
+    },
+    "cudnn": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "cuDNN library >=6.0",
+      "sort": 50,
+      "tags": "lib,cudnn"
+    }    
   }, 
   "end_full_path": {
     "linux": "install/lib/tensorflow_cc/libtensorflow_cc.so", 
@@ -81,9 +95,10 @@
     "tensorflow_cc", 
     "vmaster", 
     "vshared", 
-    "vsrc", 
-    "v1.4.0",
-    "v1.4",
+    "vsrc",
+    "vcuda",
+    "v1.4.0", 
+    "v1.4", 
     "v1", 
     "channel-stable"
   ], 
