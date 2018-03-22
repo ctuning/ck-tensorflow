@@ -41,8 +41,8 @@ def load_image(image_path):
     # Crop the central region of the image with an area containing 87.5% of the original image.
     new_w = int(img.shape[0] * 0.875)
     new_h = int(img.shape[1] * 0.875)
-    offset_w = (img.shape[0] - new_w)/2
-    offset_h = (img.shape[1] - new_h)/2
+    offset_w = int((img.shape[0] - new_w)/2)
+    offset_h = int((img.shape[1] - new_h)/2)
     img = img[offset_w:new_w+offset_w, offset_h:new_h+offset_h, :]
 
     # Convert to float and normalize
