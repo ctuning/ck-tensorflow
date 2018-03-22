@@ -1,0 +1,70 @@
+{
+  "backup_data_uid": "b4025ad44457764b", 
+  "data_name": "classification-tensorflow",
+  "no_compile": "yes", 
+  "no_target_file": "yes", 
+  "print_files_after_run": [
+    "stderr.log", 
+    "stdout.log"
+  ], 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json", 
+        "post_process_via_ck": "yes", 
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py", 
+        "run_cmd_out1": "stdout.log", 
+        "run_cmd_out2": "stderr.log", 
+        "run_output_files": [
+          "stdout.log", 
+          "stderr.log", 
+          "tmp-ck-timer.json"
+        ]
+      }
+    }
+  }, 
+  "run_deps": {
+    "imagenet-aux": {
+      "local": "yes", 
+      "name": "ImageNet dataset (aux)", 
+      "sort": 30, 
+      "tags": "dataset,imagenet,aux"
+    }, 
+    "imagenet-val": {
+      "local": "yes", 
+      "name": "ImageNet dataset (val)", 
+      "sort": 20, 
+      "tags": "dataset,imagenet,raw,val"
+    }, 
+    "lib-tensorflow": {
+      "local": "yes", 
+      "name": "TensorFlow library", 
+      "sort": 10, 
+      "tags": "lib,tensorflow"
+    }, 
+    "model-and-weights": {
+      "local": "yes", 
+      "name": "TensorFlow-Python model and weights", 
+      "sort": 40, 
+      "tags": "tensorflow-model,weights,python"
+    }, 
+    "python": {
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 10, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "run_vars": {
+    "CK_BATCH_COUNT": 1, 
+    "CK_BATCH_SIZE": 1, 
+    "CK_SKIP_IMAGES": 0, 
+    "CK_TF_GPU_MEMORY_PERCENT": 33
+  }, 
+  "tags": [
+    "tensorflow-classification"
+  ]
+}
