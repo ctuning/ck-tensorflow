@@ -1,0 +1,14 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_TENSORFLOW_MODEL"
+  },
+  "soft_name": "TensorFlow python model and weights",
+  "tags": [
+    "tensorflowmodel",
+    "weights",
+    "python"
+  ]
+}
