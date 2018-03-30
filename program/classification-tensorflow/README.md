@@ -25,9 +25,9 @@ $ ck install package:lib-tensorflow-1.4.0-src-{cpu,cuda}{,-xla}
 ### TensorFlow models
 
 ```
-$ ck install package:tensorflow-model-alexnet-py
-$ ck install package:tensorflow-model-squeezenet-py
-$ ck install package:tensorflow-model-googlenet-py
+$ ck install package:tensorflowmodel-alexnet-py
+$ ck install package:tensorflowmodel-squeezenet-py
+$ ck install package:tensorflowmodel-googlenet-py
 ```
 
 ### ImageNet dataset
