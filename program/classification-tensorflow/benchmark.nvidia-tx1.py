@@ -39,7 +39,7 @@ def do(i, arg):
     tdid=r['device_id']
 
     # Program and command.
-    program='tf-test'
+    program='classification-tensorflow'
     cmd_key='default'
     # Load Dataset path
     ii={'action':'show',
@@ -188,7 +188,7 @@ def do(i, arg):
                     'data_uoa':model_uoa}
                 r=ck.access(ii)
                 if r['return']>0: return r
-                # Get the tags from e.g. 'TensorFlow model - SqueezeDet (SqueezeDet)'
+                # Get the tags from e.g. 'TensorFlow python model and weights (squeezenet)'.
                 model_name=r['data_name']
                 model_tags = re.match('TensorFlow python model and weights \((?P<tags>.*)\)', model_name)
                 model_tags = model_tags.group('tags').replace(' ', '').replace(',', '-').lower()
