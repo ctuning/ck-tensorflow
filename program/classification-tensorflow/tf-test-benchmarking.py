@@ -16,10 +16,10 @@ bs={
   'default':1
 }
 
-# Number of statistical repetitions.
+# Number of statistical repetitions e.g. 3.
 num_repetitions=3
 
-# Number of batches to run (the first is to be discarded). 5
+# Number of batches to run (the first is to be discarded) e.g. 5.
 num_batches=5
 
 def do(i, arg):
