@@ -84,6 +84,9 @@ cd ${INSTALL_DIR}/src
 exit_if_error
 
 stage "Build with bazel"
+
+echo "$LD_LIBRARY_PATH"
+
 bazel build --config=opt ${CUDA_CONFIG_OPTS} --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} //tensorflow/tools/pip_package:build_pip_package
 bazel shutdown
 exit_if_error
