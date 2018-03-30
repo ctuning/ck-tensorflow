@@ -1,6 +1,6 @@
 # Pre-requisites
 
-## Python
+## Python 2
 
 ### Misc
 ```
@@ -11,16 +11,7 @@
 
 ```
 # apt install liblapack-dev libatlas-dev
-# pip install scipy
-```
-
-#### OpenBLAS?
-```
-$ ck install package:lib-openblas-0.2.20-universal
-$ ck search env --tags=openblas,v0.2.20
-$ ck load env:<...>
-$ cd $INSTALL_DIR/src
-$ sudo PREFIX=/usr/local make install 
+# pip2 install scipy
 ```
 
 ## Install via CK
