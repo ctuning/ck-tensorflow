@@ -193,7 +193,7 @@ def do(i, arg):
                 model_tags = re.match('TensorFlow python model and weights \((?P<tags>.*)\)', model_name)
                 model_tags = model_tags.group('tags').replace(' ', '').replace(',', '-').lower()
                 # Skip some models with "in [..]" or "not in [..]".
-                if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet' ]: continue
+                #if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet' ]: continue
 
                 record_repo='local'
                 record_uoa=model_tags+'-'+lib_tags
