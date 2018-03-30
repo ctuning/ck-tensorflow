@@ -6,7 +6,7 @@ import argparse
 
 
 # Platform tag.
-platform_tags='nvidia-gtx1080'
+platform_tags='nvidia-tx1'
 
 # Batch size.
 bs={
@@ -16,10 +16,10 @@ bs={
   'default':1
 }
 
-# Number of statistical repetitions.3
+# Number of statistical repetitions e.g. 3.
 num_repetitions=3
 
-# Number of batches to run (the first is to be discarded). 5
+# Number of batches to run (the first is to be discarded) e.g. 5.
 num_batches=5
 
 def do(i, arg):
@@ -193,7 +193,7 @@ def do(i, arg):
                 model_tags = re.match('TensorFlow python model and weights \((?P<tags>.*)\)', model_name)
                 model_tags = model_tags.group('tags').replace(' ', '').replace(',', '-').lower()
                 # Skip some models with "in [..]" or "not in [..]".
-                if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet']: continue
+                if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet' ]: continue
 
                 record_repo='local'
                 record_uoa=model_tags+'-'+lib_tags
