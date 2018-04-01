@@ -25,14 +25,17 @@
   },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
-  "suggested_path": "KITTI-min",
+  "suggested_path": "dataset-kitti-min",
   "tags": [
     "dataset",
-    "kitti",
-    "KITTI",
-    "val",
-    "KITTImin",
     "small_dataset",
+    "val",
+    "kitti",
+    "kittimin",
+    "kitti-min",
+    "KITTI",
+    "KITTImin",
+    "KITTI-min",
     "channel-stable"
   ]
 }
