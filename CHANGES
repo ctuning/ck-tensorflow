@@ -1,3 +1,5 @@
+2018.03.30 - added TF 1.7.x
+
 2018.03.23 - added TF classification via compiled TF
 
 2018.02.22 - added TF 1.5.0 (CPU & GPU). Also added check for version ranges for CUDA/CuDNN via CK package manager!

@@ -4,7 +4,8 @@
 
 ### Misc
 ```
-# pip2 install enum34 mock pillow absl-py
+# pip2 install enum34 mock pillow
+# pip2 install wheel absl-py
 ```
 
 ### SciPy
