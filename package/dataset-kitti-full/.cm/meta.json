@@ -23,13 +23,16 @@
   },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
-  "suggested_path": "KITTI-full",
+  "suggested_path": "dataset-kitti-full",
   "tags": [
     "dataset",
-    "kitti",
-    "KITTI",
     "val",
+    "kitti",
+    "kittimin",
+    "kitti-min",
+    "KITTI",
     "KITTIfull",
+    "KITTI-full",
     "channel-stable"
   ]
 }
