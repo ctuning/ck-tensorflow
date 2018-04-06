@@ -21,32 +21,42 @@
       "tags": "tool,bazel", 
       "version_from": [
         0, 
-        9
+        10
       ], 
       "version_to": [
-        0, 
-        12 
+        0,
+        12
       ]
     }, 
     "cuda": {
       "add_to_path": "no", 
       "local": "yes", 
-      "name": "CUDA compiler >=7.0", 
+      "name": "CUDA compiler >=9.0",
       "sort": 40, 
-      "tags": "compiler,cuda"
+      "tags": "compiler,cuda",
+      "version_from": [
+        9,
+        0
+      ],
+      "version_to": [
+        10,
+        0
+      ]
     }, 
     "cudnn": {
       "add_to_path": "no", 
       "local": "yes", 
-      "name": "cuDNN library >=6.0", 
+      "name": "cuDNN library >=7.0",
       "sort": 50, 
-      "tags": "lib,cudnn"
-    }, 
-    "gcc": {
-      "local": "yes", 
-      "name": "GCC compiler", 
-      "sort": 30, 
-      "tags": "compiler,lang-c"
+      "tags": "lib,cudnn",
+      "version_from": [
+        7,
+        0
+      ],
+      "version_to": [
+        8,
+        0
+      ]
     }, 
     "python": {
       "local": "yes", 
