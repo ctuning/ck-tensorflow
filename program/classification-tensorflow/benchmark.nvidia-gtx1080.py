@@ -41,16 +41,7 @@ def do(i, arg):
     # Program and command.
     program='classification-tensorflow'
     cmd_key='default'
-    # Load Dataset path
-    ii={'action':'show',
-        'module_uoa':'env',
-        'tags':'dataset,images,object-detection'}
-
-    rx=ck.access(ii)
-    if len(rx['lst']) == 0: return rx
-    # FIXME: It's probably better to use CK_ENV_DATASET_IMAGE_DIR.
-    img_dir = rx['lst'][0]['meta']['env']['CK_ENV_DATASET_IMAGE_DIR']
-    # Load TensorFlow program meta and desc to check deps.
+    # Load program meta and description to check deps.
     ii={'action':'load',
         'module_uoa':'program',
         'data_uoa':program}
@@ -60,7 +51,6 @@ def do(i, arg):
     # Get compile-time and run-time deps.
     cdeps=mm.get('compile_deps',{})
     rdeps=mm.get('run_deps',{})
-
     # Merge rdeps with cdeps for setting up the pipeline (which uses
     # common deps), but tag them as "for_run_time".
     for k in rdeps:
@@ -72,7 +62,6 @@ def do(i, arg):
     if (arg.tos is not None) and (arg.did is not None):
         tos=arg.tos
         tdid=arg.did
-
     ii={'action':'resolve',
         'module_uoa':'env',
         'host_os':hos,
@@ -88,6 +77,7 @@ def do(i, arg):
     udepl=r['deps']['lib-tensorflow'].get('choices',[]) # All UOAs of env for Tensorflow libs.
     if len(udepl)==0:
         return {'return':1, 'error':'no installed Tensorflow libs'}
+
     # Tensorflow models.
     depm=copy.deepcopy(cdeps['model-and-weights'])
     ii={'action':'resolve',
@@ -105,6 +95,17 @@ def do(i, arg):
     udepm=r['deps']['tensorflow_model'].get('choices',[]) # All UOAs of env for Tensorflow models.
     if len(udepm)==0:
         return {'return':1, 'error':'no installed TensorFlow models'}
+
+    # Load dataset path.
+    # FIXME: Does not have to be ImageNet val.
+    ii={'action':'show',
+        'module_uoa':'env',
+        'tags':'dataset,imagenet,val,raw'}
+    rx=ck.access(ii)
+    if len(rx['lst'])==0: return rx
+    # FIXME: Can also be 'CK_ENV_DATASET_IMAGE_DIR'.
+    img_dir=rx['lst'][0]['meta']['env']['CK_ENV_DATASET_IMAGENET_VAL']
+
     # Prepare pipeline.
     cdeps['lib-tensorflow']['uoa']=udepl[0]
     cdeps['model-and-weights']['uoa']=udepm[0]
@@ -193,7 +194,7 @@ def do(i, arg):
                 model_tags = re.match('TensorFlow python model and weights \((?P<tags>.*)\)', model_name)
                 model_tags = model_tags.group('tags').replace(' ', '').replace(',', '-').lower()
                 # Skip some models with "in [..]" or "not in [..]".
-                #if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet' ]: continue
+                if model_tags not in [ 'squeezenet', 'googlenet', 'alexnet' ]: continue
 
                 record_repo='local'
                 record_uoa=model_tags+'-'+lib_tags
