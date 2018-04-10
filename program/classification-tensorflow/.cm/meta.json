@@ -62,7 +62,8 @@
     "CK_BATCH_COUNT": 1, 
     "CK_BATCH_SIZE": 1, 
     "CK_SKIP_IMAGES": 0, 
-    "CK_TF_GPU_MEMORY_PERCENT": 33
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "CK_IMAGE_FILE": ""
   }, 
   "tags": [
     "tensorflow-classification"

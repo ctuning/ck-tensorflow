@@ -9,13 +9,7 @@
       "MODEL_WEIGHTS_ARE_CHECKPOINTS": "YES", 
       "MODULE_FILE": "tf-mobilenet-model.py", 
       "PACKAGE_NAME": "mobilenet_v1_0.75_160_2017_06_14.tar.gz", 
-      "PACKAGE_NAME1": "mobilenet_v1_0.75_160_2017_06_14.tar", 
-      "PACKAGE_SKIP_CLEAN_PACKAGE": "NO", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_UNGZIP": "YES", 
-      "PACKAGE_UNTAR": "YES", 
       "PACKAGE_URL": "http://download.tensorflow.org/models", 
-      "PACKAGE_WGET": "YES", 
       "WEIGHTS_FILE": "mobilenet_v1_0.75_160.ckpt"
     }, 
     "no_os_in_suggested_path": "yes", 
@@ -45,7 +39,7 @@
     "mobilenet-v1-0.75-160"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "6b1b2b254718b69a", 
     "module_uoa": "script"
   }
 }
