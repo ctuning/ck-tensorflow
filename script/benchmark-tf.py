@@ -226,11 +226,13 @@ def do(i, arg):
             r=ck.access(ii)
             if r['return']>0: return r
             model_name=r['data_name']
+            if 'mobilenet' not in r['dict']['tags']:
+                continue
             print r['dict']['env']
-            alpha = float(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_MULTIPLIER'))
-            rho =  int(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_RESOLUTION'))
-#            alpha = float(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER'])
-#            rho = int(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION'])
+#            alpha = float(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_MULTIPLIER'))
+#            rho =  int(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_RESOLUTION'))
+            alpha = float(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER'])
+            rho = int(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION'])
 #            exit(1)
 
             record_repo='local'
