@@ -22,6 +22,7 @@ BATCH_SIZE = int(os.getenv('CK_BATCH_SIZE', 1))
 IMAGES_COUNT = BATCH_COUNT * BATCH_SIZE
 SKIP_IMAGES = int(os.getenv('CK_SKIP_IMAGES', 0))
 IMAGE_DIR = os.getenv('CK_ENV_DATASET_IMAGENET_VAL')
+IMAGE_FILE = os.getenv('CK_IMAGE_FILE')
 AUX_DIR = os.getenv('CK_ENV_DATASET_IMAGENET_AUX')
 VALUES_FILE = os.path.join(AUX_DIR, 'val.txt')
 CLASSES_FILE = os.path.join(AUX_DIR, 'synset_words.txt')
@@ -37,11 +38,20 @@ def load_ImageNet_classes():
   
   global VALUES_MAP
   with open(VALUES_FILE, 'r') as values_file:
-    for _ in range(SKIP_IMAGES):
-      values_file.readline().split()
-    for _ in range(IMAGES_COUNT):
-      val = values_file.readline().split()
-      VALUES_MAP[val[0]] = int(val[1])
+    if IMAGE_FILE:
+      # Single file mode: try to find this file in values
+      for line in values_file:
+        file_name, file_class = line.split()
+        if file_name == IMAGE_FILE:
+          VALUES_MAP[file_name] = int(file_class)
+          break
+    else:
+      # Directory mode: load only required amount of values
+      for _ in range(SKIP_IMAGES):
+        values_file.readline()
+      for _ in range(IMAGES_COUNT):
+        val = values_file.readline().split()
+        VALUES_MAP[val[0]] = int(val[1])
 
 
 def get_class_str(class_index):
@@ -63,9 +73,12 @@ def get_top5(all_probs):
 
 # top5 - list of pairs (prob, class_index)
 def print_predictions(top5, img_file):
-  class_correct = VALUES_MAP[img_file]
   print('---------------------------------------')
-  print('%s - %s' % (img_file, get_class_str(class_correct)))
+  if img_file in VALUES_MAP:
+    class_correct = VALUES_MAP[img_file]
+    print('%s - %s' % (img_file, get_class_str(class_correct)))
+  else:
+    print(img_file)
   for prob, class_index in top5:
     print('%.2f - %s' % (prob, get_class_str(class_index)))
   print('---------------------------------------')
@@ -73,6 +86,10 @@ def print_predictions(top5, img_file):
 
 # top5 - list of pairs (prob, class_index)
 def check_predictions(top5, img_file):
+  if not img_file in VALUES_MAP:
+    print('Correctness information is not available')
+    return {}
+    
   class_correct = VALUES_MAP[img_file]
   classes = [c[1] for c in top5]
   is_top1 = class_correct == classes[0]
@@ -108,8 +125,23 @@ def load_image_list():
 
 
 def main(_):
+  global IMAGE_DIR
+  global IMAGE_FILE
+  global BATCH_SIZE
+  global BATCH_COUNT
+  global IMAGES_COUNT
+  global SKIP_IMAGES
   print('Model module: ' + MODEL_MODULE)
   print('Model weights: ' + MODEL_WEIGHTS)
+  if IMAGE_FILE:
+    print('Single file mode')
+    print('Input image file: ' + IMAGE_FILE)
+    assert os.path.isfile(IMAGE_FILE)
+    IMAGE_DIR, IMAGE_FILE = os.path.split(IMAGE_FILE)
+    BATCH_SIZE = 1
+    BATCH_COUNT = 1
+    IMAGES_COUNT = 1
+    SKIP_IMAGES = 0
   print('Input images dir: ' + IMAGE_DIR)
   print('Batch size: %d' % BATCH_SIZE)
   print('Batch count: %d' % BATCH_COUNT)
@@ -120,7 +152,10 @@ def main(_):
   model = imp.load_source('tf_model', MODEL_MODULE)
 
   # Load processing image filenames
-  image_list = load_image_list()
+  if IMAGE_FILE:
+    image_list = [IMAGE_FILE]
+  else:
+    image_list = load_image_list()
 
   # Load ImageNet classes info
   load_ImageNet_classes()
