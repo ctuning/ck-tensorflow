@@ -94,7 +94,8 @@ def inference_v2(input_image):
 
     # Inference mode is created by default
     logits, end_points = mobilenet_v2.mobilenet(input_image, 
-                                                num_classes = 1001, 
+                                                num_classes = 1001,
+                                                finegrain_classification_mode = True,
                                                 depth_multiplier = MULTIPLIER)
 
     return end_points['Predictions']
