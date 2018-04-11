@@ -228,12 +228,8 @@ def do(i, arg):
             model_name=r['data_name']
             if 'mobilenet' not in r['dict']['tags']:
                 continue
-            print r['dict']['env']
-#            alpha = float(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_MULTIPLIER'))
-#            rho =  int(r['dict']['env'].get('CK_ENV_MODEL_TENSORFLOW_MOBILENET_RESOLUTION'))
             alpha = float(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER'])
             rho = int(r['dict']['env']['CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION'])
-#            exit(1)
 
             record_repo='local'
             record_uoa='mobilenets-'+experiment_type+'-'+str(rho)+'-'+str(alpha)+'-tensorflow-'+lib_tags
@@ -343,12 +339,12 @@ def do(i, arg):
                'pipeline':cpipeline,
                'out':'con'
             }
-#            r=ck.access(ii)
-#            if r['return']>0: return r
+            r=ck.access(ii)
+            if r['return']>0: return r
 
-#            fail=r.get('fail','')
-#            if fail=='yes':
-#                return {'return':10, 'error':'pipeline failed ('+r.get('fail_reason','')+')'}
+            fail=r.get('fail','')
+            if fail=='yes':
+                return {'return':10, 'error':'pipeline failed ('+r.get('fail_reason','')+')'}
 
 ### end pipeline
     return {'return':0}
