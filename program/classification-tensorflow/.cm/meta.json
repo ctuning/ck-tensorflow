@@ -42,8 +42,9 @@
     "lib-tensorflow": {
       "local": "yes", 
       "name": "TensorFlow library", 
-      "sort": 10, 
-      "tags": "lib,tensorflow"
+      "sort": 50, 
+      "tags": "lib,tensorflow",
+      "no_tags": "tensorflow_cc"
     }, 
     "model-and-weights": {
       "local": "yes", 

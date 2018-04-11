@@ -13,6 +13,7 @@
 
 import imp
 import os
+import sys
 import tensorflow as tf
 import numpy as np
 import scipy.io
@@ -22,6 +23,7 @@ from tensorflow.contrib import slim
 MODULE_PATH = os.path.dirname(os.getenv('CK_ENV_TENSORFLOW_MODEL_MODULE'))
 RESOLUTION = int(os.getenv('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION', '224'))
 MULTIPLIER = float(os.getenv('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER', '1.0'))
+VERSION = os.getenv('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION', '1')
 
 #-----------------------------------------------------------------------
 
@@ -35,7 +37,7 @@ def load_checkpoints(sess, file_prefix):
 def load_image(image_path):
     img = scipy.misc.imread(image_path)
 
-    # The same image preprocessing steps are used for MobileNet as for Inseption:
+    # The same image preprocessing steps are used for MobileNet as for Inception:
     # https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py
 
     # Crop the central region of the image with an area containing 87.5% of the original image.
@@ -65,7 +67,7 @@ def load_image(image_path):
 
 #-----------------------------------------------------------------------
 
-def inference(input_image):
+def inference_v1(input_image):
     # We can't import module as it's out of current dir
     mobilenet_path = os.path.join(MODULE_PATH, 'mobilenet_v1.py')
     mobilenet_v1 = imp.load_source('mobilenet_v1', mobilenet_path)
@@ -78,6 +80,36 @@ def inference(input_image):
                                                    depth_multiplier = MULTIPLIER)
 
     return end_points['Predictions']
+
+#-----------------------------------------------------------------------
+
+def inference_v2(input_image):
+    # Path to additional modules required by mobilenet_v2
+    if MODULE_PATH not in sys.path:
+      sys.path.append(MODULE_PATH)
+
+    # We can't import module as it's out of current dir
+    mobilenet_path = os.path.join(MODULE_PATH, 'mobilenet_v2.py')
+    mobilenet_v2 = imp.load_source('mobilenet_v2', mobilenet_path)
+
+    # Inference mode is created by default
+    logits, end_points = mobilenet_v2.mobilenet(input_image, 
+                                                num_classes = 1001,
+                                                finegrain_classification_mode = True,
+                                                depth_multiplier = MULTIPLIER)
+
+    return end_points['Predictions']
+
+#-----------------------------------------------------------------------
+
+def inference(input_image):
+    if VERSION == '1':
+        return inference_v1(input_image)
+
+    if VERSION == '2':
+        return inference_v2(input_image)
+
+    raise Exception('Unsupported MobileNet version: {}'.format(VERSION))
 
 #-----------------------------------------------------------------------
 
