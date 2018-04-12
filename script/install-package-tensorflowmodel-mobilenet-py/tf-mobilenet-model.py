@@ -36,6 +36,13 @@ def load_checkpoints(sess, file_prefix):
 
 def load_image(image_path):
     img = scipy.misc.imread(image_path)
+    
+    # check if grayscale and convert to RGB
+    if len(img.shape) == 2:
+        img = np.dstack((img,img,img))
+    # drop alpha-channel if present
+    if img.shape[2] > 3:
+        img = img[:,:,:3]
 
     # The same image preprocessing steps are used for MobileNet as for Inception:
     # https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py

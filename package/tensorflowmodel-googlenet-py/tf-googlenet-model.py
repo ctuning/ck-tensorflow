@@ -40,6 +40,9 @@ def load_image(image_path):
     if len(img.shape) == 2:
         # grayscale
         img = np.dstack((img,img,img))
+    # drop alpha-channel if present
+    if img.shape[2] > 3:
+        img = img[:,:,:3]
 
     img = img - np.mean(img)
         
