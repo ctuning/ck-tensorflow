@@ -6,7 +6,7 @@
 # See CK LICENSE.txt for licensing details.
 #
 #
-# MobilenetNet for TensorFlow
+# MobileNets for TensorFlow
 # Implementation mobilenet_v1.py is from
 # https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.py   
 #
