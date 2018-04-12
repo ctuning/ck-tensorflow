@@ -8,7 +8,7 @@
 #
 # MobileNets for TensorFlow
 # Implementation mobilenet_v1.py is from
-# https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.py   
+# https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.py
 #
 
 import imp
@@ -36,7 +36,7 @@ def load_checkpoints(sess, file_prefix):
 
 def load_image(image_path):
     img = scipy.misc.imread(image_path)
-    
+
     # check if grayscale and convert to RGB
     if len(img.shape) == 2:
         img = np.dstack((img,img,img))
@@ -65,7 +65,7 @@ def load_image(image_path):
 
     # Shift and scale
     img = img - 0.5
-    img = img * 2        
+    img = img * 2
 
     res = {}
     res['data'] = img
@@ -80,8 +80,8 @@ def inference_v1(input_image):
     mobilenet_v1 = imp.load_source('mobilenet_v1', mobilenet_path)
 
     with slim.arg_scope(mobilenet_v1.mobilenet_v1_arg_scope(is_training = False)):
-        logits, end_points = mobilenet_v1.mobilenet_v1(input_image, 
-                                                   num_classes = 1001, 
+        logits, end_points = mobilenet_v1.mobilenet_v1(input_image,
+                                                   num_classes = 1001,
                                                    is_training = False,
                                                    dropout_keep_prob = 1,
                                                    depth_multiplier = MULTIPLIER)
@@ -100,7 +100,7 @@ def inference_v2(input_image):
     mobilenet_v2 = imp.load_source('mobilenet_v2', mobilenet_path)
 
     # Inference mode is created by default
-    logits, end_points = mobilenet_v2.mobilenet(input_image, 
+    logits, end_points = mobilenet_v2.mobilenet(input_image,
                                                 num_classes = 1001,
                                                 finegrain_classification_mode = True,
                                                 depth_multiplier = MULTIPLIER)
@@ -134,4 +134,4 @@ def get_image_scores(batch_results, image_index):
 
 
 
-    
+
