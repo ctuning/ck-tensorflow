@@ -5,7 +5,7 @@
     "no_os_in_suggested_path": "yes", 
     "no_ver_in_suggested_path": "yes", 
     "skip_file_check": "yes", 
-    "version": "ImageNet"
+    "version": "v2_all"
   },
   "deps": {
     "mobilenet-v2-1.4-224": {
@@ -152,5 +152,13 @@
   ], 
   "process_script": "install", 
   "soft_uoa": "439b9f1757f27091", 
-  "suggested_path": "tensorflowmodel-mobilenet-v2-py"
+  "suggested_path": "tensorflowmodel-mobilenet-v2-py", 
+  "tags": [
+    "mobilenet", 
+    "mobilenet-v2", 
+    "mobilenet-v2-all", 
+    "tensorflowmodel", 
+    "weights", 
+    "python"
+  ]
 }
