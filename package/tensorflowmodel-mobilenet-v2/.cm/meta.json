@@ -1,7 +1,7 @@
 {
   "check_exit_status": "yes", 
   "customize": {
-    "force_ask_path": "yes", 
+    "force_ask_path": "no", 
     "no_os_in_suggested_path": "yes", 
     "no_ver_in_suggested_path": "yes", 
     "skip_file_check": "yes", 
