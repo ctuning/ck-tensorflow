@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 cTuning foundation.
+# Copyright (c) 2017-2018 cTuning foundation.
 # See CK COPYRIGHT.txt for copyright details.
 #
 # SPDX-License-Identifier: BSD-3-Clause.

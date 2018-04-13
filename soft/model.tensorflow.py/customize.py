@@ -83,8 +83,10 @@ def setup(i):
     ep=cus['env_prefix']
 
     # Init common variables, they are set for all models
-    env[ep+'_WEIGHTS']=os.path.join(pi, install_env['WEIGHTS_FILE'])
-    env[ep+'_MODULE']=os.path.join(pi, install_env['MODULE_FILE'])
+    if 'WEIGHTS_FILE' in install_env:
+      env[ep+'_WEIGHTS']=os.path.join(pi, install_env['WEIGHTS_FILE'])
+    if 'MODULE_FILE' in install_env:
+      env[ep+'_MODULE']=os.path.join(pi, install_env['MODULE_FILE'])
 
     # Init model specific variables
     # They should be started with MODEL_ prefix e.g. MODEL_MOBILENET_RESOLUTION

@@ -3,7 +3,7 @@
   "customize": {
     "force_ask_path": "yes", 
     "install_env": {
-      "MODULE_FILE": "tf-googlenet-model.py", 
+      "MODULE_FILE": "googlenet-model.py",
       "PACKAGE_NAME": "googlenet.npy", 
       "PACKAGE_SKIP_CLEAN_PACKAGE": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
@@ -17,7 +17,7 @@
     "version": "ImageNet"
   }, 
   "end_full_path": {
-    "linux": "tf-googlenet-model.py"
+    "linux": "googlenet-model.py"
   }, 
   "only_for_host_os_tags": [
     "linux"
@@ -30,7 +30,7 @@
   "soft_uoa": "439b9f1757f27091", 
   "suggested_path": "tensorflowmodel-googlenet-py",
   "tags": [
-    "tensorflow-model", 
+    "tensorflowmodel",
     "weights", 
     "python", 
     "googlenet"

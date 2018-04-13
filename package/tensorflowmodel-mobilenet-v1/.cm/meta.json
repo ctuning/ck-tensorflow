@@ -1,0 +1,120 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "force_ask_path": "yes", 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "skip_file_check": "yes", 
+    "version": "ImageNet"
+  },
+  "deps": {
+    "mobilenet-v1-0.25-128": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.25-128",
+      "name": "mobilenet-v1-0.25-128",
+      "sort": 0
+    },
+    "mobilenet-v1-0.25-160": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.25-160",
+      "name": "mobilenet-v1-0.25-160",
+      "sort": 1
+    },
+    "mobilenet-v1-0.25-192": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.25-192",
+      "name": "mobilenet-v1-0.25-192",
+      "sort": 2
+    },
+    "mobilenet-v1-0.25-224": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.25-224",
+      "name": "mobilenet-v1-0.25-224",
+      "sort": 3
+    },
+    "mobilenet-v1-0.50-128": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.50-128",
+      "name": "mobilenet-v1-0.50-128",
+      "sort": 4
+    },
+    "mobilenet-v1-0.50-160": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.50-160",
+      "name": "mobilenet-v1-0.50-160",
+      "sort": 5
+    },
+    "mobilenet-v1-0.50-192": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.50-192",
+      "name": "mobilenet-v1-0.50-192",
+      "sort": 6
+    },
+    "mobilenet-v1-0.50-224": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.50-224",
+      "name": "mobilenet-v1-0.50-224",
+      "sort": 7
+    },
+    "mobilenet-v1-0.75-128": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.75-128",
+      "name": "mobilenet-v1-0.75-128",
+      "sort": 8
+    },
+    "mobilenet-v1-0.75-160": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.75-160",
+      "name": "mobilenet-v1-0.75-160",
+      "sort": 9
+    },
+    "mobilenet-v1-0.75-192": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.75-192",
+      "name": "mobilenet-v1-0.75-192",
+      "sort": 10
+    },
+    "mobilenet-v1-0.75-224": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-0.75-224",
+      "name": "mobilenet-v1-0.75-224",
+      "sort": 11
+    },
+    "mobilenet-v1-1.0-128": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-1.0-128",
+      "name": "mobilenet-v1-1.0-128",
+      "sort": 12
+    },
+    "mobilenet-v1-1.0-160": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-1.0-160",
+      "name": "mobilenet-v1-1.0-160",
+      "sort": 13
+    },
+    "mobilenet-v1-1.0-192": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-1.0-192",
+      "name": "mobilenet-v1-1.0-192",
+      "sort": 14
+    },
+    "mobilenet-v1-1.0-224": {
+      "local": "yes",
+      "tags": "tensorflowmodel,python,mobilenet-v1-1.0-224",
+      "name": "mobilenet-v1-1.0-224",
+      "sort": 15
+    }
+  },
+  "end_full_path": {
+    "linux": "README.md"
+  }, 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "process_script": "install", 
+  "soft_uoa": "439b9f1757f27091", 
+  "suggested_path": "tensorflowmodel-mobilenet-v1-py"
+}
