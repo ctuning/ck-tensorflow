@@ -265,7 +265,7 @@ def main(_):
   openme['accuracy_top1'] = accuracy_top1
   openme['accuracy_top5'] = accuracy_top5
   openme['execution_time'] = exe_time
-  openme['time_fw_ms'] = forward_time * 1000
+  openme['total_time_ms'] = forward_time * 1000
   openme['weights_load_time_s'] = weights_load_time
   openme['images_load_time_s'] = images_load_time
   openme['net_create_time_s'] = net_create_time
@@ -273,7 +273,7 @@ def main(_):
   openme['prediction_time_avg_s'] = class_avg_time
   openme['avg_time_ms'] = class_avg_time * 1000
   openme['avg_fps'] = 1.0 / class_avg_time
-  openme['total_time_ms'] = class_avg_time * 1000 * BATCH_SIZE
+  openme['batch_time_ms'] = class_avg_time * 1000 * BATCH_SIZE
   openme['frame_predictions'] = frame_predictions
   openme['batch_size'] = BATCH_SIZE
   with open('tmp-ck-timer.json', 'w') as o:
