@@ -1,7 +1,6 @@
 {
   "check_exit_status": "yes",
   "customize": {
-    "force_ask_path": "yes",
     "install_env": {
       "MODEL_MOBILENET_MULTIPLIER": "1.0",
       "MODEL_MOBILENET_RESOLUTION": "160",
