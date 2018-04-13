@@ -176,25 +176,17 @@ def main(_):
     model.load_weights(MODEL_WEIGHTS)
     weights_load_time = time.time() - begin_time
     print("Weights loaded in %fs" % weights_load_time)
-
-  # Load images in model specific way
-  # Images should be loaded after weights, because of some models (squeezenet)
-  # collect some data from weights and use them to preprocess loaded image
-  # Result image must be an object containing 'data' and 'shape' fields
-  begin_time = time.time()
-  images = []
-  for i in range(IMAGES_COUNT):
-    img_file = os.path.join(IMAGE_DIR, image_list[i])
-    images.append(model.load_image(img_file))
-  images_load_time = time.time() - begin_time
-  print("Images loaded in %fs" % images_load_time)
+    
+  # Load one image to detect which shape is used in model
+  img_file = os.path.join(IMAGE_DIR, image_list[0])
+  test_img = model.load_image(img_file)
 
   frame_predictions = []
   forward_begin_time = time.time()
   with tf.Graph().as_default(), tf.Session(config=config) as sess:
     # Build net
     begin_time = time.time()
-    input_shape = (BATCH_SIZE,) + images[0]['shape']
+    input_shape = (BATCH_SIZE,) + test_img['shape']
     input_node = tf.placeholder(dtype=tf.float32, shape=input_shape, name="input")
     output_node = model.inference(input_node)
     net_create_time = time.time() - begin_time
@@ -209,18 +201,32 @@ def main(_):
       print("Weights loaded in %fs" % weights_load_time)
 
     # Run batched mode
+    images_load_time = 0
     class_total_time = 0
     image_index = 0
     images_processed = 0
     for batch_index in range(BATCH_COUNT):
       print("\nBatch %d" % (batch_index))
+      
+      # Load images batch in model specific way
+      # Result image must be an object containing 'data' and 'shape' fields
+      batch_data = []
+      begin_time = time.time()
+      loaded_images = 0
+      for _ in range(BATCH_SIZE):
+        img_file = os.path.join(IMAGE_DIR, image_list[image_index])
+        img_data = model.load_image(img_file)
+        batch_data.append(img_data['data'])
+        image_index += 1
+        loaded_images += 1
+        if loaded_images % 10 == 0:
+          print('Images loaded: %d of %d ...' % (loaded_images, BATCH_SIZE))
+      load_time = time.time() - begin_time
+      images_load_time += load_time
+      print("Batch loaded in %fs" % (load_time))
 
       # Classify batch
       begin_time = time.time()
-      batch_data = []
-      for _ in range(BATCH_SIZE):
-        batch_data.append(images[image_index]['data'])
-        image_index += 1
       feed = { input_node: batch_data }
       batch_results = output_node.eval(feed_dict=feed)
       class_time = time.time() - begin_time
