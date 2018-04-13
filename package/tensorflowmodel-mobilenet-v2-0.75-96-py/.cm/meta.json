@@ -1,13 +1,12 @@
 {
   "check_exit_status": "yes",
   "customize": {
-    "force_ask_path": "yes",
     "install_env": {
       "MODEL_MOBILENET_MULTIPLIER": "0.75",
       "MODEL_MOBILENET_RESOLUTION": "96",
       "MODEL_MOBILENET_VERSION": "2",
       "MODEL_WEIGHTS_ARE_CHECKPOINTS": "YES",
-      "MODULE_FILE": "tf-mobilenet-model.py",
+      "MODULE_FILE": "mobilenet-model.py",
       "PACKAGE_NAME": "mobilenet_v2_0.75_96.tgz",
       "PACKAGE_URL": "https://storage.googleapis.com/mobilenet_v2/checkpoints",
       "WEIGHTS_FILE": "mobilenet_v2_0.75_96.ckpt"
@@ -18,7 +17,7 @@
     "version": "ImageNet"
   },
   "end_full_path": {
-    "linux": "tf-mobilenet-model.py"
+    "linux": "mobilenet-model.py"
   },
   "only_for_host_os_tags": [
     "linux"
@@ -31,7 +30,7 @@
   "soft_uoa": "439b9f1757f27091",
   "suggested_path": "tensorflowmodel-mobilenet-v2-0.75-96-py",
   "tags": [
-    "tensorflow-model",
+    "tensorflowmodel",
     "weights",
     "python",
     "mobilenet",

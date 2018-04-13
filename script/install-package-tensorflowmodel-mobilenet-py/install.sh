@@ -42,7 +42,7 @@ echo
 echo "Copy Python modules ..."
 THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cp ${THIS_SCRIPT_DIR}/tf-mobilenet-model.py .
+cp ${THIS_SCRIPT_DIR}/mobilenet-model.py .
 
 if [ ${VERSION} == "1" ]; then
   cp ${THIS_SCRIPT_DIR}/mobilenet_v1.py .
