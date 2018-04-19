@@ -35,7 +35,8 @@
     "python",
     "mobilenet",
     "mobilenet-v1",
-    "mobilenet-v1-0.25-224"
+    "mobilenet-v1-0.25-224",
+    "2017_06_14"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "6b1b2b254718b69a",
