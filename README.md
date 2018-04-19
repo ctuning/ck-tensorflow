@@ -64,7 +64,7 @@ You can see and use all public results in the [Collective Knowledge repository](
 ```
 $ sudo apt-get install python-dev python-pip python-setuptools python-opencv git
 $ sudo pip install --upgrade pip
-$ sudo pip install protobuf easydict joblib image numpy scipy
+$ sudo pip install protobuf easydict joblib image numpy scipy absl-py
 ```
 
 * Python 3.x:
@@ -72,7 +72,7 @@ $ sudo pip install protobuf easydict joblib image numpy scipy
 ```
 $ sudo apt-get install python3-dev python3-pip python3-setuptools
 $ sudo pip3 install --upgrade pip
-$ sudo pip3 install protobuf easydict joblib image wheel numpy scipy
+$ sudo pip3 install protobuf easydict joblib image wheel numpy scipy absl-py
 ```
 
 ## Prerequisites for Windows
