@@ -18,12 +18,12 @@ VERSION=${MODEL_MOBILENET_VERSION}
 ########################################################################
 echo
 echo "Download weights from ${PACKAGE_URL} ..."
-wget ${PACKAGE_URL}/${PACKAGE_NAME}
+#wget ${PACKAGE_URL}/${PACKAGE_NAME}
 
 ########################################################################
 echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
-tar -zxvf ${PACKAGE_NAME}
+#tar -zxvf ${PACKAGE_NAME}
 
 ########################################################################
 echo
