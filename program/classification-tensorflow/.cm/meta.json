@@ -50,7 +50,7 @@
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
-      "tags": "tensorflow-model,weights,python"
+      "tags": "tensorflowmodel,weights,python"
     }, 
     "python": {
       "local": "yes", 
@@ -64,7 +64,12 @@
     "CK_BATCH_SIZE": 1, 
     "CK_SKIP_IMAGES": 0, 
     "CK_TF_GPU_MEMORY_PERCENT": 33,
-    "CK_IMAGE_FILE": ""
+    "CK_IMAGE_FILE": "",
+    "CK_CROP_PERCENT": 87.5,
+    "CK_TMP_IMAGE_SIZE": 0,
+    "CK_SCALE_AS_FLOAT": "YES",
+    "CK_SUBTRACT_MEAN": "YES",
+    "CK_USE_MODEL_MEAN": "YES"
   }, 
   "tags": [
     "tensorflow-classification"

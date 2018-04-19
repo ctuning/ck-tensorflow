@@ -12,7 +12,6 @@
 
 import tensorflow as tf
 import numpy as np
-import scipy.io
 
 WEIGHTS = {}
 
@@ -21,35 +20,6 @@ WEIGHTS = {}
 def load_weights(data_path):
     global WEIGHTS
     WEIGHTS = np.load(data_path).item()
-
-#-----------------------------------------------------------------------
-
-def preprocess_image(image):
-    swap_img = np.array(image)
-    img_out = np.array(swap_img)
-    # Convert to BGR
-    img_out[:, :, 0] = swap_img[:, :, 2]
-    img_out[:, :, 2] = swap_img[:, :, 0]
-    return img_out
-
-#-----------------------------------------------------------------------
-
-def load_image(image_path):
-    img_orig = scipy.misc.imread(image_path)
-    img = scipy.misc.imresize(img_orig, (227, 227)).astype(np.float)
-    if len(img.shape) == 2:
-        # grayscale
-        img = np.dstack((img,img,img))
-    # drop alpha-channel if present
-    if img.shape[2] > 3:
-        img = img[:,:,:3]
-
-    img = img - np.mean(img)
-        
-    res = {}
-    res['data'] = preprocess_image(img)
-    res['shape'] = img.shape
-    return res
 
 #-----------------------------------------------------------------------
 

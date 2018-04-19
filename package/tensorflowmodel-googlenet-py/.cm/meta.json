@@ -9,7 +9,10 @@
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
       "PACKAGE_URL": "https://lexiondebug.blob.core.windows.net/mlmodel/models", 
       "PACKAGE_WGET": "YES", 
-      "WEIGHTS_FILE": "googlenet.npy"
+      "WEIGHTS_FILE": "googlenet.npy",
+      "MODEL_IMAGE_HEIGHT": 227,
+      "MODEL_IMAGE_WIDTH": 227,
+      "MODEL_CONVERT_TO_BGR": "YES"
     }, 
     "no_os_in_suggested_path": "yes", 
     "no_ver_in_suggested_path": "yes", 

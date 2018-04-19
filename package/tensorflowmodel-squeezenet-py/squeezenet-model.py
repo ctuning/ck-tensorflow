@@ -15,13 +15,11 @@ import numpy as np
 import scipy.io
 
 WEIGHTS = {}
-MEAN_PIXEL = []
 
 #-----------------------------------------------------------------------
 
 def load_weights(data_path):
     global WEIGHTS
-    global MEAN_PIXEL
 
     weights_raw = scipy.io.loadmat(data_path)
     
@@ -34,42 +32,18 @@ def load_weights(data_path):
             kernels, bias = weights_raw[name][0]
             WEIGHTS[name].append( kernels.astype(dtype) )
             WEIGHTS[name].append( bias.astype(dtype) )
-    
-    MEAN_PIXEL = np.array([104.006, 116.669, 122.679], dtype=dtype)
-    
+
+#-----------------------------------------------------------------------
+
+def get_mean_value():
+  return np.array([104.006, 116.669, 122.679], dtype=np.float32)
+
 #-----------------------------------------------------------------------
 
 def get_weights_biases(layer_name):
     weights, biases = WEIGHTS[layer_name]
     biases = biases.reshape(-1)
     return (weights, biases)
-
-#-----------------------------------------------------------------------
-
-def preprocess_image(image):
-    swap_img = np.array(image)
-    img_out = np.array(swap_img)
-    # Convert to BGR
-    img_out[:, :, 0] = swap_img[:, :, 2]
-    img_out[:, :, 2] = swap_img[:, :, 0]
-    return img_out - MEAN_PIXEL
-
-#-----------------------------------------------------------------------
-
-def load_image(image_path):
-    img_orig = scipy.misc.imread(image_path)
-    img = scipy.misc.imresize(img_orig, (227, 227)).astype(np.float)
-    if len(img.shape) == 2:
-        # grayscale
-        img = np.dstack((img,img,img))
-    # drop alpha-channel if present
-    if img.shape[2] > 3:
-        img = img[:,:,:3]
-
-    res = {}
-    res['data'] = preprocess_image(img)
-    res['shape'] = img.shape
-    return res
 
 #-----------------------------------------------------------------------
     
