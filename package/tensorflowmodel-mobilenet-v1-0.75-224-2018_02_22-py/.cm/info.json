@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "712805846348309b",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2018-04-19T12:43:17.127720",
+    "version": [
+      "1",
+      "9",
+      "4"
+    ]
+  },
+  "data_name": "tensorflowmodel-mobilenet-v1-0.75-224-2018_02_22-py"
+}

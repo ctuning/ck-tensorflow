@@ -30,12 +30,15 @@ echo
 echo "Remove temporary files ..."
 rm ${PACKAGE_NAME}
 
+function rm_file() {
+  if [ -f $1 ]; then
+    rm $1
+  fi
+}
 # We don't use it right now, so remove to save disk space, but it can be useful in future
-if [ ${VERSION} == "2" ]; then
-  rm "mobilenet_v2_${MULTIPLIER}_${RESOLUTION}_eval.pbtxt"
-  rm "mobilenet_v2_${MULTIPLIER}_${RESOLUTION}_frozen.pb"
-  rm "mobilenet_v2_${MULTIPLIER}_${RESOLUTION}.tflite"
-fi
+rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}_eval.pbtxt"
+rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}_frozen.pb"
+rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}.tflite"
 
 ########################################################################
 echo

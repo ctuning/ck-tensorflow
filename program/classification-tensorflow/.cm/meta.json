@@ -50,7 +50,7 @@
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
-      "tags": "tensorflow-model,weights,python"
+      "tags": "tensorflowmodel,weights,python"
     }, 
     "python": {
       "local": "yes", 
