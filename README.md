@@ -79,7 +79,7 @@ $ sudo pip3 install protobuf easydict joblib image wheel numpy scipy absl-py
 
 ```
 $ pip install --upgrade pip
-$ pip install protobuf easydict joblib image numpy scipy
+$ pip install protobuf easydict joblib image numpy scipy absl-py
 ```
 
 You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
