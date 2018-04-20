@@ -69,7 +69,7 @@ USE_MODEL_MEAN = os.getenv("CK_USE_MODEL_MEAN") == "YES"
 # Returns dir for cached prepared images files.
 # Dir name consist of values of preparation parameters.
 def get_cache_dir():
-  return os.path.join(CACHE_DIR, '{}-{}-{}-{}'.format(TMP_IMAGE_SIZE, CROP_PERCENT, SUBTRACT_MEAN, USE_MODEL_MEAN))
+  return os.path.join(CACHE_DIR, '{}-{}'.format(TMP_IMAGE_SIZE, CROP_PERCENT))
 
 
 # Returns path to preprocessed image in cache directory
@@ -326,6 +326,9 @@ def main(_):
   if hasattr(model, 'get_mean_value'):
     global MODEL_MEAN_VALUE
     MODEL_MEAN_VALUE = model.get_mean_value()
+  else:
+    global USE_MODEL_MEAN
+    USE_MODEL_MEAN = False
 
   # Load processing image filenames
   if IMAGE_FILE:
