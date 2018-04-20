@@ -83,7 +83,16 @@ Used when `CK_SUBTRACT_MEAN` is set.
 Default: `YES`
 
 ### `CK_CACHE_IMAGES`
-Cache preprocessed images. Images are cached into a directory whose name contained of preprocessing parameters. Next time when program runs with the same preprocessing parameters, preprocessed images will be loaded from cache. This significantly speeds up images loading process.
+Do caching of preprocessed images. Images are cached into a directory whose name contained of preprocessing parameters. Next time when program runs with the same preprocessing parameters, preprocessed images will be loaded from cache. This significantly speeds up images loading process.
 
 Default: `YES`
 
+### `CK_RECREATE_CACHE`
+Is set to `YES` then existed cached images will be erased. 
+
+Default: `NO`
+
+### `CK_CACHE_DIR`
+Root director for storing cached images. This directory will include additional subdirectories for images preprocessed with different preprocessing parameters `CK_TMP_IMAGE_SIZE` and `CK_CROP_PERCENT`.
+
+Default: `../preprocessed`
