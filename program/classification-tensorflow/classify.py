@@ -11,6 +11,7 @@ import time
 import json
 import os
 import re
+import shutil 
 import tensorflow as tf
 import numpy as np
 import scipy.io
@@ -40,6 +41,16 @@ VALUES_MAP = {}
 TOP1 = 0
 TOP5 = 0
 
+# Try to use cached prepared images if presented.
+# Load as normal, prepare and cache, if no cached data is found.
+USE_CACHE = os.getenv("CK_CACHE_IMAGES") == "YES"
+
+# Ignore existed cached images and create new ones.
+RECREATE_CACHE = os.getenv("CK_RECREATE_CACHE") == "YES"
+
+# Root dir for cached prepared images
+CACHE_DIR = os.getenv("CK_CACHE_DIR")
+
 # Preprocessing options:
 #
 # CK_TMP_IMAGE_SIZE - if this set and greater tnan IMAGE_SIZE
@@ -51,9 +62,24 @@ TOP5 = 0
 #
 TMP_IMAGE_SIZE = int(os.getenv('CK_TMP_IMAGE_SIZE'))
 CROP_PERCENT = float(os.getenv('CK_CROP_PERCENT'))
-SCALE_AS_FLOAT = os.getenv("CK_SCALE_AS_FLOAT") == "YES"
 SUBTRACT_MEAN = os.getenv("CK_SUBTRACT_MEAN") == "YES"
 USE_MODEL_MEAN = os.getenv("CK_USE_MODEL_MEAN") == "YES"
+
+
+# Returns dir for cached prepared images files.
+# Dir name consist of values of preparation parameters.
+def get_cache_dir():
+  return os.path.join(CACHE_DIR, '{}-{}-{}-{}'.format(TMP_IMAGE_SIZE, CROP_PERCENT, SUBTRACT_MEAN, USE_MODEL_MEAN))
+
+
+# Returns path to preprocessed image in cache directory
+def get_cached_path(image_file_name):
+  return os.path.join(get_cache_dir(), image_file_name) + '.npy'
+
+
+# Returns path to source image in dataset directory
+def get_original_path(image_file_name):
+  return os.path.join(IMAGE_DIR, image_file_name)
 
 
 def load_ImageNet_classes():
@@ -181,10 +207,6 @@ def load_image(image_path):
   if img.shape[2] > 3:
       img = img[:,:,:3]
 
-  # Convert to float 
-  if SCALE_AS_FLOAT:
-    img = img.astype(np.float)
-
   # Resize and crop
   if TMP_IMAGE_SIZE > IMAGE_SIZE:
     img = resize_img(img, TMP_IMAGE_SIZE)
@@ -192,16 +214,6 @@ def load_image(image_path):
   else:
     img = crop_img(img, CROP_PERCENT/100.0)
     img = resize_img(img, IMAGE_SIZE)
-
-  # Convert to float
-  if not SCALE_AS_FLOAT:
-    img = img.astype(np.float)
-
-  # Normalize if required
-  if MODEL_NORMALIZE_DATA:
-    img = img / 255.0
-    img = img - 0.5
-    img = img * 2
 
   # Convert to BGR
   if MODEL_CONVERT_TO_BGR:
@@ -211,7 +223,21 @@ def load_image(image_path):
     tmp_img[:, :, 2] = swap_img[:, :, 0]
     img = tmp_img
 
-  # Subtract mean value if required
+  return img
+
+
+# Final prepartion of image before loading into network
+def prepare_img(img):
+  # Convert to float
+  img = img.astype(np.float)
+
+  # Normalize
+  if MODEL_NORMALIZE_DATA:
+    img = img / 255.0
+    img = img - 0.5
+    img = img * 2
+
+  # Subtract mean value
   if SUBTRACT_MEAN:
     if USE_MODEL_MEAN:
       img = img - MODEL_MEAN_VALUE
@@ -226,8 +252,27 @@ def load_batch(image_list, image_index):
   batch_data = []
   loaded_images = 0
   for _ in range(BATCH_SIZE):
-    img_file = os.path.join(IMAGE_DIR, image_list[image_index])
-    img_data = load_image(img_file)
+    img_file = image_list[image_index]
+    do_load_image = True
+
+    # In cached mode try to find cached preprocessed image
+    if USE_CACHE:
+      img_file_path = get_cached_path(img_file)
+      if os.path.isfile(img_file_path):
+        print 'LOAD CACHE', img_file
+        dd = np.load(img_file_path)
+        print dd.shape
+        img_data = dd
+        do_load_image = False
+
+    # Load and preprocess image
+    if do_load_image:
+      img_data = load_image(get_original_path(img_file))
+      if USE_CACHE:
+        print 'SAVE CACHE', img_file
+        np.save(get_cached_path(img_file), img_data)
+
+    img_data = prepare_img(img_data)
     batch_data.append(img_data)
     image_index += 1
     loaded_images += 1
@@ -243,6 +288,7 @@ def main(_):
   global BATCH_COUNT
   global IMAGES_COUNT
   global SKIP_IMAGES
+  global USE_CACHE
   print('Model module: ' + MODEL_MODULE)
   print('Model weights: ' + MODEL_WEIGHTS)
   print('Image size: {}x{}'.format(MODEL_IMAGE_HEIGHT, MODEL_IMAGE_WIDTH))
@@ -255,9 +301,21 @@ def main(_):
     BATCH_COUNT = 1
     IMAGES_COUNT = 1
     SKIP_IMAGES = 0
+    USE_CACHE = False
   print('Input images dir: ' + IMAGE_DIR)
   print('Batch size: %d' % BATCH_SIZE)
   print('Batch count: %d' % BATCH_COUNT)
+
+  # Prepare cache dirs
+  if USE_CACHE:
+    if not os.path.isdir(CACHE_DIR):
+      os.mkdir(CACHE_DIR)
+    cache_dir = get_cache_dir()
+    if RECREATE_CACHE:
+      if os.path.isdir(cache_dir):
+        shutil.rmtree(cache_dir) 
+    if not os.path.isdir(cache_dir):
+      os.mkdir(cache_dir)
 
   exe_begin_time = time.time()
 

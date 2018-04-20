@@ -67,9 +67,11 @@
     "CK_IMAGE_FILE": "",
     "CK_CROP_PERCENT": 87.5,
     "CK_TMP_IMAGE_SIZE": 0,
-    "CK_SCALE_AS_FLOAT": "YES",
     "CK_SUBTRACT_MEAN": "YES",
-    "CK_USE_MODEL_MEAN": "YES"
+    "CK_USE_MODEL_MEAN": "YES",
+    "CK_CACHE_IMAGES": "YES",
+    "CK_RECREATE_CACHE": "NO",
+    "CK_CACHE_DIR": "../preprocessed"
   }, 
   "tags": [
     "tensorflow-classification"
