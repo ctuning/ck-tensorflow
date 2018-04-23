@@ -6,7 +6,7 @@
       "CK_TF_ENABLE_XLA": "NO", 
       "CK_TF_NEED_CUDA": "NO", 
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "v1.8.0-rc0", 
+      "PACKAGE_GIT_CHECKOUT": "v1.8.0-rc1",
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     }, 
