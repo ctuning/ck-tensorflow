@@ -75,9 +75,12 @@ def setup(i):
     env[ep]=pi
     env[ep+'_LIB']=pl
 
+    # Path to bundled protobuf.
+    pb=os.path.join(pl,'external','protobuf_archive','python')
+
     if winh=='yes':
-        s+='\nset PYTHONPATH='+pl+';%PYTHONPATH%\n'
+        s+='\nset PYTHONPATH='+pl+';'+pb+';%PYTHONPATH%\n'
     else:
-        s+='\nexport PYTHONPATH='+pl+':${PYTHONPATH}\n'
+        s+='\nexport PYTHONPATH='+pl+':'+pb+':${PYTHONPATH}\n'
 
     return {'return':0, 'bat':s}
