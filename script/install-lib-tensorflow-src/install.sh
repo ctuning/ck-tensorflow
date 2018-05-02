@@ -31,6 +31,27 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   exit_if_error
 fi
 
+############################################################
+if [ "${PACKAGE_PATCH}" == "YES" ] ; then
+  if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
+    echo ""
+    echo "Patching source directory ..."
+
+    cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
+
+    for i in ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}/*
+    do
+      echo "$i"
+      patch -p1 < $i
+
+      if [ "${?}" != "0" ] ; then
+        echo "Error: patching failed!"
+        exit 1
+      fi
+    done
+  fi
+fi
+
 stage "Configure environment variables"
 # TF configure.py script will ask for all unset variables
 export CC_OPT_FLAGS="-march=native"
