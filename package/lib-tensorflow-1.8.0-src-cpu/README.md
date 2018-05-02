@@ -15,3 +15,7 @@ e.g. 1 processor:
 ```
 $ ck install package:lib-tensorflow-1.8.0-src-cpu --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
 ```
+
+## Patch
+
+`png.patch` is a workaround for [TensorFlow issue #18643](https://github.com/tensorflow/tensorflow/issues/18643).
