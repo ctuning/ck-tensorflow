@@ -69,7 +69,7 @@ USE_MODEL_MEAN = os.getenv("CK_USE_MODEL_MEAN") == "YES"
 # Returns dir for cached prepared images files.
 # Dir name consist of values of preparation parameters.
 def get_cache_dir():
-  return os.path.join(CACHE_DIR, '{}-{}'.format(TMP_IMAGE_SIZE, CROP_PERCENT))
+  return os.path.join(CACHE_DIR, '{}-{}-{}'.format(IMAGE_SIZE, TMP_IMAGE_SIZE, CROP_PERCENT))
 
 
 # Returns path to preprocessed image in cache directory
