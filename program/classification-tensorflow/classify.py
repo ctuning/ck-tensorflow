@@ -259,9 +259,7 @@ def load_batch(image_list, image_index):
     if USE_CACHE:
       img_file_path = get_cached_path(img_file)
       if os.path.isfile(img_file_path):
-        print 'LOAD CACHE', img_file
         dd = np.load(img_file_path)
-        print dd.shape
         img_data = dd
         do_load_image = False
 
@@ -269,7 +267,6 @@ def load_batch(image_list, image_index):
     if do_load_image:
       img_data = load_image(get_original_path(img_file))
       if USE_CACHE:
-        print 'SAVE CACHE', img_file
         np.save(get_cached_path(img_file), img_data)
 
     img_data = prepare_img(img_data)
