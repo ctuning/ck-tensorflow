@@ -15,9 +15,6 @@ import imp
 import os
 import sys
 import tensorflow as tf
-import numpy as np
-import scipy.io
-from scipy.ndimage import zoom
 from tensorflow.contrib import slim
 
 MODULE_PATH = os.path.dirname(os.getenv('CK_ENV_TENSORFLOW_MODEL_MODULE'))
@@ -31,46 +28,6 @@ def load_checkpoints(sess, file_prefix):
     print('Restore checkpoints from {}'.format(file_prefix))
     saver = tf.train.Saver()
     saver.restore(sess, file_prefix)
-
-#-----------------------------------------------------------------------
-
-def load_image(image_path):
-    img = scipy.misc.imread(image_path)
-
-    # check if grayscale and convert to RGB
-    if len(img.shape) == 2:
-        img = np.dstack((img,img,img))
-    # drop alpha-channel if present
-    if img.shape[2] > 3:
-        img = img[:,:,:3]
-
-    # The same image preprocessing steps are used for MobileNet as for Inception:
-    # https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py
-
-    # Crop the central region of the image with an area containing 87.5% of the original image.
-    new_w = int(img.shape[0] * 0.875)
-    new_h = int(img.shape[1] * 0.875)
-    offset_w = int((img.shape[0] - new_w)/2)
-    offset_h = int((img.shape[1] - new_h)/2)
-    img = img[offset_w:new_w+offset_w, offset_h:new_h+offset_h, :]
-
-    # Convert to float and normalize
-    img = img.astype(np.float)
-    img = img / 255.0
-
-    # Zoom to target size
-    zoom_w = float(RESOLUTION)/float(img.shape[0])
-    zoom_h = float(RESOLUTION)/float(img.shape[1])
-    img = zoom(img, [zoom_w, zoom_h, 1])
-
-    # Shift and scale
-    img = img - 0.5
-    img = img * 2
-
-    res = {}
-    res['data'] = img
-    res['shape'] = img.shape
-    return res
 
 #-----------------------------------------------------------------------
 

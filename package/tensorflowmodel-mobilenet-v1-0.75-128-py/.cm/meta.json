@@ -2,9 +2,12 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
+      "MODEL_IMAGE_HEIGHT": "128",
+      "MODEL_IMAGE_WIDTH": "128",
       "MODEL_MOBILENET_MULTIPLIER": "0.75",
       "MODEL_MOBILENET_RESOLUTION": "128",
       "MODEL_MOBILENET_VERSION": "1",
+      "MODEL_NORMALIZE_DATA": "YES",
       "MODEL_WEIGHTS_ARE_CHECKPOINTS": "YES",
       "MODULE_FILE": "mobilenet-model.py",
       "PACKAGE_NAME": "mobilenet_v1_0.75_128_2017_06_14.tar.gz",
