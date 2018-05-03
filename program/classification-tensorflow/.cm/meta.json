@@ -50,7 +50,8 @@
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
-      "tags": "tensorflowmodel,weights,python"
+      "tags": "tensorflowmodel,weights,python",
+      "no_tags": "mobilenet-all"
     },
     "python": {
       "local": "yes", 

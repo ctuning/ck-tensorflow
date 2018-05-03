@@ -118,7 +118,8 @@
   "soft_uoa": "439b9f1757f27091", 
   "suggested_path": "tensorflowmodel-mobilenet-v1-py", 
   "tags": [
-    "mobilenet", 
+    "mobilenet",
+    "mobilenet-all",
     "mobilenet-v1", 
     "mobilenet-v1-all", 
     "2017_06_14",

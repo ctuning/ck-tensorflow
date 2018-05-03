@@ -119,6 +119,7 @@
   "suggested_path": "tensorflowmodel-mobilenet-v1-2018_02_22-py",
   "tags": [
     "mobilenet",
+    "mobilenet-all",
     "mobilenet-v1",
     "mobilenet-v1-all",
     "2018_02_22",
