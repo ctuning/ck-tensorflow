@@ -5,7 +5,7 @@
     "install_env": {
       "PACKAGE_URL": "https://github.com/codeplaysoftware/tensorflow",
       "PACKAGE_GIT": "YES",
-      "PACKAGE_GIT_CHECKOUT": "4aff06b",
+      "PACKAGE_GIT_CHECKOUT": "master",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_SUB_DIR": "src",
       "USE_CUDA": 0,
@@ -18,7 +18,7 @@
       "tf_need_opencl": 1
     }, 
     "use_git_revision": "yes", 
-    "version": "4aff06b"
+    "version": "master"
   }, 
   "deps": {
     "bazel": {
@@ -39,6 +39,13 @@
       "sort": 40, 
       "tags": "compiler,lang-computecpp"
     }, 
+    "compiler.gcc": {
+      "local": "yes", 
+      "name": "GCC compiler", 
+      "sort": 39, 
+      "tags": "compiler,lang-cpp"
+    }, 
+
     "lib.opencl": {
       "add_to_path": "yes", 
       "local": "yes", 
