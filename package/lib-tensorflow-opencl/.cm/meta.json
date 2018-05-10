@@ -3,7 +3,11 @@
     "extra_dir": "", 
     "git_src_dir": "src", 
     "install_env": {
-      "TENSORFLOW_URL": "https://github.com/tensorflow/tensorflow", 
+      "PACKAGE_URL": "https://github.com/codeplaysoftware/tensorflow",
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_GIT_CHECKOUT": "4aff06b",
+      "PACKAGE_PATCH": "YES",
+      "PACKAGE_SUB_DIR": "src",
       "USE_CUDA": 0,
       "USE_OPENCL": 1
     }, 
@@ -14,7 +18,7 @@
       "tf_need_opencl": 1
     }, 
     "use_git_revision": "yes", 
-    "version": "master"
+    "version": "4aff06b"
   }, 
   "deps": {
     "bazel": {
@@ -41,6 +45,13 @@
       "name": "OpenCL library", 
       "sort": 50, 
       "tags": "lib,opencl"
+    }, 
+    "lib.armcl": {
+      "add_to_path": "yes", 
+      "local": "yes", 
+      "name": "ARM Compute library", 
+      "sort": 50, 
+      "tags": "lib,armcl,v18.03"
     }, 
     "python": {
       "local": "yes", 
@@ -72,6 +83,8 @@
     "vsrc"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "939b484199d4d7da"
+    "data_uoa": "882656604ea47304",
+    "module_uoa": "script"
   }
 }
+
