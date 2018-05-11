@@ -51,27 +51,38 @@ if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   fi
 fi
 
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "${CK_ANDROID_NDK_ROOT_DIR}"
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-exit
 if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
+  echo
+  echo "Building Android package..."
 
   # TODO: We have somehow to convert --target_os into an option supported by build_all_android.sh script:
   # arm64-v8a armeabi armeabi-v7a mips mips64 x86 x86_64 tegra
   TARGET_ARCH=arm64-v8a
+
+  TENSORFLOW_LIB_DIR=lib/android_${TARGET_ARCH}
+  PROTOBUF_LIB_DIR=protobuf_android/${TARGET_ARCH}
+  NSYNC_LIB_DIR=arm64-v8a.android.c++11 # TODO how to select correct subdir?
+  
   export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
   ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/build_all_android.sh -a ${TARGET_ARCH}
-  
 else
+  echo
+  echo "Building Linux package..."
+
+  TENSORFLOW_LIB_DIR=lib
+  PROTOBUF_LIB_DIR=protobuf
+  NSYNC_LIB_DIR=default.linux.c++11
 
   ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/build_all_linux.sh
-  
 fi
 
-# TODO copy target files
+# Copy target files
+remove_dir_if_exists ${INSTALL_DIR}/lib
+mkdir ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/gen/${TENSORFLOW_LIB_DIR}/libtensorflow-core.a ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/gen/${PROTOBUF_LIB_DIR}/lib/libprotobuf.a ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/gen/${PROTOBUF_LIB_DIR}/lib/libprotobuf-lite.a ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/downloads/nsync/builds/${NSYNC_LIB_DIR}/libnsync.a ${INSTALL_DIR}/lib
+
 
 return 0

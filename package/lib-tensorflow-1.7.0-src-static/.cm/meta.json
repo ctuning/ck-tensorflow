@@ -11,8 +11,15 @@
     "version": "1.7"
   },
   "deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    }
   },
   "end_full_path": {
+    "linux": "lib/libtensorflow-core.a",
     "android": "lib/libtensorflow-core.a"
   },
   "need_cpu_info": "yes",

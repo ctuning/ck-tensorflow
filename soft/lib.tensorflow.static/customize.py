@@ -56,7 +56,7 @@ def setup(i):
     iv=i.get('interactive','')
 
     cus=i.get('customize',{})
-    fp=cus.get('full_path','')
+    full_path = cus.get('full_path','')
 
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
@@ -66,19 +66,29 @@ def setup(i):
     env=i['env']
     ep=cus['env_prefix']
 
-    p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-    pi=os.path.dirname(pl)
+    lib_dir = os.path.dirname(full_path)
+    install_dir = os.path.dirname(lib_dir)
+    src_dir = os.path.join(install_dir, 'src')
 
-    env[ep]=pi
-    env[ep+'_LIB']=pl
+    target_os_dict = i.get('target_os_dict', {})
+    target_os_name = target_os_dict.get('ck_name2', '')
 
-    # Path to bundled protobuf.
-    pb=os.path.join(pl,'external','protobuf_archive','python')
-
-    if winh=='yes':
-        s+='\nset PYTHONPATH='+pl+';'+pb+';%PYTHONPATH%\n'
+    env[ep+'_LINK_OPTIONS'] = '-Wl,--allow-multiple-definition -Wl,--whole-archive'
+    env[ep+'_LIBS_DIRS'] = '-L' + lib_dir
+    if target_os_name == 'android':
+      env[ep+'_LIBS'] = '-ltensorflow-core -lprotobuf -lprotobuf-lite -llog -lnsync -lz'
+    elif target_os_name == 'linux':
+      env[ep+'_LIBS'] = '-pthread -ltensorflow-core -lprotobuf -lprotobuf-lite -lnsync -ldl -lz'
     else:
-        s+='\nexport PYTHONPATH='+pl+':'+pb+':${PYTHONPATH}\n'
+      return {'return': -1, 'error': 'Unsupported target OS'}
 
-    return {'return':0, 'bat':s}
+    env[ep] = install_dir
+    env[ep+'_LIB'] = lib_dir
+    env[ep+'_INCLUDE0'] = src_dir
+    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'protobuf', 'src')
+    env[ep+'_INCLUDE2'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads')
+    env[ep+'_INCLUDE3'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'eigen')
+    env[ep+'_INCLUDE4'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'gen', 'proto')
+    env[ep+'_INCLUDE5'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'nsync', 'public')
+
+    return {'return': 0, 'bat': s}

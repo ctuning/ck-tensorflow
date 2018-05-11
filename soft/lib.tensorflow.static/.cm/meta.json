@@ -8,12 +8,13 @@
       "android": 10
     },
     "soft_file": {
-      "android": "libtensorflow-core.a"
+      "android": "install/lib/libtensorflow-core.a"
     }
   },
-  "soft_name": "TensorFlow library",
+  "soft_name": "TensorFlow C++ API",
   "tags": [
     "lib",
-    "tensorflow"
+    "tensorflow",
+    "vstatic"
   ]
 }
