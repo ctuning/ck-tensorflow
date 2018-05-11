@@ -48,12 +48,14 @@ You can see and use all public results in the [Collective Knowledge repository](
 # License
 * [BSD](https://github.com/ctuning/ck-tensorflow/blob/master/LICENSE) (3 clause)
 
-# Prerequisites
+# Global prerequisites 
 
 * Python 2.7+ or 3.3+
 * [Collective Knowledge Framework](http://github.com/ctuning/ck)
-* Java 8 JDK (though can be automatically installed via CK)
+* Git client
+
 * CUDA/cuDNN if you have [CUDA-enabled GPU](https://developer.nvidia.com/cuda-gpus)
+
 * Android NDK if you want to compile and run TF for Android devices
 
 ## Prerequisites for Ubuntu
@@ -63,24 +65,18 @@ You can see and use all public results in the [Collective Knowledge repository](
 * Python 2.x:
 ```
 $ sudo apt-get install python-dev python-pip python-setuptools python-opencv git
-$ sudo pip install --upgrade pip
-$ sudo pip install protobuf easydict joblib image numpy scipy absl-py
 ```
 
 * Python 3.x:
 
 ```
 $ sudo apt-get install python3-dev python3-pip python3-setuptools
-$ sudo pip3 install --upgrade pip
-$ sudo pip3 install protobuf easydict joblib image wheel numpy scipy absl-py
 ```
 
-## Prerequisites for Windows
+Note that CK will automatically install the following dependencies into CK TF virtual space:
+```protobuf easydict joblib image wheel numpy scipy absl-py```
 
-```
-$ pip install --upgrade pip
-$ pip install protobuf easydict joblib image numpy scipy absl-py
-```
+## Customized build
 
 You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
 Raspberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
