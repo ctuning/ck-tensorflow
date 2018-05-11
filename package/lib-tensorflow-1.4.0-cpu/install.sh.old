@@ -28,22 +28,22 @@ if [[ ${CK_PYTHON_PIP_BIN_FULL} == /home/* ]] ; then
   SUDO=""
 fi
 
-#echo ""
-#read -r -p "Upgrade pip and install other deps (Y/n)? " x
-#
-#case "$x" in
-#  [nN][oO]|[nN])
-#    ;;
-#  *)
-#    echo ""
-#    echo "Using ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} ..."
-#    echo ""
-#
-#    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} install --upgrade pip
-#    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} install protobuf easydict joblib image numpy scipy enum-compat
-#    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} uninstall enum34
-#    ;;
-#esac
+echo ""
+read -r -p "Upgrade pip and install other deps (Y/n)? " x
+
+case "$x" in
+  [nN][oO]|[nN])
+    ;;
+  *)
+    echo ""
+    echo "Using ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} ..."
+    echo ""
+
+    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} install --upgrade pip
+    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} install protobuf easydict joblib image numpy scipy enum-compat
+    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} uninstall enum34
+    ;;
+esac
 
 # Check if has --system option
 ${CK_PYTHON_PIP_BIN_FULL} install --help > tmp-pip-help.tmp
@@ -51,22 +51,6 @@ if grep -q "\-\-system" tmp-pip-help.tmp ; then
  SYS=" --system"
 fi
 rm -f tmp-pip-help.tmp
-
-######################################################################################
-echo "Downloading and installing deps ..."
-echo ""
-
-${CK_PYTHON_PIP_BIN_FULL} install --upgrade pip protobuf easydict joblib image numpy scipy enum-compat -t ${TENSORFLOW_LIB_DIR}  ${SYS}
-if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
-  exit 1
-fi
-
-${CK_PYTHON_PIP_BIN_FULL} uninstall enum34 ${SYS}
-if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
-  exit 1
-fi
 
 ######################################################################################
 echo ""

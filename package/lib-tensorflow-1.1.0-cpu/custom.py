@@ -105,6 +105,9 @@ def setup(i):
     if len(spython_ver)>1:
        sver2=spython_ver[1]
 
+    if ie.get('CK_FORCE_PYTHON_VER2','')!='':
+       sver2=int(ie['CK_FORCE_PYTHON_VER2'])
+
     # Check download path
     p='https://storage.googleapis.com/tensorflow/'
 
