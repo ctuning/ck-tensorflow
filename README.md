@@ -93,23 +93,30 @@ $ sudo pip install ck
 $ ck pull repo:ck-tensorflow
 ```
 
-## Example of TensorFlow unified installation on Ubuntu or Windows via CK (pre-build binaries)
+## Example of unified TensorFlow installation on Ubuntu or Windows via CK (pre-build versions)
 
 ```
-$ ck install package:lib-tensorflow-1.1.0-cpu
-$ ck install package:lib-tensorflow-1.1.0-cuda
+$ ck install package:lib-tensorflow-1.8.0-cpu
+ and/or (CK enables easy co-existance of different versions of tools
+$ ck install package:lib-tensorflow-1.8.0-cuda
 ```
 
-# Benchmarking
+Check that TF is installed locally and registered in the CK:
 ```
- $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
+$ ck show env --tags=lib,tensorflow
 ```
 
-Select one of the `test_cpu` and `test_cuda` commands;  select an available version of TensorFlow, 
-if prompted (more than one choice); select an available benchmark, if prompted (more than one choice),
-and select TensorFlow model.
+Use CK virtual environment to test it (similar to Python virtual env but for any binary package installed via CK):
+```
+$ ck virtual env --tags=lib,tensorflow
+```
 
-## Example of TensorFlow unified classification on Ubuntu via CK
+Install other TF versions available in the CK:
+```
+$ ck install package --tags=lib,tensorflow
+```
+
+## Test unified image classification workflow via CK using above TF
 
 ```
 $ ck run program:tensorflow --cmd_key=classify
@@ -123,6 +130,15 @@ You can list them via
  $ ck pull repo:ctuning-datasets-min
  $ ck search dataset --tags=dnn
 ```
+
+# Benchmarking
+```
+ $ ck run program:tensorflow (--env.BATCH_SIZE=10) (--env.NUM_BATCHES=5)
+```
+
+Select one of the `test_cpu` and `test_cuda` commands;  select an available version of TensorFlow, 
+if prompted (more than one choice); select an available benchmark, if prompted (more than one choice),
+and select TensorFlow model.
 
 ## Crowd-benchmarking
 
