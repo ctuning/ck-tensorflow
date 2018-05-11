@@ -1,0 +1,19 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_TF",
+    "limit_recursion_dir_search": {
+      "android": 10
+    },
+    "soft_file": {
+      "android": "libtensorflow-core.a"
+    }
+  },
+  "soft_name": "TensorFlow library",
+  "tags": [
+    "lib",
+    "tensorflow"
+  ]
+}
