@@ -112,9 +112,11 @@ def setup(i):
     p='https://storage.googleapis.com/tensorflow/'
 
     if hname=='win':
-       p+='windows'
+       p += 'windows'
+    elif macos=='yes':
+       p += 'mac'
     else:
-       p+='linux'
+       p += 'linux'
 
     tp='cpu'
     tp1=''
@@ -130,9 +132,9 @@ def setup(i):
 
     if macos=='yes':
        if python3==1:
-          px='py2-none-any.whl'
-       else:
           px='py3-none-any.whl'
+       else:
+          px='py2-none-any.whl'
 
     elif hname=='win':
        if python3==1:
