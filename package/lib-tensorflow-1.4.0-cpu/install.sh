@@ -63,10 +63,11 @@ if [ "${?}" != "0" ] ; then
 fi
 
 ${CK_PYTHON_PIP_BIN_FULL} uninstall enum34 ${SYS}
-if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
-  exit 1
-fi
+# enum34 is not always installed so skip check for error - it doesn't matter ...
+#if [ "${?}" != "0" ] ; then
+#  echo "Error: installation failed!"
+#  exit 1
+#fi
 
 ######################################################################################
 echo ""
