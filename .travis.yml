@@ -8,16 +8,31 @@ python:
     - 2.7
     - 3.6
 
+env:
+    matrix:
+        - TF_PREBUILT_VERSION=1.4.0
+        - TF_PREBUILT_VERSION=1.5.0
+        - TF_PREBUILT_VERSION=1.7.0
+        - TF_PREBUILT_VERSION=1.8.0
+
 matrix:
     include:
         - os: osx
           language: generic
           python:   2.7
-          env:      WANTED_PYTHON_VERSION=2.7
+          env:      WANTED_PYTHON_VERSION=2.7 TF_PREBUILT_VERSION=1.4.0
+        - os: osx
+          language: generic
+          python:   2.7
+          env:      WANTED_PYTHON_VERSION=2.7 TF_PREBUILT_VERSION=1.8.0
         - os: osx
           language: generic
           python:   3.6
-          env:      WANTED_PYTHON_VERSION=3.6
+          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.4.0
+        - os: osx
+          language: generic
+          python:   3.6
+          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.8.0
 
 before_install:
     - |
@@ -42,7 +57,7 @@ before_install:
 install:
     - CWD=`pwd`
     - THIS_REPO_NAME=`basename $CWD`
-    - echo "os=${TRAVIS_OS_NAME}, python=${WANTED_PYTHON_VERSION}, which_test=${TRAVIS_CK_WHICH_TEST}"
+    - echo "os=${TRAVIS_OS_NAME}, python=${WANTED_PYTHON_VERSION}, TF_prebuilt_version=${TF_PREBUILT_VERSION}"
     - which python
     - python --version
     - python -m pip install --ignore-installed --verbose pip setuptools         # make sure pip is also up to date no matter what
@@ -53,7 +68,7 @@ install:
     -       ck install package:imagenet-2012-aux                                # one part of ImageNet
     -       echo | ck install package:imagenet-2012-val-min-resized             # another part of ImageNet
     -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
-    -       ck install package:lib-tensorflow-1.4.0-cpu                         # prebuilt TF package
+    -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu        # prebuilt TF package
 
 script:
     - ck run program:classification-tensorflow --env.CK_IMAGE_FILE=$HOME/CK-TOOLS/dataset-imagenet-ilsvrc2012-val-min-resized/ILSVRC2012_val_00000060.JPEG

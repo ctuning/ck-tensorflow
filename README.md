@@ -3,6 +3,7 @@
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](https://github.com/ctuning/ck)
 [![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Travis Build Status](https://travis-ci.org/ctuning/ck-tensorflow.svg?branch=master)](https://travis-ci.org/ctuning/ck-tensorflow)
 
 # Introduction
 
