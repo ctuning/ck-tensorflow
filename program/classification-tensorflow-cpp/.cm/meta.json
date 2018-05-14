@@ -1,0 +1,85 @@
+{
+  "backup_data_uid": "dda4f4bb0b8cf989",
+  "compile_deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    },
+    "library": {
+      "local": "yes", 
+      "name": "TensorFlow C++ API", 
+      "sort": 20, 
+      "tags": "lib,tensorflow,vstatic"
+    }
+  },
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_STDCPP_INCLUDE",
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA",
+    "CK_ENV_LIB_TF_INCLUDE0",
+    "CK_ENV_LIB_TF_INCLUDE1",
+    "CK_ENV_LIB_TF_INCLUDE2",
+    "CK_ENV_LIB_TF_INCLUDE3",
+    "CK_ENV_LIB_TF_INCLUDE4",
+    "CK_ENV_LIB_TF_INCLUDE5"
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
+  "data_name": "classification-tensorflow-cpp", 
+  "linker_add_lib_as_env": [
+    "CK_CXX_EXTRA",
+    "CK_ENV_LIB_STDCPP_STATIC"
+  ],
+  "main_language": "cpp",
+  "only_for_target_os_tags": [
+    "linux",
+    "android"
+  ],
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "print_files_after_run": [
+    "stderr.log", 
+    "stdout.log"
+  ],
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json",
+        "post_process_via_ck": "no",
+        "run_cmd_main": "$#BIN_FILE#$",
+        "run_cmd_out1": "stdout.log",
+        "run_cmd_out2": "stderr.log",
+        "run_output_files": [
+          "stdout.log",
+          "stderr.log",
+          "tmp-ck-timer.json"
+        ]
+      }
+    }
+  },
+  "run_vars": {
+    "CK_BATCH_COUNT": 1,
+    "CK_BATCH_SIZE": 1,
+    "CK_CACHE_DIR": "../preprocessed",
+    "CK_CACHE_IMAGES": "YES", 
+    "CK_CROP_PERCENT": 87.5, 
+    "CK_IMAGE_FILE": "",
+    "CK_RECREATE_CACHE": "NO", 
+    "CK_SKIP_IMAGES": 0,
+    "CK_SUBTRACT_MEAN": "YES",
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "CK_TMP_IMAGE_SIZE": 0,
+    "CK_USE_MODEL_MEAN": "YES"
+  },
+  "skip_bin_ext": "yes",
+  "source_files": [
+    "classification.cpp"
+  ],
+  "target_file": "classification",
+  "tags": [
+    "tensorflow-classification"
+  ]
+}
