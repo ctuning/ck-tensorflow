@@ -43,7 +43,7 @@ rm -f tmp-pip-help.tmp
 echo "Downloading and installing deps ..."
 echo ""
 
-${CK_ENV_COMPILER_PYTHON_FILE} -m pip install protobuf easydict joblib image numpy scipy enum-compat --prefix=${EXTRA_PYTHON_SITE}  ${SYS}
+${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --ignore-installed protobuf easydict joblib image numpy scipy enum-compat --prefix=${EXTRA_PYTHON_SITE}  ${SYS}
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
   exit 1
@@ -66,7 +66,7 @@ fi
 echo "Downloading and installing TensorFlow prebuilt binaries (${TF_PYTHON_URL}) ..."
 echo ""
 
-${CK_ENV_COMPILER_PYTHON_FILE} -m pip install ${TF_PYTHON_URL} --prefix=${EXTRA_PYTHON_SITE}  --trusted-host storage.googleapis.com  ${SYS}
+${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --ignore-installed ${TF_PYTHON_URL} --prefix=${EXTRA_PYTHON_SITE}  --trusted-host storage.googleapis.com  ${SYS}
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
   exit 1
