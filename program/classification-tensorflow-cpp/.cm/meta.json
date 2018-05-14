@@ -39,25 +39,33 @@
   ],
   "process_in_tmp": "yes",
   "program": "yes",
-  "print_files_after_run": [
-    "stderr.log", 
-    "stdout.log"
-  ],
   "run_cmds": {
     "default": {
       "ignore_return_code": "no", 
       "run_time": {
-        "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": "no",
-        "run_cmd_main": "$#BIN_FILE#$",
-        "run_cmd_out1": "stdout.log",
-        "run_cmd_out2": "stderr.log",
-        "run_output_files": [
-          "stdout.log",
-          "stderr.log",
-          "tmp-ck-timer.json"
-        ]
+        "run_cmd_main": "$#BIN_FILE#$"
       }
+    }
+  },
+  "run_deps": {
+    "imagenet-aux": {
+      "local": "yes",
+      "name": "ImageNet dataset (aux)",
+      "sort": 30,
+      "tags": "dataset,imagenet,aux"
+    },
+    "imagenet-val": {
+      "local": "yes", 
+      "name": "ImageNet dataset (val)", 
+      "sort": 20, 
+      "tags": "dataset,imagenet,raw,val"
+    },
+    "model-and-weights": {
+      "local": "yes", 
+      "name": "TensorFlow-Python model and weights", 
+      "sort": 40, 
+      "tags": "tensorflowmodel,weights,python",
+      "no_tags": "mobilenet-all"
     }
   },
   "run_vars": {
