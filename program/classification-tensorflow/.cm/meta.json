@@ -27,25 +27,18 @@
     }
   }, 
   "run_deps": {
-    "imagenet-aux": {
-      "local": "yes", 
-      "name": "ImageNet dataset (aux)", 
-      "sort": 30, 
-      "tags": "dataset,imagenet,aux"
-    }, 
     "imagenet-val": {
       "local": "yes", 
       "name": "ImageNet dataset (val)", 
       "sort": 20, 
       "tags": "dataset,imagenet,raw,val"
-    }, 
-    "lib-tensorflow": {
+    },
+    "imagenet-aux": {
       "local": "yes", 
-      "name": "TensorFlow library", 
-      "sort": 50, 
-      "tags": "lib,tensorflow",
-      "no_tags": "tensorflow_cc"
-    }, 
+      "name": "ImageNet dataset (aux)", 
+      "sort": 30, 
+      "tags": "dataset,imagenet,aux"
+    },
     "model-and-weights": {
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
@@ -53,11 +46,12 @@
       "tags": "tensorflowmodel,weights,python",
       "no_tags": "mobilenet-all"
     },
-    "python": {
+    "lib-tensorflow": {
       "local": "yes", 
-      "name": "Python", 
-      "sort": 10, 
-      "tags": "compiler,python"
+      "name": "TensorFlow library", 
+      "sort": 50, 
+      "tags": "lib,tensorflow",
+      "no_tags": "tensorflow_cc"
     }
   }, 
   "run_vars": {
