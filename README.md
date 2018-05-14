@@ -81,11 +81,54 @@ Note that CK will automatically install the following dependencies into CK TF vi
 You can find more details about customized TensorFlow builds via CK for Android, Linux, Windows, 
 Raspberry Pi, odroid, etc [here](https://github.com/ctuning/ck-tensorflow/wiki/Installation).
 
-### Installing CK and this repository
+### Installing minimal CK
 
-You can install all basic dependencies and CK as following
+The minimal installation requires:
+
+* Python 2.7 or 3.3+ (limitation is mainly due to unitests)
+* Git command line client.
+
+#### Linux/MacOS
+
+You can install CK in your local user space as following:
+
+```
+$ git clone http://github.com/ctuning/ck
+$ export PATH=$PWD/ck/bin:$PATH
+$ export PYTHONPATH=$PWD/ck:$PYTHONPATH
+```
+
+You can also install CK via PIP with sudo to avoid setting up environment variables yourself:
+
 ```
 $ sudo pip install ck
+```
+
+#### Windows
+
+First you need to download and install a few dependencies from the following sites:
+
+* Git: https://git-for-windows.github.io
+* Minimal Python: https://www.python.org/downloads/windows
+
+You can then install CK as following:
+```
+ $ pip install ck
+```
+
+or
+
+
+```
+ $ git clone https://github.com/ctuning/ck.git ck-master
+ $ set PATH={CURRENT PATH}\ck-master\bin;%PATH%
+ $ set PYTHONPATH={CURRENT PATH}\ck-master;%PYTHONPATH%
+```
+
+### Installing CK workflow for TensorFlow
+
+You can this CK workflow as following:
+```
 $ ck pull repo:ck-tensorflow
 ```
 
