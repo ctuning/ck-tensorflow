@@ -1,0 +1,60 @@
+# After changing this file, check it on:
+#   http://lint.travis-ci.org/
+
+os:         linux
+language:   python
+
+python:
+    - 2.7
+    - 3.6
+
+matrix:
+    include:
+        - os: osx
+          language: generic
+          python:   2.7
+          env:      WANTED_PYTHON_VERSION=2.7
+        - os: osx
+          language: generic
+          python:   3.6
+          env:      WANTED_PYTHON_VERSION=3.6
+
+before_install:
+    - |
+        if [ $TRAVIS_OS_NAME == "osx" ]; then
+            brew update                                                         # this swaps python versions and makes 3 the default one
+
+            if [ "$WANTED_PYTHON_VERSION" == "2.7" ]; then
+                brew reinstall python\@2 || brew link --overwrite python\@2     # install and link python2 and pip2 to /usr/local/bin
+            else
+                brew reinstall python                                           # install and link python3 and pip3 to /usr/local/bin
+            fi
+            export PATH=/usr/local/opt/python/libexec/bin:$PATH
+
+            export CK_PLATFORM_INDEX=2                                          # used later by CK
+        else
+            sudo apt-get update -qq
+            sudo apt-get install python-pip
+            export WANTED_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION                 # since Python is supported in Linux, get it from Travis
+            export CK_PLATFORM_INDEX=1                                          # used later by CK
+        fi
+
+install:
+    - CWD=`pwd`
+    - THIS_REPO_NAME=`basename $CWD`
+    - echo "os=${TRAVIS_OS_NAME}, python=${WANTED_PYTHON_VERSION}, which_test=${TRAVIS_CK_WHICH_TEST}"
+    - which python
+    - python --version
+    - python -m pip install --ignore-installed --verbose pip setuptools         # make sure pip is also up to date no matter what
+    - python -m pip install ck                                                  # ck kernel itself
+    - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
+    - echo $CK_PLATFORM_INDEX | ck detect platform.os --update_platform_init    # set the platform to generic-linux (1) or generic-macos (2)
+    -       ck detect soft:compiler.python --full_path=`which python`           # pick the one Travis has set for us in the PATH
+    -       ck install package:imagenet-2012-aux                                # one part of ImageNet
+    -       echo | ck install package:imagenet-2012-val-min-resized             # another part of ImageNet
+    -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
+    -       ck install package:lib-tensorflow-1.4.0-cpu                         # prebuilt TF package
+
+script:
+    - ck run program:classification-tensorflow --env.CK_IMAGE_FILE=$HOME/CK-TOOLS/dataset-imagenet-ilsvrc2012-val-min-resized/ILSVRC2012_val_00000060.JPEG
+
