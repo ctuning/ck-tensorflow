@@ -1,0 +1,13 @@
+diff --git a/tensorflow_cc/cmake/TensorflowShared.cmake b/tensorflow_cc/cmake/TensorflowShared.cmake
+index 8bf4441..a6a114e 100644
+--- a/tensorflow_cc/cmake/TensorflowShared.cmake
++++ b/tensorflow_cc/cmake/TensorflowShared.cmake
+@@ -4,7 +4,7 @@ include(ExternalProject)
+ ExternalProject_Add(
+   tensorflow_shared
+   DEPENDS tensorflow_base
+-  TMP_DIR "/tmp"
++  TMP_DIR "tmp"
+   STAMP_DIR "tensorflow-stamp"
+   SOURCE_DIR "tensorflow"
+   BUILD_IN_SOURCE 1
