@@ -1,0 +1,37 @@
+build: false
+
+environment:
+  matrix:
+    - PYTHON: C:\Python36-x64
+      PYTHON_VERSION: 3.6
+      TF_PREBUILT_VERSION: 1.8.0
+
+    - PYTHON: C:\Python35-x64
+      PYTHON_VERSION: 3.5
+      TF_PREBUILT_VERSION: 1.7.0
+
+    - PYTHON: C:\Python27-x64
+      PYTHON_VERSION: 2.7
+      TF_PREBUILT_VERSION: 1.4.0
+
+init:
+    - "ECHO %PYTHON% %PYTHON_VERSION% TF_PREBUILT_VERSION=%TF_PREBUILT_VERSION%"
+    - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+    - python --version
+    - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+
+install:
+    - python -m pip install -U pip
+    - python -m easy_install -U setuptools
+    - python -m pip install ck
+    - ck version
+    - ck pull repo:ck-tensorflow
+    - ck pull repo:ctuning-datasets-min
+    - ck detect soft:compiler.python --full_path=%PYTHON%\\python.exe
+    - echo 0 | ck detect platform.os --update_platform_init
+    - ck install package:tensorflowmodel-imagenet-inception-20151205
+    - ck install package:lib-tensorflow-%TF_PREBUILT_VERSION%-cpu
+
+test_script:
+    - ck run program:tensorflow --cmd_key=classify --dataset_uoa=image-jpeg-dnn-computer-mouse
+
