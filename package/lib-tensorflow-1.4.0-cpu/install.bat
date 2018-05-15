@@ -17,7 +17,7 @@ rem %CK_PYTHON_PIP_BIN% install --upgrade pip
 rem %CK_PYTHON_PIP_BIN% install easydict joblib image numpy scipy enum-compat
 rem %CK_PYTHON_PIP_BIN% uninstall enum34
 
-%CK_PYTHON_PIP_BIN_FULL% install --upgrade pip protobuf easydict joblib image numpy scipy enum-compat -t %TENSORFLOW_LIB_DIR%
+%CK_ENV_COMPILER_PYTHON_FILE% -m pip install --upgrade pip protobuf easydict joblib image numpy scipy enum-compat -t %TENSORFLOW_LIB_DIR%
 if %errorlevel% neq 0 (
  echo.
  echo Error: Failed installing misc deps ...
@@ -28,7 +28,7 @@ echo.
 echo Downloading and installing TensorFlow prebuilt binaries (%TF_PYTHON_URL%) ...
 echo.
 
-%CK_PYTHON_PIP_BIN% install --ignore-installed --upgrade %TF_PYTHON_URL% -t %TENSORFLOW_LIB_DIR% --trusted-host storage.googleapis.com
+%CK_ENV_COMPILER_PYTHON_FILE% -m pip install --ignore-installed --upgrade %TF_PYTHON_URL% -t %TENSORFLOW_LIB_DIR% --trusted-host storage.googleapis.com
 
 cd /D %INSTALL_DIR%\lib
 rmdir /Q /S enum
