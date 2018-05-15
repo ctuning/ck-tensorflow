@@ -43,7 +43,10 @@
     "default": {
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$#BIN_FILE#$"
+        "run_cmd_main": "$#BIN_FILE#$",
+        "pre_process_via_ck": {
+          "script_name": "preprocess"
+        }
       }
     }
   },
@@ -60,7 +63,7 @@
       "sort": 20, 
       "tags": "dataset,imagenet,raw,val"
     },
-    "model-and-weights": {
+    "weights": {
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
@@ -72,7 +75,6 @@
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_CACHE_DIR": "../preprocessed",
-    "CK_CACHE_IMAGES": "YES", 
     "CK_CROP_PERCENT": 87.5, 
     "CK_IMAGE_FILE": "",
     "CK_RECREATE_CACHE": "NO", 
@@ -80,7 +82,8 @@
     "CK_SUBTRACT_MEAN": "YES",
     "CK_TF_GPU_MEMORY_PERCENT": 33,
     "CK_TMP_IMAGE_SIZE": 0,
-    "CK_USE_MODEL_MEAN": "YES"
+    "CK_USE_MODEL_MEAN": "YES",
+    "CK_RESULTS_DIR": "predictions"
   },
   "skip_bin_ext": "yes",
   "source_files": [
