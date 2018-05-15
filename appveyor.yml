@@ -12,7 +12,11 @@ environment:
 
     - PYTHON: C:\Python35-x64
       PYTHON_VERSION: 3.5
-      TF_PREBUILT_VERSION: 1.7.0
+      TF_PREBUILT_VERSION: 1.8.0
+
+    - PYTHON: C:\Python35-x64
+      PYTHON_VERSION: 3.5
+      TF_PREBUILT_VERSION: 1.4.0
 
 # Python 2.7 is supported by AppVeyor, but there is no pre-built TF package for Windows.
 #
