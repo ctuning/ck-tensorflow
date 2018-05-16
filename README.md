@@ -93,7 +93,7 @@ The minimal installation requires:
 
 #### Linux/MacOS
 
-You can install CK in your local user space as following:
+You can install CK in your local user space as follows:
 
 ```
 $ git clone http://github.com/ctuning/ck
@@ -114,7 +114,7 @@ First you need to download and install a few dependencies from the following sit
 * Git: https://git-for-windows.github.io
 * Minimal Python: https://www.python.org/downloads/windows
 
-You can then install CK as following:
+You can then install CK as follows:
 ```
  $ pip install ck
 ```
@@ -130,7 +130,7 @@ or
 
 ### Installing CK workflow for TensorFlow
 
-You can this CK workflow as following:
+You can this CK workflow as follows:
 ```
 $ ck pull repo:ck-tensorflow
 ```
@@ -207,7 +207,7 @@ soon - please, stay tuned!
 ## Unified, multi-dimensional and multi-objective autotuning
 
 It is now possible to take advantage of our [universal multi-objective CK autotuner](https://github.com/ctuning/ck/wiki/Autotuning)
-to optimize TensorFlow. As a first simple example, we added batch size tuning via CK. You can invoke it as following:
+to optimize TensorFlow. As a first simple example, we added batch size tuning via CK. You can invoke it as follows:
 
 ```
 $ ck autotune tensorflow
