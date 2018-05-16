@@ -46,7 +46,11 @@
         "run_cmd_main": "$#BIN_FILE#$",
         "pre_process_via_ck": {
           "script_name": "preprocess"
-        }
+        },
+        "post_process_via_ck": "yes",
+        "post_process_cmds": [
+          "python $#src_path_local#$postprocess.py"
+        ]
       }
     }
   },
@@ -80,10 +84,10 @@
     "CK_RECREATE_CACHE": "NO", 
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
-    "CK_TF_GPU_MEMORY_PERCENT": 33,
     "CK_TMP_IMAGE_SIZE": 0,
     "CK_USE_MODEL_MEAN": "YES",
-    "CK_RESULTS_DIR": "predictions"
+    "CK_RESULTS_DIR": "predictions",
+    "CK_IMAGE_LIST_FILE": "image_list.txt"
   },
   "skip_bin_ext": "yes",
   "source_files": [

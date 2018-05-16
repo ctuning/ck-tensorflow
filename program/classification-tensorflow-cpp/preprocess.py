@@ -36,8 +36,8 @@ def crop_img(img, crop_percent):
 
 def ck_preprocess(i):
   print('\n--------------------------------')
-  def my_env(var): return i['env'][var]
-  def dep_env(dep, var): return i['deps'][dep]['dict']['env'][var]
+  def my_env(var): return i['env'].get(var)
+  def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
 
   # Init variables from environment
   MODEL_WEIGHTS = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
@@ -58,6 +58,7 @@ def ck_preprocess(i):
   IMAGE_DIR = dep_env('imagenet-val', 'CK_ENV_DATASET_IMAGENET_VAL')
   MODE_SUFFIX = '-{}-{}-{}'.format(IMAGE_SIZE, BATCH_SIZE, BATCH_COUNT)
   RESULTS_DIR = my_env('CK_RESULTS_DIR')
+  IMAGE_LIST_FILE = my_env('CK_IMAGE_LIST_FILE')
 
   # Preprocessing options:
   #
@@ -76,11 +77,11 @@ def ck_preprocess(i):
   CACHE_DIR = os.path.join(CACHE_DIR_ROOT, '{}-{}-{}'.format(IMAGE_SIZE, TMP_IMAGE_SIZE, CROP_PERCENT))
   RECREATE_CACHE = my_env("CK_RECREATE_CACHE") == "YES"
 
-  print('Frozen graph: ' + MODEL_FROZEN_GRAPH_PATH)
+  print('Frozen graph: {}'.format(MODEL_FROZEN_GRAPH_PATH))
   print('Image size: {}x{}'.format(MODEL_IMAGE_HEIGHT, MODEL_IMAGE_WIDTH))
-  print('Input images dir: ' + IMAGE_DIR)
-  print('Batch size: %d' % BATCH_SIZE)
-  print('Batch count: %d' % BATCH_COUNT)
+  print('Input images dir: {}'.format(IMAGE_DIR))
+  print('Batch size: {}'.format(BATCH_SIZE))
+  print('Batch count: {}'.format(BATCH_COUNT))
   print('Results dir: {}'.format(RESULTS_DIR))
   print('Preprocessed images dir: {}'.format(CACHE_DIR))
   print('Skip images: {}'.format(SKIP_IMAGES))
@@ -116,13 +117,13 @@ def ck_preprocess(i):
     return images
 
 
-  # Load processing image filenames
+  # Load processing image filenames and 
   image_list = load_image_list()
 
 
   # Returns path to preprocessed image in cache directory
   def get_cached_path(image_file_name):
-    return os.path.join(CACHE_DIR, image_file_name) + '.npy'
+    return os.path.join(CACHE_DIR, image_file_name)
 
 
   # Returns path to source image in dataset directory
@@ -158,29 +159,32 @@ def ck_preprocess(i):
       tmp_img[:, :, 2] = swap_img[:, :, 0]
       img = tmp_img
 
-    # Convert to float
-    img = img.astype(np.float)
-
-    # Normalize
-    if MODEL_NORMALIZE_DATA:
-      img = img / 255.0
-      img = img - 0.5
-      img = img * 2
-
     return img
 
 
+  # Preprocess images which are not cached yet
   print('Preprocess images...')
   for image_file in image_list:
     if os.path.isfile(get_cached_path(image_file)):
       continue
     print(image_file)
     image_data = load_image(get_original_path(image_file))
-    np.save(get_cached_path(image_file), image_data)
+    image_data.tofile(get_cached_path(image_file))
 
-  # Setup parameters to program
-  os.putenv('RUN_OPT_IMAGES_DIR', CACHE_DIR)
-  os.putenv('RUN_OPT_BATCH_SIZE', BATC)
+  # Save list of images to be classified
+  with open(IMAGE_LIST_FILE, 'w') as f:
+    for image_file in image_list:
+      f.write(image_file + '\n')
+
+  # Setup parameters for program
+  os.putenv('RUN_OPT_IMAGE_DIR', CACHE_DIR)
+  os.putenv('RUN_OPT_IMAGE_LIST', IMAGE_LIST_FILE)
+  os.putenv('RUN_OPT_IMAGE_SIZE', str(IMAGE_SIZE))
+  os.putenv('RUN_OPT_BATCH_SIZE', str(BATCH_SIZE))
+  os.putenv('RUN_OPT_BATCH_COUNT', str(BATCH_COUNT))
+  os.putenv('RUN_OPT_FROZEN_GRAPH', MODEL_FROZEN_GRAPH_PATH)
+  os.putenv('RUN_OPT_RESULT_DIR', RESULTS_DIR)
+  os.putenv('RUN_OPT_NORMALIZE_DATA', str(1 if MODEL_NORMALIZE_DATA else 0))
 
   print('--------------------------------\n')
   return {'return': 0}
