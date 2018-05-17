@@ -17,8 +17,22 @@
 using namespace std;
 using namespace tensorflow;
 
-inline int getenv_i(const char *name, int def) {
-  return getenv(name) ? atoi(getenv(name)) : def;
+inline string getenv_s(const char *name) {
+  const char *value = getenv(name);
+  if (!value) {
+    cerr << "ERROR: required environment variable " << name << " is not set" << endl;
+    exit(-1);
+  }
+  return string(value);
+}
+
+inline int getenv_i(const char *name) {
+  const char *value = getenv(name);
+  if (!value) {
+    cerr << "ERROR: required environment variable " << name << " is not set" << endl;
+    exit(-1);
+  }
+  return atoi(value);
 }
 
 enum GLOBAL_TIMER {
@@ -53,17 +67,17 @@ int main(int argc, char* argv[]) {
   xopenme_init(GLOBAL_TIMER_COUNT, GLOBAL_VAR_COUNT);
 
   // Load parameters
-  string graph_file(getenv("RUN_OPT_FROZEN_GRAPH"));
-  string images_dir(getenv("RUN_OPT_IMAGE_DIR"));
-  string images_file(getenv("RUN_OPT_IMAGE_LIST"));
-  string result_dir(getenv("RUN_OPT_RESULT_DIR"));
-  string input_layer_name(getenv("RUN_OPT_INPUT_LAYER_NAME"));
-  string output_layer_name(getenv("RUN_OPT_OUTPUT_LAYER_NAME"));
-  int batch_count = getenv_i("RUN_OPT_BATCH_COUNT", 1);
-  int batch_size = getenv_i("RUN_OPT_BATCH_SIZE", 1);
-  int image_size = getenv_i("RUN_OPT_IMAGE_SIZE", 224);
-  bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA", 1) == 1;
-  bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN", 1) == 1;
+  string graph_file = getenv_s("RUN_OPT_FROZEN_GRAPH");
+  string images_dir = getenv_s("RUN_OPT_IMAGE_DIR");
+  string images_file = getenv_s("RUN_OPT_IMAGE_LIST");
+  string result_dir = getenv_s("RUN_OPT_RESULT_DIR");
+  string input_layer_name = getenv_s("RUN_OPT_INPUT_LAYER_NAME");
+  string output_layer_name = getenv_s("RUN_OPT_OUTPUT_LAYER_NAME");
+  int batch_count = getenv_i("RUN_OPT_BATCH_COUNT");
+  int batch_size = getenv_i("RUN_OPT_BATCH_SIZE");
+  int image_size = getenv_i("RUN_OPT_IMAGE_SIZE");
+  bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") == 1;
+  bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") == 1;
 
   cout << "Graph file: " << graph_file << endl;
   cout << "Image dir: " << images_dir << endl;
@@ -77,7 +91,7 @@ int main(int argc, char* argv[]) {
   vector<string> image_list;
   ifstream file(images_file);
   if (!file.good()) {
-    cerr << "Unable to open image list file " << images_file;
+    cerr << "ERROR: Unable to open image list file " << images_file << endl;
     return -1;
   }
   for (string s; !getline(file, s).fail();)
@@ -92,13 +106,13 @@ int main(int argc, char* argv[]) {
   GraphDef graph_def;
   Status load_graph_status = ReadBinaryProto(Env::Default(), graph_file, &graph_def);
   if (!load_graph_status.ok()) {
-    cerr << "Failed to load graph: " << load_graph_status.ToString() << endl;
+    cerr << "ERROR: Failed to load graph: " << load_graph_status.ToString() << endl;
     return -1;
   }
   session.reset(NewSession(SessionOptions()));
   Status session_create_status = session->Create(graph_def);
   if (!session_create_status.ok()) {
-    cerr << "Failed to create new session: " << session_create_status.ToString() << endl;
+    cerr << "ERROR: Failed to create new session: " << session_create_status.ToString() << endl;
     return -1;
   }
   xopenme_clock_end(X_TIMER_SETUP);
@@ -124,7 +138,7 @@ int main(int argc, char* argv[]) {
       auto image_path = images_dir + '/' + image_list[img_index];
       ifstream file(image_path, ios::in | ios::binary);
       if (!file.good()) {
-        cerr << "Failed to open image data " + image_path << endl;
+        cerr << "ERROR: Failed to open image data " + image_path << endl;
         return -1;
       }
       file.read(reinterpret_cast<char*>(img_data.data()), img_px_count);
@@ -161,7 +175,7 @@ int main(int argc, char* argv[]) {
     Status run_status = session->Run(
       {{input_layer_name, input}}, {output_layer_name}, {}, &outputs);
     if (!run_status.ok()) {
-      cerr << "Running model failed: " << run_status.ToString() << endl;
+      cerr << "ERROR: Running model failed: " << run_status.ToString() << endl;
       return -1;
     }
     auto pred_finish_time = chrono::high_resolution_clock::now(); 
@@ -173,7 +187,7 @@ int main(int argc, char* argv[]) {
     // Process output tensor
     auto output_flat = outputs[0].flat<float>();
     if (output_flat.size() != batch_size * NUM_CLASSES) {
-      cerr << "Invalid output tensor size " << output_flat.size()
+      cerr << "ERROR: valid output tensor size " << output_flat.size()
            << "but expected size is " << batch_size * NUM_CLASSES << endl;
       return -1;
     }
@@ -182,7 +196,7 @@ int main(int argc, char* argv[]) {
       auto result_path = result_dir + '/' + image_list[img_index] + ".txt";
       ofstream file(result_path);
       if (!file.good()) {
-        cerr << "Unable to create result file " + result_path << endl;
+        cerr << "ERROR: Unable to create result file " + result_path << endl;
         return -1;
       }
       int probe_offset = batch_img_index * NUM_CLASSES;

@@ -198,18 +198,19 @@ def ck_preprocess(i):
       f.write(image_file + '\n')
 
   # Setup parameters for program
-  os.putenv('RUN_OPT_IMAGE_DIR', CACHE_DIR)
-  os.putenv('RUN_OPT_IMAGE_LIST', IMAGE_LIST_FILE)
-  os.putenv('RUN_OPT_IMAGE_SIZE', str(IMAGE_SIZE))
-  os.putenv('RUN_OPT_BATCH_SIZE', str(BATCH_SIZE))
-  os.putenv('RUN_OPT_BATCH_COUNT', str(BATCH_COUNT))
-  os.putenv('RUN_OPT_FROZEN_GRAPH', MODEL_FROZEN_FILE)
-  os.putenv('RUN_OPT_RESULT_DIR', RESULTS_DIR)
-  os.putenv('RUN_OPT_NORMALIZE_DATA', str(1 if MODEL_NORMALIZE_DATA else 0))
-  os.putenv('RUN_OPT_SUBTRACT_MEAN', str(1 if SUBTRACT_MEAN else 0))
-  os.putenv('RUN_OPT_INPUT_LAYER_NAME', INPUT_LAYER_NAME)
-  os.putenv('RUN_OPT_OUTPUT_LAYER_NAME', OUTPUT_LAYER_NAME)
-
+  new_env = {
+    'RUN_OPT_IMAGE_DIR': CACHE_DIR,
+    'RUN_OPT_IMAGE_LIST': IMAGE_LIST_FILE,
+    'RUN_OPT_IMAGE_SIZE': str(IMAGE_SIZE),
+    'RUN_OPT_BATCH_SIZE': str(BATCH_SIZE),
+    'RUN_OPT_BATCH_COUNT': str(BATCH_COUNT),
+    'RUN_OPT_FROZEN_GRAPH': MODEL_FROZEN_FILE,
+    'RUN_OPT_RESULT_DIR': RESULTS_DIR,
+    'RUN_OPT_NORMALIZE_DATA': str(1 if MODEL_NORMALIZE_DATA else 0),
+    'RUN_OPT_SUBTRACT_MEAN': str(1 if SUBTRACT_MEAN else 0),
+    'RUN_OPT_INPUT_LAYER_NAME': INPUT_LAYER_NAME,
+    'RUN_OPT_OUTPUT_LAYER_NAME': OUTPUT_LAYER_NAME
+  }
   print('--------------------------------\n')
-  return {'return': 0}
+  return {'return': 0, 'new_env': new_env}
 
