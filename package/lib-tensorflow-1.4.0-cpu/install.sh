@@ -26,12 +26,6 @@ echo "Removing '${EXTRA_PYTHON_SITE}' ..."
 rm -rf ${EXTRA_PYTHON_SITE}
 
 ######################################################################################
-# Print info about possible issues
-echo ""
-echo "Note that you sometimes need to upgrade your pip to the latest version"
-echo "to avoid well-known issues with user/system space installation:"
-
-######################################################################################
 # Check if has --system option
 ${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --help > tmp-pip-help.tmp
 if grep -q "\-\-system" tmp-pip-help.tmp ; then

@@ -101,12 +101,12 @@ def setup(i):
     if python_ver.startswith('3'):
         python3=1
 
-    sver2=''
-    if len(spython_ver)>1:
-       sver2=spython_ver[1]
-
     if ie.get('CK_FORCE_PYTHON_VER2','')!='':
        sver2=int(ie['CK_FORCE_PYTHON_VER2'])
+    elif len(spython_ver)>1:
+       sver2=spython_ver[1]
+    else:
+       sver2=''
 
     # Check download path
     p='https://storage.googleapis.com/tensorflow/'
@@ -150,30 +150,39 @@ def setup(i):
 
     else:
        if python3==1:
-          px='cp34-cp34m-linux_x86_64.whl'
-          if sver2==5:
-             px='cp35-cp35m-linux_x86_64.whl'
-          elif sver2==6:
-             px='cp36-cp36m-linux_x86_64.whl'
+          px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-linux_x86_64.whl'
        else:
           px='cp27-none-linux_x86_64.whl'
 
-    p+='-'+px
+    p += '-' + px
 
-    nie={'PYTHON3':python3,
-         'TF_PYTHON_URL':p}
 
-    # Prepare protobuf
+
+    ################################ Prepare protobuf ################################
     proto+='protobuf-3.1.0-'
 
     if hname=='win':
        proto='https://pypi.python.org/packages/b2/30/ab593c6ae73b45a5ef0b0af24908e8aec27f79efcda2e64a3df7af0b92a2/protobuf-3.1.0-py2.py3-none-any.whl'
+
+    elif macos=='yes':
+       if python3==1:
+
+          supported_python_ver2_on_mac=cus.get('supported_python_ver2_on_mac',[])
+          if len(supported_python_ver2_on_mac)>0 and sver2 not in supported_python_ver2_on_mac:
+             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_mac)+' on MacOS'}
+
+          proto += 'cp3'+str(sver2)+'-none-macosx_10_11_x86_64.whl'
+       else:
+          proto += 'cp27-none-macosx_10_11_x86_64.whl'
+
     else:
        if python3==1:
-          proto+='cp35-none-linux_x86_64.whl'
+          proto += 'cp35-none-linux_x86_64.whl'
        else:
-          proto+='cp27-none-linux_x86_64.whl'
+          proto += 'cp27-none-linux_x86_64.whl'
 
-    nie['PROTOBUF_PYTHON_URL']=proto
+    nie={'PYTHON3':python3,
+         'TF_PYTHON_URL':p,
+         'PROTOBUF_PYTHON_URL': proto }
 
     return {'return':0, 'install_env':nie}
