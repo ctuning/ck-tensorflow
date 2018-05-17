@@ -42,9 +42,7 @@ def ck_preprocess(i):
   # Init variables from environment
   MODEL_WEIGHTS = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
   MODEL_DIR, _ = os.path.split(MODEL_WEIGHTS)
-  MODEL_FROZEN_FILE = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_FROZEN_FILE')
-  assert MODEL_FROZEN_FILE, "Frozen graph is not found in selected model package"
-  MODEL_FROZEN_GRAPH_PATH = os.path.join(MODEL_DIR, MODEL_FROZEN_FILE)
+  MODEL_FROZEN_FILE = None # To be assigned
   MODEL_IMAGE_WIDTH = int(dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH"))
   MODEL_IMAGE_HEIGHT = int(dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT"))
   assert MODEL_IMAGE_WIDTH == MODEL_IMAGE_HEIGHT, "Only square images are supported at this time"
@@ -59,6 +57,8 @@ def ck_preprocess(i):
   MODE_SUFFIX = '-{}-{}-{}'.format(IMAGE_SIZE, BATCH_SIZE, BATCH_COUNT)
   RESULTS_DIR = my_env('CK_RESULTS_DIR')
   IMAGE_LIST_FILE = my_env('CK_IMAGE_LIST_FILE')
+  INPUT_LAYER_NAME = 'input'
+  OUTPUT_LAYER_NAME = 'output'
 
   # Preprocessing options:
   #
@@ -71,13 +71,31 @@ def ck_preprocess(i):
   #
   TMP_IMAGE_SIZE = int(my_env('CK_TMP_IMAGE_SIZE'))
   CROP_PERCENT = float(my_env('CK_CROP_PERCENT'))
+  SUBTRACT_MEAN = my_env("CK_SUBTRACT_MEAN") == "YES"
 
   # Dir for cached prepared images
   CACHE_DIR_ROOT = my_env("CK_CACHE_DIR")
   CACHE_DIR = os.path.join(CACHE_DIR_ROOT, '{}-{}-{}'.format(IMAGE_SIZE, TMP_IMAGE_SIZE, CROP_PERCENT))
   RECREATE_CACHE = my_env("CK_RECREATE_CACHE") == "YES"
 
-  print('Frozen graph: {}'.format(MODEL_FROZEN_GRAPH_PATH))
+  # Find frozed graph file and graph info file
+  for filename in os.listdir(MODEL_DIR):
+    if filename.endswith('.pb'):
+      MODEL_FROZEN_FILE = os.path.join(MODEL_DIR, filename)
+    elif filename.endswith('_info.txt'):
+      # Read input and output layer names from graph info file
+      with open(os.path.join(MODEL_DIR, filename), 'r') as f:
+        for line in f:
+          key_name = line.split(' ')
+          if len(key_name) == 2:
+            if key_name[0] == 'Input:':
+              INPUT_LAYER_NAME = key_name[1].strip()
+            elif key_name[0] == 'Output:':
+              OUTPUT_LAYER_NAME = key_name[1].strip()
+
+  assert MODEL_FROZEN_FILE, "Frozen graph is not found in selected model package"
+
+  print('Frozen graph: {}'.format(MODEL_FROZEN_FILE))
   print('Image size: {}x{}'.format(MODEL_IMAGE_HEIGHT, MODEL_IMAGE_WIDTH))
   print('Input images dir: {}'.format(IMAGE_DIR))
   print('Batch size: {}'.format(BATCH_SIZE))
@@ -85,6 +103,8 @@ def ck_preprocess(i):
   print('Results dir: {}'.format(RESULTS_DIR))
   print('Preprocessed images dir: {}'.format(CACHE_DIR))
   print('Skip images: {}'.format(SKIP_IMAGES))
+  print('Input layer: {}'.format(INPUT_LAYER_NAME))
+  print('Output layer: {}'.format(OUTPUT_LAYER_NAME))
 
   # Prepare cache dir
   if not os.path.isdir(CACHE_DIR_ROOT):
@@ -111,6 +131,7 @@ def ck_preprocess(i):
     files = sorted(files)[SKIP_IMAGES:]
     assert len(files) > 0, 'Input dir does not contain more files'
     images = files[:IMAGES_COUNT]
+    # Repeat last image to make full last batch
     if len(images) < IMAGES_COUNT:
       for _ in range(IMAGES_COUNT-len(images)):
         images.append(images[-1])
@@ -182,9 +203,12 @@ def ck_preprocess(i):
   os.putenv('RUN_OPT_IMAGE_SIZE', str(IMAGE_SIZE))
   os.putenv('RUN_OPT_BATCH_SIZE', str(BATCH_SIZE))
   os.putenv('RUN_OPT_BATCH_COUNT', str(BATCH_COUNT))
-  os.putenv('RUN_OPT_FROZEN_GRAPH', MODEL_FROZEN_GRAPH_PATH)
+  os.putenv('RUN_OPT_FROZEN_GRAPH', MODEL_FROZEN_FILE)
   os.putenv('RUN_OPT_RESULT_DIR', RESULTS_DIR)
   os.putenv('RUN_OPT_NORMALIZE_DATA', str(1 if MODEL_NORMALIZE_DATA else 0))
+  os.putenv('RUN_OPT_SUBTRACT_MEAN', str(1 if SUBTRACT_MEAN else 0))
+  os.putenv('RUN_OPT_INPUT_LAYER_NAME', INPUT_LAYER_NAME)
+  os.putenv('RUN_OPT_OUTPUT_LAYER_NAME', OUTPUT_LAYER_NAME)
 
   print('--------------------------------\n')
   return {'return': 0}

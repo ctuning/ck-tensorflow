@@ -12,6 +12,12 @@
       "name": "TensorFlow C++ API", 
       "sort": 20, 
       "tags": "lib,tensorflow,vstatic"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
     }
   },
   "compiler_add_include_as_env_from_deps": [
@@ -50,6 +56,9 @@
         "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python $#src_path_local#$postprocess.py"
+        ],
+        "run_output_files": [
+          "tmp-ck-timer.json"
         ]
       }
     }

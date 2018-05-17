@@ -158,8 +158,6 @@ def ck_postprocess(i):
   print('Accuracy top 1: %f (%d of %d)' % (accuracy_top1, TOP1, IMAGES_COUNT))
   print('Accuracy top 5: %f (%d of %d)' % (accuracy_top5, TOP5, IMAGES_COUNT))  
 
-  return {'return': 0}
-
   # Store benchmark results
   openme = {}
   
@@ -168,17 +166,16 @@ def ck_postprocess(i):
     old_values = json.load(o)
   for key in old_values['run_time_state']:
     openme[key] = old_values['run_time_state'][key]
-    
+
+  prediction_time = openme.get('prediction_time_total_s', 0.0)
+  setup_time = openme.get('setup_time_s', 0.0)
+  test_time = openme.get('test_time_s', 0.0)
+
   openme['accuracy_top1'] = accuracy_top1
   openme['accuracy_top5'] = accuracy_top5
   openme['frame_predictions'] = frame_predictions
-
-  t1=openme.get('setup_time_s',0.0)
-  t2=openme.get('images_load_time_s',0.0)
-  t3=openme.get('prediction_time_total_s',0.0)
-
-  openme['execution_time']=t3 # only prediction time (what we are interested in)
-  openme['execution_time_sum']=t1+t2+t3 # only prediction time (what we are interested in)
+  openme['execution_time'] = prediction_time
+  openme['execution_time_sum'] = setup_time + test_time
 
   with open('tmp-ck-timer.json', 'w') as o:
     json.dump(openme, o, indent=2, sort_keys=True)    
