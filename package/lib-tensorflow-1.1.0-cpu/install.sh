@@ -44,6 +44,12 @@ if [ "${?}" != "0" ] ; then
 fi
 
 ######################################################################################
+#
+# The following seems to fix the problem of the importer that was unable to find older ProtoBufs:
+#
+touch ${PACKAGE_LIB_DIR}/google/__init__.py
+
+######################################################################################
 echo "Downloading and installing TensorFlow prebuilt binaries (${TF_PYTHON_URL}) ..."
 echo ""
 
