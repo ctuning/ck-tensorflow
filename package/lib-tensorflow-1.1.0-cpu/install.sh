@@ -34,10 +34,10 @@ fi
 rm -f tmp-pip-help.tmp
 
 ######################################################################################
-echo "Downloading and installing ProtoBuf (${PROTOBUF_PYTHON_URL}) ..."
+echo "Downloading and installing ProtoBuf (${PROTOBUF_PYTHON_URL}) and TensorFlow (${TF_PYTHON_URL}) prebuilt libraries..."
 echo ""
 
-${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --ignore-installed ${PROTOBUF_PYTHON_URL} --prefix=${EXTRA_PYTHON_SITE} --trusted-host storage.googleapis.com --trusted-host pypi.python.org  ${SYS}
+${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --ignore-installed ${PROTOBUF_PYTHON_URL} ${TF_PYTHON_URL} --prefix=${EXTRA_PYTHON_SITE} --trusted-host storage.googleapis.com --trusted-host pypi.python.org  ${SYS}
 if [ "${?}" != "0" ] ; then
   echo "Error: installation failed!"
   exit 1
@@ -48,16 +48,6 @@ fi
 # The following seems to fix the problem of the importer that was unable to find older ProtoBufs:
 #
 touch ${PACKAGE_LIB_DIR}/google/__init__.py
-
-######################################################################################
-echo "Downloading and installing TensorFlow prebuilt binaries (${TF_PYTHON_URL}) ..."
-echo ""
-
-${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --ignore-installed ${TF_PYTHON_URL} --prefix=${EXTRA_PYTHON_SITE}  --trusted-host storage.googleapis.com  ${SYS}
-if [ "${?}" != "0" ] ; then
-  echo "Error: installation failed!"
-  exit 1
-fi
 
     # Because we have to provide a fixed name via meta.json ,
     # and $PACKAGE_LIB_DIR depends on the Python version,
