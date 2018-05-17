@@ -74,6 +74,7 @@ install:
     - python --version
     - python -m pip install --ignore-installed --verbose pip setuptools         # make sure pip is also up to date no matter what
     - python -m pip install ck                                                  # ck kernel itself
+    - python -m pip install pillow scipy                                        # FIXME: these are undeclared dependencies of program:classification-tensorflow
     - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
     - echo $CK_PLATFORM_INDEX | ck detect platform.os --update_platform_init    # set the platform to generic-linux (1) or generic-macos (2)
     -       ck detect soft:compiler.python --full_path=`which python`           # pick the one Travis has set for us in the PATH
