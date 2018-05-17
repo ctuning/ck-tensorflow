@@ -159,7 +159,7 @@ def setup(i):
 
 
     ################################ Prepare protobuf ################################
-    proto+='protobuf-3.1.0-'
+    proto += 'protobuf-3.1.0-'
 
     if hname=='win':
        proto='https://pypi.python.org/packages/b2/30/ab593c6ae73b45a5ef0b0af24908e8aec27f79efcda2e64a3df7af0b92a2/protobuf-3.1.0-py2.py3-none-any.whl'
@@ -177,12 +177,17 @@ def setup(i):
 
     else:
        if python3==1:
-          proto += 'cp35-none-linux_x86_64.whl'
+
+          supported_python_ver2_on_linux=cus.get('supported_python_ver2_on_linux',[])
+          if len(supported_python_ver2_on_linux)>0 and sver2 not in supported_python_ver2_on_linux:
+             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_linux)+' on Linux'}
+
+          proto += 'cp3'+str(sver2)+'-none-linux_x86_64.whl'
        else:
           proto += 'cp27-none-linux_x86_64.whl'
 
-    nie={'PYTHON3':python3,
-         'TF_PYTHON_URL':p,
+    nie={'PYTHON3':             python3,
+         'TF_PYTHON_URL':       p,
          'PROTOBUF_PYTHON_URL': proto }
 
     return {'return':0, 'install_env':nie}
