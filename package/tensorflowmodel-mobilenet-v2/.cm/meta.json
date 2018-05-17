@@ -142,13 +142,15 @@
     }
   },
   "end_full_path": {
-    "linux": "README.md"
+    "linux": "README.md",
+    "android": "README.md"
   }, 
   "only_for_host_os_tags": [
     "linux"
   ], 
   "only_for_target_os_tags": [
-    "linux"
+    "linux",
+    "android"
   ], 
   "process_script": "install", 
   "soft_uoa": "439b9f1757f27091", 
