@@ -27,6 +27,12 @@
     }
   }, 
   "run_deps": {
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 5,
+      "tags": "compiler,python"
+    },
     "imagenet-val": {
       "local": "yes", 
       "name": "ImageNet dataset (val)", 
