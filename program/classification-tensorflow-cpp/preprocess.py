@@ -55,6 +55,7 @@ def ck_preprocess(i):
   IMAGES_COUNT = BATCH_COUNT * BATCH_SIZE
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
   IMAGE_DIR = dep_env('imagenet-val', 'CK_ENV_DATASET_IMAGENET_VAL')
+  IMAGE_FILE = my_env('CK_IMAGE_FILE')
   MODE_SUFFIX = '-{}-{}-{}'.format(IMAGE_SIZE, BATCH_SIZE, BATCH_COUNT)
   RESULTS_DIR = 'predictions'
   IMAGE_LIST_FILE = 'image_list.txt'
@@ -98,16 +99,34 @@ def ck_preprocess(i):
 
   assert MODEL_FROZEN_FILE, "Frozen graph is not found in selected model package"
 
+  # Single file mode
+  if IMAGE_FILE:
+    image_dir, IMAGE_FILE = os.path.split(IMAGE_FILE)
+    # If only filename is set, assume that file is in images package
+    if not image_dir:
+      image_dir = IMAGE_DIR
+    else:
+      IMAGE_DIR = image_dir
+    assert os.path.isfile(os.path.join(IMAGE_DIR, IMAGE_FILE)), "Input file does not exist"
+    IMAGES_COUNT = 1
+    BATCH_SIZE = 1
+    BATCH_COUNT = 1
+    SKIP_IMAGES = 1
+    RECREATE_CACHE = True
+    CACHE_DIR = os.path.join(CACHE_DIR_ROOT, 'single-image')
+    print('Single file mode')
+    print('Input image file: {}'.format(IMAGE_FILE))
+
+  print('Input images dir: {}'.format(IMAGE_DIR))
+  print('Preprocessed images dir: {}'.format(CACHE_DIR))
+  print('Results dir: {}'.format(RESULTS_DIR))
   print('Frozen graph: {}'.format(MODEL_FROZEN_FILE))
   print('Image size: {}x{}'.format(MODEL_IMAGE_HEIGHT, MODEL_IMAGE_WIDTH))
-  print('Input images dir: {}'.format(IMAGE_DIR))
-  print('Batch size: {}'.format(BATCH_SIZE))
-  print('Batch count: {}'.format(BATCH_COUNT))
-  print('Results dir: {}'.format(RESULTS_DIR))
-  print('Preprocessed images dir: {}'.format(CACHE_DIR))
-  print('Skip images: {}'.format(SKIP_IMAGES))
   print('Input layer: {}'.format(INPUT_LAYER_NAME))
   print('Output layer: {}'.format(OUTPUT_LAYER_NAME))
+  print('Batch size: {}'.format(BATCH_SIZE))
+  print('Batch count: {}'.format(BATCH_COUNT))
+  print('Skip images: {}'.format(SKIP_IMAGES))
 
   # Prepare cache dir
   if not os.path.isdir(CACHE_DIR_ROOT):
@@ -141,8 +160,11 @@ def ck_preprocess(i):
     return images
 
 
-  # Load processing image filenames and 
-  image_list = load_image_list()
+  # Load processing image filenames and
+  if IMAGE_FILE:
+    image_list = [IMAGE_FILE]
+  else:
+    image_list = load_image_list()
 
 
   # Returns path to preprocessed image in cache directory
@@ -191,7 +213,6 @@ def ck_preprocess(i):
   for image_file in image_list:
     if os.path.isfile(get_cached_path(image_file)):
       continue
-    print(image_file)
     image_data = load_image(get_original_path(image_file))
     image_data.tofile(get_cached_path(image_file))
 
