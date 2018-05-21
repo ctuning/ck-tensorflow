@@ -87,16 +87,13 @@
   "run_vars": {
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
-    "CK_CACHE_DIR": "../preprocessed",
     "CK_CROP_PERCENT": 87.5, 
     "CK_IMAGE_FILE": "",
     "CK_RECREATE_CACHE": "NO", 
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
     "CK_TMP_IMAGE_SIZE": 0,
-    "CK_USE_MODEL_MEAN": "YES",
-    "CK_RESULTS_DIR": "predictions",
-    "CK_IMAGE_LIST_FILE": "image_list.txt"
+    "CK_USE_MODEL_MEAN": "YES"
   },
   "skip_bin_ext": "yes",
   "source_files": [

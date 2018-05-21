@@ -40,6 +40,7 @@ def ck_preprocess(i):
   def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
 
   # Init variables from environment
+  CUR_DIR = os.getcwd()
   MODEL_WEIGHTS = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
   MODEL_DIR, _ = os.path.split(MODEL_WEIGHTS)
   MODEL_FROZEN_FILE = None # To be assigned
@@ -55,8 +56,8 @@ def ck_preprocess(i):
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
   IMAGE_DIR = dep_env('imagenet-val', 'CK_ENV_DATASET_IMAGENET_VAL')
   MODE_SUFFIX = '-{}-{}-{}'.format(IMAGE_SIZE, BATCH_SIZE, BATCH_COUNT)
-  RESULTS_DIR = my_env('CK_RESULTS_DIR')
-  IMAGE_LIST_FILE = my_env('CK_IMAGE_LIST_FILE')
+  RESULTS_DIR = 'predictions'
+  IMAGE_LIST_FILE = 'image_list.txt'
   INPUT_LAYER_NAME = 'input'
   OUTPUT_LAYER_NAME = 'output'
 
@@ -73,8 +74,10 @@ def ck_preprocess(i):
   CROP_PERCENT = float(my_env('CK_CROP_PERCENT'))
   SUBTRACT_MEAN = my_env("CK_SUBTRACT_MEAN") == "YES"
 
-  # Dir for cached prepared images
-  CACHE_DIR_ROOT = my_env("CK_CACHE_DIR")
+  # Dir for caching of prepared images
+  # Store preprocessed images in sources directory, not in `tmp`, as
+  # `tmp` directory can de cleaned between runs and caches will be lost.
+  CACHE_DIR_ROOT = os.path.join('..', 'preprocessed')
   CACHE_DIR = os.path.join(CACHE_DIR_ROOT, '{}-{}-{}'.format(IMAGE_SIZE, TMP_IMAGE_SIZE, CROP_PERCENT))
   RECREATE_CACHE = my_env("CK_RECREATE_CACHE") == "YES"
 
@@ -211,6 +214,39 @@ def ck_preprocess(i):
     'RUN_OPT_INPUT_LAYER_NAME': INPUT_LAYER_NAME,
     'RUN_OPT_OUTPUT_LAYER_NAME': OUTPUT_LAYER_NAME
   }
+  
+  res = {'return': 0, 'new_env': new_env}
+
+  # Some special preparation to run program on Android device
+  if i.get('target_os_dict', {}).get('ck_name2', '') == 'android':
+    files_to_push = []
+    files_to_pull = []
+
+    # We are in the `tmp` directory now.
+    # But when pushing on a device, paths are relative to the program
+    # sources directory. So remove leading `../` from cache dir name.
+    cache_dir = CACHE_DIR[3:]
+    new_env['RUN_OPT_IMAGE_DIR'] = cache_dir
+
+    # Preprocessed images
+    for image_file in image_list:
+      files_to_push.append(os.path.join(cache_dir, image_file))
+      files_to_pull.append(os.path.join(RESULTS_DIR, image_file) + '.txt')
+
+    # Set list of additional files to be copied to Android device.
+    # We have to set these files via env variables with full paths 
+    # in order to they will be copied into remote program dir without sub-paths.
+    new_env['RUN_OPT_IMAGE_LIST_PATH'] = os.path.join(CUR_DIR, IMAGE_LIST_FILE)
+    new_env['RUN_OPT_FROZEN_GRAPH_PATH'] = MODEL_FROZEN_FILE
+    files_to_push.append('$<<RUN_OPT_IMAGE_LIST_PATH>>$')
+    files_to_push.append('$<<RUN_OPT_FROZEN_GRAPH_PATH>>$')
+
+    # On Android graph will be opened from current path, so strip directory
+    new_env['RUN_OPT_FROZEN_GRAPH'] = os.path.split(MODEL_FROZEN_FILE)[1]
+
+    res['run_input_files'] = files_to_push
+    res['run_output_files'] = files_to_pull
+
   print('--------------------------------\n')
-  return {'return': 0, 'new_env': new_env}
+  return res
 

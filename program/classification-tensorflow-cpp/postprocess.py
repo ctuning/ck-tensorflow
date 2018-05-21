@@ -22,7 +22,7 @@ def ck_postprocess(i):
   BATCH_SIZE = int(my_env('CK_BATCH_SIZE'))
   IMAGES_COUNT = BATCH_COUNT * BATCH_SIZE
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
-  RESULTS_DIR = my_env('CK_RESULTS_DIR')
+  RESULTS_DIR = 'predictions'
   NUM_CLASSES = 1000
   AUX_DIR = dep_env('imagenet-aux', 'CK_ENV_DATASET_IMAGENET_AUX')
   CLASSES_FILE = os.path.join(AUX_DIR, 'synset_words.txt')

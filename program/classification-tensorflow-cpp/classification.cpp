@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include <chrono>
+#include <dirent.h>
 
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/cc/framework/scope.h"
@@ -86,6 +87,13 @@ int main(int argc, char* argv[]) {
   cout << "Result dir: " << result_dir << endl;
   cout << "Batch count: " << batch_count << endl;
   cout << "Batch size: " << batch_size << endl;
+
+  // Create results dir if none
+  auto dir = opendir(result_dir.c_str());
+  if (dir)
+    closedir(dir);
+  else
+    system(("mkdir " + result_dir).c_str());
 
   // Load image filenames
   vector<string> image_list;
