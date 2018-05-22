@@ -82,6 +82,7 @@ install:
     -       ck install package:imagenet-2012-val-min-resized                    # another part of ImageNet
     -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
     -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu        # prebuilt TF package
+    -       ck install package:lib-scipy                                        # to prevent confusion with pre-installed version on Macs @ Travis
 
 script:
     - ck run program:classification-tensorflow --env.CK_IMAGE_FILE=$HOME/CK-TOOLS/dataset-imagenet-ilsvrc2012-val-min-resized/ILSVRC2012_val_00000060.JPEG
