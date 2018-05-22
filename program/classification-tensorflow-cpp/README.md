@@ -1,6 +1,6 @@
 # TensorFlow classification demo
 
-## Pre-requisites
+## Prerequisites
 
 ### SciPy
 
@@ -11,16 +11,19 @@
 
 ### TensorFlow library
 
-This demo uses statically linked TensorFlow library. This package can be installed for Android too.
+This demo program uses a statically linked TensorFlow library.
 
 ```
-$ ck install package:lib-tensorflow-1.7.0-src-static
-$ ck install package:lib-tensorflow-1.7.0-src-static --target_os=android23-arm64
+$ ck install package:lib-tensorflow-1.7.0-src-static [--target_os=android23-arm64]
 ```
+
+**NB:** Use `--target_os=android23-arm64` to build for Android API 23 (v6.0
+"Marshmallow") or
+[similar](https://source.android.com/setup/start/build-numbers).
 
 ### TensorFlow models
 
-Install one of the models providing frozen graph. 
+Install a model providing a frozen graph e.g.:
 
 ```
 $ ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py
@@ -36,47 +39,62 @@ $ ck install package:imagenet-2012-aux
 ## Build
 
 ```
-$ ck complie program:classification-tensorflow-cpp
-$ ck complie program:classification-tensorflow-cpp --target_os=android23-arm64
+$ ck compile program:classification-tensorflow-cpp [--target_os=android23-arm64]
 ```
 
 ## Run
 
 ```
-$ ck run program:classification-tensorflow-cpp
-$ ck run program:classification-tensorflow-cpp --target_os=android23-arm64
+$ ck run program:classification-tensorflow-cpp [--target_os=android23-arm64]
 ```
 
 ## Program parameters
 
-### `CK_IMAGE_FILE`
-Classify single file instead of iterating over ImageNet dataset.
-When only image name is specified, it is assumed that image is in ImageNet dataset.
+### Input image parameters
+
+#### `CK_IMAGE_FILE`
+
+If set, the program will classify a single image instead of iterating over a
+dataset.  When only the name of an image is specified, it is assumed that the
+image is in the ImageNet dataset.
+
 ```
 $ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=/tmp/images/path-to-image.jpg
 $ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=ILSVRC2012_val_00000011.JPEG
 ```
 
-### `CK_TMP_IMAGE_SIZE`
-Preprocessing parameter, size of intermediate image. If this parameter is set to a value greater than targer image size defined by a model, loaded images will be scaled to this size and then cropped to target size.
+#### `CK_RECREATE_CACHE`
+If set to `YES`, then all previously cached images will be erased.
 
-For example, when running against MobileNet you may specify `--env.CK_TMP_IMAGE_SIZE=256`, then images will be resized to 256x256 the cropped to 224x244 as required to MobileNet.
+Default: `NO`.
 
-Default: `0`
+### Input preprocessing parameters
 
-### `CK_CROP_PERCENT`
-Preprocessing parameter, percentage of central image region for cropping. If this parameter is set to a value between 0 and 100, loaded images will be cropped to this percent and then scaled to targer image size defined by a model.
+#### `CK_TMP_IMAGE_SIZE`
 
-Not used if `CK_TMP_IMAGE_SIZE` is set and valid.
+The size of an intermediate image. If this preprocessing parameter is set to a
+value greater than the input image size defined by the model, input images
+will be first scaled to this size and then cropped to the input size.
 
-Default: `87.5`
+For example, if `--env.CK_TMP_IMAGE_SIZE=256` is specified for MobileNets
+models with the input image resolution of 224, then input images will be first
+resized to *256x256* and then cropped to *224x224*.
 
-### `CK_SUBTRACT_MEAN`
-Preprocessing parameter, defines whether program should subtract mean value from loaded image.
+Default: `0`.
 
-Default: `YES`
+#### `CK_CROP_PERCENT`
 
-### `CK_RECREATE_CACHE`
-Is set to `YES` then existed cached images will be erased. 
+The percentage of the central image region to crop. If this preprocessing
+parameter is set to a value between 0 and 100, then loaded images will be
+cropped according this percentage and then scaled to the input image size
+defined by the model.
 
-Default: `NO`
+Default: `87.5`.
+
+**NB:** If `CK_TMP_IMAGE_SIZE` is set and valid, this parameter is not used.
+
+#### `CK_SUBTRACT_MEAN`
+
+If set to `YES`, then the mean value will be subtracted from the input image.
+
+Default: `YES`.
