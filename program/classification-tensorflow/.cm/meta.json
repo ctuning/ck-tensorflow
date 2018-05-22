@@ -59,10 +59,16 @@
       "tags": "lib,tensorflow",
       "no_tags": "tensorflow_cc"
     },
-    "python-lib-scipy": {
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 60,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-python-scipy": {
       "local": "yes",
       "name": "SciPy python library",
-      "sort": 60,
+      "sort": 70,
       "tags": "lib,python-package,scipy"
     }
   }, 
