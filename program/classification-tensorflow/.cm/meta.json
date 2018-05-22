@@ -58,6 +58,12 @@
       "sort": 50, 
       "tags": "lib,tensorflow",
       "no_tags": "tensorflow_cc"
+    },
+    "python-lib-scipy": {
+      "local": "yes",
+      "name": "SciPy python library",
+      "sort": 60,
+      "tags": "lib,python-package,scipy"
     }
   }, 
   "run_vars": {
