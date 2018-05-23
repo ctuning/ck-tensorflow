@@ -132,6 +132,8 @@ int main(int argc, char* argv[]) {
   int img_px_count = image_size * image_size * NUM_CHANNELS;
   double total_load_images_time = 0;
   double total_prediction_time = 0;
+  double avg_prediction_time = 0;
+  int avg_predicted_images = 0;
   vector<uint8_t> img_data(img_px_count);
   Tensor input(DT_FLOAT, TensorShape({batch_size, image_size, image_size, NUM_CHANNELS}));
   float* input_ptr = input.flat<float>().data();
@@ -190,6 +192,11 @@ int main(int argc, char* argv[]) {
     chrono::duration<double> pred_time = pred_finish_time - pred_start_time;
     cout << "Batch classified in " << pred_time.count() << " s" << endl;
     total_prediction_time += pred_time.count();
+    // Skip first but to account warming-up the system
+    if (batch_count == 1 || batch_index > 0) {
+      avg_prediction_time += pred_time.count();
+      avg_predicted_images++;
+    }
 
     //-------------------------------------------------
     // Process output tensor
@@ -220,9 +227,8 @@ int main(int argc, char* argv[]) {
   // Store some metrics
   float setup_time = xopenme_get_timer(X_TIMER_SETUP);
   float test_time = xopenme_get_timer(X_TIMER_TEST);
-  float img_count_f = static_cast<float>(image_list.size());
-  float avg_load_images_time = total_load_images_time / img_count_f;
-  float avg_prediction_time = total_prediction_time / img_count_f;
+  float avg_load_images_time = total_load_images_time / float(image_list.size());
+  avg_prediction_time /= float(avg_predicted_images);
 
   cout << "-------------------------------\n";
   cout << "Graph loaded in " << setup_time << " s" << endl;
