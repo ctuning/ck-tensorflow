@@ -37,6 +37,7 @@
   "tags": [
     "tensorflowmodel",
     "weights",
+    "frozen",
     "python",
     "mobilenet",
     "mobilenet-v2",
