@@ -7,13 +7,12 @@
     "limit_recursion_dir_search": {
       "linux": 10
     },
-    "soft_file": {
-      "linux": "keras/__init__.py"
-    }
+    "soft_file_universal": "keras$#sep#$__init__.py"
   },
   "soft_name": "Keras API, TensorFlow based",
   "tags": [
     "lib",
+    "python-package",
     "keras",
     "keras-tensorflow"
   ]
