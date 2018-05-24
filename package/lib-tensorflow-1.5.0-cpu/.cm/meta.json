@@ -46,8 +46,12 @@
     "vcpu", 
     "channel-stable"
   ],
+  "use_preprocess_scripts_from_another_entry": {
+    "module_uoa": "package",
+    "data_uoa": "lib-tensorflow-1.1.0-cpu"
+  },
   "use_scripts_from_another_entry": {
-    "data_uoa": "94a780371b44f0db",
-    "module_uoa": "package"
+    "module_uoa": "package",
+    "data_uoa": "lib-tensorflow-1.4.0-cpu"
   }
 }
