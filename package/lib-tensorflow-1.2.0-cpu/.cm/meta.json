@@ -20,10 +20,7 @@
       "tags": "compiler,python"
     }
   }, 
-  "end_full_path": {
-    "linux": "lib/tensorflow/__init__.py", 
-    "win": "lib/tensorflow/__init__.py"
-  }, 
+  "end_full_path_universal": "lib$#sep#$tensorflow$#sep#$__init__.py",
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [
     "linux", 
