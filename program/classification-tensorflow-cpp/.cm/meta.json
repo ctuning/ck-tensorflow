@@ -65,18 +65,21 @@
   },
   "run_deps": {
     "imagenet-aux": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "ImageNet dataset (aux)",
       "sort": 30,
       "tags": "dataset,imagenet,aux"
     },
     "imagenet-val": {
+      "force_target_as_host": "yes",
       "local": "yes", 
       "name": "ImageNet dataset (val)", 
       "sort": 20, 
       "tags": "dataset,imagenet,raw,val"
     },
     "weights": {
+      "force_target_as_host": "yes",
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
