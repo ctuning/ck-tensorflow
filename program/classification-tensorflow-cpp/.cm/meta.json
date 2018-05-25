@@ -106,5 +106,6 @@
   "target_file": "classification",
   "tags": [
     "tensorflow-classification"
-  ]
+  ],
+  "template":"yes"
 }
