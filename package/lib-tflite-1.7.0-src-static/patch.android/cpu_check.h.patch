@@ -1,0 +1,13 @@
+diff --git a/tensorflow/contrib/lite/kernels/internal/optimized/cpu_check.h b/tensorflow/contrib/lite/kernels/internal/optimized/cpu_check.h
+index 3a53d3a..ea00a75 100644
+--- a/tensorflow/contrib/lite/kernels/internal/optimized/cpu_check.h
++++ b/tensorflow/contrib/lite/kernels/internal/optimized/cpu_check.h
+@@ -18,7 +18,7 @@ limitations under the License.
+ namespace tflite {
+ 
+ #ifdef __ANDROID__
+-#include "ndk/sources/android/cpufeatures/cpu-features.h"
++#include "sources/android/cpufeatures/cpu-features.h"
+ 
+ // Runtime check for Neon support on Android.
+ inline bool TestCPUFeatureNeon() {
