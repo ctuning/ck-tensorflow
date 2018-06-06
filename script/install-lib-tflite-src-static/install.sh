@@ -85,6 +85,9 @@ echo "Building ..."
 echo ""
 
 if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
+  echo
+  echo "Building Android package..."
+  
   NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
 
   # TODO: We have somehow to convert --target_os into an arch name supported by android_makefile.inc:
@@ -97,7 +100,17 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
          TARGET=ANDROID NDK_ROOT="$NDK_ROOT" ANDROID_ARCH="$TARGET_ARCH" ANDROID_API="$API_LEVEL"\
          CC_PREFIX="$CC_PREFIX"
   exit_if_error
+else
+  echo
+  echo "Building Linux package..."
+
+  make -f tensorflow/contrib/lite/Makefile
+  exit_if_error
 fi
 
+# Copy target files
+remove_dir_if_exists ${INSTALL_DIR}/lib
+mkdir ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/lite/gen/lib/libtensorflow-lite.a ${INSTALL_DIR}/lib
 
 return 0

@@ -73,25 +73,17 @@ def setup(i):
     target_os_dict = i.get('target_os_dict', {})
     target_os_name = target_os_dict.get('ck_name2', '')
 
-    return {'return': 0, 'bat': s}
-'''
-    env[ep+'_LINK_OPTIONS'] = '-Wl,--allow-multiple-definition -Wl,--whole-archive'
     env[ep+'_LIBS_DIRS'] = '-L' + lib_dir
     if target_os_name == 'android':
-      env[ep+'_LIBS'] = '-ltensorflow-core -lprotobuf -lprotobuf-lite -llog -lnsync -lz'
+      env[ep+'_LIBS'] = '-ltensorflow-lite'
     elif target_os_name == 'linux':
-      env[ep+'_LIBS'] = '-pthread -ltensorflow-core -lprotobuf -lprotobuf-lite -lnsync -ldl -lz'
+      env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl'
     else:
       return {'return': -1, 'error': 'Unsupported target OS'}
 
     env[ep] = install_dir
     env[ep+'_LIB'] = lib_dir
     env[ep+'_INCLUDE0'] = src_dir
-    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'protobuf', 'src')
-    env[ep+'_INCLUDE2'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads')
-    env[ep+'_INCLUDE3'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'eigen')
-    env[ep+'_INCLUDE4'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'gen', 'proto')
-    env[ep+'_INCLUDE5'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'nsync', 'public')
+    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'lite', 'downloads', 'flatbuffers', 'include')
 
     return {'return': 0, 'bat': s}
-'''
