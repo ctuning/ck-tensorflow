@@ -88,16 +88,11 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo
   echo "Building Android package..."
   
-  NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
-
-  # TODO: We have somehow to convert --target_os into an arch name supported by android_makefile.inc:
-  TARGET_ARCH=arm64-v8a
-
-  # TODO: extract fom --target_os
-  API_LEVEL=23
-
   make -f tensorflow/contrib/lite/Makefile \
-         TARGET=ANDROID NDK_ROOT="$NDK_ROOT" ANDROID_ARCH="$TARGET_ARCH" ANDROID_API="$API_LEVEL"\
+         TARGET=ANDROID \
+         NDK_ROOT="$CK_ANDROID_NDK_ROOT_DIR" \
+         ANDROID_ARCH="$CK_ANDROID_ABI" \
+         ANDROID_API="$CK_ANDROID_API_LEVEL"\
          CC_PREFIX="$CC_PREFIX"
   exit_if_error
 else
