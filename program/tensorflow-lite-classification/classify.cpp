@@ -45,7 +45,6 @@ int main(int argc, char *argv[]) {
     string model_file;
     string labels_file;
     for (int i = 1; i < argc; i++) {
-      cout << "ARG " << argv[i] << endl;
       get_arg(argv[i], "--image=", image_file) ||
       get_arg(argv[i], "--graph=", model_file) ||
       get_arg(argv[i], "--labels=", labels_file);
@@ -115,7 +114,7 @@ int main(int argc, char *argv[]) {
     vector<pair<float, int>> top_results;
     tflite::label_image::get_top_n<float>(
       interpreter->typed_output_tensor<float>(0),
-      output_size, num_results, threshold, &top_results, false);
+      output_size, num_results, threshold, &top_results, true);
 
     // Read labels
     vector<string> labels;
