@@ -1,0 +1,108 @@
+{
+  "backup_data_uid": "6e58bd944e048e47",
+  "compile_deps": {
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    },
+    "library": {
+      "local": "yes",
+      "name": "TensorFlow C++ API",
+      "sort": 20,
+      "tags": "lib,tensorflow-lite,vstatic"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
+    }
+  },
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_STDCPP_INCLUDE",
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA",
+    "CK_ENV_LIB_TF_INCLUDE0",
+    "CK_ENV_LIB_TF_INCLUDE1"
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
+  "data_name": "classification-tflite-cpp",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
+  "linker_add_lib_as_env": [
+    "CK_CXX_EXTRA",
+    "CK_ENV_LIB_STDCPP_STATIC"
+  ],
+  "main_language": "cpp",
+  "only_for_target_os_tags": [
+    "linux",
+    "android"
+  ],
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no",
+      "run_time": {
+        "post_process_via_ck": "yes",
+        "post_process_cmds": [
+          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
+        ],
+        "pre_process_via_ck": {
+          "module_uoa": "script",
+          "data_uoa": "689867d1939a781d",
+          "script_name": "preprocess"
+        },
+        "run_cmd_main": "$#BIN_FILE#$",
+        "run_output_files": [
+          "tmp-ck-timer.json"
+        ]
+      }
+    }
+  },
+  "run_deps": {
+    "imagenet-aux": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (aux)",
+      "sort": 10,
+      "tags": "dataset,imagenet,aux"
+    },
+    "imagenet-val": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (val)",
+      "sort": 20,
+      "tags": "dataset,imagenet,raw,val"
+    },
+    "weights": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "TensorFlow-Python model and weights",
+      "no_tags": "mobilenet-all",
+      "sort": 30,
+      "tags": "tensorflowmodel,weights,tflite"
+    }
+  },
+  "run_vars": {
+    "CK_BATCH_COUNT": 1,
+    "CK_BATCH_SIZE": 1,
+    "CK_CROP_PERCENT": 87.5,
+    "CK_IMAGE_FILE": "",
+    "CK_RECREATE_CACHE": "NO",
+    "CK_SKIP_IMAGES": 0,
+    "CK_SUBTRACT_MEAN": "YES",
+    "CK_TMP_IMAGE_SIZE": 0,
+    "CK_USE_MODEL_MEAN": "YES"
+  },
+  "skip_bin_ext": "yes",
+  "source_files": [
+    "classification.cpp"
+  ],
+  "tags": [
+    "tensorflow-lite-classification"
+  ],
+  "target_file": "classification",
+  "template": "yes"
+}
