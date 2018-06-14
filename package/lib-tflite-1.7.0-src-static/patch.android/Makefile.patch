@@ -1,0 +1,19 @@
+diff --git a/tensorflow/contrib/lite/Makefile b/tensorflow/contrib/lite/Makefile
+index b4504f2..8f61191 100644
+--- a/tensorflow/contrib/lite/Makefile
++++ b/tensorflow/contrib/lite/Makefile
+@@ -1,4 +1,6 @@
+ 
++SHELL := /bin/bash
++
+ # Find where we're running from, so we can store generated files here.
+ ifeq ($(origin MAKEFILE_DIR), undefined)
+ 	MAKEFILE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+@@ -62,6 +64,7 @@ endif
+ 
+ include $(MAKEFILE_DIR)/ios_makefile.inc
+ include $(MAKEFILE_DIR)/rpi_makefile.inc
++include $(MAKEFILE_DIR)/android_makefile.inc
+ 
+ # This library is the main target for this makefile. It will contain a minimal
+ # runtime that can be linked in to other programs.
