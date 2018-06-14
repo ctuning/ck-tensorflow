@@ -6,243 +6,138 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#include <chrono>
-#include <dirent.h>
-#include <fstream>
-#include <iostream>
-#include <string.h>
+#include "benchmark.h"
 
-#include <xopenme.h>
+#include "tensorflow/contrib/lite/kernels/register.h"
+#include "tensorflow/contrib/lite/model.h"
 
 using namespace std;
+using namespace CK;
 
-inline string getenv_s(const string& name) {
-  const char *value = getenv(name.c_str());
-  if (!value)
-    throw "Required environment variable " + name + " is not set";
-  return string(value);
-}
+template <typename TData, typename TInConverter, typename TOutConverter>
+class Benchmark {
+public:
+  Benchmark(const BenchmarkSettings* settings, const tflite::Interpreter* interpreter, int input_index) {
+    _in_ptr = interpreter->typed_tensor<TData>(input_index);
+    _out_ptr = interpreter->typed_output_tensor<TData>(0);
+    _in_data = new ImageData(settings);
+    _out_data = new ResultData(settings);
+    _in_converter = new TInConverter(settings);
+    _out_converter = new TOutConverter(settings);
+  }
 
-inline int getenv_i(const string& name) {
-  const char *value = getenv(name.c_str());
-  if (!value)
-    throw "Required environment variable " + name + " is not set";
-  return atoi(value);
-}
+  void load_images(const vector<string>& batch_images) {
+    int offset = 0;
+    for (auto image_file : batch_images) {
+      _in_data->load(image_file);
+      _in_converter->convert(_in_data, _in_ptr + offset);
+      offset += _in_data.length();
+    }
+  }
 
-enum GLOBAL_TIMER {
-  X_TIMER_SETUP,
-  X_TIMER_TEST,
+  void save_results(const vector<string>& batch_images) {
+    int offset = 0;
+    for (auto image_file : batch_images) {
+      _out_converter->convert(_out_ptr + offset, _out_data);
+      _out_data->save(image_file);
+      offset += _out_data.length();
+    }
+  }
 
-  GLOBAL_TIMER_COUNT
+private:
+  TData* _in_ptr;
+  TData* _out_ptr;
+  unique_ptr<ImageData> _in_data;
+  unique_ptr<ResultData> _out_data;
+  unique_ptr<TInConverter> _in_converter;
+  unique_ptr<TOutConverter> _out_converter;
 };
 
-enum GLOBAL_VAR {
-  VAR_TIME_SETUP,
-  VAR_TIME_TEST,
-  VAR_TIME_IMG_LOAD_TOTAL,
-  VAR_TIME_IMG_LOAD_AVG,
-  VAR_TIME_CLASSIFY_TOTAL,
-  VAR_TIME_CLASSIFY_AVG,
-
-  GLOBAL_VAR_COUNT
-};
-
-inline void store_value_f(int index, const char* name, float value) {
-  char* json_name = new char[strlen(name) + 6];
-  sprintf(json_name, "\"%s\":%%f", name);
-  xopenme_add_var_f(index, json_name, value);
-  delete[] json_name;
-}
-
-const int NUM_CHANNELS = 3;
-const int NUM_CLASSES = 1001;
 
 int main(int argc, char* argv[]) {
-  xopenme_init(GLOBAL_TIMER_COUNT, GLOBAL_VAR_COUNT);
-
   try {
-    // Load parameters
-    string graph_file = getenv_s("RUN_OPT_TFLITE_GRAPH");
-    string images_dir = getenv_s("RUN_OPT_IMAGE_DIR");
-    string images_file = getenv_s("RUN_OPT_IMAGE_LIST");
-    string result_dir = getenv_s("RUN_OPT_RESULT_DIR");
-    int batch_count = getenv_i("CK_BATCH_COUNT");
-    int batch_size = getenv_i("CK_BATCH_SIZE");
-    int image_size = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
-    bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") == 1;
-    bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") == 1;
+    init_benchmark();
+    
+    BenchmarkSettings settings;
+    BenchmarkSession session(&settings);
 
-    cout << "Graph file: " << graph_file << endl;
-    cout << "Image dir: " << images_dir << endl;
-    cout << "Image list: " << images_file << endl;
-    cout << "Image size: " << image_size << endl;
-    cout << "Result dir: " << result_dir << endl;
-    cout << "Batch count: " << batch_count << endl;
-    cout << "Batch size: " << batch_size << endl;
+    unique_ptr<Benchmark> benchmark;
+    unique_ptr<tflite::FlatBufferModel> model;
+    unique_ptr<tflite::Interpreter> interpreter;
+
+    cout << "Loading graph..." << endl;
+    measure_setup([&]{
+      model = tflite::FlatBufferModel::BuildFromFile(graph_file.c_str());
+      if (!model)
+        throw "Failed to load graph from file " + graph_file;
+
+      tflite::ops::builtin::BuiltinOpResolver resolver;
+      tflite::InterpreterBuilder(*model, resolver)(&interpreter);
+      if (!interpreter)
+        throw string("Failed to construct interpreter");
+      if (interpreter->AllocateTensors() != kTfLiteOk)
+        throw string("Failed to allocate tensors");
+        
+      int input_index = interpreter->inputs()[0];
+      int output_index = interpreter->outputs()[0];
+      auto input_type = interpreter->tensor(input_index)->type;
+      auto output_type = interpreter->tensor(output_index)->type;
+
+      if (input_type != output_type)
+        throw format("Type of graph's input (%d) does not match type of its output (%d).",
+                     int(input_type), int(output_type));
+
+      switch (input_type) {
+      case kTfLiteFloat32:
+        benchmark = new Benchmark<float, InNormalize, OutCopy>(&settings, interpreter, input_index);
+        break;
+
+      case kTfLiteUInt8:
+        benchmark = new Benchmark<uint8_t, InCopy, OutDequantize>(&settings, interpreter, input_index);
+        break;
+
+      default:
+        throw format("Unsupported type of graph's input: %d. "
+                     "Supported types are: Float32 (%d), UInt8 (%d)",
+                     int(input_type), int(kTfLiteFloat32), int(kTfLiteUInt8));
+      }
+
+      TfLiteIntArray* dims = interpreter->tensor(input_index)->dims;
+      int wanted_height = dims->data[1];
+      int wanted_width = dims->data[2];
+      int wanted_channels = dims->data[3];
+      if (wanted_height != settings.image_size ||
+          wanted_width != settings.image_size ||
+          wanted_channels != settings.NUM_CHANNELS)
+        throw format("Dimensions of graph's input (HWC = %dx%dx%d) "
+                     "do not correspond to dimensions of input image (%dx%dx%d)",
+                     wanted_height, wanted_width, wanted_channels,
+                     settings.image_size, settings.image_size, settings.NUM_CHANNELS);
+    });
+
+    cout << "Processing batches...";
+    measure_prediction([&]{
+      while (session->get_next_batch()) {
+        cout << "\nBatch " << session.batch_index()+1 << " of " << settings.batch_count << endl;
+    
+        session->measure_begin();
+        benchmark->load_images(session->batch_files());
+        session->measure_end_load_images();
+
+        session->measure_begin();
+        if (interpreter->Invoke() != kTfLiteOk)
+          throw "Failed to invoke tflite"
+        session->measure_end_prediction();
+
+        benchmark->save_results(session->batch_files());
+      }
+    });
+
+    finish_benchmark(session);
   }
   catch (const string& error_message) {
     cerr << "ERROR: " << error_message << endl;
     return -1;
   }
-/*
-  // Create results dir if none
-  auto dir = opendir(result_dir.c_str());
-  if (dir)
-    closedir(dir);
-  else
-    system(("mkdir " + result_dir).c_str());
-
-  // Load image filenames
-  vector<string> image_list;
-  ifstream file(images_file);
-  if (!file.good()) {
-    cerr << "ERROR: Unable to open image list file " << images_file << endl;
-    return -1;
-  }
-  for (string s; !getline(file, s).fail();)
-    image_list.emplace_back(s);
-  cout << "Image count in file: " << image_list.size() << endl;
-  
-  //-------------------------------------------------
-  // Load frozen graph
-  cout << "Loading frozen graph..." << endl;
-  xopenme_clock_start(X_TIMER_SETUP);
-  unique_ptr<Session> session;
-  GraphDef graph_def;
-  Status load_graph_status = ReadBinaryProto(Env::Default(), graph_file, &graph_def);
-  if (!load_graph_status.ok()) {
-    cerr << "ERROR: Failed to load graph: " << load_graph_status.ToString() << endl;
-    return -1;
-  }
-  session.reset(NewSession(SessionOptions()));
-  Status session_create_status = session->Create(graph_def);
-  if (!session_create_status.ok()) {
-    cerr << "ERROR: Failed to create new session: " << session_create_status.ToString() << endl;
-    return -1;
-  }
-  xopenme_clock_end(X_TIMER_SETUP);
-
-  //-------------------------------------------------
-  // Classify each batch
-  xopenme_clock_start(X_TIMER_TEST);
-  int img_index = 0;
-  int img_px_count = image_size * image_size * NUM_CHANNELS;
-  double total_load_images_time = 0;
-  double total_prediction_time = 0;
-  double avg_prediction_time = 0;
-  int avg_predicted_images = 0;
-  vector<uint8_t> img_data(img_px_count);
-  Tensor input(DT_FLOAT, TensorShape({batch_size, image_size, image_size, NUM_CHANNELS}));
-  float* input_ptr = input.flat<float>().data();
-  for (int batch_index = 0; batch_index < batch_count; batch_index++) {
-    cout << "\nProcessing batch " << batch_index << " of " << batch_count << "...\n";
-
-    //-------------------------------------------------
-    // Load batch of images into input tensor
-    auto load_start_time = chrono::high_resolution_clock::now();
-    for (int batch_img_index = 0; batch_img_index < batch_size; batch_img_index++) {
-      // Read image data bytes
-      auto image_path = images_dir + '/' + image_list[img_index];
-      ifstream file(image_path, ios::in | ios::binary);
-      if (!file.good()) {
-        cerr << "ERROR: Failed to open image data " + image_path << endl;
-        return -1;
-      }
-      file.read(reinterpret_cast<char*>(img_data.data()), img_px_count);
-
-      // Copy image data to input tensor
-      float sum = 0;
-      int img_offset = batch_img_index * img_px_count;
-      for (int px_offset = 0; px_offset < img_px_count; px_offset++) {
-        //float px = img_buf[px_offset];
-        float px = img_data[px_offset];
-        if (normalize_img)
-          px = (px / 255.0 - 0.5) * 2.0;
-        sum += px;
-        input_ptr[img_offset + px_offset] = px;
-      }
-      
-      // Subtract mean value if required
-      if (subtract_mean) {
-        float mean = sum / static_cast<float>(img_px_count);
-        for (int px_offset = 0; px_offset < img_px_count; px_offset++)
-          input_ptr[img_offset + px_offset] -= mean;
-      }
-      img_index++;
-    }
-    auto load_finish_time = chrono::high_resolution_clock::now(); 
-    chrono::duration<double> load_time = load_finish_time - load_start_time;
-    cout << "Batch loaded in " << load_time.count() << " s" << endl;
-    total_load_images_time += load_time.count();
-
-    //-------------------------------------------------
-    // Classify current batch
-    auto pred_start_time = chrono::high_resolution_clock::now();
-    vector<Tensor> outputs;
-    Status run_status = session->Run(
-      {{input_layer_name, input}}, {output_layer_name}, {}, &outputs);
-    if (!run_status.ok()) {
-      cerr << "ERROR: Running model failed: " << run_status.ToString() << endl;
-      return -1;
-    }
-    auto pred_finish_time = chrono::high_resolution_clock::now(); 
-    chrono::duration<double> pred_time = pred_finish_time - pred_start_time;
-    cout << "Batch classified in " << pred_time.count() << " s" << endl;
-    total_prediction_time += pred_time.count();
-    // Skip first but to account warming-up the system
-    if (batch_count == 1 || batch_index > 0) {
-      avg_prediction_time += pred_time.count();
-      avg_predicted_images++;
-    }
-
-    //-------------------------------------------------
-    // Process output tensor
-    auto output_flat = outputs[0].flat<float>();
-    if (output_flat.size() != batch_size * NUM_CLASSES) {
-      cerr << "ERROR: valid output tensor size " << output_flat.size()
-           << "but expected size is " << batch_size * NUM_CLASSES << endl;
-      return -1;
-    }
-    for (int batch_img_index = 0; batch_img_index < batch_size; batch_img_index++) {
-      int img_index = batch_index * batch_size + batch_img_index;
-      auto result_path = result_dir + '/' + image_list[img_index] + ".txt";
-      ofstream file(result_path);
-      if (!file.good()) {
-        cerr << "ERROR: Unable to create result file " + result_path << endl;
-        return -1;
-      }
-      int probe_offset = batch_img_index * NUM_CLASSES;
-      for (int class_index = 0; class_index < NUM_CLASSES; class_index++) {
-        float probe_for_class = output_flat(probe_offset + class_index);
-        file << probe_for_class << endl;
-      }
-    }
-  }
-  xopenme_clock_end(X_TIMER_TEST);
-
-  //-------------------------------------------------
-  // Store some metrics
-  float setup_time = xopenme_get_timer(X_TIMER_SETUP);
-  float test_time = xopenme_get_timer(X_TIMER_TEST);
-  float avg_load_images_time = total_load_images_time / float(image_list.size());
-  avg_prediction_time /= float(avg_predicted_images);
-
-  cout << "-------------------------------\n";
-  cout << "Graph loaded in " << setup_time << " s" << endl;
-  cout << "All batches loaded in " << total_load_images_time << " s" << endl;
-  cout << "All batches classified in " << total_prediction_time << " s" << endl;
-  cout << "Average classification time: " << avg_prediction_time << " s" << endl;
-  cout << "-------------------------------\n";
-
-  store_value_f(VAR_TIME_SETUP, "setup_time_s", setup_time);
-  store_value_f(VAR_TIME_TEST, "test_time_s", test_time);
-  store_value_f(VAR_TIME_IMG_LOAD_TOTAL, "images_load_time_s", total_load_images_time);
-  store_value_f(VAR_TIME_IMG_LOAD_AVG, "images_load_time_avg_s", avg_load_images_time);
-  store_value_f(VAR_TIME_CLASSIFY_TOTAL, "prediction_time_total_s", total_prediction_time);
-  store_value_f(VAR_TIME_CLASSIFY_AVG, "prediction_time_avg_s", avg_prediction_time);
-*/ 
-  xopenme_dump_state();
-  xopenme_finish();
   return 0;
 }
