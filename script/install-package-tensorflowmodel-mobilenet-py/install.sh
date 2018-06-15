@@ -37,8 +37,6 @@ function rm_file() {
 }
 # We don't use it right now, so remove to save disk space, but it can be useful in future
 rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}_eval.pbtxt"
-#rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}_frozen.pb"
-rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}.tflite"
 
 ########################################################################
 echo

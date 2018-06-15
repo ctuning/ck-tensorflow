@@ -38,6 +38,7 @@
     "tensorflowmodel",
     "weights",
     "frozen",
+    "tflite",
     "python",
     "mobilenet",
     "mobilenet-v2",
