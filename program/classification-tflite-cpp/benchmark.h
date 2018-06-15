@@ -13,8 +13,11 @@
 #include <fstream>
 #include <iostream>
 #include <string.h>
+#include <vector>
 
 #include <xopenme.h>
+
+#define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
 
@@ -36,7 +39,7 @@ enum _VARS {
   X_VAR_COUNT
 };
 
-/// Store named value into xopenme variable
+/// Store named value into xopenme variable.
 inline void store_value_f(int index, const char* name, float value) {
   char* json_name = new char[strlen(name) + 6];
   sprintf(json_name, "\"%s\":%%f", name);
@@ -44,7 +47,7 @@ inline void store_value_f(int index, const char* name, float value) {
   delete[] json_name;
 }
 
-/// Load mandatory string value from the environment
+/// Load mandatory string value from the environment.
 inline std::string getenv_s(const std::string& name) {
   const char *value = getenv(name.c_str());
   if (!value)
@@ -52,7 +55,7 @@ inline std::string getenv_s(const std::string& name) {
   return std::string(value);
 }
 
-/// Load mandatory integer value from the environment
+/// Load mandatory integer value from the environment.
 inline int getenv_i(const std::string& name) {
   const char *value = getenv(name.c_str());
   if (!value)
@@ -60,10 +63,13 @@ inline int getenv_i(const std::string& name) {
   return atoi(value);
 }
 
+/// Dummy `sprintf` like formatting function using std::string.
+/// It uses buffer of fixed length so can't be used in any cases,
+/// generally use it for short messages with numeric arguments.
 template <typename ...Args>
 inline std::string format(const char* str, Args ...args) {
   char buf[1024];
-  sprintf(buf, std, args...);
+  sprintf(buf, str, args...);
   return std::string(buf);
 }
 
@@ -74,7 +80,7 @@ public:
   void reset() { _total = 0, _count = 0; }
   void add(float value) { _total += value, _count++; }
   float total() const { return _total; }
-  float avg() const { _total / static_cast<float>(_count); }
+  float avg() const { return _total / static_cast<float>(_count); }
 private:
   float _total = 0;
   int _count = 0;
@@ -91,11 +97,10 @@ public:
   const int batch_count = getenv_i("CK_BATCH_COUNT");
   const int batch_size = getenv_i("CK_BATCH_SIZE");
   const int image_size = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
-  const bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") == 1;
-  const bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") == 1;
-
-  const int NUM_CHANNELS = 3;
-  const int NUM_CLASSES = 1001;
+  const int num_channels = 3;
+  const int num_classes = 1000;
+  const bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") != 0;
+  const bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") != 0;
 
   BenchmarkSettings() {
     // Print settings
@@ -103,9 +108,13 @@ public:
     std::cout << "Image dir: " << images_dir << std::endl;
     std::cout << "Image list: " << images_file << std::endl;
     std::cout << "Image size: " << image_size << std::endl;
+    std::cout << "Image channels: " << num_channels << std::endl;
+    std::cout << "Prediction classes: " << num_classes << std::endl;
     std::cout << "Result dir: " << result_dir << std::endl;
     std::cout << "Batch count: " << batch_count << std::endl;
     std::cout << "Batch size: " << batch_size << std::endl;
+    std::cout << "Normalize: " << normalize_img << std::endl;
+    std::cout << "Subtract mean: " << subtract_mean << std::endl;
 
     // Create results dir if none
     auto dir = opendir(result_dir.c_str());
@@ -115,17 +124,17 @@ public:
       system(("mkdir " + result_dir).c_str());
 
     // Load list of images to be processed
-    ifstream file(images_file);
+    std::ifstream file(images_file);
     if (!file)
       throw "Unable to open image list file " + images_file;
-    for (string s; !getline(file, s).fail();)
+    for (std::string s; !getline(file, s).fail();)
       _image_list.emplace_back(s);
-    cout << "Image count in file: " << _image_list.size() << endl;
+    std::cout << "Image count in file: " << _image_list.size() << std::endl;
   }
 
   const std::vector<std::string>& image_list() const { return _image_list; }
 
-  const std::vector<std::string> _image_list;
+  std::vector<std::string> _image_list;
 };
 
 //----------------------------------------------------------------------
@@ -143,12 +152,18 @@ public:
   float avg_prediction_time() const { return _prediction_time.avg(); }
 
   bool get_next_batch() {
-    if (_batch_index+1 == settings->batch_count)
+    if (_batch_index+1 == _settings->batch_count)
       return false;
     _batch_index++;
-    auto begin = settings->image_list().begin() + _batch_index * _settings->batch_size;
-    auto end = begin + _settings->batch_size;
-    std::copy(begin, end, _batch_files.begin(), _batch_files.begin());
+    std::cout << "\nBatch " << _batch_index+1 << " of " << _settings->batch_count << std::endl;
+    int begin = _batch_index * _settings->batch_size;
+    int end = (_batch_index + 1) * _settings->batch_size;
+    int images_count = _settings->image_list().size();
+    if (begin >= images_count || end > images_count)
+      throw format("Not enough images to populate batch %d", _batch_index);
+    _batch_files.clear();
+    for (int i = begin; i < end; i++)
+      _batch_files.emplace_back(_settings->image_list()[i]);
     return true;
   }
 
@@ -184,10 +199,10 @@ private:
   int _batch_index = -1;
   Accumulator _loading_time;
   Accumulator _prediction_time;
-  const BenchmarkSettings const* _settings;
+  const BenchmarkSettings* _settings;
   float _total_prediction_time = 0;
   std::vector<std::string> _batch_files;
-  std::chrono::time_point<chrono::high_resolution_clock> _start_time;
+  std::chrono::time_point<std::chrono::high_resolution_clock> _start_time;
 
   float measure_end() const {
     auto finish_time = std::chrono::high_resolution_clock::now();
@@ -204,12 +219,13 @@ inline void init_benchmark() {
 
 inline void finish_benchmark(const BenchmarkSession& s) {
   // Print metrics
-  std::cout << "-------------------------------\n";
+  std::cout << "\nSummary:" << std::endl;
+  std::cout << "-------------------------------" << std::endl;
   std::cout << "Graph loaded in " << xopenme_get_timer(X_TIMER_SETUP) << " s" << std::endl;
   std::cout << "All batches loaded in " << s.total_load_images_time() << " s" << std::endl;
   std::cout << "All batches classified in " << s.total_prediction_time() << " s" << std::endl;
   std::cout << "Average classification time: " << s.avg_prediction_time() << " s" << std::endl;
-  std::cout << "-------------------------------\n";
+  std::cout << "-------------------------------" << std::endl;
 
   // Store metrics
   store_value_f(X_VAR_TIME_SETUP, "setup_time_s", xopenme_get_timer(X_TIMER_SETUP));
@@ -232,7 +248,7 @@ void measure_setup(L &&lambda_function) {
 }
 
 template <typename L>
-void measure_prediction(L &&lambda_function) const {
+void measure_prediction(L &&lambda_function) {
   xopenme_clock_start(X_TIMER_TEST);
   lambda_function();
   xopenme_clock_end(X_TIMER_TEST);
@@ -240,47 +256,55 @@ void measure_prediction(L &&lambda_function) const {
 
 //----------------------------------------------------------------------
 
-class ImageData {
-  ImageData(const BenchmarkSettings* s): _dir(s->images_dir) {
-    _buffer.resize(s->image_size * s->image_size * s->NUM_CHANNELS);
+template <typename TData>
+class StaticBuffer {
+public:
+  StaticBuffer(int size, const std::string& dir): _size(size), _dir(dir) {
+    _buffer = new TData[size];
   }
+  
+  virtual ~StaticBuffer() {
+    delete[] _buffer;
+  }
+
+  TData* data() const { return _buffer; }
+  int size() const { return _size; }
+
+protected:
+  const int _size;
+  const std::string _dir;
+  TData* _buffer;
+};
+
+//----------------------------------------------------------------------
+
+class ImageData : public StaticBuffer<uint8_t> {
+public:
+  ImageData(const BenchmarkSettings* s): StaticBuffer(
+    s->image_size * s->image_size * s->num_channels, s->images_dir) {}
   
   void load(const std::string& filename) {
     auto path = _dir + '/' + filename;
     std::ifstream file(path, std::ios::in | std::ios::binary);
     if (!file) throw "Failed to open image data " + path;
-    file.read(reinterpret_cast<char*>(data()), size());
+    file.read(reinterpret_cast<char*>(_buffer), _size);
   }
-
-  uint8_t* data() const { return _buffer.data(); }
-  int size() const { return _buffer.size(); }
-
-private:
-  const std::string _dir;
-  std::vector<uint8_t> _buffer;
 };
 
 //----------------------------------------------------------------------
 
-class ResultData {
-  ResultData(const BenchmarkSettings* s): _dir(s->result_dir) {
-    _buffer.resize(s->NUM_CLASSES);
-  }
+class ResultData : public StaticBuffer<float> {
+public:
+  ResultData(const BenchmarkSettings* s): StaticBuffer<float>(
+    s->num_classes, s->result_dir) {}
 
   void save(const std::string& filename) {
-    auto path = _dir + '/' + filename + ".txt"
+    auto path = _dir + '/' + filename + ".txt";
     std::ofstream file(path);
     if (!file) throw "Unable to create result file " + path;
-    for (auto probe : _buffer)
-      file << probe << std::endl;
+    for (int i = 0; i < _size; i++)
+      file << _buffer[i] << std::endl;
   }
-
-  float* data() const { return _buffer.data(); }
-  int size() const { return _buffer.size(); }
-
-private:
-  const std::string _dir;
-  std::vector<float> _buffer;
 };
 
 //----------------------------------------------------------------------
@@ -289,8 +313,8 @@ class InCopy {
 public:
   InCopy(const BenchmarkSettings* s) {}
   
-  void convert(const ImageData& source, uint8_t* target) const {
-    std::copy(source.data(), source.data() + source.size(), target);
+  void convert(const ImageData* source, uint8_t* target) const {
+    std::copy(source->data(), source->data() + source->size(), target);
   }
 };
 
@@ -302,11 +326,11 @@ public:
     _normalize_img(s->normalize_img), _subtract_mean(s->subtract_mean) {
   }
   
-  void convert(const ImageData& source, float* target) const {
+  void convert(const ImageData* source, float* target) const {
     // Copy image data to target
     float sum = 0;
-    for (int i = 0; i < source.size(); i++) {
-      float px = source.data()[i];
+    for (int i = 0; i < source->size(); i++) {
+      float px = source->data()[i];
       if (_normalize_img)
         px = (px / 255.0 - 0.5) * 2.0;
       sum += px;
@@ -314,8 +338,8 @@ public:
     }
     // Subtract mean value if required
     if (_subtract_mean) {
-      float mean = sum / static_cast<float>(source.size());
-      for (int i = 0; i < source.size(); i++)
+      float mean = sum / static_cast<float>(source->size());
+      for (int i = 0; i < source->size(); i++)
         target[i] -= mean;
     }
   }
@@ -331,8 +355,8 @@ class OutCopy {
 public:
   OutCopy(const BenchmarkSettings* s) {}
   
-  void convert(float* source, const ResultData& target) const {
-    std::copy(source, source + target.size(), target.data());
+  void convert(const float* source, ResultData* target) const {
+    std::copy(source, source + target->size(), target->data());
   }
 };
 
@@ -342,9 +366,9 @@ class OutDequantize {
 public:
   OutDequantize(const BenchmarkSettings* s) {}
   
-  void convert(float* source, const ResultData& target) const {
-    for (int i = 0; i < target.size(); i++)
-      target.data()[i] = source[i] / 255.0;
+  void convert(const uint8_t* source, ResultData* target) const {
+    for (int i = 0; i < target->size(); i++)
+      target->data()[i] = source[i] / 255.0;
   }
 };
 

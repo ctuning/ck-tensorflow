@@ -11,6 +11,7 @@ import json
 
 TOP1 = 0
 TOP5 = 0
+IMAGES_COUNT = 0 # to be assigned
 
 def ck_postprocess(i):
   print('\n--------------------------------')
@@ -20,6 +21,7 @@ def ck_postprocess(i):
   # Init variables from environment
   BATCH_COUNT = int(my_env('CK_BATCH_COUNT'))
   BATCH_SIZE = int(my_env('CK_BATCH_SIZE'))
+  global IMAGES_COUNT
   IMAGES_COUNT = BATCH_COUNT * BATCH_SIZE
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
   RESULTS_DIR = 'predictions'
@@ -126,8 +128,7 @@ def ck_postprocess(i):
         for line in f:
           s = line.strip()
           if s: probes.append(float(s))
-      # remove first background class
-      return probes[1:] 
+      return probes 
 
     for res_file in sorted(os.listdir(RESULTS_DIR)):
       # remove trailing suffix .txt
@@ -153,8 +154,8 @@ def ck_postprocess(i):
   CLASSES_LIST, VALUES_MAP = load_ImageNet_classes()
   calculate_precision()
 
-  accuracy_top1 = TOP1 / float(IMAGES_COUNT)
-  accuracy_top5 = TOP5 / float(IMAGES_COUNT) 
+  accuracy_top1 = TOP1 / float(IMAGES_COUNT) if IMAGES_COUNT > 0 else 0
+  accuracy_top5 = TOP5 / float(IMAGES_COUNT) if IMAGES_COUNT > 0 else 0 
   print('Accuracy top 1: %f (%d of %d)' % (accuracy_top1, TOP1, IMAGES_COUNT))
   print('Accuracy top 5: %f (%d of %d)' % (accuracy_top5, TOP5, IMAGES_COUNT))  
 

@@ -101,16 +101,6 @@ def ck_preprocess(i):
   IMAGE_FILE = my_env('CK_IMAGE_FILE')
   RESULTS_DIR = 'predictions'
   IMAGE_LIST_FILE = 'image_list.txt'
-
-  # Preprocessing options:
-  #
-  # CK_TMP_IMAGE_SIZE - if this set and greater tnan IMAGE_SIZE
-  #                     then images will be scaled to this size
-  #                     and then cropped to target size
-  # CK_CROP_PERCENT   - if TMP_IMAGE_SIZE is not set,
-  #                     images will be cropped to this percent
-  #                     and then scaled to target size
-  #
   TMP_IMAGE_SIZE = int(my_env('CK_TMP_IMAGE_SIZE'))
   CROP_PERCENT = float(my_env('CK_CROP_PERCENT'))
   SUBTRACT_MEAN = my_env("CK_SUBTRACT_MEAN") == "YES"
@@ -211,11 +201,14 @@ def ck_preprocess(i):
     new_env['RUN_OPT_IMAGE_LIST_PATH'] = os.path.join(os.getcwd(), IMAGE_LIST_FILE)
     files_to_push.append('$<<RUN_OPT_IMAGE_LIST_PATH>>$')
 
+  def to_flag(val):
+    return 1 if (str(val).upper() == "YES" or int(val) == 1) else 0
+
   new_env['RUN_OPT_IMAGE_LIST'] = IMAGE_LIST_FILE
   new_env['RUN_OPT_RESULT_DIR'] = RESULTS_DIR
   new_env['RUN_OPT_IMAGE_DIR'] = CACHE_DIR
-  new_env['RUN_OPT_NORMALIZE_DATA'] = dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA") == "YES"
-  new_env['RUN_OPT_SUBTRACT_MEAN'] = my_env("CK_SUBTRACT_MEAN") == "YES"
+  new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"))
+  new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
 
   # Run program specific preprocess script
   preprocess_script = os.path.join(os.getcwd(), '..', 'preprocess_next.py')
