@@ -204,14 +204,17 @@ def ck_preprocess(i):
   def to_flag(val):
     return 1 if (str(val).upper() == "YES" or int(val) == 1) else 0
 
+  # TF specific variable
+  tf_normalize = dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA")
+
   new_env['RUN_OPT_IMAGE_LIST'] = IMAGE_LIST_FILE
   new_env['RUN_OPT_RESULT_DIR'] = RESULTS_DIR
   new_env['RUN_OPT_IMAGE_DIR'] = CACHE_DIR
-  new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"))
+  new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or tf_normalize)
   new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
 
   # Run program specific preprocess script
-  preprocess_script = os.path.join(os.getcwd(), '..', 'preprocess_next.py')
+  preprocess_script = os.path.join(os.getcwd(), '..', 'preprocess-next.py')
   if os.path.isfile(preprocess_script):
     print('--------------------------------')
     print('Running program specific preprocessing script ...')

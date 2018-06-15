@@ -51,7 +51,7 @@ public:
     for (auto image_file : batch_images) {
       _out_converter->convert(_out_ptr + image_offset + probe_offset, _out_data.get());
       _out_data->save(image_file);
-      image_offset += _out_data->size();
+      image_offset += _out_data->size() + probe_offset;
     }
   }
 

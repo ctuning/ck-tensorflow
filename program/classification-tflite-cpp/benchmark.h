@@ -90,7 +90,7 @@ private:
 
 class BenchmarkSettings {
 public:
-  const std::string graph_file = getenv_s("RUN_OPT_TFLITE_GRAPH");
+  const std::string graph_file = getenv_s("RUN_OPT_GRAPH_FILE");
   const std::string images_dir = getenv_s("RUN_OPT_IMAGE_DIR");
   const std::string images_file = getenv_s("RUN_OPT_IMAGE_LIST");
   const std::string result_dir = getenv_s("RUN_OPT_RESULT_DIR");

@@ -93,8 +93,7 @@
     "CK_RECREATE_CACHE": "NO",
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
-    "CK_TMP_IMAGE_SIZE": 0,
-    "CK_USE_MODEL_MEAN": "YES"
+    "CK_TMP_IMAGE_SIZE": 0
   },
   "skip_bin_ext": "yes",
   "source_files": [

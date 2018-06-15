@@ -22,7 +22,7 @@ def ck_preprocess(i):
       MODEL_TFLITE_FILE = filename
       MODEL_TFLITE_PATH = os.path.join(MODEL_DIR, MODEL_TFLITE_FILE)
   if not MODEL_TFLITE_FILE:
-    return {'return': 1, 'error': 'Tflite graph is not found in selected model package'}
+    return {'return': 1, 'error': 'Tflite graph is not found in the selected model package'}
 
   # Setup parameters for program
   new_env = {}
@@ -30,10 +30,10 @@ def ck_preprocess(i):
 
   if i['target_os_dict'].get('remote','') == 'yes':
     # For Android we need only filename without full path  
-    new_env['RUN_OPT_TFLITE_GRAPH'] = MODEL_TFLITE_FILE
-    files_to_push_by_path['RUN_OPT_TFLITE_GRAPH_PATH'] = MODEL_TFLITE_PATH
+    new_env['RUN_OPT_GRAPH_FILE'] = MODEL_TFLITE_FILE
+    files_to_push_by_path['RUN_OPT_GRAPH_PATH'] = MODEL_TFLITE_PATH
   else:
-    new_env['RUN_OPT_TFLITE_GRAPH'] = MODEL_TFLITE_PATH
+    new_env['RUN_OPT_GRAPH_FILE'] = MODEL_TFLITE_PATH
 
   print('--------------------------------\n')
   return {

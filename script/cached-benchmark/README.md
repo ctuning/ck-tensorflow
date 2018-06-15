@@ -1,10 +1,8 @@
 # Common scripts for benchmarking programs
 
-These are common preprocessing and postprocessing scripts to be used in benchmarking programs such as `classification-tensorflow` (TBD), `classification-tensorflow-cpp` (TBD), `classification-tflite-cpp`.
+Common preprocessing and postprocessing scripts to be used in benchmarking programs such as `classification-tensorflow` (*TBD*), `classification-tensorflow-cpp` (*TBD*), `classification-tflite-cpp`.
 
-**NOTE:** Even through these scripts are currently used by tensorflow programs, they are not directly related to TensorFlow and could be used with other programs, e.g. `mobilenets-armcl-opencl`. So they can be moved to some more common location (where?).
-
-A client program has to reference preprocessing script in its meta in `run_time` section, e.g.:
+A client program has to reference scripts in its meta in the section `run_time`, e.g.:
 
 ```json
   "run_cmds": {
@@ -12,7 +10,7 @@ A client program has to reference preprocessing script in its meta in `run_time`
       "run_time": {
         "post_process_via_ck": "yes",
         "post_process_cmds": [
-          "python $#src_path_local#$postprocess.py"
+          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
         ],
         "pre_process_via_ck": {
           "module_uoa": "script",
@@ -22,7 +20,7 @@ A client program has to reference preprocessing script in its meta in `run_time`
         "run_cmd_main": "$#BIN_FILE#$",
 ```
 
-It is supposed that client programs provide required enviroment variables and dependencies with suitable names that scripts will search for.
+It is supposed that the client program provides required enviroment variables and dependencies with suitable names that scripts will search for.
 
 
 ## Preprocessing
@@ -31,9 +29,13 @@ Preprocessing script prepares images for client programs.
 
 Preprocessing steps:
 
-- Read required number of images from a dataset.
+- Read required number of images from a dataset. The number of images is governed by program parameters `CK_BATCH_COUNT` and `CK_BATCH_SIZE`.
+  
+- Prepare images for loading into a network. Preparation includes cropping images, scaling them to a size defined by input images size of a network being benchmarked. See the section **Input preprocessing parameters** below.
 
-As a result preprocessing script provides a set of enviroment variables that client program should use.
+- Store prepared images into a cache directory.
+
+As a result, preprocessing script provides a set of enviroment variables that client program should use:
 
 - `RUN_OPT_IMAGE_DIR`
 Path to a directory containing preprocessed images.
@@ -42,8 +44,14 @@ Path to a directory containing preprocessed images.
 Path to a file containing list of images to be processed.
 This file contains only image file names (one per line) without paths.
 
+- `RUN_OPT_RESULT_DIR`
+Path to a directory to which the client program should store prediction results that will be validated by postprocessing script.
 
-### Images dataset
+### Program-specific preprocessing
+
+Client program can contain its own additional preprocessing script  `preprocess-next.py`. If it is presented it will be called after the common preprocessing.
+
+## Images dataset
 
 Client program should provide access to the ImageNet dataset via run-time dependencies `imagenet-val` and `imagenet-aux`, e.g.:
 
@@ -65,10 +73,27 @@ Client program should provide access to the ImageNet dataset via run-time depend
     },
 ```
 
- includes cropping images, scaling them to a size defined by input images size of a network being benchmarked.
+## Weights package
 
-<!--
+A network for benchmarking is provided by program's run-time dependency `weights`, e.g.:
+
+```json
+  "run_deps": {
+    "weights": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "TensorFlow-Python model and weights",
+      "no_tags": "mobilenet-all",
+      "sort": 30,
+      "tags": "tensorflowmodel,weights,tflite"
+    }
+```
+
+**TODO** Currently only TensorFlow packages provide env variable giving their wanted input image size (`CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH`). But all the packages should do.
+
 ## Program parameters
+
+Here are set of client program parameters affecting pre/post-processig stages.
 
 ### Input image parameters
 
@@ -113,10 +138,3 @@ Default: `87.5`.
 
 **NB:** If `CK_TMP_IMAGE_SIZE` is set and valid, this parameter is not used.
 
-#### `CK_SUBTRACT_MEAN`
-
-If set to `YES`, then the mean value will be subtracted from the input image.
-
-Default: `YES`.
-
-->

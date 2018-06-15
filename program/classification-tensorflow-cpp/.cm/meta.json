@@ -50,13 +50,15 @@
       "ignore_return_code": "no", 
       "run_time": {
         "run_cmd_main": "$#BIN_FILE#$",
-        "pre_process_via_ck": {
-          "script_name": "preprocess"
-        },
         "post_process_via_ck": "yes",
         "post_process_cmds": [
-          "python $#src_path_local#$postprocess.py"
+          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
         ],
+        "pre_process_via_ck": {
+          "module_uoa": "script",
+          "data_uoa": "689867d1939a781d",
+          "script_name": "preprocess"
+        },
         "run_output_files": [
           "tmp-ck-timer.json"
         ]
@@ -96,7 +98,6 @@
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
     "CK_TMP_IMAGE_SIZE": 0,
-    "CK_USE_MODEL_MEAN": "YES",
     "CK_IMAGE_FILE": ""
   },
   "skip_bin_ext": "yes",
