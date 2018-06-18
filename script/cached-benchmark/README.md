@@ -1,6 +1,6 @@
 # Common scripts for benchmarking programs
 
-Common preprocessing and postprocessing scripts to be used in benchmarking programs such as `classification-tensorflow` (*TBD*), `classification-tensorflow-cpp`, `classification-tflite-cpp`, `mobilenets-armcl-opencl` (*TBD*).
+Common preprocessing and postprocessing scripts to be used in benchmarking programs such as `classification-tensorflow`, `classification-tensorflow-cpp`, `classification-tflite-cpp`, `mobilenets-armcl-opencl` (*TBD*).
 
 A client program has to reference scripts in its meta in the section `run_time`, e.g.:
 

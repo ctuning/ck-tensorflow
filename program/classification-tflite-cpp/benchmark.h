@@ -96,7 +96,7 @@ public:
   const std::string result_dir = getenv_s("RUN_OPT_RESULT_DIR");
   const int batch_count = getenv_i("CK_BATCH_COUNT");
   const int batch_size = getenv_i("CK_BATCH_SIZE");
-  const int image_size = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
+  const int image_size = getenv_i("RUN_OPT_IMAGE_SIZE");
   const int num_channels = 3;
   const int num_classes = 1000;
   const bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") != 0;

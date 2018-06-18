@@ -92,9 +92,23 @@ def ck_preprocess(i):
   print('\n--------------------------------')
   def my_env(var): return i['env'].get(var)
   def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
+  def has_dep_env(dep, var): return var in i['deps'][dep]['dict']['env']
 
   # Init variables from environment
-  IMAGE_SIZE = int(dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH"))
+
+  # TF-model specific value
+  if has_dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_CONVERT_TO_BGR'):
+    MODEL_CONVERT_TO_BGR = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_CONVERT_TO_BGR') == 'YES'
+  else:
+    MODEL_CONVERT_TO_BGR = True
+
+  # TODO: all weights packages should provide common vars to reveal its 
+  # input image size: https://github.com/ctuning/ck-tensorflow/issues/67
+  if has_dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'):
+    IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'))
+  else:
+    return {'return': 1, 'error': 'Only TensorFlow model packages are currently supported.'}
+    
   IMAGE_COUNT = int(my_env('CK_BATCH_COUNT')) * int(my_env('CK_BATCH_SIZE'))
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
   IMAGE_DIR = dep_env('imagenet-val', 'CK_ENV_DATASET_IMAGENET_VAL')
@@ -103,7 +117,7 @@ def ck_preprocess(i):
   IMAGE_LIST_FILE = 'image_list.txt'
   TMP_IMAGE_SIZE = int(my_env('CK_TMP_IMAGE_SIZE'))
   CROP_PERCENT = float(my_env('CK_CROP_PERCENT'))
-  SUBTRACT_MEAN = my_env("CK_SUBTRACT_MEAN") == "YES"
+  SUBTRACT_MEAN = my_env('CK_SUBTRACT_MEAN') == "YES"
 
   # Full path of dir for caching prepared images.
   # Store preprocessed images in sources directory, not in `tmp`, as
@@ -166,7 +180,7 @@ def ck_preprocess(i):
       image_data = load_image(image_path = original_path,
                               target_size = IMAGE_SIZE,
                               intermediate_size = TMP_IMAGE_SIZE,
-                              crop_percentage = CK_CROP_PERCENT,
+                              crop_percentage = CROP_PERCENT,
                               convert_to_bgr = MODEL_CONVERT_TO_BGR)
       image_data.tofile(cached_path)
       preprocessed_count += 1
@@ -202,7 +216,7 @@ def ck_preprocess(i):
     files_to_push.append('$<<RUN_OPT_IMAGE_LIST_PATH>>$')
 
   def to_flag(val):
-    return 1 if (str(val).upper() == "YES" or int(val) == 1) else 0
+    return 1 if val and (str(val).upper() == "YES" or int(val) == 1) else 0
 
   # TF specific variable
   tf_normalize = dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA")
@@ -210,8 +224,10 @@ def ck_preprocess(i):
   new_env['RUN_OPT_IMAGE_LIST'] = IMAGE_LIST_FILE
   new_env['RUN_OPT_RESULT_DIR'] = RESULTS_DIR
   new_env['RUN_OPT_IMAGE_DIR'] = CACHE_DIR
+  new_env['RUN_OPT_IMAGE_SIZE'] = IMAGE_SIZE
   new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or tf_normalize)
   new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
+  print(new_env)
 
   # Run program specific preprocess script
   preprocess_script = os.path.join(os.getcwd(), '..', 'preprocess-next.py')
