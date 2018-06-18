@@ -218,15 +218,6 @@ inline void init_benchmark() {
 }
 
 inline void finish_benchmark(const BenchmarkSession& s) {
-  // Print metrics
-  std::cout << "\nSummary:" << std::endl;
-  std::cout << "-------------------------------" << std::endl;
-  std::cout << "Graph loaded in " << xopenme_get_timer(X_TIMER_SETUP) << " s" << std::endl;
-  std::cout << "All batches loaded in " << s.total_load_images_time() << " s" << std::endl;
-  std::cout << "All batches classified in " << s.total_prediction_time() << " s" << std::endl;
-  std::cout << "Average classification time: " << s.avg_prediction_time() << " s" << std::endl;
-  std::cout << "-------------------------------" << std::endl;
-
   // Store metrics
   store_value_f(X_VAR_TIME_SETUP, "setup_time_s", xopenme_get_timer(X_TIMER_SETUP));
   store_value_f(X_VAR_TIME_TEST, "test_time_s", xopenme_get_timer(X_TIMER_TEST));
