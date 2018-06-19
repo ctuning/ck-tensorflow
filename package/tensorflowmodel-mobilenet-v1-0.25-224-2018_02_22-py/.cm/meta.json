@@ -19,16 +19,10 @@
     "skip_file_check": "yes",
     "version": "1_0.25_224_2018_02_22"
   },
-  "end_full_path": {
-    "android": "mobilenet-model.py",
-    "linux": "mobilenet-model.py"
-  },
+  "end_full_path_universal": "mobilenet-model.py",
   "only_for_host_os_tags": [
-    "linux"
   ],
   "only_for_target_os_tags": [
-    "linux",
-    "android"
   ],
   "package_extra_name": " (mobilenet-v1-0.25-224-2018_02_22)",
   "process_script": "install",

@@ -14,7 +14,15 @@
       "ignore_return_code": "no", 
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json", 
-        "post_process_via_ck": "yes", 
+        "post_process_via_ck": "yes",
+        "post_process_cmds": [
+          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
+        ],
+        "pre_process_via_ck": {
+          "module_uoa": "script",
+          "data_uoa": "689867d1939a781d",
+          "script_name": "preprocess"
+        },
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py", 
         "run_cmd_out1": "stdout.log", 
         "run_cmd_out2": "stderr.log", 
@@ -34,18 +42,21 @@
       "tags": "compiler,python"
     },
     "imagenet-val": {
+      "force_target_as_host": "yes",
       "local": "yes", 
       "name": "ImageNet dataset (val)", 
       "sort": 20, 
       "tags": "dataset,imagenet,raw,val"
     },
     "imagenet-aux": {
+      "force_target_as_host": "yes",
       "local": "yes", 
       "name": "ImageNet dataset (aux)", 
       "sort": 30, 
       "tags": "dataset,imagenet,aux"
     },
-    "model-and-weights": {
+    "weights": {
+      "force_target_as_host": "yes",
       "local": "yes", 
       "name": "TensorFlow-Python model and weights", 
       "sort": 40, 
@@ -77,14 +88,12 @@
     "CK_BATCH_SIZE": 1, 
     "CK_SKIP_IMAGES": 0, 
     "CK_TF_GPU_MEMORY_PERCENT": 33,
-    "CK_IMAGE_FILE": "",
     "CK_CROP_PERCENT": 87.5,
+    "CK_IMAGE_FILE": "",
     "CK_TMP_IMAGE_SIZE": 0,
     "CK_SUBTRACT_MEAN": "YES",
     "CK_USE_MODEL_MEAN": "YES",
-    "CK_CACHE_IMAGES": "YES",
-    "CK_RECREATE_CACHE": "NO",
-    "CK_CACHE_DIR": "../preprocessed"
+    "CK_RECREATE_CACHE": "NO"
   }, 
   "tags": [
     "tensorflow-classification"
