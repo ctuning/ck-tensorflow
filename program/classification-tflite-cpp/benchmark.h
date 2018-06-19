@@ -8,6 +8,9 @@
  
 #pragma once
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <chrono>
 #include <dirent.h>
 #include <fstream>
