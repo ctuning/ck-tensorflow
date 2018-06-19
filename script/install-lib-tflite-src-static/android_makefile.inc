@@ -75,6 +75,13 @@ ifeq ($(TARGET),ANDROID)
 	endif
 	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-g++
 	CC := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-gcc
+	CCFLAGS +=\
+--sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
+-Wno-narrowing \
+-fomit-frame-pointer \
+$(MARCH_OPTION) \
+-fPIE \
+-fPIC
 	CXXFLAGS +=\
 --sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
 -Wno-narrowing \
