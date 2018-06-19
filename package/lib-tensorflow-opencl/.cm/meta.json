@@ -61,6 +61,7 @@
       "tags": "lib,armcl,v18.03"
     }, 
     "python": {
+      "add_to_path": "yes",
       "local": "yes", 
       "name": "Python", 
       "sort": 20, 

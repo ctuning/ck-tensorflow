@@ -30,6 +30,7 @@
       ]
     }, 
     "python": {
+      "add_to_path": "yes",
       "local": "yes", 
       "name": "Python interpreter", 
       "sort": 5, 
