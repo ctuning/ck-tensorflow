@@ -203,7 +203,7 @@ def ck_preprocess(i):
     # When files will being pushed to Android, current path will be sources path,
     # not `tmp` as during preprocessing. So we have to set `files_to_push` accordingly,
     if CACHE_DIR.startswith('..'):
-      CACHE_DIR = CACHE_DIR[3,]
+      CACHE_DIR = CACHE_DIR[3:]
 
     for image_file in image_list:
       files_to_push.append(os.path.join(CACHE_DIR, image_file))
