@@ -19,13 +19,11 @@
     "skip_file_check": "yes",
     "version": "1_0.75_128"
   },
-  "end_full_path": {
-    "linux": "mobilenet-model.py"
-  },
+  "end_full_path_universal": "mobilenet-model.py",
   "only_for_host_os_tags": [
-    "linux"
   ],
   "only_for_target_os_tags": [
+    "windows",
     "linux"
   ],
   "package_extra_name": " (mobilenet-v1-0.75-128)",

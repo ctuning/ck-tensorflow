@@ -105,13 +105,11 @@
       "sort": 15
     }
   },
-  "end_full_path": {
-    "linux": "README.md"
-  }, 
+  "end_full_path_universal": "README.md",
   "only_for_host_os_tags": [
-    "linux"
   ], 
   "only_for_target_os_tags": [
+    "windows",
     "linux"
   ], 
   "process_script": "install", 
