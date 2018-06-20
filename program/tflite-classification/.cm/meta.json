@@ -96,5 +96,5 @@
     "tensorflow-lite-classification-cpp",
     "demo"
   ],  
-  "target_file": "classify"
+  "target_file": "classification"
 }
