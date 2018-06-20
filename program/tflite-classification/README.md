@@ -4,9 +4,11 @@ This program in ck format based on the original TensorFlow Lite example `label_i
 
 ## Requirements
 
+For Android: target_os >= android23
+
 ```bash
 ck install package:lib-tflite-1.7.0-src-static
-ck install package:lib-tflite-1.7.0-src-staticc --target_os=android23-arm64
+ck install package:lib-tflite-1.7.0-src-static --target_os=android23-arm64
 ```
 
 Model and labels are downloaded from [here](https://storage.googleapis.com/download.tensorflow.org/models/tflite/mobilenet_v1_224_android_quant_2017_11_08.zip).
