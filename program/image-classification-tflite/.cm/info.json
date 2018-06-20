@@ -16,5 +16,5 @@
       "4"
     ]
   },
-  "data_name": "classification-tflite-cpp"
+  "data_name": "image-classification-tflite"
 }

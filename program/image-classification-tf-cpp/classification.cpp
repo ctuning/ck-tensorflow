@@ -7,7 +7,7 @@
  */
 
 // TODO: this header should be moved to a common location (where?)
-#include "../classification-tflite-cpp/benchmark.h"
+#include "../image-classification-tflite/benchmark.h"
 
 #include "tensorflow/core/public/session.h"
 #include "tensorflow/cc/framework/scope.h"
