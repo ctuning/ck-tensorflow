@@ -13,6 +13,14 @@
 
 #include "image_helper.h"
 
+enum X_TIMERS {
+  X_TIMER_SETUP,
+  X_TIMER_LOAD_IMAGE,
+  X_TIMER_CLASSIFY,
+
+  X_TIMER_COUNT
+}; 
+
 using namespace std;
 
 bool get_arg(const char* arg, const char* key, string& target) {
@@ -34,12 +42,9 @@ void check_file(const string& path, const string& id) {
 int main(int argc, char *argv[]) {
   try {
 #ifdef XOPENME
-    xopenme_init(3,0);
+    xopenme_init(X_TIMER_COUNT, 0);
 #endif
 
-#ifdef XOPENME
-    xopenme_clock_start(0);
-#endif
     // Parse command line arguments
     string image_file;
     string model_file;
@@ -53,15 +58,10 @@ int main(int argc, char *argv[]) {
     check_file(model_file, "Model");
     check_file(labels_file, "Labels");
 
-    // Read input image
-    ImageData img_data = load_jpeg_file(image_file);
-    cout << "OK: Input image loaded: " << img_data.height << "x"
-                                       << img_data.width << "x"
-                                       << img_data.channels << endl;
-    if (img_data.channels != 3)
-      throw string("Only RGB images are supported");
-
     // Load network from ftlite file
+#ifdef XOPENME
+    xopenme_clock_start(X_TIMER_SETUP);
+#endif
     unique_ptr<tflite::FlatBufferModel> model;
     model = tflite::FlatBufferModel::BuildFromFile(model_file.c_str());
     if (!model)
@@ -80,6 +80,20 @@ int main(int argc, char *argv[]) {
     if (interpreter->tensor(input)->type != kTfLiteFloat32 ||
         interpreter->tensor(output)->type != kTfLiteFloat32)
       throw string("This demo is for FLOAT input/output only");
+#ifdef XOPENME
+    xopenme_clock_end(X_TIMER_SETUP);
+#endif
+
+    // Read input image
+#ifdef XOPENME
+    xopenme_clock_start(X_TIMER_LOAD_IMAGE);
+#endif
+    ImageData img_data = load_jpeg_file(image_file);
+    cout << "OK: Input image loaded: " << img_data.height << "x"
+                                       << img_data.width << "x"
+                                       << img_data.channels << endl;
+    if (img_data.channels != 3)
+      throw string("Only RGB images are supported");
 
     // Prepare input image
     TfLiteIntArray* dims = interpreter->tensor(input)->dims;
@@ -90,20 +104,20 @@ int main(int argc, char *argv[]) {
       throw string("Unsupported channels number in model");
     resize_image(interpreter->typed_tensor<float>(input), img_data, wanted_height, wanted_width);
 #ifdef XOPENME
-    xopenme_clock_end(0);
+    xopenme_clock_end(X_TIMER_LOAD_IMAGE);
 #endif
 
     // Classify image
     long ct_repeat_max = getenv("CT_REPEAT_MAIN") ? atol(getenv("CT_REPEAT_MAIN")) : 1;
 #ifdef XOPENME
-    xopenme_clock_start(2);
+    xopenme_clock_start(X_TIMER_CLASSIFY);
 #endif
     for (int i = 0; i < ct_repeat_max; i++) {
       if (interpreter->Invoke() != kTfLiteOk)
         throw string("Failed to invoke tflite");
     }
 #ifdef XOPENME
-    xopenme_clock_end(2);
+    xopenme_clock_end(X_TIMER_CLASSIFY);
 #endif
     cout << "OK: Image classified" << endl;
 

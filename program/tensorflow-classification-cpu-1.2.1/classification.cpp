@@ -66,6 +66,15 @@ limitations under the License.
 #ifdef XOPENME
 #include <xopenme.h>
 #endif
+
+enum X_TIMERS {
+  X_TIMER_SETUP,
+  X_TIMER_LOAD_IMAGE,
+  X_TIMER_CLASSIFY,
+
+  X_TIMER_COUNT
+};
+
 // These are all common classes it's handy to reference with no namespace.
 using tensorflow::Flag;
 using tensorflow::Tensor;
@@ -417,10 +426,10 @@ int main(int argc, char* argv[]) {
   // input the model expects. If you train your own model, or use something
   // other than GoogLeNet you'll need to update these.
 #ifdef XOPENME
-  xopenme_init(3,0);
+  xopenme_init(X_TIMER_COUNT, 0);
 #endif
 
-  x_clock_start(0);
+  x_clock_start(X_TIMER_SETUP);
   string image = "tensorflow/examples/label_image/data/grace_hopper.jpg";
   string graph = "data/tensorflow_inception_graph.pb";
   string labels =
@@ -472,8 +481,12 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
+  x_clock_end(X_TIMER_SETUP);
+
   // Get the image from disk as a float array of numbers, resized and normalized
   // to the specifications the main graph expects.
+  x_clock_start(X_TIMER_LOAD_IMAGE);
+  
   std::vector<Tensor> resized_tensors;
   string image_path = tensorflow::io::JoinPath(root_dir, image);
   Status read_tensor_status =
@@ -484,8 +497,8 @@ int main(int argc, char* argv[]) {
     return -1;
   }
   const Tensor& resized_tensor = resized_tensors[0];
-
-  x_clock_end(0);
+  x_clock_end(X_TIMER_LOAD_IMAGE);  
+  
   // Actually run the image through the model.
 
   long ct_repeat=0;
@@ -494,7 +507,7 @@ int main(int argc, char* argv[]) {
 
   if (getenv("CT_REPEAT_MAIN")!=NULL) ct_repeat_max=atol(getenv("CT_REPEAT_MAIN"));
   
-  x_clock_start(2);
+  x_clock_start(X_TIMER_CLASSIFY);
 
   std::vector<Tensor> outputs;
   Status run_status;
@@ -503,7 +516,7 @@ int main(int argc, char* argv[]) {
                                    {output_layer}, {}, &outputs);
   }
 
-  x_clock_end(2);  
+  x_clock_end(X_TIMER_CLASSIFY);  
   if (!run_status.ok()) {
     LOG(ERROR) << "Running model failed: " << run_status;
     return -1;
