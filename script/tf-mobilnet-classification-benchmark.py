@@ -70,7 +70,7 @@ def do(i, arg):
     tdid=r['device_id']
 
 #    program='mobilenets-armcl-opencl'
-    program='classification-tensorflow'
+    program='image-classification-tf-py'
     ii={'action':'show',
         'module_uoa':'env',
         'tags':'dataset,imagenet,raw,val'}
