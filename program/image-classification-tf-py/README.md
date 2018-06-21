@@ -50,7 +50,7 @@ $ ck install package:imagenet-2012-aux
 
 ```
 $ ck list local:experiment:*
-$ cd `ck find program:classification-tensorflow`
+$ cd `ck find program:image-classification-tf-py`
 $ python benchmark.nvidia-gtx1080.py
 ```
 

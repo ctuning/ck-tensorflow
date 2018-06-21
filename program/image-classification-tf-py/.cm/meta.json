@@ -1,6 +1,6 @@
 {
   "backup_data_uid": "b4025ad44457764b", 
-  "data_name": "classification-tensorflow",
+  "data_name": "image-classification-tf-py",
   "no_compile": "yes", 
   "no_target_file": "yes", 
   "print_files_after_run": [

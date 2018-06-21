@@ -85,5 +85,5 @@ install:
     -       ck install package --tags=lib,python-package,scipy                  # to prevent confusion with pre-installed version on Macs @ Travis
 
 script:
-    - ck run program:classification-tensorflow --env.CK_IMAGE_FILE=$HOME/CK-TOOLS/dataset-imagenet-ilsvrc2012-val-min-resized/ILSVRC2012_val_00000060.JPEG
+    - ck run program:image-classification-tf-py --env.CK_IMAGE_FILE=$HOME/CK-TOOLS/dataset-imagenet-ilsvrc2012-val-min-resized/ILSVRC2012_val_00000060.JPEG
 

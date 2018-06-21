@@ -1,6 +1,6 @@
 # Common scripts for benchmarking programs
 
-Common preprocessing and postprocessing scripts to be used in benchmarking programs such as `classification-tensorflow`, `classification-tensorflow-cpp`, `classification-tflite-cpp`, `mobilenets-armcl-opencl` (*TBD*).
+Common preprocessing and postprocessing scripts to be used in benchmarking programs such as `image-classification-tf-py`, `image-classification-tf-cpp`, `image-classification-tflite`, `mobilenets-armcl-opencl` (*TBD*).
 
 A client program has to reference scripts in its meta in the section `run_time`, e.g.:
 
@@ -104,8 +104,8 @@ dataset. When only the name of an image is specified, it is assumed that the
 image is in the ImageNet dataset.
 
 ```
-$ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=/tmp/images/path-to-image.jpg
-$ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=ILSVRC2012_val_00000011.JPEG
+$ ck run program:image-classification-tf-cpp --env.CK_IMAGE_FILE=/tmp/images/path-to-image.jpg
+$ ck run program:image-classification-tf-cpp --env.CK_IMAGE_FILE=ILSVRC2012_val_00000011.JPEG
 ```
 
 #### `CK_RECREATE_CACHE`

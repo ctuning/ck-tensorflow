@@ -39,7 +39,7 @@ def do(i, arg):
     tdid=r['device_id']
 
     # Program and command.
-    program='classification-tensorflow'
+    program='image-classification-tf-py'
     cmd_key='default'
     # Load program meta and description to check deps.
     ii={'action':'load',

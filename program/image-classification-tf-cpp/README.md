@@ -39,13 +39,13 @@ $ ck install package:imagenet-2012-aux
 ## Build
 
 ```
-$ ck compile program:classification-tensorflow-cpp [--target_os=android23-arm64]
+$ ck compile program:image-classification-tf-cpp [--target_os=android23-arm64]
 ```
 
 ## Run
 
 ```
-$ ck run program:classification-tensorflow-cpp [--target_os=android23-arm64]
+$ ck run program:image-classification-tf-cpp [--target_os=android23-arm64]
 ```
 
 ## Program parameters
@@ -59,8 +59,8 @@ dataset.  When only the name of an image is specified, it is assumed that the
 image is in the ImageNet dataset.
 
 ```
-$ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=/tmp/images/path-to-image.jpg
-$ ck run program:classification-tensorflow-cpp --env.CK_IMAGE_FILE=ILSVRC2012_val_00000011.JPEG
+$ ck run program:image-classification-tf-cpp --env.CK_IMAGE_FILE=/tmp/images/path-to-image.jpg
+$ ck run program:image-classification-tf-cpp --env.CK_IMAGE_FILE=ILSVRC2012_val_00000011.JPEG
 ```
 
 #### `CK_RECREATE_CACHE`

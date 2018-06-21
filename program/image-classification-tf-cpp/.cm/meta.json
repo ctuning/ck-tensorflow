@@ -33,7 +33,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
   "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
-  "data_name": "classification-tensorflow-cpp", 
+  "data_name": "image-classification-tf-cpp", 
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
