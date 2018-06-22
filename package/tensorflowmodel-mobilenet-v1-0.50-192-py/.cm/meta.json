@@ -1,5 +1,6 @@
 {
   "check_exit_status": "yes",
+  "comment": "OUTDATED - 20170614",
   "customize": {
     "install_env": {
       "MODEL_IMAGE_HEIGHT": "192",
