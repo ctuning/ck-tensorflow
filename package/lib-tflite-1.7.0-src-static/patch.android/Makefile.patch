@@ -1,5 +1,5 @@
 diff --git a/tensorflow/contrib/lite/Makefile b/tensorflow/contrib/lite/Makefile
-index b4504f2..8f61191 100644
+index b4504f2..67f2aa2 100644
 --- a/tensorflow/contrib/lite/Makefile
 +++ b/tensorflow/contrib/lite/Makefile
 @@ -1,4 +1,6 @@
@@ -17,3 +17,13 @@ index b4504f2..8f61191 100644
  
  # This library is the main target for this makefile. It will contain a minimal
  # runtime that can be linked in to other programs.
+@@ -91,6 +94,9 @@ $(wildcard tensorflow/contrib/lite/kernels/internal/*.c) \
+ $(wildcard tensorflow/contrib/lite/kernels/internal/optimized/*.c) \
+ $(wildcard tensorflow/contrib/lite/kernels/internal/reference/*.c) \
+ $(wildcard tensorflow/contrib/lite/downloads/farmhash/src/farmhash.cc)
++ifeq ($(TARGET),ANDROID)
++	CORE_CC_ALL_SRCS += $(NDK_ROOT)/sources/android/cpufeatures/cpu-features.c
++endif  # ANDROID
+ # Remove any duplicates.
+ CORE_CC_ALL_SRCS := $(sort $(CORE_CC_ALL_SRCS))
+ CORE_CC_EXCLUDE_SRCS := \
