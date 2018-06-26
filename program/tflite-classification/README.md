@@ -1,28 +1,35 @@
-# Test program for TensorFlow Lite ck package.
+# Classification program for TensorFlow Lite
 
-This program in ck format based on the original TensorFlow Lite example `label_image` (`tensorflow/contrib/lite/examples/label_image/label_image/label_image.cc`).
+## Prerequisites
 
-## Requirements
+### TensorFlow Lite package
 
-For Android: target_os >= android23
+This demo program uses a statically linked TensorFlow Lite library. 
 
-```bash
-ck install package:lib-tflite-1.7.0-src-static
-ck install package:lib-tflite-1.7.0-src-static --target_os=android23-arm64
+```
+$ ck install package:lib-tflite-1.7.0-src-static [--target_os=android23-arm64]
 ```
 
-Model and labels are downloaded from [here](https://storage.googleapis.com/download.tensorflow.org/models/tflite/mobilenet_v1_224_android_quant_2017_11_08.zip).
+**NB:** Use `--target_os=android23-arm64` to build for Android API 23 (v6.0 "Marshmallow") or [similar](https://source.android.com/setup/start/build-numbers).
+
+### Weights package
+
+Install a model providing a graph as tflite file e.g.:
+
+```
+$ ck install package:tensorflowmodel-mobilenet-v1-1.0-224-2018_02_22-py
+$ ck install package:tensorflowmodel-mobilenet-v2-1.0-224-py 
+```
+
 
 ## Build
 
-```bash
-ck compile program:ch-test-tflite
-ck compile program:ch-test-tflite --target_os=android23-arm64
+```
+$ ck compile program:tflite-classification [--target_os=android23-arm64]
 ```
 
 ## Run
 
-```bash
-ck run program:ch-test-tflite
-ck run program:ch-test-tflite --target_os=android23-arm64
+```
+$ ck run program:tflite-classification [--target_os=android23-arm64]
 ```
