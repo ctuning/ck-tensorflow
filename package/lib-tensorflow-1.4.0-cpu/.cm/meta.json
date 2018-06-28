@@ -49,5 +49,6 @@
   "use_preprocess_scripts_from_another_entry": {
     "module_uoa": "package",
     "data_uoa": "lib-tensorflow-1.1.0-cpu"
-  }
+  },
+  "template":"yes"
 }
