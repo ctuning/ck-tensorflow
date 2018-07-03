@@ -236,8 +236,8 @@ and the Embedded Vision Summit'17 - so please stay tuned ;) !
 ## Other DNN with unified CK API
 
 CK allows us to unify AI interfaces while collaboratively optimizing underneath engines.
-For example, we added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2) 
-and [MXNet](https://github.com/ctuning/ck-mxnet) via CK:
+For example, we added similar support to install, use and evaluate [Caffe/Caffe2](https://github.com/ctuning/ck-caffe2),
+[CK-PyTorch](https://github.com/ctuning/ck-pytorch) and [MXNet](https://github.com/ctuning/ck-mxnet) via CK:
 
 ```
 $ ck pull repo:ck-caffe2
