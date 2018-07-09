@@ -10,5 +10,6 @@
     "tensorflowmodel",
     "weights",
     "python"
-  ]
+  ],
+  "template":"yes"
 }

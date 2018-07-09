@@ -16,5 +16,6 @@
     "lib",
     "tensorflow",
     "vstatic"
-  ]
+  ],
+  "template":"yes"
 }

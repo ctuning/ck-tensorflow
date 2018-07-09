@@ -16,5 +16,6 @@
   "tags": [
     "lib",
     "tensorflow"
-  ]
+  ],
+  "template":"yes"
 }

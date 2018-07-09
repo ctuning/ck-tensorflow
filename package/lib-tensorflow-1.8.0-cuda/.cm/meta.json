@@ -82,5 +82,6 @@
   "use_scripts_from_another_entry": {
     "data_uoa": "94a780371b44f0db", 
     "module_uoa": "package"
-  }
+  },
+  "template":"yes"
 }
