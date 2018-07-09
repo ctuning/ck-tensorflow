@@ -66,6 +66,14 @@ inline int getenv_i(const std::string& name) {
   return atoi(value);
 }
 
+/// Load mandatory float value from the environment.
+inline float getenv_f(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value)
+    throw "Required environment variable " + name + " is not set";
+  return atof(value);
+}
+
 /// Dummy `sprintf` like formatting function using std::string.
 /// It uses buffer of fixed length so can't be used in any cases,
 /// generally use it for short messages with numeric arguments.
