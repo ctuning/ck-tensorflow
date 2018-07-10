@@ -107,7 +107,10 @@ def ck_preprocess(i):
   if has_dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'):
     IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'))
   else:
-    return {'return': 1, 'error': 'Only TensorFlow model packages are currently supported.'}
+    if has_dep_env('weights', 'CK_ENV_MOBILENET_RESOLUTION'):
+      IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_MOBILENET_RESOLUTION'))
+    else:
+      return {'return': 1, 'error': 'Only TensorFlow model packages are currently supported.'}
     
   IMAGE_COUNT = int(my_env('CK_BATCH_COUNT')) * int(my_env('CK_BATCH_SIZE'))
   SKIP_IMAGES = int(my_env('CK_SKIP_IMAGES'))
