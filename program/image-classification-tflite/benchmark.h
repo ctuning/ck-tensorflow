@@ -15,6 +15,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string.h>
 #include <vector>
 
@@ -105,8 +106,8 @@ public:
   const std::string images_dir = getenv_s("RUN_OPT_IMAGE_DIR");
   const std::string images_file = getenv_s("RUN_OPT_IMAGE_LIST");
   const std::string result_dir = getenv_s("RUN_OPT_RESULT_DIR");
-  const int batch_count = getenv_i("CK_BATCH_COUNT");
-  const int batch_size = getenv_i("CK_BATCH_SIZE");
+  const int batch_count = getenv_i("RUN_OPT_BATCH_COUNT");
+  const int batch_size = getenv_i("RUN_OPT_BATCH_SIZE");
   const int image_size = getenv_i("RUN_OPT_IMAGE_SIZE");
   const int num_channels = 3;
   const int num_classes = 1000;
@@ -307,6 +308,57 @@ public:
     for (int i = 0; i < _size; i++)
       file << _buffer[i] << std::endl;
   }
+};
+
+//----------------------------------------------------------------------
+
+class IBenchmark {
+public:
+  bool has_background_class = false;
+
+  virtual void load_images(const std::vector<std::string>& batch_images) = 0;
+  virtual void save_results(const std::vector<std::string>& batch_images) = 0;
+};
+
+
+template <typename TData, typename TInConverter, typename TOutConverter>
+class Benchmark : public IBenchmark {
+public:
+  Benchmark(const BenchmarkSettings* settings, TData *in_ptr, TData *out_ptr) {
+    _in_ptr = in_ptr;
+    _out_ptr = out_ptr;
+    _in_data.reset(new ImageData(settings));
+    _out_data.reset(new ResultData(settings));
+    _in_converter.reset(new TInConverter(settings));
+    _out_converter.reset(new TOutConverter(settings));
+  }
+
+  void load_images(const std::vector<std::string>& batch_images) override {
+    int image_offset = 0;
+    for (auto image_file : batch_images) {
+      _in_data->load(image_file);
+      _in_converter->convert(_in_data.get(), _in_ptr + image_offset);
+      image_offset += _in_data->size();
+    }
+  }
+
+  void save_results(const std::vector<std::string>& batch_images) override {
+    int image_offset = 0;
+    int probe_offset = has_background_class ? 1 : 0;
+    for (auto image_file : batch_images) {
+      _out_converter->convert(_out_ptr + image_offset + probe_offset, _out_data.get());
+      _out_data->save(image_file);
+      image_offset += _out_data->size() + probe_offset;
+    }
+  }
+
+private:
+  TData* _in_ptr;
+  TData* _out_ptr;
+  std::unique_ptr<ImageData> _in_data;
+  std::unique_ptr<ResultData> _out_data;
+  std::unique_ptr<TInConverter> _in_converter;
+  std::unique_ptr<TOutConverter> _out_converter;
 };
 
 //----------------------------------------------------------------------

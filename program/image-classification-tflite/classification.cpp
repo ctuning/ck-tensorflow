@@ -15,53 +15,13 @@ using namespace std;
 using namespace CK;
 
 
-class IBenchmark {
-public:
-  bool has_background_class = false;
-
-  virtual void load_images(const vector<string>& batch_images) = 0;
-  virtual void save_results(const vector<string>& batch_images) = 0;
-};
-
-
 template <typename TData, typename TInConverter, typename TOutConverter>
-class Benchmark : public IBenchmark {
+class TFLiteBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
 public:
-  Benchmark(const BenchmarkSettings* settings, tflite::Interpreter* interpreter, int input_index) {
-    _in_ptr = interpreter->typed_tensor<TData>(input_index);
-    _out_ptr = interpreter->typed_output_tensor<TData>(0);
-    _in_data.reset(new ImageData(settings));
-    _out_data.reset(new ResultData(settings));
-    _in_converter.reset(new TInConverter(settings));
-    _out_converter.reset(new TOutConverter(settings));
+  TFLiteBenchmark(const BenchmarkSettings* settings, tflite::Interpreter* interpreter, int input_index)
+    : Benchmark<TData, TInConverter, TOutConverter>(
+      settings, interpreter->typed_tensor<TData>(input_index), interpreter->typed_output_tensor<TData>(0)) {
   }
-
-  void load_images(const vector<string>& batch_images) override {
-    int image_offset = 0;
-    for (auto image_file : batch_images) {
-      _in_data->load(image_file);
-      _in_converter->convert(_in_data.get(), _in_ptr + image_offset);
-      image_offset += _in_data->size();
-    }
-  }
-
-  void save_results(const vector<string>& batch_images) override {
-    int image_offset = 0;
-    int probe_offset = has_background_class ? 1 : 0;
-    for (auto image_file : batch_images) {
-      _out_converter->convert(_out_ptr + image_offset + probe_offset, _out_data.get());
-      _out_data->save(image_file);
-      image_offset += _out_data->size() + probe_offset;
-    }
-  }
-
-private:
-  TData* _in_ptr;
-  TData* _out_ptr;
-  unique_ptr<ImageData> _in_data;
-  unique_ptr<ResultData> _out_data;
-  unique_ptr<TInConverter> _in_converter;
-  unique_ptr<TOutConverter> _out_converter;
 };
 
 
@@ -105,11 +65,11 @@ int main(int argc, char* argv[]) {
 
       switch (input_type) {
       case kTfLiteFloat32:
-        benchmark.reset(new Benchmark<float, InNormalize, OutCopy>(&settings, interpreter.get(), input_index));
+        benchmark.reset(new TFLiteBenchmark<float, InNormalize, OutCopy>(&settings, interpreter.get(), input_index));
         break;
 
       case kTfLiteUInt8:
-        benchmark.reset(new Benchmark<uint8_t, InCopy, OutDequantize>(&settings, interpreter.get(), input_index));
+        benchmark.reset(new TFLiteBenchmark<uint8_t, InCopy, OutDequantize>(&settings, interpreter.get(), input_index));
         break;
 
       default:

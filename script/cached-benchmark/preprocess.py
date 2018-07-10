@@ -227,6 +227,8 @@ def ck_preprocess(i):
   new_env['RUN_OPT_IMAGE_SIZE'] = IMAGE_SIZE
   new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or tf_normalize)
   new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
+  new_env['RUN_OPT_BATCH_COUNT'] = my_env('CK_BATCH_COUNT');
+  new_env['RUN_OPT_BATCH_SIZE'] = my_env('CK_BATCH_SIZE');
   print(new_env)
 
   # Run program specific preprocess script
