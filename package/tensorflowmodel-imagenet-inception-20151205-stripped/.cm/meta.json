@@ -28,7 +28,6 @@
     "model", 
     "tensorflowmodel", 
     "google", 
-    "aux", 
     "imagenet", 
     "stripped", 
     "inception", 

@@ -106,7 +106,7 @@
   "run_deps": {
     "tensorflow-model": {
       "local": "yes", 
-      "name": "Tensorflow aux", 
+      "name": "Stripped Tensorflow model",
       "sort": 1, 
       "tags": "tensorflowmodel,stripped"
     }

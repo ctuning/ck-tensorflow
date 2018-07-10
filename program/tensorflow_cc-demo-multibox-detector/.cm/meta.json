@@ -62,7 +62,7 @@
   "run_deps": {
     "tensorflow-model": {
       "local": "yes", 
-      "name": "Tensorflow aux", 
+      "name": "Multibox Tensorflow model",
       "sort": 1, 
       "tags": "tensorflowmodel,multibox"
     }
