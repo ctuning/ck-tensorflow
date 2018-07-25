@@ -4,12 +4,12 @@
     "git_src_dir": "src",
     "install_env": {
       "PACKAGE_GIT": "YES",
-      "PACKAGE_GIT_CHECKOUT": "v1.7.0",
+      "PACKAGE_GIT_CHECKOUT": "tflite-v0.1.7",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
-    "version": "1.7"
+    "version": "0.1.7"
   },
   "deps": {
     "compiler": {
@@ -43,9 +43,9 @@
     "tensorflow-static",
     "vsrc",
     "vstatic",
-    "v1.7.0",
-    "v1.7",
-    "v1",
+    "v0.1.7",
+    "v0.1",
+    "v0",
     "channel-stable"
   ],
   "use_scripts_from_another_entry": {

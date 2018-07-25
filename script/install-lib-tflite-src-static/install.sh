@@ -20,6 +20,11 @@ function remove_dir_if_exists() {
   if [ -d $1 ]; then rm -rdf $1; fi
 }
 
+function exclude_from_build() {
+  if [ -f $1 ]; then mv $1 $1~; fi
+}
+
+
 if [ "${PACKAGE_GIT}" == "YES" ] ; then
   echo "--------------------------------";
   echo "Cloning package ${PACKAGE_URL} ..."
@@ -63,13 +68,20 @@ remove_dir_if_exists ${TFLITE_DIR}/gen
 
 cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_DIR}
 
-# These files reference to external functionality that seems no more available
-if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.h ]; then
-  mv ${TFLITE_DIR}/kernels/internal/spectrogram.h ${TFLITE_DIR}/kernels/internal/spectrogram.~h
-fi
-if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.cc ]; then
-  mv ${TFLITE_DIR}/kernels/internal/spectrogram.cc ${TFLITE_DIR}/kernels/internal/spectrogram.~cc
-fi
+# These files reference to some external functionality that seems no more available:
+# $CK-TOOLS/$TF/src/third_party/fft2d can't be downloaded from the address mentioned there.
+# Library itself can be built successfully, but linking of an application
+# (e.g.: ck compile program:image-classification-tflite) fails with message
+# spectrogram.cc:(.text+0x47a): undefined reference to `rdft'
+exclude_from_build ${TFLITE_DIR}/kernels/internal/spectrogram.h
+exclude_from_build ${TFLITE_DIR}/kernels/internal/spectrogram.cc
+exclude_from_build ${TFLITE_DIR}/kernels/audio_spectrogram.cc
+#if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.h ]; then
+#  mv ${TFLITE_DIR}/kernels/internal/spectrogram.h ${TFLITE_DIR}/kernels/internal/spectrogram.~h
+#fi
+#if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.cc ]; then
+# mv ${TFLITE_DIR}/kernels/internal/spectrogram.cc ${TFLITE_DIR}/kernels/internal/spectrogram.~cc
+#fi
 
 echo "--------------------------------";
 echo "Download dependencies ..."
