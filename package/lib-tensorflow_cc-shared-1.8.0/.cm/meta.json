@@ -33,7 +33,7 @@
       "tags": "tool,bazel",
       "version_from": [
         0,
-        5
+        10
       ],
       "version_to": [
         0,
