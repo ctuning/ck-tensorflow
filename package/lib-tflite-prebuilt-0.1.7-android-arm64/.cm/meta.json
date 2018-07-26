@@ -7,7 +7,7 @@
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/q9233bmop95umkc",
-      "PACKAGE_NAME": "lib-tflite-prebuild-static-0.1.7-android21-arm64.zip",
+      "PACKAGE_NAME": "lib-tflite-prebuilt-static-0.1.7-android21-arm64.zip",
       "PACKAGE_WGET": "YES"
     },
     "version": "0.1.7"
@@ -22,10 +22,10 @@
   "only_for_target_os_tags": [
     "android"
   ],
-  "package_extra_name": " (prebuild, static)",
+  "package_extra_name": " (prebuilt, static)",
   "process_script": "install",
   "soft_uoa": "22441eac479e90e0",
-  "suggested_path": "lib-tflite-prebuild-static",
+  "suggested_path": "lib-tflite-prebuilt-static",
   "tags": [
     "lib",
     "tensorflow",
