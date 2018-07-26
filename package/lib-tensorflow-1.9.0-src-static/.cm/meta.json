@@ -4,12 +4,11 @@
     "git_src_dir": "src",
     "install_env": {
       "PACKAGE_GIT": "YES",
-      "PACKAGE_GIT_CHECKOUT": "v1.7.0",
+      "PACKAGE_GIT_CHECKOUT": "v1.9.0",
       "PACKAGE_SUB_DIR": "src",
-      "PACKAGE_PATCH": "YES",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
-    "version": "1.7"
+    "version": "1.9"
   },
   "deps": {
     "compiler": {
@@ -20,8 +19,8 @@
     }
   },
   "end_full_path": {
-    "linux": "lib/libtensorflow-lite.a",
-    "android": "lib/libtensorflow-lite.a"
+    "android": "lib/libtensorflow-core.a",
+    "linux": "lib/libtensorflow-core.a"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [
@@ -34,23 +33,21 @@
   ],
   "package_extra_name": " (from sources, static)",
   "process_script": "install",
-  "soft_uoa": "22441eac479e90e0",
-  "suggested_path": "lib-tflite-src-static",
+  "soft_uoa": "6ad9e190eb44aa3b",
+  "suggested_path": "lib-tensorflow-src-static",
   "tags": [
     "lib",
     "tensorflow",
-    "tensorflow-lite",
     "tensorflow-static",
     "vsrc",
     "vstatic",
-    "v1.7.0",
-    "v1.7",
+    "v1.9.0",
+    "v1.9",
     "v1",
     "channel-stable"
   ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "0eb9f24b67b17d68",
+    "data_uoa": "272e54598bbc9064",
     "module_uoa": "script"
-  },
-  "template":"yes"
+  }
 }

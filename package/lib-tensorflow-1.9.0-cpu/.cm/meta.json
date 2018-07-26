@@ -1,0 +1,57 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "GPU_ENABLED": 0,
+      "TENSORFLOW_PACKAGE_VER": "1.9.0",
+      "TF_CUDA": "NO"
+    },
+    "supported_python_ver2_on_win": [
+      5,
+      6
+    ],
+    "version": "1.9.0"
+  },
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path_universal": "lib$#sep#$tensorflow$#sep#$__init__.py",
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "only_for_target_os_tags": [
+    "linux",
+    "windows"
+  ],
+  "package_extra_name": " (prebuilt, cpu)",
+  "process_script": "install",
+  "soft_uoa": "30db354f469bb178",
+  "suggested_path": "tensorflow-prebuilt-cpu",
+  "tags": [
+    "lib",
+    "tensorflow",
+    "tensorflow-cpu",
+    "v1",
+    "v1.9",
+    "v1.9.0",
+    "vprebuilt",
+    "vcpu",
+    "channel-stable"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "lib-tensorflow-1.1.0-cpu",
+    "module_uoa": "package"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "lib-tensorflow-1.4.0-cpu",
+    "module_uoa": "package"
+  }
+}

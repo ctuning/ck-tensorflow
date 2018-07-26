@@ -11,7 +11,7 @@
       "android": "install/lib/libtensorflow-core.a"
     }
   },
-  "soft_name": "TensorFlow C++ API",
+  "soft_name": "TensorFlow Lite API",
   "tags": [
     "lib",
     "tensorflow",
