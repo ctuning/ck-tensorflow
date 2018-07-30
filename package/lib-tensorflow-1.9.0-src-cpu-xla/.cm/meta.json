@@ -21,12 +21,12 @@
       "tags": "tool,bazel",
       "version_from": [
         0,
-        10
+        11
       ],
       "version_to": [
         0,
-        13,
-        0
+        15,
+        99
       ]
     },
     "python": {
