@@ -56,7 +56,7 @@ before_install:
                 export PATH=/usr/local/opt/python\@2/bin:$PATH
             else
                 brew reinstall python                                           # install and link python3 and pip3 to /usr/local/bin
-                export PATH=/usr/local/opt/python/bin:$PATH
+                export PATH=/usr/local/opt/python\@3/bin:$PATH
             fi
 
             export CK_PLATFORM_INDEX=2                                          # used later by CK
