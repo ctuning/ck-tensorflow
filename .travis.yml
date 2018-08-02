@@ -58,6 +58,9 @@ before_install:
             fi
             export PATH=/usr/local/opt/python/libexec/bin:$PATH
 
+            echo PATH = $PATH
+            ls -l /usr/local/opt/python/libexec/bin
+
             export CK_PLATFORM_INDEX=2                                          # used later by CK
         else
             sudo apt-get update -qq
