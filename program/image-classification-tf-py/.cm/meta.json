@@ -68,7 +68,7 @@
       "name": "TensorFlow library", 
       "sort": 50, 
       "tags": "lib,tensorflow",
-      "no_tags": "tensorflow_cc"
+      "no_tags": "tensorflow_cc,vstatic"
     },
     "lib-python-pillow": {
       "local": "yes",
