@@ -11,9 +11,9 @@ python:
 env:
     matrix:
         - TF_PREBUILT_VERSION=1.4.0
-        - TF_PREBUILT_VERSION=1.5.0
-        - TF_PREBUILT_VERSION=1.7.0
-        - TF_PREBUILT_VERSION=1.8.0
+#        - TF_PREBUILT_VERSION=1.5.0
+#        - TF_PREBUILT_VERSION=1.7.0
+#        - TF_PREBUILT_VERSION=1.8.0
 
 matrix:
     include:
@@ -37,14 +37,14 @@ matrix:
           language: generic
           python:   3.6
           env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.8.0
-        - os: linux
-          language: python
-          python:   2.7
-          env:      TF_PREBUILT_VERSION=1.1.0
-        - os: linux
-          language: python
-          python:   3.5
-          env:      TF_PREBUILT_VERSION=1.1.0
+#        - os: linux
+#          language: python
+#          python:   2.7
+#          env:      TF_PREBUILT_VERSION=1.1.0
+#        - os: linux
+#          language: python
+#          python:   3.5
+#          env:      TF_PREBUILT_VERSION=1.1.0
 
 before_install:
     - |
@@ -57,6 +57,14 @@ before_install:
             else
                 brew reinstall python                                           # install and link python3 and pip3 to /usr/local/bin
                 export PATH=/usr/local/opt/python\@3/bin:$PATH
+                echo "------------------------- /usr/local/opt:"
+                ls -l /usr/local/opt
+                echo "------------------------- /usr/local/opt/python:"
+                ls -l /usr/local/opt/python
+                echo "------------------------- /usr/local/opt/python/bin:"
+                ls -l /usr/local/opt/python/bin
+                echo "------------------------- /usr/local/opt/python\@3/bin:"
+                ls -l /usr/local/opt/python\@3/bin
             fi
 
             export CK_PLATFORM_INDEX=2                                          # used later by CK
