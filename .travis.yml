@@ -71,6 +71,7 @@ install:
     - CWD=`pwd`
     - THIS_REPO_NAME=`basename $CWD`
     - echo "os=${TRAVIS_OS_NAME}, python=${WANTED_PYTHON_VERSION}, TF_prebuilt_version=${TF_PREBUILT_VERSION}"
+    - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
     - which python
     - python --version
     - python -m pip install --ignore-installed --verbose pip setuptools         # make sure pip is also up to date no matter what
