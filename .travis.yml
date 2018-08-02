@@ -67,7 +67,7 @@ before_install:
             sudo apt-get install python-pip
             export WANTED_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION                 # since Python is supported in Linux, get it from Travis
             export CK_PLATFORM_INDEX=1                                          # used later by CK
-            export PYTHON_EXE
+            export PYTHON_EXE=python
         fi
 
 install:
@@ -75,13 +75,13 @@ install:
     - THIS_REPO_NAME=`basename $CWD`
     - echo "TRAVIS_OS_NAME=${TRAVIS_OS_NAME}, WANTED_PYTHON_VERSION=${WANTED_PYTHON_VERSION}, TF_PREBUILT_VERSION=${TF_PREBUILT_VERSION}"
     - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
-    - which $PYTHON_EXE
-    - $PYTHON_EXE --version
-    - $PYTHON_EXE -m pip install --ignore-installed --verbose pip setuptools         # make sure pip is also up to date no matter what
-    - $PYTHON_EXE -m pip install -r requirements.txt                                 # ck kernel itself and some essential components
+    - which ${PYTHON_EXE}
+    - ${PYTHON_EXE} --version
+    - ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools  # make sure pip is also up to date no matter what
+    - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
     - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
     - echo $CK_PLATFORM_INDEX | ck detect platform.os --update_platform_init    # set the platform to generic-linux (1) or generic-macos (2)
-    -       ck detect soft:compiler.python --full_path=`which $PYTHON_EXE`      # pick the one Travis has set for us in the PATH
+    -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
     -       ck install package:imagenet-2012-aux                                # one part of ImageNet
     -       ck install package:imagenet-2012-val-min-resized                    # another part of ImageNet
     -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
