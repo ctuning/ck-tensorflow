@@ -88,6 +88,9 @@ def main(_):
   config.gpu_options.allow_growth = True
   config.gpu_options.allocator_type = 'BFC'
   config.gpu_options.per_process_gpu_memory_fraction = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 33)) / 100.0
+  num_processors = int(os.getenv('CK_TF_CPU_NUM_OF_PROCESSORS', 0))
+  if num_processors > 0:
+    config.device_count["CPU"] = num_processors
     
   setup_time_begin = time.time()
 

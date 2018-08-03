@@ -11,6 +11,7 @@ import os
 def ck_preprocess(i):
   def dep_env(dep, var): return i['deps'][dep]['dict']['env'].get(var)
   
+  MODEL_TFLITE_FILE = ''
   # Our tensorflow model packages provide model as checkpoints files.
   # But we have to find tflite graph file in model's directory.
   # If weights will be already provided as tflite file,
