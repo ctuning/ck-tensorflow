@@ -15,3 +15,9 @@ e.g. 1 processor:
 ```
 $ ck install package:lib-tensorflow-1.9.0-src-cpu --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
 ```
+
+## Temporarily introduce patch
+
+Fails both [without](https://github.com/tensorflow/tensorflow/issues/21332) and
+[with](https://github.com/tensorflow/tensorflow/pull/16175#issuecomment-410437372)
+the patch on the TX1. Committed to be tested on other aarch64 platforms.
