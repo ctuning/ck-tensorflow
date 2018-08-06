@@ -19,7 +19,7 @@ WEIGHTS = {}
 
 def load_weights(data_path):
     global WEIGHTS
-    WEIGHTS = np.load(data_path).item()
+    WEIGHTS = np.load(data_path, encoding='bytes').item()
 
 #-----------------------------------------------------------------------
 
