@@ -51,5 +51,3 @@ bazel build -c opt \
             --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
             tensorflow:libtensorflow_cc.so
 bazel shutdown
-
-return 0

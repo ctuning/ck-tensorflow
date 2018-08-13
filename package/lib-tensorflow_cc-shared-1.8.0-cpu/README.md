@@ -15,5 +15,5 @@ $ sudo updatedb
 To prevent running out of memory during a build, restrict the build to use
 e.g. 2 processors:
 ```
-$ ck install package:lib-tensorflow_cc-shared-1.4.0 --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=2
+$ ck install package:lib-tensorflow_cc-shared-1.8.0-cpu --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=2
 ```
