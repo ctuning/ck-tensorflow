@@ -59,15 +59,15 @@
   "only_for_target_os_tags": [
     "linux"
   ], 
-  "package_extra_name": " (sycl, cpu)", 
+  "package_extra_name": " (sycl, opencl)", 
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178", 
-  "suggested_path": "lib-tensorflow-sycl-cpu", 
+  "suggested_path": "lib-tensorflow-sycl-opencl", 
   "tags": [
     "lib", 
     "tensorflow", 
     "tensorflow-sycl", 
-    "vcpu", 
+    "vopencl", 
     "vsrc"
   ], 
   "use_scripts_from_another_entry": {
