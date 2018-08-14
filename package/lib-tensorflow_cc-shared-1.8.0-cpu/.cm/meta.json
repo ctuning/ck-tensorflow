@@ -1,0 +1,91 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "git_src_dir": "tensorflow_cc",
+    "install_env": {
+      "CK_TF_NEED_CUDA": "NO",
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_GIT_CHECKOUT": "lib-tensorflow_cc-shared-1.8.0",
+      "PACKAGE_PATCH": "YES",
+      "PACKAGE_SUB_DIR": "tensorflow_cc",
+      "PACKAGE_URL": "https://github.com/ctuning/tensorflow_cc.git"
+    },
+    "version": "1.8"
+  },
+  "deps": {
+    "bazel": {
+      "add_to_path": "no",
+      "local": "no",
+      "name": "Bazel tool",
+      "sort": 40,
+      "tags": "tool,bazel",
+      "version_from": [
+        0,
+        10
+      ],
+      "version_to": [
+        0,
+        13,
+        0
+      ]
+    },
+    "cmake": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "CMake",
+      "sort": 5,
+      "tags": "tool,cmake"
+    },
+    "compiler": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 10,
+      "tags": "compiler,lang-cpp"
+    },
+    "python": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 6,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path": {
+    "linux": "install/lib/tensorflow_cc/libtensorflow_cc.so"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " (cpu)",
+  "process_script": "install",
+  "soft_uoa": "0cdc7594d430ab2b",
+  "suggested_path": "lib-tensorflow_cc-shared-cpu",
+  "tags": [
+    "lib",
+    "bazel",
+    "api",
+    "tensorflow",
+    "tensorflow_cc",
+    "vmaster",
+    "vshared",
+    "vsrc",
+    "vcpu",
+    "v1.8.0",
+    "v1.8",
+    "v1",
+    "channel-stable"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f",
+    "module_uoa": "84e27ad9dd12e734"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "543a6140708537cf",
+    "module_uoa": "script"
+  }
+}
