@@ -17,5 +17,5 @@
       "2"
     ]
   }, 
-  "data_name": "lib-tensorflow-opencl"
+  "data_name": "lib-tensorflow-sycl-cpu"
 }
