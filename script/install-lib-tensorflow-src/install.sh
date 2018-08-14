@@ -106,7 +106,18 @@ exit_if_error
 
 stage "Build with bazel"
 
-bazel build --config=opt ${CUDA_CONFIG_OPTS} --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} //tensorflow/tools/pip_package:build_pip_package
+if [ -n "${CK_BAZEL_CACHE_DIR}" ]; then
+  OUTPUT_USER_ROOT="--output_user_root ${CK_BAZEL_CACHE_DIR}"
+fi
+
+bazel \
+  ${OUTPUT_USER_ROOT} \
+  build \
+  --config=opt \
+  ${CUDA_CONFIG_OPTS} \
+  --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
+  //tensorflow/tools/pip_package:build_pip_package
+  
 bazel shutdown
 exit_if_error
 # Seems bazel does not set error code when build process is interrupted 

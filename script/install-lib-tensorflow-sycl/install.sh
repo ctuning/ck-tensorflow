@@ -90,6 +90,10 @@ fi
 TARGET_OBJ_DIR=${INSTALL_DIR}/obj
 TARGET_LIB_DIR=${INSTALL_DIR}/lib
 
+if [ -n "${CK_BAZEL_CACHE_DIR}" ]; then
+  OUTPUT_USER_ROOT="--output_user_root ${CK_BAZEL_CACHE_DIR}"
+fi
+
 stage "Run configuration script"
 cd ${INSTALL_DIR}/src
 ./configure
@@ -97,6 +101,7 @@ exit_if_error
 
 stage "Build with bazel"
 bazel \
+  ${OUTPUT_USER_ROOT} \
   build \
   --config=opt \
   ${BUILD_CONFIG_SYCL} \
