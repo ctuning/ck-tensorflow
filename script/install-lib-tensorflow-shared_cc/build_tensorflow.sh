@@ -43,11 +43,18 @@ if [ ${TF_NEED_CUDA} == 1 ]; then
   export TF_CUDA_CLANG=${TF_CUDA_CLANG:-0}
 fi
 
+if [ -n "${CK_BAZEL_CACHE_DIR}" ]; then
+  OUTPUT_USER_ROOT="--output_user_root ${CK_BAZEL_CACHE_DIR}"
+fi
+
 # configure and build
 ./configure
-bazel build -c opt \
-            ${CUDA_CONFIG_OPTS} \
-            --config=monolithic \
-            --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
-            tensorflow:libtensorflow_cc.so
+bazel \
+  ${OUTPUT_USER_ROOT} \
+  build -c opt \
+  ${CUDA_CONFIG_OPTS} \
+  --config=monolithic \
+  --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
+  tensorflow:libtensorflow_cc.so
+
 bazel shutdown
