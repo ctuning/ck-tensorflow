@@ -60,8 +60,15 @@ remove_dir_if_exists ${INSTALL_DIR}/obj
 stage "Prepare custom build script ..."
 ORIG_SCRIPT_DIR=${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow_cc/cmake
 THIS_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cp ${ORIG_SCRIPT_DIR}/build_tensorflow.sh ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.orig
-cp ${THIS_SCRIPT_DIR}/build_tensorflow.sh ${ORIG_SCRIPT_DIR}
+if [ -f ${ORIG_SCRIPT_DIR}/build_tensorflow.sh ]; then
+  cp ${ORIG_SCRIPT_DIR}/build_tensorflow.sh ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.orig
+  cp ${THIS_SCRIPT_DIR}/build_tensorflow.sh ${ORIG_SCRIPT_DIR}
+fi
+if [ -f ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.in ]; then
+  cp ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.in ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.in.orig
+  cp ${THIS_SCRIPT_DIR}/build_tensorflow.sh ${ORIG_SCRIPT_DIR}/build_tensorflow.sh.in
+fi
+
 
 stage "Run build script ..."
 mkdir ${INSTALL_DIR}/obj
