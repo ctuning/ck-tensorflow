@@ -1,0 +1,64 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "PACKAGE_URL": "https://github.com/codeplaysoftware/tensorflow",
+      "PACKAGE_GIT": "NO",
+      "PACKAGE_GIT_CHECKOUT": "eigen_sycl",
+      "PACKAGE_PATCH": "YES",
+      "PACKAGE_SUB_DIR": "src"
+    }, 
+    "version": "master"
+  }, 
+  "deps": {
+    "bazel": {
+      "local": "yes", 
+      "name": "Bazel", 
+      "sort": 10, 
+      "tags": "tool,bazel",
+      "version_from": [
+        0,
+        10
+      ],
+      "version_to": [
+        0,
+        11,
+        99
+      ]
+    },
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes", 
+      "name": "Python", 
+      "sort": 20, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "package_extra_name": " (sycl, cpu)", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "lib-tensorflow-sycl-cpu", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "tensorflow-sycl",
+    "vcpu",
+    "vsrc"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "882656604ea47304",
+    "module_uoa": "script"
+  }
+}
+

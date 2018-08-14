@@ -12,5 +12,5 @@
       "1"
     ]
   }, 
-  "data_name": "install-lib-tensorflow-opencl"
+  "data_name": "install-lib-tensorflow-sycl"
 }
