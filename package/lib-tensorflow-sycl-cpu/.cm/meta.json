@@ -3,8 +3,9 @@
     "extra_dir": "", 
     "git_src_dir": "src", 
     "install_env": {
+      "CK_TF_NEED_OPENCL": "NO",
       "PACKAGE_URL": "https://github.com/codeplaysoftware/tensorflow",
-      "PACKAGE_GIT": "NO",
+      "PACKAGE_GIT": "YES",
       "PACKAGE_GIT_CHECKOUT": "eigen_sycl",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_SUB_DIR": "src"
@@ -45,15 +46,15 @@
   "only_for_target_os_tags": [
     "linux"
   ], 
-  "package_extra_name": " (sycl, cpu)", 
+  "package_extra_name": " (sycl, opencl)", 
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178", 
-  "suggested_path": "lib-tensorflow-sycl-cpu", 
+  "suggested_path": "lib-tensorflow-sycl-opencl", 
   "tags": [
     "lib", 
     "tensorflow", 
     "tensorflow-sycl",
-    "vcpu",
+    "vopencl",
     "vsrc"
   ], 
   "use_scripts_from_another_entry": {

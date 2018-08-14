@@ -59,7 +59,6 @@ export TF_NEED_S3=0
 export TF_NEED_GDR=0
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
-export TF_NEED_OPENCL=0
 export TF_NEED_JEMALLOC=0
 export TF_NEED_VERBS=0
 export TF_NEED_MKL=0
@@ -68,8 +67,25 @@ export TF_NEED_MPI=0
 export TF_CUDA_CLANG=0
 export TF_NEED_CUDA=0
 export TF_ENABLE_XLA=0
+export TF_NEED_KAFKA=0
+export TF_SET_ANDROID_WORKSPACE=0
+export TF_VECTORIZE_SYCL=0
 export PYTHON_BIN_PATH=${CK_ENV_COMPILER_PYTHON_FILE}
 export PYTHON_LIB_PATH="$($PYTHON_BIN_PATH -c 'import site; print(site.getsitepackages()[0])')" 
+
+if [ "$CK_TF_NEED_OPENCL" == "YES" ] ; then  
+  echo "OpenCL enabled"
+  export TF_NEED_OPENCL=1
+  export TF_NEED_OPENCL_SYCL=1
+  export TF_NEED_COMPUTECPP=1
+  export COMPUTECPP_TOOLKIT_PATH=${CK_ENV_COMPILER_COMPUTECPP}
+  BUILD_CONFIG_SYCL="--config=sycl"
+else
+  echo "OpenCL disabled"
+  export TF_NEED_OPENCL=0
+  export TF_NEED_OPENCL_SYCL=0
+  export TF_NEED_COMPUTECPP=0
+fi  
 
 TARGET_OBJ_DIR=${INSTALL_DIR}/obj
 TARGET_LIB_DIR=${INSTALL_DIR}/lib
@@ -83,6 +99,7 @@ stage "Build with bazel"
 bazel \
   build \
   --config=opt \
+  ${BUILD_CONFIG_SYCL} \
   --jobs ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
   //tensorflow/tools/pip_package:build_pip_package
 
