@@ -48,7 +48,7 @@
   "package_extra_name": " (sycl, cpu)", 
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178", 
-  "suggested_path": "tensorflow-sycl-cpu", 
+  "suggested_path": "lib-tensorflow-sycl-cpu", 
   "tags": [
     "lib", 
     "tensorflow", 
