@@ -41,7 +41,7 @@ for more details).
 We can now build TensorFlow library and run classification via CK for various Android and Linux platforms. 
 You can even participate in collaborative evaluation and optimization of TF using your Android device
 (mobile phone, tablet, etc) via this engaging 
-[Android app](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments). 
+[Android app](http://cKnowledge.org/android-apps.html). 
 You can see and use all public results in the [Collective Knowledge repository](http://cKnowledge.org/repo).
 
 # Coordination of development
@@ -201,7 +201,7 @@ and tuning of realistic workloads across diverse hardware
 [DATE'16](http://tinyurl.com/zyupd5v), [CPC'15](http://arxiv.org/abs/1506.06256)).
 We also plan to add crowd-benchmarking and crowd-tuning of Caffe, TensorFlow 
 and other DNN frameworks to our 
-[Android application](https://play.google.com/store/apps/details?id=openscience.crowdsource.experiments) 
+[Android application](http://cKnowledge.org/android-apps.html) 
 soon - please, stay tuned!
 
 ## Unified, multi-dimensional and multi-objective autotuning
@@ -287,7 +287,7 @@ hardware price and other costs
 We are working with the community to unify and crowdsource performance analysis 
 and tuning of various DNN frameworks (or any realistic workload) 
 using Collective Knowledge Technology:
-* [Android app for DNN crowd-benchmarking and crowd-tuning](https://play.google.com/store/apps/details?id=openscience.crowdsource.video.experiments)
+* [Android app for DNN crowd-benchmarking and crowd-tuning](http://cKnowledge.org/android-apps.html)
 * [CK-TensorFlow](https://github.com/ctuning/ck-tensorflow)
 * [CK-Caffe](https://github.com/dividiti/ck-caffe)
 * [CK-Caffe2](https://github.com/ctuning/ck-caffe2)
