@@ -1,0 +1,20 @@
+diff --git a/tensorflow_cc/cmake/TensorflowBase.cmake b/tensorflow_cc/cmake/TensorflowBase.cmake
+index 94e00c8..8f7b0ef 100644
+--- a/tensorflow_cc/cmake/TensorflowBase.cmake
++++ b/tensorflow_cc/cmake/TensorflowBase.cmake
+@@ -4,13 +4,14 @@ ExternalProject_Add(
+   tensorflow_base
+   GIT_REPOSITORY http://github.com/tensorflow/tensorflow.git
+   GIT_TAG 56663eedd7296d85c9adb3e9537ddac521719445
+-  TMP_DIR "/tmp"
++  TMP_DIR "tmp"
+   STAMP_DIR "tensorflow-stamp"
+   DOWNLOAD_DIR "tensorflow"
+   SOURCE_DIR "tensorflow"
+   BUILD_IN_SOURCE 1
+   UPDATE_COMMAND ""
+   CONFIGURE_COMMAND make -f tensorflow/contrib/makefile/Makefile clean
++            COMMAND patch -p1 < ../platform.h.patch
+             COMMAND tensorflow/contrib/makefile/download_dependencies.sh
+   BUILD_COMMAND ""
+   INSTALL_COMMAND ""
