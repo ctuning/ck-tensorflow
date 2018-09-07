@@ -1,0 +1,20 @@
+{
+  "backup_data_uid": "927d420ca58b4022", 
+  "backup_module_uid": "1dc07ee0f4742028", 
+  "backup_module_uoa": "package", 
+  "control": {
+    "author": "Grigori Fursin", 
+    "author_email": "Grigori.Fursin@cTuning.org", 
+    "author_webpage": "http://fursin.net", 
+    "copyright": "See CK COPYRIGHT.txt for copyright details", 
+    "engine": "CK", 
+    "iso_datetime": "2018-09-07T14:35:47.138734", 
+    "license": "See CK LICENSE.txt for licensing details", 
+    "version": [
+      "1", 
+      "9", 
+      "5"
+    ]
+  }, 
+  "data_name": "lib-tensorflow-1.10.1-src-cuda"
+}
