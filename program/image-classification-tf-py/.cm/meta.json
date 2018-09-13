@@ -63,26 +63,26 @@
       "tags": "tensorflowmodel,weights,python",
       "no_tags": "mobilenet-all"
     },
-    "lib-tensorflow": {
-      "local": "yes", 
-      "name": "TensorFlow library", 
-      "sort": 50, 
-      "tags": "lib,tensorflow",
-      "no_tags": "tensorflow_cc,vstatic"
-    },
     "lib-python-pillow": {
       "local": "yes",
       "name": "Pillow python library",
-      "sort": 60,
+      "sort": 50,
       "tags": "lib,python-package,pillow"
     },
     "lib-python-scipy": {
       "local": "yes",
       "name": "SciPy python library",
-      "sort": 70,
+      "sort": 60,
       "tags": "lib,python-package,scipy"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 70,
+      "tags": "lib,tensorflow",
+      "no_tags": "tensorflow_cc,vstatic"
     }
-  }, 
+  },
   "run_vars": {
     "CK_BATCH_COUNT": 1, 
     "CK_BATCH_SIZE": 1, 
