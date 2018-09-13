@@ -16,7 +16,7 @@ import numpy as np
 # We have to augment search paths manually before importing TF
 # otherwise standard paths prepend ones from PYTHONPATH in `sys.path`
 # and pip-installed TF is loaded instead of ck-installed one
-for p in os.getenv('PYTHONPATH', '').split(':'):
+for p in os.getenv('PYTHONPATH', '').split(os.pathsep):
   sys.path.insert(0, p)
 
 import tensorflow as tf
