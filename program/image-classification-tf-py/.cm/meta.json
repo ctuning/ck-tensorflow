@@ -69,16 +69,22 @@
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 60,
+      "tags": "lib,python-package,numpy"
+    },
     "lib-python-scipy": {
       "local": "yes",
       "name": "SciPy python library",
-      "sort": 60,
+      "sort": 70,
       "tags": "lib,python-package,scipy"
     },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
-      "sort": 70,
+      "sort": 80,
       "tags": "lib,tensorflow",
       "no_tags": "tensorflow_cc,vstatic"
     }
