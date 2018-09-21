@@ -1,20 +1,20 @@
 # TensorFlow classification demo
 
+This demo program uses a statically linked TensorFlow Lite library.
+
 ## Prerequisites
 
 ### SciPy
 
 ```
 # apt install liblapack-dev libatlas-dev
-# pip2 install scipy
+# python -m pip install scipy
 ```
 
 ### TensorFlow library
 
-This demo program uses a statically linked TensorFlow Lite library.
-
 ```
-$ ck install package:lib-tflite-1.7.0-src-static [--target_os=android23-arm64]
+$ ck install package:lib-tflite-0.1.7-src-static [--target_os=android23-arm64]
 ```
 
 **NB:** Use `--target_os=android23-arm64` to build for Android API 23 (v6.0 "Marshmallow")
@@ -32,7 +32,7 @@ $ ck install package:tensorflowmodel-mobilenet-v2-1.0-224-py
 ### ImageNet dataset
 
 ```
-$ ck install package --tags=dataset,imagenet,raw,val
+$ ck install package --tags=small_dataset,imagenet,raw,val
 $ ck install package:imagenet-2012-aux 
 ```
 
