@@ -10,8 +10,9 @@ import imp
 import time
 import json
 import os
-import tensorflow as tf
+import sys
 import numpy as np
+import tensorflow as tf
 
 MODEL_MODULE = os.getenv('CK_ENV_TENSORFLOW_MODEL_MODULE')
 MODEL_WEIGHTS = os.getenv('CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
