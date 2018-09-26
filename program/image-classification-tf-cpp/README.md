@@ -1,6 +1,6 @@
-# TensorFlow classification demo
+# TensorFlow (C++) image classification program
 
-This demo program uses a statically linked TensorFlow library.
+This program uses a statically linked TensorFlow (C++) library.
 
 ## Prerequisites
 
