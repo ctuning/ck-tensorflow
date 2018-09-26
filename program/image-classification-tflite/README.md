@@ -1,6 +1,6 @@
-# TensorFlow classification demo
+# TensorFlow Lite image classification program
 
-This demo program uses a statically linked TensorFlow Lite library.
+This program uses a statically linked [TensorFlow Lite](https://www.tensorflow.org/lite/) library.
 
 ## Prerequisites
 
