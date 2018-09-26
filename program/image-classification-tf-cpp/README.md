@@ -1,20 +1,20 @@
 # TensorFlow classification demo
 
+This demo program uses a statically linked TensorFlow library.
+
 ## Prerequisites
 
 ### SciPy
 
 ```
 # apt install liblapack-dev libatlas-dev
-# pip2 install scipy
+# python -m pip install scipy
 ```
 
 ### TensorFlow library
 
-This demo program uses a statically linked TensorFlow library.
-
 ```
-$ ck install package:lib-tensorflow-1.7.0-src-static [--target_os=android23-arm64]
+$ ck install package:lib-tensorflow-1.9.0-src-static [--target_os=android23-arm64]
 ```
 
 **NB:** Use `--target_os=android23-arm64` to build for Android API 23 (v6.0
@@ -23,8 +23,12 @@ $ ck install package:lib-tensorflow-1.7.0-src-static [--target_os=android23-arm6
 
 ### TensorFlow models
 
-Install a model providing a frozen graph e.g.:
+Install a TensorFlow model providing a _frozen_ graph via:
 
+```
+$ ck install package --tags=tensorflowmodel,frozen
+```
+or directly via e.g.:
 ```
 $ ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py
 ```
@@ -32,8 +36,8 @@ $ ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py
 ### ImageNet dataset
 
 ```
-$ ck install package --tags=dataset,imagenet,raw,val
 $ ck install package:imagenet-2012-aux 
+$ ck install package --tags=dataset,imagenet,raw,val
 ```
 
 ## Build
