@@ -4,23 +4,28 @@
 
 ### Misc
 ```
-# pip2 install enum34 mock pillow
-# pip2 install wheel absl-py
+# python -m pip install enum34 mock pillow
+# python -m pip install wheel absl-py
 ```
 
 ### SciPy
 
 ```
 # apt install liblapack-dev libatlas-dev
-# pip2 install scipy
+# python -m pip install scipy
 ```
 
 ## Install via CK
 
 ### TensorFlow
 
+Install from source:
 ```
-$ ck install package:lib-tensorflow-1.4.0-src-{cpu,cuda}{,-xla}
+$ ck install package:lib-tensorflow-1.10.1-src-{cpu,cuda}
+```
+or from a binary `x86_64` package:
+```
+$ ck install package:lib-tensorflow-1.10.1-{cpu,cuda}
 ```
 
 ### TensorFlow models
