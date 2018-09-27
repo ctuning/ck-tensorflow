@@ -61,8 +61,7 @@
     "windows"
   ], 
   "only_for_target_os_tags": [
-    "linux", 
-    "windows"
+    "linux" 
   ], 
   "package_extra_name": " (prebuilt, cuda)", 
   "process_script": "install", 

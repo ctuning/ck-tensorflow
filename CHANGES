@@ -1,3 +1,5 @@
+2018.09.27 - [FGG] fixed TF 1.10.1 package for Windows (use 1.10.0 instead)
+
 2018.07.31 - fixed python issue #74
 
 2018.05.11 - added TF 1.8.0 prebuilt versions or for native compilation
