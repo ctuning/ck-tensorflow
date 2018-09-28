@@ -3,7 +3,11 @@
   "customize": {
     "check_that_exists": "yes",
     "ck_version": 10,
-    "env_prefix": "CK_ENV_TENSORFLOW_MODEL"
+    "env_prefix": "CK_ENV_TENSORFLOW_MODEL",
+    "soft_file": {
+      "linux": "*-model.py",
+      "win": "*-model.py"
+    }
   },
   "soft_name": "TensorFlow python model and weights",
   "tags": [
