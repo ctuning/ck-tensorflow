@@ -32,6 +32,7 @@ def ck_postprocess(i):
   CLASSES_LIST = []
   VALUES_MAP = {}
   IMAGE_FILE = my_env('CK_IMAGE_FILE')
+  FULL_REPORT = my_env('CK_SILENT_MODE') != 'YES'
 
 
   # Loads ImageNet classes and correct predictions
@@ -130,9 +131,12 @@ def ck_postprocess(i):
           if s: probes.append(float(s))
       return probes 
 
+    checked_files = 0
+
     for res_file in sorted(os.listdir(RESULTS_DIR)):
       # remove trailing suffix .txt
       img_file = res_file[:-4] 
+      checked_files += 1
       
       all_probes = load_probes(res_file)
       if len(all_probes) != NUM_CLASSES:
@@ -141,10 +145,13 @@ def ck_postprocess(i):
         IMAGES_COUNT -= 1
         continue
         
-      top5 = get_top5(all_probes) 
-      print_predictions(top5, img_file)
+      top5 = get_top5(all_probes)
+      if FULL_REPORT:
+        print_predictions(top5, img_file)
+      elif checked_files % 100 == 0:
+        print('Predictions checked: {}'.format(checked_files))
       res = check_predictions(top5, img_file)
-      frame_predictions.append(res)  
+      frame_predictions.append(res)
 
 
   global TOP1

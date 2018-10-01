@@ -125,7 +125,9 @@ def ck_preprocess(i):
   # Full path of dir for caching prepared images.
   # Store preprocessed images in sources directory, not in `tmp`, as
   # `tmp` directory can de cleaned between runs and caches will be lost.
-  CACHE_DIR_ROOT = os.path.join('..', 'preprocessed')
+  CACHE_DIR_ROOT = my_env('CK_IMG_CACHE_DIR')
+  if not CACHE_DIR_ROOT:
+    CACHE_DIR_ROOT = os.path.join('..', 'preprocessed')
 
   # Single file mode
   if IMAGE_FILE:
@@ -230,8 +232,9 @@ def ck_preprocess(i):
   new_env['RUN_OPT_IMAGE_SIZE'] = IMAGE_SIZE
   new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or tf_normalize)
   new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
-  new_env['RUN_OPT_BATCH_COUNT'] = my_env('CK_BATCH_COUNT');
-  new_env['RUN_OPT_BATCH_SIZE'] = my_env('CK_BATCH_SIZE');
+  new_env['RUN_OPT_BATCH_COUNT'] = my_env('CK_BATCH_COUNT')
+  new_env['RUN_OPT_BATCH_SIZE'] = my_env('CK_BATCH_SIZE')
+  new_env['RUN_OPT_SILENT_MODE'] = to_flag(my_env('CK_SILENT_MODE'))
   print(new_env)
 
   # Run program specific preprocess script
