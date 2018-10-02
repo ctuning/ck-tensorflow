@@ -50,7 +50,7 @@
     "default": {
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$#BIN_FILE#$",
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
@@ -60,6 +60,7 @@
           "data_uoa": "689867d1939a781d",
           "script_name": "preprocess"
         },
+        "run_cmd_main": "$#BIN_FILE#$",
         "run_output_files": [
           "tmp-ck-timer.json"
         ]
