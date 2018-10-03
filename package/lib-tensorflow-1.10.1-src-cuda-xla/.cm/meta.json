@@ -1,0 +1,102 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "CK_TF_ENABLE_XLA": "YES", 
+      "CK_TF_NEED_CUDA": "YES", 
+      "PACKAGE_GIT": "YES", 
+      "PACKAGE_GIT_CHECKOUT": "v1.9.0", 
+      "PACKAGE_PATCH": "YES", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
+    }, 
+    "version": "1.9.0"
+  }, 
+  "deps": {
+    "bazel": {
+      "add_to_path": "no", 
+      "local": "no", 
+      "name": "Bazel tool", 
+      "sort": 40, 
+      "tags": "tool,bazel", 
+      "version_from": [
+        0, 
+        11
+      ], 
+      "version_to": [
+        0, 
+        15, 
+        99
+      ]
+    }, 
+    "cuda": {
+      "add_to_path": "no", 
+      "local": "yes", 
+      "name": "CUDA compiler >=9.0", 
+      "sort": 40, 
+      "tags": "compiler,cuda", 
+      "version_from": [
+        9, 
+        0
+      ], 
+      "version_to": [
+        10, 
+        0
+      ]
+    }, 
+    "cudnn": {
+      "add_to_path": "no", 
+      "local": "yes", 
+      "name": "cuDNN library >=7.0", 
+      "sort": 50, 
+      "tags": "lib,cudnn", 
+      "version_from": [
+        7, 
+        0
+      ], 
+      "version_to": [
+        8, 
+        0
+      ]
+    }, 
+    "python": {
+      "add_to_path": "yes", 
+      "local": "yes", 
+      "name": "Python interpreter", 
+      "sort": 5, 
+      "tags": "compiler,python"
+    }
+  }, 
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ], 
+  "package_extra_name": " (from sources, cuda, xla)", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "lib-tensorflow-src-cuda-xla", 
+  "tags": [
+    "lib", 
+    "bazel", 
+    "tensorflow", 
+    "tensorflow-cpu", 
+    "vsrc", 
+    "vcuda", 
+    "vxla", 
+    "v1.9.0", 
+    "v1.9", 
+    "v1", 
+    "channel-stable"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "9024d3aaf2cdc47d", 
+    "module_uoa": "script"
+  }
+}
