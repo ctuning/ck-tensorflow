@@ -45,6 +45,7 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"

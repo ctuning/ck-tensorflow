@@ -113,6 +113,7 @@ public:
   const int num_classes = 1000;
   const bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") != 0;
   const bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") != 0;
+  const bool full_report = getenv_i("RUN_OPT_SILENT_MODE") == 0;
 
   BenchmarkSettings() {
     // Print settings
@@ -167,7 +168,9 @@ public:
     if (_batch_index+1 == _settings->batch_count)
       return false;
     _batch_index++;
-    std::cout << "\nBatch " << _batch_index+1 << " of " << _settings->batch_count << std::endl;
+    int batch_number = _batch_index+1;
+    if (_settings->full_report || batch_number%10 == 0)
+      std::cout << "\nBatch " << batch_number << " of " << _settings->batch_count << std::endl;
     int begin = _batch_index * _settings->batch_size;
     int end = (_batch_index + 1) * _settings->batch_size;
     int images_count = _settings->image_list().size();
@@ -188,7 +191,8 @@ public:
   /// Finish measuring of batch loading stage
   float measure_end_load_images() {
     float duration = measure_end();
-    std::cout << "Batch loaded in " << duration << " s" << std::endl;
+    if (_settings->full_report)
+      std::cout << "Batch loaded in " << duration << " s" << std::endl;
     _loading_time.add(duration);
     return duration;
   }
@@ -197,7 +201,8 @@ public:
   float measure_end_prediction() {
     float duration = measure_end();
     _total_prediction_time += duration;
-    std::cout << "Batch classified in " << duration << " s" << std::endl;
+    if (_settings->full_report)
+      std::cout << "Batch classified in " << duration << " s" << std::endl;
     // Skip first batch in order to account warming-up the system
     if (_batch_index > 0 || _settings->batch_count == 1)
       _prediction_time.add(duration);

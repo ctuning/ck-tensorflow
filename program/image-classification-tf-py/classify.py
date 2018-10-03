@@ -27,6 +27,7 @@ RESULT_DIR = os.getenv('RUN_OPT_RESULT_DIR')
 SUBTRACT_MEAN = os.getenv("CK_SUBTRACT_MEAN") == "YES"
 USE_MODEL_MEAN = os.getenv("CK_USE_MODEL_MEAN") == "YES"
 IMAGE_SIZE = int(os.getenv('RUN_OPT_IMAGE_SIZE'))
+FULL_REPORT = int(os.getenv('RUN_OPT_SILENT_MODE', '0')) == 0
 
 # Load images batch
 def load_batch(image_list, image_index):
@@ -133,21 +134,25 @@ def main(_):
     images_loaded = 0
     images_processed = 0
     for batch_index in range(BATCH_COUNT):
-      print("\nBatch {} of {}".format(batch_index+1, BATCH_COUNT))
+      batch_number = batch_index+1
+      if FULL_REPORT or (batch_number % 10 == 0):
+        print("\nBatch {} of {}".format(batch_number, BATCH_COUNT))
       
       begin_time = time.time()
       batch_data, image_index = load_batch(image_list, image_index)
       load_time = time.time() - begin_time
       load_total_time += load_time
       images_loaded += BATCH_SIZE
-      print("Batch loaded in %fs" % (load_time))
+      if FULL_REPORT:
+        print("Batch loaded in %fs" % (load_time))
 
       # Classify batch
       begin_time = time.time()
       feed = { input_node: batch_data }
       batch_results = output_node.eval(feed_dict=feed)
       class_time = time.time() - begin_time
-      print("Batch classified in %fs" % (class_time))
+      if FULL_REPORT:
+        print("Batch classified in %fs" % (class_time))
       
       # Exclude first batch from averaging
       if batch_index > 0 or BATCH_COUNT == 1:
