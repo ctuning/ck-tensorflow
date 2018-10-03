@@ -3,10 +3,6 @@
   "data_name": "image-classification-tf-py",
   "no_compile": "yes", 
   "no_target_file": "yes", 
-  "print_files_after_run": [
-    "stderr.log", 
-    "stdout.log"
-  ], 
   "process_in_tmp": "yes", 
   "program": "yes", 
   "run_cmds": {
@@ -24,11 +20,7 @@
           "script_name": "preprocess"
         },
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py", 
-        "run_cmd_out1": "stdout.log", 
-        "run_cmd_out2": "stderr.log", 
         "run_output_files": [
-          "stdout.log", 
-          "stderr.log", 
           "tmp-ck-timer.json"
         ]
       }
