@@ -6,12 +6,12 @@
       "CK_TF_ENABLE_XLA": "YES", 
       "CK_TF_NEED_CUDA": "YES", 
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "v1.9.0", 
+      "PACKAGE_GIT_CHECKOUT": "v1.11.0", 
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     }, 
-    "version": "1.9.0"
+    "version": "1.11.0"
   }, 
   "deps": {
     "bazel": {
@@ -90,8 +90,8 @@
     "vsrc", 
     "vcuda", 
     "vxla", 
-    "v1.9.0", 
-    "v1.9", 
+    "v1.11.0", 
+    "v1.11", 
     "v1", 
     "channel-stable"
   ], 

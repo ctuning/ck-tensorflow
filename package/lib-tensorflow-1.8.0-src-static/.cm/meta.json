@@ -8,7 +8,7 @@
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
-    "version": "1.8"
+    "version": "1.8.0"
   },
   "deps": {
     "compiler": {
