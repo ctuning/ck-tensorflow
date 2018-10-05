@@ -10,7 +10,7 @@
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
-    "version": "1.9"
+    "version": "1.9.0"
   },
   "deps": {
     "bazel": {
