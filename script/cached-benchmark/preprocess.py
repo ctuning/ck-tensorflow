@@ -100,7 +100,7 @@ def ck_preprocess(i):
   if has_dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_CONVERT_TO_BGR'):
     MODEL_CONVERT_TO_BGR = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_CONVERT_TO_BGR') == 'YES'
   else:
-    MODEL_CONVERT_TO_BGR = True
+    MODEL_CONVERT_TO_BGR = False
 
   # TODO: all weights packages should provide common vars to reveal its 
   # input image size: https://github.com/ctuning/ck-tensorflow/issues/67
