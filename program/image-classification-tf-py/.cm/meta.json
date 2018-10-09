@@ -90,8 +90,8 @@
     "CK_CROP_PERCENT": 87.5,
     "CK_IMAGE_FILE": "",
     "CK_TMP_IMAGE_SIZE": 0,
-    "CK_SUBTRACT_MEAN": "YES",
-    "CK_USE_MODEL_MEAN": "YES",
+    "CK_SUBTRACT_MEAN": 0,
+    "CK_USE_MODEL_MEAN": 0,
     "CK_RECREATE_CACHE": "NO"
   }, 
   "tags": [
