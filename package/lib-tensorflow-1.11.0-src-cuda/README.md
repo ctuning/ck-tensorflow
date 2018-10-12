@@ -5,6 +5,15 @@ https://www.tensorflow.org/install/install_sources
 ```
 $ sudo apt-get install python-numpy python-dev python-pip python-wheel
 $ sudo apt-get install libcupti-dev
+$ pip install keras_applications==1.0.4 --no-deps
+$ pip install keras_preprocessing==1.0.2 --no-deps
+```
+
+## Install Python libraries on aarch64-architecture
+```
+$ pip install gast
+$ pip install astor
+$ pip install termcolor
 ```
 
 ## Prevent running out of memory
