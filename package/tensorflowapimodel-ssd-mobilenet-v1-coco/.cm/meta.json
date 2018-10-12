@@ -16,7 +16,7 @@
     "tensorflow": {
       "local": "yes",
       "name": "TensorFlow Library",
-      "tags": "lib,tensorflow,tensorflow-cuda"
+      "tags": "lib,tensorflow"
     },
     "coco": {
       "local":"yes",

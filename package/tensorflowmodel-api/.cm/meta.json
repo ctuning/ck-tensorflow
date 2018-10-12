@@ -11,7 +11,12 @@
     "tensorflow": {
       "local": "yes",
       "name": "TensorFlow Library",
-      "tags": "lib,tensorflow,tensorflow-cuda"
+      "tags": "lib,tensorflow,tensorflow"
+    },
+    "protobuf": {
+      "local": "yes",
+      "name": "ProtoBuf host library 3.0.x",
+      "tags": "lib,protobuf-host,v3,v3.0"
     }
   },
   "end_full_path": {
