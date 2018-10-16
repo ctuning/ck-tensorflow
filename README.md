@@ -1,7 +1,6 @@
 # Unification of AI for collaborative experimentation and optimization using Collective Knowledge workflow framework with common JSON API
 
-[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-powered-by-ck.png)](https://github.com/ctuning/ck)
-[![logo](https://github.com/ctuning/ck-guide-images/blob/master/logo-validated-by-the-community-simple.png)](http://cTuning.org)
+[![compatibility](https://github.com/ctuning/ck-guide-images/blob/master/ck-compatible.svg)](https://github.com/ctuning/ck)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 Linux/MacOS: [![Travis Build Status](https://travis-ci.org/ctuning/ck-tensorflow.svg?branch=master)](https://travis-ci.org/ctuning/ck-tensorflow)
