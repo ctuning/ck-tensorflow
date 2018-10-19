@@ -22,14 +22,14 @@ mkdir $TRAIN_DIR
 #####################################################################
 echo ""
 echo "Generating TFRecord files for training and validation... "
-if [ $DATASET_NAME == 'coco' ] || [ $DATASET_NAME == 'pets' ] || [ $DATASET_NAME == 'voc' ];
+if [ $DATASET_NAME == 'coco' ] || [ $DATASET_NAME == 'pets' ] || [ $DATASET_NAME == 'voc' ] || [ $DATASET_NAME == 'kitti' ];
 then
     echo ""
-    echo "Runnin install_$DATASET_NAME.sh script."
+    echo "Running install_$DATASET_NAME.sh script."
     sh $PACKAGE_DIR/install_$DATASET_NAME.sh
 else
     echo ""
-    echo "Error: Set Dataset name parameter from ['pets', 'voc', 'coco'] in your meta file."
+    echo "Error: Set Dataset name parameter from ['pets', 'voc', 'coco', 'kitti'] in your meta file."
     exit 1
 fi
 
@@ -47,6 +47,44 @@ rm $PIPELINE_NAME.config
 if [ "${?}" != "0" ] ; then
   echo "Error: Generating '${PIPELINE_NAME}'.config file failed!"
   exit 1
+fi
+
+########################################################################
+cd $INSTALL_DIR
+echo
+echo "Download weights from ${PACKAGE_URL} ..."
+wget ${PACKAGE_URL}/${PACKAGE_NAME}
+
+########################################################################
+echo
+echo "Unpack weights file ${PACKAGE_NAME} ..."
+tar -zxvf ${PACKAGE_NAME}
+
+########################################################################
+echo
+echo "Remove temporary files ..."
+rm $INSTALL_DIR/$PACKAGE_NAME
+mv $INSTALL_DIR/$PACKAGE_NAME1/$FROZEN_GRAPH  $MODEL_DIR
+if [ $WEIGHTS_FILE ]; then
+  if [ $MODEL_WEIGHTS_ARE_CHECKPOINTS = "YES" ]; then
+    mv $INSTALL_DIR/$PACKAGE_NAME1/$WEIGHTS_FILE*  $MODEL_DIR
+  else
+    mv $INSTALL_DIR/$PACKAGE_NAME1/$WEIGHTS_FILE  $MODEL_DIR
+  fi
+fi
+rm -r $INSTALL_DIR/$PACKAGE_NAME1
+
+############################################################
+if [ -f "${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh" ] ; then
+  echo ""
+  echo "Executing extra script ..."
+
+  . ${ORIGINAL_PACKAGE_DIR}/scripts.${CK_TARGET_OS_ID}/install.sh $MODEL_DIR
+
+  if [ "${?}" != "0" ] ; then
+    echo "Error: Failed executing extra script ..."
+    exit 1
+  fi
 fi
 
 #####################################################################

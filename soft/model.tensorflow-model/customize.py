@@ -74,6 +74,25 @@ def setup(i):
     env[ep+'_MODEL']=p1
     env[ep+'_PIPELINE_NAME']=os.path.basename(fp)
 
+    install_env = cus.get('install_env', {})
+
+    # Init common variables, they are set for all models
+    if 'FROZEN_GRAPH' in install_env:
+      env[ep+'_FROZEN_GRAPH']=os.path.join(p1, install_env['FROZEN_GRAPH'])
+    if 'WEIGHTS_FILE' in install_env:
+      env[ep+'_WEIGHTS']=os.path.join(p1, install_env['WEIGHTS_FILE'])
+    if 'MODULE_FILE' in install_env:
+      env[ep+'_MODULE']=os.path.join(p1, install_env['MODULE_FILE'])
+    if 'LABELS_FILE' in install_env:
+      env[ep+'_LABELS']=os.path.join(p1, install_env['LABELS_FILE'])
+
+    # Init model specific variables
+    # They should be started with MODEL_ prefix e.g. MODEL_MOBILENET_RESOLUTION
+    # This prefix will be cut off as it already contained in cus['env_prefix']
+    # so we'll get vars like CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION
+    for varname in install_env.keys():
+      if varname.startswith('MODEL_'):
+        env[ep+varname[len('MODEL'):]] = install_env[varname]
+
 
     return {'return':0, 'bat':s}
-
