@@ -7,9 +7,11 @@ import json
 import shutil
 import numpy as np
 import tensorflow as tf
-from utils import label_map_util
+import metriconv
 from PIL import Image
+from utils import label_map_util
 from utils import visualization_utils as vis_util
+from utils import ops as utils_ops
 
 CUR_DIR=os.getcwd()
 PATH_TO_FROZEN_GRAPH = os.getenv("CK_ENV_MODEL_TENSORFLOW_API_FROZEN_GRAPH")
@@ -24,7 +26,41 @@ if SAVE_IMAGES:
   print("Images output directory: " + IMAGES_OUT_DIR)
 LABELS_OUT_DIR=os.path.join(CUR_DIR,"out-labels")
 print("Labels output directory: " + LABELS_OUT_DIR)
+DATASET_TYPE = os.getenv("CK_ENV_DATASET_TYPE")
+if DATASET_TYPE:
+  print("Dataset type: " + DATASET_TYPE)
+else:
+  DATASET_TYPE = "coco"
+  print("Dataset type not setted. Default settings is: "  + DATASET_TYPE)
+MODEL_DATASET_TYPE = os.getenv("CK_ENV_MODEL_DATASET_TYPE")
+if MODEL_DATASET_TYPE:
+  print("Model's dataset type: " + MODEL_DATASET_TYPE)
+else:
+  MODEL_DATASET_TYPE = "coco"
+  print("Model's dataset type not setted. Default settings is: "  + MODEL_DATASET_TYPE)
+TARGET_METRIC_TYPE = os.getenv("CK_ENV_TARGET_METRIC_TYPE")
+if TARGET_METRIC_TYPE:
+  print("Target metric type: " + TARGET_METRIC_TYPE)
+else:
+  TARGET_METRIC_TYPE = DATASET_TYPE
+  print("Target metric type isn't defined. Default is equal to "\
+    "dataset's type ("  + TARGET_METRIC_TYPE + ")")
+DATASET_ANNOTATIONS = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
+print("Dataset annotations: " + DATASET_ANNOTATIONS)
+
 print('*'*80)
+
+TARGET_ANNOTATIONS_DIR=os.path.join(CUR_DIR,"annotations")
+if TARGET_METRIC_TYPE != DATASET_TYPE:
+  if os.path.isdir(TARGET_ANNOTATIONS_DIR):
+    shutil.rmtree(TARGET_ANNOTATIONS_DIR)
+  os.mkdir(TARGET_ANNOTATIONS_DIR)
+
+TARGET_RESULTS_DIR=os.path.join(CUR_DIR,"results")
+if os.path.isdir(TARGET_RESULTS_DIR):
+  shutil.rmtree(TARGET_RESULTS_DIR)
+os.mkdir(TARGET_RESULTS_DIR)
+
 
 if SAVE_IMAGES:
   if os.path.isdir(IMAGES_OUT_DIR):
@@ -111,9 +147,12 @@ load_time_total = 0
 print('-'*80)
 
 for image_file in IMAGE_FILES:
+  file_counter += 1
+  if file_counter > 3:
+    break
   load_time_begin = process_time_begin = time.time()
   image = Image.open(os.path.join(IMAGES_DIR, image_file))
-  file_counter += 1
+  
   # the array based representation of the image will be used later in order to prepare the
   # result image with boxes and labels on it.
   image_np = load_image_into_numpy_array(image)
@@ -132,16 +171,20 @@ for image_file in IMAGE_FILES:
   file_name = os.path.splitext(image_file)[0]
   res_file = os.path.join(LABELS_OUT_DIR, file_name) + '.txt'
   with open(res_file, 'w') as f:
+    f.write('{:d} {:d}\n'.format(im_width, im_height))
     for i in range(output_dict['num_detections']):
-      if 'display_name' in category_index[output_dict['detection_classes'][i]]:
-        class_name = category_index[output_dict['detection_classes'][i]]['display_name']
+      class_id = output_dict['detection_classes'][i]
+      if 'display_name' in category_index[class_id]:
+        class_name = category_index[class_id]['display_name']
       else:
-        class_name = category_index[output_dict['detection_classes'][i]]['name']
-      x1, y1, x2, y2 = output_dict['detection_boxes'][i]
+        class_name = category_index[class_id]['name']
+      y1, x1, y2, x2 = output_dict['detection_boxes'][i]
       score = output_dict['detection_scores'][i]
-      f.write('{} 0.0 0.0 0.0 {:.2f} {:.2f} {:.2f} {:.2f} 0.0 0.0 0.0 0.0'\
-        ' 0.0 0.0 0.0 {:.2f}\n'.format(class_name, y1*im_width, x1*im_height,
-        y2*im_width, x2*im_height, score))
+      f.write('{:.2f} {:.2f} {:.2f} {:.2f} {:.3f} {:d} {}\n'.format( x1*im_width,
+        y1*im_height, x2*im_width, y2*im_height, score, class_id, class_name))
+#      f.write('{} -1 -1 0.0 {:.2f} {:.2f} {:.2f} {:.2f} 0.0 0.0 0.0 0.0'\
+#        ' 0.0 0.0 0.0 {:.3f}\n'.format(class_name, y1*im_width, x1*im_height,
+#        y2*im_width, x2*im_height, score))
 
   if SAVE_IMAGES:
     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -177,9 +220,24 @@ openme['detection_time_total_s'] = detect_time_total
 openme['detection_time_avg_s'] = detect_avg_time
 
 openme['avg_time_ms'] = detect_avg_time * 1000
-openme['avg_fps'] = 1.0 / detect_avg_time
+openme['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
 openme['batch_time_ms'] = detect_time_total * 1000
 openme['batch_size'] = len(IMAGE_FILES)
 
 with open('tmp-ck-timer.json', 'w') as o:
   json.dump(openme, o, indent=2, sort_keys=True)
+
+print('*'*80)
+print('* Postprocess results')
+print('*'*80)
+print('\n Process annotations...')
+annotations = metriconv.convert_annotations(DATASET_ANNOTATIONS, TARGET_ANNOTATIONS_DIR, DATASET_TYPE , TARGET_METRIC_TYPE)
+if not annotations:
+  print("Error converting annotations from " + DATASET_TYPE + " to " + TARGET_METRIC_TYPE)
+  sys.exit()
+
+print('\n Converting results...')
+results = metriconv.convert_results(LABELS_OUT_DIR, TARGET_RESULTS_DIR, DATASET_TYPE,
+    MODEL_DATASET_TYPE , TARGET_METRIC_TYPE)
+if not results:
+  print("Error converting results from type " + MODEL_DATASET_TYPE + " to " + TARGET_METRIC_TYPE)

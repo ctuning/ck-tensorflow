@@ -23,6 +23,12 @@
       "name": "Tensorflow library",
       "sort": 40,
       "tags": "lib,tensorflow"
+    },
+    "dataset": {
+      "local": "yes",
+      "sort": 50,
+      "name": "Object-detection dataset", 
+      "tags": "dataset,object-detection"
     }
   },
   "data_name": "TensorFlow API Models",
@@ -41,7 +47,7 @@
     }
   },
   "run_vars": {
-    "CK_SAVE_IMAGES": "NO"
+    "CK_SAVE_IMAGES": "YES"
   },
   "tags": [
     "tensorflow",

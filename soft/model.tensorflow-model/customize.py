@@ -94,5 +94,7 @@ def setup(i):
       if varname.startswith('MODEL_'):
         env[ep+varname[len('MODEL'):]] = install_env[varname]
 
+    if 'DATASET_NAME' in install_env:
+      env['CK_ENV_MODEL_DATASET_TYPE'] = install_env['DATASET_NAME']
 
     return {'return':0, 'bat':s}

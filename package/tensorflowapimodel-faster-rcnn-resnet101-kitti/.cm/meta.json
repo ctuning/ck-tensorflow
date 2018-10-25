@@ -21,11 +21,6 @@
     "version": "20170714"
   }, 
   "deps": {
-    "kitti": {
-      "local": "yes", 
-      "name": "Kitti dataset", 
-      "tags": "dataset,kitti"
-    },
     "tensorflow": {
       "local": "yes", 
       "name": "TensorFlow Library", 

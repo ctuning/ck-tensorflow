@@ -33,6 +33,7 @@
     "KITTI",
     "KITTIfull",
     "KITTI-full",
+    "object-detection",
     "channel-stable"
   ]
 }
