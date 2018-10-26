@@ -53,3 +53,13 @@ Also you need:
   ```
 
 ## Running
+
+```bash
+$ ck run ck-tensorflow:program:tensorflow-api
+```
+
+In case of using metics from other dataset, you can use:
+```bash
+$ ck run ck-tensorflow:program:tensorflow-api --env.CK_ENV_TARGET_METRIC_TYPE='kitti'
+```
+(CK_ENV_TARGET_METRIC_TYPE can be set to 'kitti' or 'coco')
