@@ -12,10 +12,16 @@
       "name": "ProtoBuf host library 3.0.x",
       "tags": "lib,protobuf-host,v3,v3.0"
     },
+    "dataset": {
+      "local": "yes",
+      "sort": 20,
+      "name": "Object-detection dataset", 
+      "tags": "dataset,object-detection"
+    },
     "tensorflow-api-model":{
       "local": "yes",
       "name": "TensorFlow Object recognition API model",
-      "sort": 20,
+      "sort": 30,
       "tags": "model,tensorflowapimodel"
     },
     "lib-tensorflow": {
@@ -23,12 +29,6 @@
       "name": "Tensorflow library",
       "sort": 40,
       "tags": "lib,tensorflow"
-    },
-    "dataset": {
-      "local": "yes",
-      "sort": 50,
-      "name": "Object-detection dataset", 
-      "tags": "dataset,object-detection"
     }
   },
   "data_name": "TensorFlow API Models",

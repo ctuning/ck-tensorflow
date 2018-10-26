@@ -24,7 +24,7 @@ def convert_annotations(dataset_annotations, target_annotations, type_from, type
     return dataset_annotations
   elif type_from == 'kitti' and type_to=='coco':
     return convert_annotations_kitti_to_coco(dataset_annotations, target_annotations)
-  elif type_from == 'coco' and type_to=='kitty':
+  elif type_from == 'coco' and type_to=='kitti':
     return convert_annotations_coco_to_kitti(dataset_annotations, target_annotations)
   else:
     return ''
@@ -75,7 +75,7 @@ def pre_splitter(str):
   return (x1, y1, x2, y2, score, class_id, class_name)
 
 def result_coco_to_kitti(str):
-  (x1, y1, x2, y2, score, class_id, class_name) = pre_splitter(str)
+  (x1, y1, x2, y2, score, class_id, _) = pre_splitter(str)
   if class_id in COCO2KITTI:
     res = '{} -1 -1 0.0 {} {} {} {} 0.0 0.0 0.0 0.0'\
       ' 0.0 0.0 0.0 {}\n'.format(COCO2KITTI[class_id][1], x1, y1, \
@@ -85,7 +85,7 @@ def result_coco_to_kitti(str):
   return res
 
 def result_kitti_to_kitti(str):
-  (x1, y1, x2, y2, score, class_id, class_name) = pre_splitter(str)
+  (x1, y1, x2, y2, score, _, class_name) = pre_splitter(str)
   res = '{} -1 -1 0.0 {} {} {} {} 0.0 0.0 0.0 0.0'\
     ' 0.0 0.0 0.0 {}\n'.format(class_name, x1, y1, x2, y2, score)
   return res
@@ -106,7 +106,7 @@ def convert_results_kitti_and_coco_to_coco(pre_results, target_dir, dataset_type
       rf.readline() #image size
       
       for line in rf:
-        (x1, y1, x2, y2, score, class_id, class_name) = pre_splitter(line)
+        (x1, y1, x2, y2, score, class_id, _) = pre_splitter(line)
         
         if model_dataset_type == 'coco':
           category_id = int(class_id)
@@ -232,4 +232,42 @@ def convert_annotations_kitti_to_coco(dataset_annotations, target_annotations):
   return write_file
 
 def convert_annotations_coco_to_kitti(dataset_annotations, target_annotations):
-  return ''
+  dataset = json.load(open(dataset_annotations, 'r'))
+
+  images = dict()
+  images_anns = dict()
+#  categories = dict()
+
+  for img in dataset['images']:
+    #images[img['id']] = os.path.join(images_dir, img['file_name'])
+    images[img['id']] = img['file_name']
+    images_anns[img['id']] = list()
+
+  for ann in dataset['annotations']:
+    images_anns[ann['image_id']].append(ann)
+
+#  for cat in dataset['categories']:
+#    categories[cat['id']] = cat['name']
+  print("Converting annotations log:")
+  for image_id, image_file in images.items():
+    label_file = os.path.join(target_annotations, os.path.splitext(image_file)[0] + '.txt')
+    with open(label_file, 'w') as lf:
+      #print("File name: " + image_file)
+      for ann in images_anns[image_id]:
+        category_id = str(ann['category_id'])
+        #print("Category Id: " + str(ann['category_id']))
+        if category_id in COCO2KITTI:
+          #print("  -/- name: " + COCO2KITTI[category_id][1])
+          name = re.sub(r'\s+', '', COCO2KITTI[category_id][1]).capitalize()
+        else:
+          continue
+        #name = re.sub(r'\s+', '', categories[ann['category_id']]).capitalize()
+        bbox = ann['bbox']
+        xmin = bbox[0]
+        ymin = bbox[1]
+        xmax = xmin + bbox[2]
+        ymax = ymin + bbox[3]
+        lf.write(name + ' 0.0 0 0.0 ' + str(xmin) + ' ' + str(ymin) + ' ' + str(xmax) + ' ' + str(ymax) + ' 0.0  0.0  0.0  0.0  0.0  0.0  0.0\n')
+
+  return target_annotations
+  
