@@ -8,6 +8,7 @@ import shutil
 import numpy as np
 import tensorflow as tf
 import metriconv
+import metricstat
 from PIL import Image
 from utils import label_map_util
 from utils import visualization_utils as vis_util
@@ -146,12 +147,16 @@ detect_time_total = 0
 load_time_total = 0
 print('-'*80)
 
+processed_images = []
 for image_file in IMAGE_FILES:
   file_counter += 1
+  if file_counter > 3 :
+    break
   print('\n'+image_file + ': ' + `file_counter` + ' of ' + `len(IMAGE_FILES)`)
   load_time_begin = process_time_begin = time.time()
   image = Image.open(os.path.join(IMAGES_DIR, image_file))
-  
+  image_id = metriconv.filename_to_id(image_file, DATASET_TYPE)
+  processed_images.append(image_id)
   # the array based representation of the image will be used later in order to prepare the
   # result image with boxes and labels on it.
   image_np = load_image_into_numpy_array(image)
@@ -225,17 +230,23 @@ openme['batch_size'] = len(IMAGE_FILES)
 with open('tmp-ck-timer.json', 'w') as o:
   json.dump(openme, o, indent=2, sort_keys=True)
 
+with open('processed_images_id.json', 'w') as wf:
+  wf.write(json.dumps(processed_images))
+
 print('*'*80)
 print('* Postprocess results')
 print('*'*80)
 print('\n Process annotations...')
 annotations = metriconv.convert_annotations(DATASET_ANNOTATIONS, TARGET_ANNOTATIONS_DIR, DATASET_TYPE , TARGET_METRIC_TYPE)
 if not annotations:
-  print("Error converting annotations from " + DATASET_TYPE + " to " + TARGET_METRIC_TYPE)
+  print('Error converting annotations from ' + DATASET_TYPE + ' to ' + TARGET_METRIC_TYPE)
   sys.exit()
 
 print('\n Converting results...')
 results = metriconv.convert_results(LABELS_OUT_DIR, TARGET_RESULTS_DIR, DATASET_TYPE,
     MODEL_DATASET_TYPE , TARGET_METRIC_TYPE)
 if not results:
-  print("Error converting results from type " + MODEL_DATASET_TYPE + " to " + TARGET_METRIC_TYPE)
+  print('Error converting results from type ' + MODEL_DATASET_TYPE + ' to ' + TARGET_METRIC_TYPE)
+
+print('\n Evaluating results...')
+eval_res = metricstat.evaluate(processed_images, results, annotations, TARGET_METRIC_TYPE)

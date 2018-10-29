@@ -24,10 +24,16 @@
       "sort": 30,
       "tags": "model,tensorflowapimodel"
     },
+    "pythonapi-pycocotools":{
+      "local": "yes",
+      "name": "Python API pycocotools",
+      "sort": 40,
+      "tags": "api,coco,pythonapi"
+    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "Tensorflow library",
-      "sort": 40,
+      "sort": 50,
       "tags": "lib,tensorflow"
     }
   },
