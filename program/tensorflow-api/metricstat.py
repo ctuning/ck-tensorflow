@@ -19,25 +19,22 @@ def evaluate_coco(image_list, results, annotations):
   cocoEval.accumulate()
   cocoEval.summarize()
 
-  stat=[
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ',
-    'Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = ',
-    'Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = ',
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ',
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ',
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ',
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = '
-  ]
-  res=''
-  for i in range(0,len(stat)):
-    res += stat[i] + '{:.3f}'.format(cocoEval.stats[i]) + '\n'
+  stat={
+    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ': cocoEval.stats[0],
+    'Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = ': cocoEval.stats[1],
+    'Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = ': cocoEval.stats[2],
+    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ': cocoEval.stats[3],
+    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ': cocoEval.stats[4],
+    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = ': cocoEval.stats[5],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = ': cocoEval.stats[6],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = ': cocoEval.stats[7],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ': cocoEval.stats[8],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ': cocoEval.stats[9],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ': cocoEval.stats[10],
+    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = ': cocoEval.stats[11]
+  }
 
-  return res
+  return stat
 
 def evaluate_kitti(results, annotations):
   return 0

@@ -76,6 +76,7 @@ setup_time_begin = time.time()
 
 category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_CATEGORY_LABELS, use_display_name=True)
 
+tf.logging.set_verbosity(tf.logging.ERROR)
 detection_graph = tf.Graph()
 with detection_graph.as_default():
   od_graph_def = tf.GraphDef()
@@ -154,6 +155,8 @@ print('-'*80)
 processed_images = []
 for image_file in IMAGE_FILES:
   file_counter += 1
+  if file_counter>3:
+    break
   print('\n'+image_file + ': ' + `file_counter` + ' of ' + `len(IMAGE_FILES)`)
   load_time_begin = process_time_begin = time.time()
   image = Image.open(os.path.join(IMAGES_DIR, image_file))
@@ -211,24 +214,6 @@ test_time = time.time() - test_time_begin
 detect_avg_time = detect_time_total / len(IMAGE_FILES)
 load_avg_time = load_time_total / len(IMAGE_FILES)
 
-# Store benchmark results
-openme = {}
-openme['setup_time_s'] = setup_time
-openme['test_time_s'] = test_time
-openme['weights_load_time_s'] = weights_load_time
-openme['images_load_time_s'] = load_time_total
-openme['images_load_time_avg_s'] = load_avg_time
-openme['detection_time_total_s'] = detect_time_total
-openme['detection_time_avg_s'] = detect_avg_time
-
-openme['avg_time_ms'] = detect_avg_time * 1000
-openme['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
-openme['batch_time_ms'] = detect_time_total * 1000
-openme['batch_size'] = len(IMAGE_FILES)
-
-with open('tmp-ck-timer.json', 'w') as o:
-  json.dump(openme, o, indent=2, sort_keys=True)
-
 with open('processed_images_id.json', 'w') as wf:
   wf.write(json.dumps(processed_images))
 
@@ -250,6 +235,22 @@ if not results:
 print('\n Evaluating results...')
 eval_res = metricstat.evaluate(processed_images, results, annotations, TARGET_METRIC_TYPE)
 
-if eval_res:
-  with open('eval_precision_stat.txt', 'w') as wf:
-    wf.write(eval_res)
+# Store benchmark results
+openme = {}
+openme['setup_time_s'] = setup_time
+openme['test_time_s'] = test_time
+openme['weights_load_time_s'] = weights_load_time
+openme['images_load_time_s'] = load_time_total
+openme['images_load_time_avg_s'] = load_avg_time
+openme['detection_time_total_s'] = detect_time_total
+openme['detection_time_avg_s'] = detect_avg_time
+
+openme['avg_time_ms'] = detect_avg_time * 1000
+openme['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
+openme['batch_time_ms'] = detect_time_total * 1000
+openme['batch_size'] = len(IMAGE_FILES)
+
+openme['evalueation'] = eval_res
+
+with open('tmp-ck-timer.json', 'w') as o:
+  json.dump(openme, o, indent=2, sort_keys=True)

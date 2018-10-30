@@ -53,7 +53,7 @@
     }
   },
   "run_vars": {
-    "CK_SAVE_IMAGES": "YES"
+    "CK_SAVE_IMAGES": "NO"
   },
   "tags": [
     "tensorflow",
