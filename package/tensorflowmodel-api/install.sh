@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# CK installation script for TensorFlow package
+# CK installation script for TensorFlow models
 #
 # Developer(s):
 #  * Vladislav Zaborovskiy, vladzab@yandex.ru
@@ -16,21 +16,21 @@ rm -rf $INSTALL_DIR/*
 
 ######################################################################################
 echo ""
-echo "Downloading Tensorflow Models api into '${INSTALL_DIR}' ..."
-git clone $TENSORFLOW_MODELS_URL $INSTALL_DIR
+echo "Downloading TensorFlow Models API into '${INSTALL_DIR}' ..."
+git clone ${TENSORFLOW_MODELS_URL} ${INSTALL_DIR}
 
 if [ "${?}" != "0" ] ; then
-  echo "Error: Downloading Tensorflow Models api failed!"
+  echo "Error: Downloading TensorFlow Models API failed!"
   exit 1
 fi
 
 ######################################################################################
 echo ""
-echo "Protobuf compilation... "
-cd $INSTALL_DIR/research/
+echo "Compiling Protobuf... "
+cd ${INSTALL_DIR}/research/
 protoc object_detection/protos/*.proto --python_out=./
 
 if [ "${?}" != "0" ] ; then
-  echo "Error: Protobuf compilation failed!"
+  echo "Error: Compiling Protobuf failed!"
   exit 1
 fi
