@@ -90,6 +90,10 @@ with detection_graph.as_default():
 setup_time = time.time() - setup_time_begin
 
 def load_image_into_numpy_array(image):
+  # check if not RGB and convert to RGB
+  if image.mode != 'RGB':
+      image = image.convert('RGB')
+
   (im_width, im_height) = image.size
   return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
 
@@ -184,9 +188,6 @@ for image_file in IMAGE_FILES:
       score = output_dict['detection_scores'][i]
       f.write('{:.2f} {:.2f} {:.2f} {:.2f} {:.3f} {:d} {}\n'.format( x1*im_width,
         y1*im_height, x2*im_width, y2*im_height, score, class_id, class_name))
-#      f.write('{} -1 -1 0.0 {:.2f} {:.2f} {:.2f} {:.2f} 0.0 0.0 0.0 0.0'\
-#        ' 0.0 0.0 0.0 {:.3f}\n'.format(class_name, y1*im_width, x1*im_height,
-#        y2*im_width, x2*im_height, score))
 
   if SAVE_IMAGES:
     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -248,3 +249,7 @@ if not results:
 
 print('\n Evaluating results...')
 eval_res = metricstat.evaluate(processed_images, results, annotations, TARGET_METRIC_TYPE)
+
+if eval_res:
+  with open('eval_precision_stat.txt', 'w') as wf:
+    wf.write(eval_res)
