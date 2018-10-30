@@ -5,6 +5,7 @@
       "TENSORFLOW_MODELS_URL": "https://github.com/tensorflow/models.git"
     },
     "no_ver_in_suggested_path": "yes",
+    "no_os_in_suggested_path": "yes",
     "version": "20170714"
   },
   "deps": {
@@ -26,10 +27,10 @@
   "soft_uoa": "72ca45fb219ff46c",
   "suggested_path": "tensorflowmodel-api",
   "tags": [
+    "tensorflowmodel",
     "tensorflow",
     "model",
     "api",
     "channel-stable"
   ]
 }
-
