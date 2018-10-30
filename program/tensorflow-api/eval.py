@@ -155,8 +155,6 @@ print('-'*80)
 processed_images = []
 for image_file in IMAGE_FILES:
   file_counter += 1
-  if file_counter>3:
-    break
   print('\n'+image_file + ': ' + `file_counter` + ' of ' + `len(IMAGE_FILES)`)
   load_time_begin = process_time_begin = time.time()
   image = Image.open(os.path.join(IMAGES_DIR, image_file))
