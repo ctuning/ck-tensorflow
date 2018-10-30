@@ -28,7 +28,7 @@ fi
 echo ""
 echo "Compiling Protobuf... "
 cd ${INSTALL_DIR}/research/
-protoc object_detection/protos/*.proto --python_out=./
+${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc object_detection/protos/*.proto --python_out=./
 
 if [ "${?}" != "0" ] ; then
   echo "Error: Compiling Protobuf failed!"
