@@ -4,9 +4,9 @@
     "install_env": {
       "TENSORFLOW_MODELS_URL": "https://github.com/tensorflow/models.git"
     },
-    "no_ver_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "no",
     "no_os_in_suggested_path": "yes",
-    "version": "20170714"
+    "version": "master"
   },
   "deps": {
     "tensorflow": {
