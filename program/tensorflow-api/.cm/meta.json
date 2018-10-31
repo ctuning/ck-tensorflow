@@ -20,7 +20,7 @@
     },
     "tensorflow-api-model":{
       "local": "yes",
-      "name": "TensorFlow Object recognition API model",
+      "name": "TensorFlow Object Detection API model",
       "sort": 30,
       "tags": "model,tensorflowapimodel"
     },

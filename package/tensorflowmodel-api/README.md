@@ -5,7 +5,7 @@
 You should have `ck-tensorflow` repository installed:
 ```bash
 $ cd ~/CK
-$ ck pull repo --url=https://github.com/dividiti/ck-tensorflow
+$ ck pull repo:ck-tensorflow
 ```
 
 Also you need install library's package >=1.9 (*-cuda* is prefferable)

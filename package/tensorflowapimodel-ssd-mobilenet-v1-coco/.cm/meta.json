@@ -11,55 +11,56 @@
       "WEIGHTS_FILE": "model.ckpt",
       "MODULE_FILE": "mobilenet-model.py",
       "DATASET_NAME": "coco",
-      "MODEL_NAME": "SSD mobilenet v1 with COCO 2014 dataset",
+      "MODEL_NAME": "SSD-MobileNet-v1 for COCO",
       "LABELS_FILE": "mscoco_label_map.pbtxt",
       "PIPELINE_NAME": "ssd_mobilenet_v1_coco"
     }, 
-    "model_id": "mobilenet_v1", 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
+    "model_id": "mobilenet_v1",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
     "version": "20170714"
-  }, 
+  },
   "deps": {
     "tensorflow": {
       "local": "yes", 
-      "name": "TensorFlow Library", 
+      "name": "TensorFlow Library",
       "tags": "lib,tensorflow"
     }, 
     "tensorflow-model-api": {
-      "local": "yes", 
-      "name": "Tensorflow models api", 
+      "local": "yes",
+      "name": "Tensorflow models api",
       "tags": "tensorflow,model,api"
     }
 
-  }, 
+  },
   "end_full_path": {
     "linux": "model/ssd_mobilenet_v1_coco.config"
-  }, 
+  },
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (SSD Mobilenet v1, coco)", 
-  "process_script": "install", 
-  "soft_uoa": "68b0b66df81fdc1d", 
-  "suggested_path": "tensorflowapimodel-ssd_mobilenet_v1_coco", 
+  ],
+  "package_extra_name": " (SSD-MobileNet-v1, COCO)",
+  "process_script": "install",
+  "soft_uoa": "68b0b66df81fdc1d",
+  "suggested_path": "tensorflowapimodel-ssd_mobilenet_v1_coco",
   "tags": [
-    "tensorflow", 
-    "model", 
-    "tensorflowapi", 
-    "tensorflowapimodel", 
-    "ssd", 
-    "mobilenet", 
-    "mobilenet_v1", 
+    "tensorflow",
+    "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
+    "ssd",
+    "mobilenet",
+    "mobilenet-v1",
+    "ssd-mobilenet",
+    "ssd-mobilenet-v1",
     "coco", 
     "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "c412930408fb8271", 
+    "data_uoa": "c412930408fb8271",
     "module_uoa": "script"
   }
 }
-

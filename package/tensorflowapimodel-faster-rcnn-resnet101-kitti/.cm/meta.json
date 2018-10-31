@@ -11,54 +11,53 @@
       "WEIGHTS_FILE": "model.ckpt",
       "MODULE_FILE": "mobilenet-model.py",
       "DATASET_NAME": "kitti",
-      "MODEL_NAME": "Faster RCNN resnet101 with Kitti dataset",
+      "MODEL_NAME": "Faster-RCNN-ResNet101 for KITTI",
       "LABELS_FILE": "kitti_label_map.pbtxt",
       "PIPELINE_NAME": "faster_rcnn_resnet101_kitti"
-    }, 
-    "model_id": "resnet101", 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
+    },
+    "model_id": "resnet101",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
     "version": "20170714"
-  }, 
+  },
   "deps": {
     "tensorflow": {
-      "local": "yes", 
-      "name": "TensorFlow Library", 
+      "local": "yes",
+      "name": "TensorFlow Library",
       "tags": "lib,tensorflow"
-    }, 
+    },
     "tensorflow-model-api": {
-      "local": "yes", 
-      "name": "Tensorflow models api", 
+      "local": "yes",
+      "name": "TensorFlow Object Detection API",
       "tags": "tensorflow,model,api"
     }
-
-  }, 
+  },
   "end_full_path": {
     "linux": "model/faster_rcnn_resnet101_kitti.config"
-  }, 
+  },
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (Faster RCNN resnet101, kitti)", 
-  "process_script": "install", 
-  "soft_uoa": "68b0b66df81fdc1d", 
-  "suggested_path": "tensorflowapimodel-faster-rcnn-resnet101-kitti", 
+  ],
+  "package_extra_name": " (Faster-RCNN-ResNet101, KITTI)",
+  "process_script": "install",
+  "soft_uoa": "68b0b66df81fdc1d",
+  "suggested_path": "tensorflowapimodel-faster-rcnn-resnet101-kitti",
   "tags": [
-    "tensorflow", 
-    "model", 
-    "tensorflowapi", 
-    "tensorflowapimodel", 
-    "fasterRCNN", 
-    "resnet", 
-    "resnet101", 
-    "kitti", 
+    "tensorflow",
+    "model",
+    "tensorflowapi",
+    "tensorflowapimodel",
+    "fasterRCNN",
+    "resnet",
+    "resnet101",
+    "kitti",
     "channel-stable"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "c412930408fb8271", 
+    "data_uoa": "c412930408fb8271",
     "module_uoa": "script"
   }
 }

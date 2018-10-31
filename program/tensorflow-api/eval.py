@@ -2,30 +2,30 @@ import sys
 import os
 sys.path.append(os.getenv("CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR"))
 
-import time
 import json
-import shutil
-import numpy as np
-import tensorflow as tf
 import metriconv
 import metricstat
+import numpy as np
+import shutil
+import tensorflow as tf
+import time
 from PIL import Image
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 from utils import ops as utils_ops
 
-CUR_DIR=os.getcwd()
+CUR_DIR = os.getcwd()
 PATH_TO_FROZEN_GRAPH = os.getenv("CK_ENV_MODEL_TENSORFLOW_API_FROZEN_GRAPH")
-print("Frozen graph: "+  PATH_TO_FROZEN_GRAPH)
+print("Frozen graph: " + PATH_TO_FROZEN_GRAPH)
 PATH_TO_CATEGORY_LABELS = os.getenv("CK_ENV_MODEL_TENSORFLOW_API_LABELS")
 print("Category labels: " + PATH_TO_CATEGORY_LABELS)
 IMAGES_DIR = os.getenv("CK_ENV_DATASET_IMAGE_DIR")
 print("Images directory: " + IMAGES_DIR)
 SAVE_IMAGES = os.getenv("CK_SAVE_IMAGES") == "YES"
 if SAVE_IMAGES:
-  IMAGES_OUT_DIR=os.path.join(CUR_DIR,"out-images")
+  IMAGES_OUT_DIR = os.path.join(CUR_DIR, "out-images")
   print("Images output directory: " + IMAGES_OUT_DIR)
-LABELS_OUT_DIR=os.path.join(CUR_DIR,"out-labels")
+LABELS_OUT_DIR = os.path.join(CUR_DIR, "out-labels")
 print("Labels output directory: " + LABELS_OUT_DIR)
 DATASET_TYPE = os.getenv("CK_ENV_DATASET_TYPE")
 if DATASET_TYPE:
@@ -51,13 +51,13 @@ print("Dataset annotations: " + DATASET_ANNOTATIONS)
 
 print('*'*80)
 
-TARGET_ANNOTATIONS_DIR=os.path.join(CUR_DIR,"annotations")
+TARGET_ANNOTATIONS_DIR = os.path.join(CUR_DIR, "annotations")
 if TARGET_METRIC_TYPE != DATASET_TYPE:
   if os.path.isdir(TARGET_ANNOTATIONS_DIR):
     shutil.rmtree(TARGET_ANNOTATIONS_DIR)
   os.mkdir(TARGET_ANNOTATIONS_DIR)
 
-TARGET_RESULTS_DIR=os.path.join(CUR_DIR,"results")
+TARGET_RESULTS_DIR = os.path.join(CUR_DIR, "results")
 if os.path.isdir(TARGET_RESULTS_DIR):
   shutil.rmtree(TARGET_RESULTS_DIR)
 os.mkdir(TARGET_RESULTS_DIR)
@@ -74,7 +74,8 @@ os.mkdir(LABELS_OUT_DIR)
 
 setup_time_begin = time.time()
 
-category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_CATEGORY_LABELS, use_display_name=True)
+category_index = label_map_util\
+  .create_category_index_from_labelmap(PATH_TO_CATEGORY_LABELS, use_display_name=True)
 
 tf.logging.set_verbosity(tf.logging.ERROR)
 detection_graph = tf.Graph()
@@ -98,7 +99,7 @@ def load_image_into_numpy_array(image):
   (im_width, im_height) = image.size
   return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
 
-IMAGE_FILES=[f for f in os.listdir(IMAGES_DIR) if os.path.isfile(os.path.join(IMAGES_DIR, f))]
+IMAGE_FILES = [f for f in os.listdir(IMAGES_DIR) if os.path.isfile(os.path.join(IMAGES_DIR, f))]
 
 def run_inference_for_single_image(image, graph):
   with graph.as_default():
@@ -107,10 +108,14 @@ def run_inference_for_single_image(image, graph):
       ops = tf.get_default_graph().get_operations()
       all_tensor_names = {output.name for op in ops for output in op.outputs}
       tensor_dict = {}
-      for key in [
-          'num_detections', 'detection_boxes', 'detection_scores',
-          'detection_classes', 'detection_masks'
-      ]:
+      key_list = [
+        'num_detections',
+        'detection_boxes',
+        'detection_scores',
+        'detection_classes',
+        'detection_masks'
+      ]
+      for key in key_list:
         tensor_name = key + ':0'
         if tensor_name in all_tensor_names:
           tensor_dict[key] = tf.get_default_graph().get_tensor_by_name(
@@ -119,7 +124,8 @@ def run_inference_for_single_image(image, graph):
         # The following processing is only for single image
         detection_boxes = tf.squeeze(tensor_dict['detection_boxes'], [0])
         detection_masks = tf.squeeze(tensor_dict['detection_masks'], [0])
-        # Reframe is required to translate mask from box coordinates to image coordinates and fit the image size.
+        # Reframe is required to translate mask from box coordinates to image coordinates
+        # and fit the image size.
         real_num_detection = tf.cast(tensor_dict['num_detections'][0], tf.int32)
         detection_boxes = tf.slice(detection_boxes, [0, 0], [real_num_detection, -1])
         detection_masks = tf.slice(detection_masks, [0, 0, 0], [real_num_detection, -1, -1])
@@ -155,7 +161,7 @@ print('-'*80)
 processed_images = []
 for image_file in IMAGE_FILES:
   file_counter += 1
-  print('\n'+image_file + ': ' + `file_counter` + ' of ' + `len(IMAGE_FILES)`)
+  print('\n{}: {:d} of {:d}'.format(image_file, file_counter, len(IMAGE_FILES)))
   load_time_begin = process_time_begin = time.time()
   image = Image.open(os.path.join(IMAGES_DIR, image_file))
   image_id = metriconv.filename_to_id(image_file, DATASET_TYPE)
@@ -187,8 +193,8 @@ for image_file in IMAGE_FILES:
         class_name = category_index[class_id]['name']
       y1, x1, y2, x2 = output_dict['detection_boxes'][i]
       score = output_dict['detection_scores'][i]
-      f.write('{:.2f} {:.2f} {:.2f} {:.2f} {:.3f} {:d} {}\n'.format( x1*im_width,
-        y1*im_height, x2*im_width, y2*im_height, score, class_id, class_name))
+      f.write('{:.2f} {:.2f} {:.2f} {:.2f} {:.3f} {:d} {}\n'\
+        .format(x1*im_width, y1*im_height, x2*im_width, y2*im_height, score, class_id, class_name))
 
   if SAVE_IMAGES:
     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -200,7 +206,7 @@ for image_file in IMAGE_FILES:
         instance_masks=output_dict.get('detection_masks'),
         use_normalized_coordinates=True,
         line_thickness=2)
-    image=Image.fromarray(image_np)
+    image = Image.fromarray(image_np)
     image.save(os.path.join(IMAGES_OUT_DIR, image_file))
   process_time = time.time() - process_time_begin
   print('  Full processing time: {:.4f}s'.format(process_time))
@@ -219,14 +225,15 @@ print('*'*80)
 print('* Postprocess results')
 print('*'*80)
 print('\n Process annotations...')
-annotations = metriconv.convert_annotations(DATASET_ANNOTATIONS, TARGET_ANNOTATIONS_DIR, DATASET_TYPE , TARGET_METRIC_TYPE)
+annotations = metriconv.convert_annotations(DATASET_ANNOTATIONS,\
+  TARGET_ANNOTATIONS_DIR, DATASET_TYPE, TARGET_METRIC_TYPE)
 if not annotations:
   print('Error converting annotations from ' + DATASET_TYPE + ' to ' + TARGET_METRIC_TYPE)
   sys.exit()
 
 print('\n Converting results...')
 results = metriconv.convert_results(LABELS_OUT_DIR, TARGET_RESULTS_DIR, DATASET_TYPE,
-    MODEL_DATASET_TYPE , TARGET_METRIC_TYPE)
+    MODEL_DATASET_TYPE, TARGET_METRIC_TYPE)
 if not results:
   print('Error converting results from type ' + MODEL_DATASET_TYPE + ' to ' + TARGET_METRIC_TYPE)
 
