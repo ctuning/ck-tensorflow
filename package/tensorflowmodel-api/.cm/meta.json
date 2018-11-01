@@ -2,30 +2,37 @@
   "check_exit_status": "yes",
   "customize": {
     "install_env": {
-      "TENSORFLOW_MODELS_URL": "https://github.com/tensorflow/models.git"
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_URL": "https://github.com/tensorflow/models.git"
     },
     "no_ver_in_suggested_path": "no",
     "no_os_in_suggested_path": "yes",
     "version": "master"
   },
   "deps": {
-    "tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow Library",
-      "tags": "lib,tensorflow,tensorflow"
-    },
     "protobuf": {
       "local": "yes",
       "name": "ProtoBuf host library 3.0.x",
       "tags": "lib,protobuf-host,v3,v3.0"
     }
   },
+  "only_for_host_os_tags": [
+     "linux"
+  ], 
+  "only_for_target_os_tags": [
+    "linux"
+  ],
   "end_full_path": {
     "linux": "research/object_detection/README.md"
   },
   "process_script": "install",
   "soft_uoa": "72ca45fb219ff46c",
   "suggested_path": "tensorflowmodel-api",
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  },
   "tags": [
     "tensorflowmodel",
     "tensorflow",

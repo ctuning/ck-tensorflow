@@ -4,8 +4,6 @@
 # See CK LICENSE.txt for licensing details
 # See CK COPYRIGHT.txt for copyright details
 #
-# Developer: Zaborovskiy Vladislav, vladzab@yandex.ru
-#
 
 import os
 
@@ -48,30 +46,21 @@ def setup(i):
 
     """
 
-    import os
-
     # Get variables
-    ck=i['ck_kernel']
-    s=''
+    cus = i.get('customize',{})
 
-    iv=i.get('interactive','')
+    env = i['env']
+    ep = cus['env_prefix']
 
-    cus=i.get('customize',{})
-    fp=cus.get('full_path','')
+    install_dir = os.path.dirname(cus.get('full_path',''))
 
-    hosd=i['host_os_dict']
-    tosd=i['target_os_dict']
+    install_env = cus.get('install_env', {})
 
-    winh=hosd.get('windows_base','')
+    # Init common variables, they are set for all models
+    env[ep+'_MODEL_NAME'] = install_env['MODEL_NAME']
+    env[ep+'_DATASET_TYPE'] = install_env['DATASET_TYPE']
+    env[ep+'_FROZEN_GRAPH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])
+    env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
+    env[ep+'_LABELMAP_FILE'] = os.path.join(install_dir, install_env['LABELMAP_FILE'])
 
-    env=i['env']
-    ep=cus['env_prefix']
-
-    p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-
-    env[ep+'_ROOT']=pl
-    env[ep+'_MODEL']=p1
-    env[ep+'_PIPELINE_NAME']=os.path.basename(fp)
-
-    return {'return':0, 'bat':s}
+    return {'return': 0, 'bat': ''}
