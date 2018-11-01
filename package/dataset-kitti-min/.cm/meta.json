@@ -4,7 +4,7 @@
     "extra_dir": "",
     "force_ask_path": "yes",
     "no_os_in_suggested_path": "yes",
-    "no_ver_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "no",
     "install_env": {
       "IMAGE_DIR": "image-min",
       "LABELS_DIR": "label-min",
@@ -15,7 +15,7 @@
     "params": {
       "min":"yes"
     },
-    "version": "2012"
+    "version": "min"
   },
   "deps": {},
   "need_cpu_info": "no",
@@ -25,7 +25,7 @@
   },
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
-  "suggested_path": "dataset-kitti-min",
+  "suggested_path": "dataset-kitti",
   "tags": [
     "dataset",
     "small_dataset",
@@ -33,9 +33,11 @@
     "kitti",
     "kittimin",
     "kitti-min",
+    "kitti_min",
     "KITTI",
     "KITTImin",
     "KITTI-min",
+    "KITTI_min",
     "channel-stable"
   ],
   "template":"yes"
