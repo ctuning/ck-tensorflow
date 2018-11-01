@@ -28,11 +28,13 @@
     "dataset",
     "val",
     "kitti",
-    "kittimin",
-    "kitti-min",
+    "kittifull",
+    "kitti-full",
+    "kitti_full",
     "KITTI",
     "KITTIfull",
     "KITTI-full",
+    "KITTI_full",
     "channel-stable"
   ]
 }
