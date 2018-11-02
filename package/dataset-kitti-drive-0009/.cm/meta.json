@@ -15,8 +15,8 @@
       "LABELS_DIR": ""
     }, 
     "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
-    "version": "2011"
+    "no_ver_in_suggested_path": "no", 
+    "version": "drive-0009"
   }, 
   "deps": {}, 
   "end_full_path": {
@@ -26,14 +26,19 @@
   "need_cpu_info": "no", 
   "process_script": "install", 
   "soft_uoa": "dd47415baf24025e", 
-  "suggested_path": "dataset-kitti-drive-0009",
+  "suggested_path": "dataset-kitti",
   "tags": [
     "dataset",
     "val",
     "kitti",
+    "drive",
+    "drive-0009",
+    "continuous",
+    "kitti-drive",
     "kitti-drive-0009",
-    "kitt-continuous",
+    "kitti-continuous",
     "KITTI",
+    "KITTI-drive",
     "KITTI-drive-0009",
     "KITTI-continuous",
     "channel-stable"

@@ -5,7 +5,7 @@
 
 # KITTI_URL
 
-KITTI_NAME="KITTI minimal validation dataset"
+KITTI_NAME="KITTI minimal dataset"
 #####################################################################
 echo ""
 echo "Downloading ${KITTI_NAME} from '${KITTI_URL}' ..."
