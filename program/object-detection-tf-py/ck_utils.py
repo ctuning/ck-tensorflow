@@ -19,6 +19,10 @@ def prepare_dir(dir_path):
   os.mkdir(dir_path)
 
 
+def get_files(dir_path):
+  return [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
+
+
 def load_image_list(images_dir, images_count, skip_images):
   '''
   Load list of images to be processed

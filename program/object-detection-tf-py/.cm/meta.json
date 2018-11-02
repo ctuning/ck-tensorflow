@@ -41,8 +41,12 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py"
-      } 
+        "fine_grain_timer_file": "tmp-ck-timer.json",
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py",
+        "run_output_files": [
+          "tmp-ck-timer.json"
+        ]
+      }
     }
   },
   "run_vars": {
@@ -52,6 +56,7 @@
     "CK_METRIC_TYPE": "",
     "CK_TF_GPU_MEMORY_PERCENT": 33,
     "CK_TF_CPU_NUM_OF_PROCESSORS": 0,
+    "CK_SILENT_MODE": "NO"
   },
   "tags": [
     "tensorflow-object-detection"

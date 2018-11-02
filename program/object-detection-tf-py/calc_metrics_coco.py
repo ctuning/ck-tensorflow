@@ -1,25 +1,25 @@
+#
+# Copyright (c) 2018 cTuning foundation.
+# See CK COPYRIGHT.txt for copyright details.
+#
+# SPDX-License-Identifier: BSD-3-Clause.
+# See CK LICENSE.txt for licensing details.
+#
+
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
-def evaluate(image_list, results, annotations, target_metric_type):
-  if target_metric_type == 'coco':
-    return evaluate_coco(image_list, results, annotations)
-  elif target_metric_type == 'kitti':
-    return evaluate_kitti(results, annotations)
-  else:
-    raise ValueError('Metric type "' + target_metric_type +'" not realized yet')
-
-def evaluate_coco(image_list, results, annotations):
-  annType='bbox'
-  cocoGt=COCO(annotations)
-  cocoDt=cocoGt.loadRes(results)
-  cocoEval = COCOeval(cocoGt,cocoDt, annType)
-  cocoEval.params.imgIds  = image_list
+def evaluate(image_ids_list, results_dir, annotations_file):
+  annType = 'bbox'
+  cocoGt = COCO(annotations_file)
+  cocoDt = cocoGt.loadRes(results_dir)
+  cocoEval = COCOeval(cocoGt, cocoDt, annType)
+  cocoEval.params.imgIds = image_ids_list
   cocoEval.evaluate()
   cocoEval.accumulate()
   cocoEval.summarize()
 
-  stat={
+  stat = {
     'Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ': cocoEval.stats[0],
     'Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = ': cocoEval.stats[1],
     'Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = ': cocoEval.stats[2],
@@ -35,6 +35,3 @@ def evaluate_coco(image_list, results, annotations):
   }
 
   return stat
-
-def evaluate_kitti(results, annotations):
-  return 0
