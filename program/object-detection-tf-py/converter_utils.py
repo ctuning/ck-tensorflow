@@ -48,4 +48,4 @@ def filename_to_id(file_name, dataset_type):
   if dataset_type == COCO:
     return int(re.split(r'_', short_name)[2])
 
-  raise Exception('Unknown datase type {}'.format(dataset_type))
+  raise ValueError('Unknown datase type {}'.format(dataset_type))

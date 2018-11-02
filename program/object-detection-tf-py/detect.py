@@ -162,6 +162,7 @@ def main(_):
 
   # Create category index
   category_index = label_map_util.create_category_index_from_labelmap(LABELMAP_FILE, use_display_name=True)
+  categories_list = category_index.values() # array: [{"id": 88, "name": "teddy bear"}, ...]
 
   with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
     # Make TF graph def from frozen graph file
@@ -200,13 +201,13 @@ def main(_):
 
       # The array based representation of the image will be used later 
       # in order to prepare the result image with boxes and labels on it.
-      batch_data = load_pil_image_into_numpy_array(image)
+      image_data = load_pil_image_into_numpy_array(image)
       load_time = time.time() - load_time_begin
       load_time_total += load_time
       
       # Detect image
       detect_time_begin = time.time()
-      feed_dict = {input_tensor: batch_data}
+      feed_dict = {input_tensor: image_data}
       output_dict = sess.run(tensor_dict, feed_dict)
       detect_time = time.time() - detect_time_begin
 
@@ -214,7 +215,9 @@ def main(_):
       if file_counter > 0 or IMAGE_COUNT == 1:
         detect_time_total += detect_time
         images_processed += 1
-      
+
+      #calc_metrics_coco.evaluate_single(categories_list, image_id, image_data, output_dict, sess)
+
       # Process results
       # All outputs are float32 numpy arrays, so convert types as appropriate
       # TODO: implement batched mode (0 here is the image index in the batch)
@@ -223,10 +226,12 @@ def main(_):
       output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
       output_dict['detection_scores'] = output_dict['detection_scores'][0]
       save_detection_txt(image_file, image, output_dict, category_index)
-      save_detection_img(image_file, batch_data[0], output_dict, category_index)
+      save_detection_img(image_file, image_data[0], output_dict, category_index)
 
       if FULL_REPORT:
-        print('Detecting in {:.4f}s'.format(detect_time))
+        print('Detected in {:.4f}s'.format(detect_time))
+
+      
 
   test_time = time.time() - test_time_begin
   detect_avg_time = detect_time_total / images_processed
@@ -266,7 +271,7 @@ def main(_):
   elif metric_type == converter_utils.KITTO:
     metrics = calc_metrics_kitti.evaluate(results, annotations)
   else:
-    raise Exception('Metrics type is not supported: {}'.format(METRIC_TYPE))
+    raise ValueError('Metrics type is not supported: {}'.format(METRIC_TYPE))
 
   # Store benchmark results
   openme = {}

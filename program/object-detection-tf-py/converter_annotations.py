@@ -30,7 +30,7 @@ def convert(source_path, target_dir, type_from, type_to):
   if type_from == helper.COCO and type_to == helper.KITTI:
     return convert_coco_to_kitti(source_path, target_dir)
     
-  raise Exception('Unknown how to convert between these annotation types ({} -> {})'.format(type_from, type_to))
+  raise ValueError('Unknown how to convert between these annotation types ({} -> {})'.format(type_from, type_to))
 
 
 def convert_kitti_to_coco(source_dir, target_dir):

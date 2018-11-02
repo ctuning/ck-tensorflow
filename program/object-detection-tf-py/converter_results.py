@@ -28,7 +28,7 @@ def convert(detections_dir, target_dir, dataset_type, model_dataset_type, metric
   if metric_type == helper.KITTI:
     return convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_type)
     
-  raise Exception('Unknown target results format: {}'.format(metric_type))
+  raise ValueError('Unknown target results format: {}'.format(metric_type))
 
 
 def convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_type):
