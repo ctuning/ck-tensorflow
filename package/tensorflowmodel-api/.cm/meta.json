@@ -4,6 +4,7 @@
     "install_env": {
       "PACKAGE_GIT": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SUB_DIR": "models",
       "PACKAGE_URL": "https://github.com/tensorflow/models.git"
     },
     "no_ver_in_suggested_path": "no",
@@ -24,7 +25,7 @@
     "linux"
   ],
   "end_full_path": {
-    "linux": "research/object_detection/README.md"
+    "linux": "models/research/object_detection/README.md"
   },
   "process_script": "install",
   "soft_uoa": "72ca45fb219ff46c",

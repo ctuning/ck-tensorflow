@@ -6,10 +6,9 @@
 # See CK COPYRIGHT.txt for copyright details
 #
 
-######################################################################################
 echo ""
 echo "Compiling Protobuf... "
-cd ${INSTALL_DIR}/research/
+cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/research
 ${CK_ENV_LIB_PROTOBUF_HOST_BIN}/protoc object_detection/protos/*.proto --python_out=./
 
 if [ "${?}" != "0" ] ; then
