@@ -32,8 +32,7 @@ def convert(detections_dir, target_dir, dataset_type, model_dataset_type, metric
 
 
 def convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_type):
-  for file_counter, file_name in enumerate(detection_files):
-    print('{}: {} of {}'.format(file_name, file_counter+1, len(detection_files)))
+  for file_name in detection_files:
     read_file = os.path.join(detections_dir, file_name)
     write_file = os.path.join(target_dir, file_name)
     with open(read_file, 'r') as rf, open(write_file, 'w') as wf:
@@ -48,8 +47,7 @@ def convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_
 
 def convert_to_coco(detection_files, detections_dir, target_dir, dataset_type, model_dataset_type):
   res_array = []
-  for file_counter, file_name in enumerate(detection_files):
-    print('{}: {} of {}'.format(file_name, file_counter+1, len(detection_files)))
+  for file_name in detection_files:
     read_file = os.path.join(detections_dir, file_name)
     file_id = helper.filename_to_id(file_name, dataset_type)
     with open(read_file, 'r') as rf:

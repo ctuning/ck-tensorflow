@@ -46,29 +46,20 @@ def setup(i):
 
     """
 
-    import os
+    env = i['env']
+    cus = i.get('customize',{})
+    ep = cus['env_prefix']
 
-    # Get variables
-    ck=i['ck_kernel']
-    s=''
+    full_path = cus.get('full_path','')
+    object_detection_dir = os.path.dirname(full_path)
+    research_models_dir = os.path.dirname(object_detection_dir)
+    slim_models_dir = os.path.join(research_models_dir, 'slim')
 
-    iv=i.get('interactive','')
+    env[ep] = research_models_dir
+    env[ep+'_OBJ_DET_DIR'] = object_detection_dir
 
-    cus=i.get('customize',{})
-    fp=cus.get('full_path','')
+    env['PYTHONPATH'] = slim_models_dir + os.pathsep + \
+                        research_models_dir + os.pathsep + \
+                        '$PYTHONPATH'
 
-    hosd=i['host_os_dict']
-    tosd=i['target_os_dict']
-
-    env=i['env']
-    ep=cus['env_prefix']
-
-    p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-    p2=os.path.dirname(pl)
-
-    env[ep]=pl
-    env[ep+'_OBJ_DET_DIR']=p1
-    env['PYTHONPATH']=pl+'/slim:'+pl+':$PYTHONPATH'
-
-    return {'return':0, 'bat':s}
+    return {'return': 0, 'bat': ''}

@@ -24,11 +24,24 @@
       "sort": 40,
       "tags": "tool,coco"
     },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 60,
+      "tags": "lib,python-package,numpy"
+    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "Tensorflow library",
-      "sort": 50,
-      "tags": "lib,tensorflow"
+      "sort": 70,
+      "tags": "lib,tensorflow",
+      "no_tags": "tensorflow_cc,vstatic"
     }
   },
   "backup_data_uid": "e604d4895f811451",

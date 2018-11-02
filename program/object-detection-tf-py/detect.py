@@ -16,10 +16,9 @@ import PIL
 
 import tensorflow as tf
 
-sys.path.append(os.getenv("CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR"))
-from utils import label_map_util
-from utils import visualization_utils as vis_util
-from utils import ops as utils_ops
+from object_detection.utils import label_map_util
+from object_detection.utils import visualization_utils as vis_util
+from object_detection.utils import ops as utils_ops
 
 import ck_utils
 import converter_utils
@@ -121,7 +120,6 @@ def save_detection_img(image_file, image_np, output_dict, category_index):
       output_dict['detection_classes'],
       output_dict['detection_scores'],
       category_index,
-      instance_masks=output_dict.get('detection_masks'),
       use_normalized_coordinates=True,
       line_thickness=2)
   image = PIL.Image.fromarray(image_np)
