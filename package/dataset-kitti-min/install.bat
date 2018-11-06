@@ -1,7 +1,7 @@
 @echo off
 
 
-set KITTI_NAME="KITTI minimal validation dataset"
+set KITTI_NAME="KITTI minimal dataset"
 rem #####################################################################
 echo.
 echo "Downloading %KITTI_NAME% from '%KITTI_URL%' ..."
