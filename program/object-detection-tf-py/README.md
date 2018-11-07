@@ -83,10 +83,21 @@ Default: `NO`
 A way to calculate metrics.
 
 Available values:
-- `KITTI` (default for `dataset-kitti-*`)
-- `COCO` (default for `dataset-coco-*`)
-- `VOC` (default for `dataset-voc-*`) (**TBD**)
-- `OID` (default for `dataset-oid-*`) (**TBD**)
+
+##### `KITTI` (**TBD**)
+Default for `dataset-kitti-*`
+
+##### `COCO`
+Use evaluation method from official [MSCOCO evaluation protocol](http://cocodataset.org/#detections-eval) implemented as ck-package `ck-env:package:tool-coco`. Default for `dataset-coco-*`.
+
+##### `COCO_TF`
+Ue evaluation method from [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) implemented as ck-package `ck-tensorflow:package:tensorflowmodel-api`.
+
+##### `VOC` (**TBD**)
+Default for `dataset-voc-*`
+
+##### `OID` (**TBD**)
+Default for `dataset-oid-*`
 
 If the parameter is not set then a tool specific for selected dataset will be used.
 

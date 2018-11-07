@@ -6,84 +6,132 @@
 # See CK LICENSE.txt for licensing details.
 #
 
-import tensorflow as tf
+import os
+
+import numpy as np
 
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
-from object_detection import eval_util
-from object_detection.core import standard_fields as fields
-from object_detection.protos import eval_pb2
+from object_detection.core import standard_fields
+from object_detection.metrics import coco_evaluation
 
-def evaluate_single(categories_list, image_id, image_data, output_dict, sess):
-  input_data_fields = fields.InputDataFields
-  detection_fields = fields.DetectionResultFields
-    
-  eval_config = eval_pb2.EvalConfig()
-  eval_config.metrics_set.extend(['coco_detection_metrics'])
+import ck_utils
 
-  detection_masks = tf.ones(shape=[1, 1, 20, 20], dtype=tf.float32)
+def load_groundtruth(file_path, class_name_to_id_map):
+  boxes = []
+  classes = []
+  with open(file_path, 'r') as f:
+    for line in f:
+      gt = ck_utils.Groundtruth(line)
+      boxes.append([gt.x1, gt.y1, gt.x2, gt.y2])
+      classes.append(class_name_to_id_map[gt.class_name])
+  if boxes:
+    return {
+      standard_fields.InputDataFields.groundtruth_boxes: np.array(boxes),
+      standard_fields.InputDataFields.groundtruth_classes: np.array(classes)
+    }
 
-  detections = {
-    detection_fields.detection_boxes: output_dict['detection_classes'],
-    detection_fields.detection_scores: output_dict['detection_scores'],
-    detection_fields.detection_classes: output_dict['detection_classes'],
-    detection_fields.num_detections: output_dict['num_detections'],
-    detection_fields.detection_masks: detection_masks,
+
+def load_detections(file_path):
+  boxes = []
+  scores = []
+  classes = []
+  with open(file_path, 'r') as f:
+    f.readline() # first line is image size
+    for line in f:
+      det = ck_utils.Detection(line)
+      boxes.append([det.x1, det.y1, det.x2, det.y2])
+      scores.append(det.score)
+      classes.append(det.class_id)
+  # Detections dict can't be empty even there is not detection for this image
+  if not boxes:
+    boxes = [[0,0,0,0]]
+    scores = [0]
+    classes = [0]
+  return {
+    standard_fields.DetectionResultFields.detection_boxes: np.array(boxes),
+    standard_fields.DetectionResultFields.detection_scores: np.array(scores),
+    standard_fields.DetectionResultFields.detection_classes: np.array(classes)
   }
 
-  # TODO: load from annotations
-  groundtruth_boxes = tf.constant([[0., 0., 1., 1.]])
-  groundtruth_classes = tf.constant([1])
-  groundtruth_instance_masks = tf.ones(shape=[1, 20, 20], dtype=tf.uint8)
 
-  groundtruth = {
-    input_data_fields.groundtruth_boxes: groundtruth_boxes,
-    input_data_fields.groundtruth_classes: groundtruth_classes,
-    input_data_fields.groundtruth_instance_masks: groundtruth_instance_masks
-  }
+def evaluate_via_tf(categories_list, results_dir, txt_annotatins_dir):
+  '''
+  Calculate COCO metrics via evaluator class included in TF models repository
+  https://github.com/tensorflow/models/tree/master/research/object_detection/metrics
 
-  eval_dict = eval_util.result_dict_for_single_example(image_data,
-                                                       image_id,
-                                                       detections,
-                                                       groundtruth)
+  This method uses annotation converted to txt files.
+  This convertation is done by installation dataset-coco-2014 package.
+  '''
+  class_name_to_id_map = {}
+  for category in categories_list:
+    # Converted txt annotation lacks spaces in class names
+    # and we have to remove spaces from labelmap's class names too
+    # to be able to find class id by class name from annotation
+    class_name = category['name'].split()
+    class_name_no_spaces = ''.join(class_name)
+    class_name_to_id_map[class_name_no_spaces] = category['id']
+  
+  evaluator = coco_evaluation.CocoDetectionEvaluator(categories_list)
 
-  metric_ops = eval_util.get_eval_metric_ops_for_evaluators(eval_config,
-                                                            categories_list,
-                                                            eval_dict)
-  _, update_op = metric_ops['DetectionBoxes_Precision/mAP']
+  files = ck_utils.get_files(results_dir)
+  for file_index, file_name in enumerate(files):
+    if (file_index+1) % 100 == 0:
+      print('Loading detections and annotations: {} of {} ...'.format(file_index+1, len(files)))
 
-  metrics = {}
-  for key, (value_op, _) in metric_ops.iteritems():
-    metrics[key] = value_op
-  sess.run(update_op)
-  metrics = sess.run(metrics)
-  print(metrics)
+    gt_file = os.path.join(txt_annotatins_dir, file_name)
+    det_file = os.path.join(results_dir, file_name)
+
+    # Skip files for which there is no groundtruth
+    # e.g. COCO_val2014_000000013466.jpg
+    gts = load_groundtruth(gt_file, class_name_to_id_map)
+    if not gts: continue 
+
+    dets = load_detections(det_file)
+
+    # Groundtruth should be added first, as adding image checks if there is groundtrush for it
+    evaluator.add_single_ground_truth_image_info(image_id=file_name, groundtruth_dict=gts)
+    evaluator.add_single_detected_image_info(image_id=file_name, detections_dict=dets)
+
+  all_metrics = evaluator.evaluate()
+  
+  mAP = all_metrics['DetectionBoxes_Precision/mAP']
+  recall = all_metrics['DetectionBoxes_Recall/AR@100']
+  return mAP, recall, all_metrics
 
 
-def evaluate(image_ids_list, results_dir, annotations_file):
-  annType = 'bbox'
+def evaluate_via_pycocotools(image_ids_list, results_dir, annotations_file):
+  '''
+  Calculate COCO metrics via evaluator from pycocotool package.
+  MSCOCO evaluation protocol: http://cocodataset.org/#detections-eval
+
+  This method uses original COCO json-file annotations
+  and results of detection converted into json file too.
+  '''
   cocoGt = COCO(annotations_file)
   cocoDt = cocoGt.loadRes(results_dir)
-  cocoEval = COCOeval(cocoGt, cocoDt, annType)
+  cocoEval = COCOeval(cocoGt, cocoDt, iouType='bbox')
   cocoEval.params.imgIds = image_ids_list
   cocoEval.evaluate()
   cocoEval.accumulate()
   cocoEval.summarize()
 
-  stat = {
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ': cocoEval.stats[0],
-    'Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = ': cocoEval.stats[1],
-    'Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = ': cocoEval.stats[2],
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ': cocoEval.stats[3],
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ': cocoEval.stats[4],
-    'Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = ': cocoEval.stats[5],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = ': cocoEval.stats[6],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = ': cocoEval.stats[7],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = ': cocoEval.stats[8],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = ': cocoEval.stats[9],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = ': cocoEval.stats[10],
-    'Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = ': cocoEval.stats[11]
+  all_metrics = {
+    "DetectionBoxes_Precision/mAP": cocoEval.stats[0], 
+    "DetectionBoxes_Precision/mAP@.50IOU": cocoEval.stats[1], 
+    "DetectionBoxes_Precision/mAP@.75IOU": cocoEval.stats[2], 
+    "DetectionBoxes_Precision/mAP (small)": cocoEval.stats[3], 
+    "DetectionBoxes_Precision/mAP (medium)": cocoEval.stats[4], 
+    "DetectionBoxes_Precision/mAP (large)": cocoEval.stats[5], 
+    "DetectionBoxes_Recall/AR@1": cocoEval.stats[6], 
+    "DetectionBoxes_Recall/AR@10": cocoEval.stats[7], 
+    "DetectionBoxes_Recall/AR@100": cocoEval.stats[8], 
+    "DetectionBoxes_Recall/AR@100 (small)": cocoEval.stats[9],
+    "DetectionBoxes_Recall/AR@100 (medium)": cocoEval.stats[10], 
+    "DetectionBoxes_Recall/AR@100 (large)": cocoEval.stats[11]
   }
 
-  return stat
+  mAP = all_metrics['DetectionBoxes_Precision/mAP']
+  recall = all_metrics['DetectionBoxes_Recall/AR@100']
+  return mAP, recall, all_metrics

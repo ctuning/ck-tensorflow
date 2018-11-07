@@ -10,8 +10,7 @@ import os
 import json
 import datetime
 
-import ck_utils
-import converter_utils as helper
+import ck_utils as helper
 
 def convert(source_path, target_dir, type_from, type_to):
   '''
@@ -24,6 +23,9 @@ def convert(source_path, target_dir, type_from, type_to):
   Returns whether target annotations directory `target_dir`
   or path to the new annotations file, depending on target format `type_to`.
   '''
+  if type_from == helper.COCO and type_to == helper.COCO_TF:
+    return os.getenv("CK_ENV_DATASET_LABELS_DIR")
+  
   if type_from == helper.KITTI and type_to == helper.COCO:
     return convert_kitti_to_coco(source_path, target_dir)
     
@@ -34,7 +36,7 @@ def convert(source_path, target_dir, type_from, type_to):
 
 
 def convert_kitti_to_coco(source_dir, target_dir):
-  files = ck_utils.get_files(source_dir)
+  files = helper.get_files(source_dir)
   write_file = os.path.join(target_dir, 'kitti_to_coco_annotations.json')
   ann_counter = 0 # annotations counter
   now = datetime.datetime.now()

@@ -9,8 +9,7 @@
 import os
 import json
 
-import ck_utils
-import converter_utils as helper
+import ck_utils as helper
 
 def convert(detections_dir, target_dir, dataset_type, model_dataset_type, metric_type):
   '''
@@ -20,7 +19,11 @@ def convert(detections_dir, target_dir, dataset_type, model_dataset_type, metric
   Returns whether results directory or path to the new results file,
   depending on target results format.
   '''
-  detection_files = ck_utils.get_files(detections_dir)
+
+  if metric_type == helper.COCO_TF:
+    return detections_dir;
+  
+  detection_files = helper.get_files(detections_dir)
 
   if metric_type == helper.COCO:
     return convert_to_coco(detection_files, detections_dir, target_dir, dataset_type, model_dataset_type)
@@ -38,7 +41,7 @@ def convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_
     with open(read_file, 'r') as rf, open(write_file, 'w') as wf:
       rf.readline() # first line is image size
       for line in rf:
-        det = Detection(line)
+        det = helper.Detection(line)
         res = detection_to_kitti_string(model_dataset_type)
         if (res):
           wf.write(res)  
@@ -53,7 +56,7 @@ def convert_to_coco(detection_files, detections_dir, target_dir, dataset_type, m
     with open(read_file, 'r') as rf:
       rf.readline() # first line is image size
       for line in rf:
-        det = Detection(line)
+        det = helper.Detection(line)
         res = detection_to_coco_object(det, model_dataset_type, file_id)
         if (res):
           res_array.append(res)
@@ -61,18 +64,6 @@ def convert_to_coco(detection_files, detections_dir, target_dir, dataset_type, m
   with open(results_file, 'w') as f:
     f.write(json.dumps(res_array, indent=2, sort_keys=False))
   return results_file
-
-
-class Detection:
-  def __init__(self, line):
-    splitted = line.split()
-    self.y1 = splitted[0]
-    self.x1 = splitted[1]
-    self.y2 = splitted[2]
-    self.x2 = splitted[3]
-    self.score = splitted[4]
-    self.class_id = splitted[5]
-    self.class_name = ' '.join(splitted[6:])
 
 
 def detection_to_kitti_string(det, model_dataset_type):
@@ -108,13 +99,13 @@ def detection_to_coco_object(det, model_dataset_type, file_id):
 
   if not category_id: return None
     
-  x = float(det.x1)
-  y = float(det.y1)
-  w = round(float(det.x2) - x, 2)
-  h = round(float(det.y2) - y, 2)
+  x = det.x1
+  y = det.y1
+  w = round(det.x2 - x, 2)
+  h = round(det.y2 - y, 2)
   return {
     "image_id" : file_id,
     "category_id" : category_id,
     "bbox" : [x, y, w, h],
-    "score" : float(det.score),
+    "score" : det.score,
   }

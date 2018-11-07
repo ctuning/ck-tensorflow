@@ -21,7 +21,6 @@ from object_detection.utils import visualization_utils as vis_util
 from object_detection.utils import ops as utils_ops
 
 import ck_utils
-import converter_utils
 import converter_results
 import converter_annotations
 import calc_metrics_kitti
@@ -44,13 +43,16 @@ ANNOTATIONS_PATH = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
 IMAGE_COUNT = int(os.getenv('CK_BATCH_COUNT', 1))
 SKIP_IMAGES = int(os.getenv('CK_SKIP_IMAGES', 0))
 SAVE_IMAGES = os.getenv("CK_SAVE_IMAGES") == "YES"
-METRIC_TYPE = os.getenv("CK_METRIC_TYPE") or DATASET_TYPE
+METRIC_TYPE = (os.getenv("CK_METRIC_TYPE") or DATASET_TYPE).lower()
 IMAGES_OUT_DIR = os.path.join(CUR_DIR, "images")
 DETECTIONS_OUT_DIR = os.path.join(CUR_DIR, "detections")
 ANNOTATIONS_OUT_DIR = os.path.join(CUR_DIR, "annotations")
 RESULTS_OUT_DIR = os.path.join(CUR_DIR, "results")
 FULL_REPORT = os.getenv('CK_SILENT_MODE') == 'NO'
+SKIP_DETECTION = os.getenv('CK_SKIP_DETECTION') == 'YES'
+IMAGE_LIST_FILE = 'processed_images_id.json'
 
+OPENME = {}
 
 def make_tf_config():
   mem_percent = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 33))
@@ -124,27 +126,11 @@ def save_detection_img(image_file, image_np, output_dict, category_index):
       line_thickness=2)
   image = PIL.Image.fromarray(image_np)
   image.save(os.path.join(IMAGES_OUT_DIR, image_file))
-  
 
-def main(_):
-  # Print settings
-  print("Model frozen graph: " + FROZEN_GRAPH)
-  print("Model label map file: " + LABELMAP_FILE)
-  print("Model is for dataset: " + MODEL_DATASET_TYPE)
 
-  print("Dataset images: " + IMAGES_DIR)
-  print("Dataset annotations: " + ANNOTATIONS_PATH)
-  print("Dataset type: " + DATASET_TYPE)
-
-  print('Image count: {}'.format(IMAGE_COUNT))
-  print("Metric type: " + METRIC_TYPE)
-  print('Results directory: {}'.format(RESULTS_OUT_DIR))
-  print("Temporary annotations directory: " + ANNOTATIONS_OUT_DIR)
-  print("Detections directory: " + DETECTIONS_OUT_DIR)
-  print("Result images directory: " + IMAGES_OUT_DIR)
-  print('Save result images: {}'.format(SAVE_IMAGES))
-
-  print('*'*80)
+def detect(category_index):
+  # Prepare TF config options
+  tf_config = make_tf_config()
 
   # Prepare directories
   ck_utils.prepare_dir(RESULTS_OUT_DIR)
@@ -153,18 +139,11 @@ def main(_):
   ck_utils.prepare_dir(DETECTIONS_OUT_DIR)
 
   # Load processing image filenames
-  IMAGE_FILES = ck_utils.load_image_list(IMAGES_DIR, IMAGE_COUNT, SKIP_IMAGES)
-
-  # Prepare TF config options
-  tf_config = make_tf_config()
-
-  setup_time_begin = time.time()
-
-  # Create category index
-  category_index = label_map_util.create_category_index_from_labelmap(LABELMAP_FILE, use_display_name=True)
-  categories_list = category_index.values() # array: [{"id": 88, "name": "teddy bear"}, ...]
+  image_files = ck_utils.load_image_list(IMAGES_DIR, IMAGE_COUNT, SKIP_IMAGES)
 
   with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
+    setup_time_begin = time.time()
+    
     # Make TF graph def from frozen graph file
     begin_time = time.time()
     graph_def = tf.GraphDef()
@@ -189,14 +168,14 @@ def main(_):
     detect_time_total = 0
     images_processed = 0
     processed_image_ids = []
-    for file_counter, image_file in enumerate(IMAGE_FILES):
+    for file_counter, image_file in enumerate(image_files):
       if FULL_REPORT or (file_counter+1) % 10 == 0:
-        print('\nDetect image: {} ({} of {})'.format(image_file, file_counter+1, len(IMAGE_FILES)))
+        print('\nDetect image: {} ({} of {})'.format(image_file, file_counter+1, len(image_files)))
 
       # Load image
       load_time_begin = time.time()
       image = PIL.Image.open(os.path.join(IMAGES_DIR, image_file))
-      image_id = converter_utils.filename_to_id(image_file, DATASET_TYPE)
+      image_id = ck_utils.filename_to_id(image_file, DATASET_TYPE)
       processed_image_ids.append(image_id)
 
       # The array based representation of the image will be used later 
@@ -216,8 +195,6 @@ def main(_):
         detect_time_total += detect_time
         images_processed += 1
 
-      #calc_metrics_coco.evaluate_single(categories_list, image_id, image_data, output_dict, sess)
-
       # Process results
       # All outputs are float32 numpy arrays, so convert types as appropriate
       # TODO: implement batched mode (0 here is the image index in the batch)
@@ -231,24 +208,33 @@ def main(_):
       if FULL_REPORT:
         print('Detected in {:.4f}s'.format(detect_time))
 
-      
+  # Save processed images ids list to be able to run
+  # evaluation without repeating detections (CK_SKIP_DETECTION=YES)
+  with open(IMAGE_LIST_FILE, 'w') as f:
+    f.write(json.dumps(processed_image_ids))
 
   test_time = time.time() - test_time_begin
   detect_avg_time = detect_time_total / images_processed
-  load_avg_time = load_time_total / len(IMAGE_FILES)
+  load_avg_time = load_time_total / len(processed_image_ids)
 
-  # TODO: support rerun evaluation without repeating detections
-  # with open('processed_images_id.json', 'w') as wf:
-  #   wf.write(json.dumps(processed_image_ids))
+  OPENME['setup_time_s'] = setup_time
+  OPENME['test_time_s'] = test_time
+  OPENME['graph_load_time_s'] = graph_load_time
+  OPENME['images_load_time_s'] = load_time_total
+  OPENME['images_load_time_avg_s'] = load_avg_time
+  OPENME['detection_time_total_s'] = detect_time_total
+  OPENME['detection_time_avg_s'] = detect_avg_time
+  OPENME['avg_time_ms'] = detect_avg_time * 1000
+  OPENME['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
 
-  print('*'*80)
-  print('* Process results')
-  print('*'*80)
+  return processed_image_ids
 
+
+def evaluate(processed_image_ids, categories_list):
   # Convert annotations from original format of the dataset
   # to a format specific for a tool that will calculate metrics
   if DATASET_TYPE != METRIC_TYPE:
-    print('\nConvert annotations from {} to {} ...'.format(type_from, type_to))
+    print('\nConvert annotations from {} to {} ...'.format(DATASET_TYPE, METRIC_TYPE))
     annotations = converter_annotations.convert(ANNOTATIONS_PATH, 
                                                 ANNOTATIONS_OUT_DIR,
                                                 DATASET_TYPE,
@@ -266,30 +252,75 @@ def main(_):
 
   # Run evaluation tool
   print('\nEvaluate metrics as {} ...'.format(METRIC_TYPE))
-  if METRIC_TYPE == converter_utils.COCO:
-    metrics = calc_metrics_coco.evaluate(processed_image_ids, results, annotations)
-  elif metric_type == converter_utils.KITTO:
-    metrics = calc_metrics_kitti.evaluate(results, annotations)
+  if METRIC_TYPE == ck_utils.COCO:
+    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_pycocotools(processed_image_ids, results, annotations)
+  elif METRIC_TYPE == ck_utils.COCO_TF:
+    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations)
   else:
     raise ValueError('Metrics type is not supported: {}'.format(METRIC_TYPE))
 
+  OPENME['mAP'] = mAP
+  OPENME['recall'] = recall
+  OPENME['metrics'] = all_metrics
+
+
+def print_header(s):
+  print('\n' + '*'*80)
+  print('* ' + s)
+  print('*'*80)
+
+
+def main(_):
+  # Print settings
+  print("Model frozen graph: " + FROZEN_GRAPH)
+  print("Model label map file: " + LABELMAP_FILE)
+  print("Model is for dataset: " + MODEL_DATASET_TYPE)
+
+  print("Dataset images: " + IMAGES_DIR)
+  print("Dataset annotations: " + ANNOTATIONS_PATH)
+  print("Dataset type: " + DATASET_TYPE)
+
+  print('Image count: {}'.format(IMAGE_COUNT))
+  print("Metric type: " + METRIC_TYPE)
+  print('Results directory: {}'.format(RESULTS_OUT_DIR))
+  print("Temporary annotations directory: " + ANNOTATIONS_OUT_DIR)
+  print("Detections directory: " + DETECTIONS_OUT_DIR)
+  print("Result images directory: " + IMAGES_OUT_DIR)
+  print('Save result images: {}'.format(SAVE_IMAGES))
+
+  # Create category index
+  category_index = label_map_util.create_category_index_from_labelmap(LABELMAP_FILE, use_display_name=True)
+  categories_list = category_index.values() # array: [{"id": 88, "name": "teddy bear"}, ...]
+  print('Categories: {}'.format(categories_list))
+
+  # Run detection if needed
+  print_header('Process images')
+  if SKIP_DETECTION:
+    print('\nSkip detection, evaluate previous results')
+    with open(IMAGE_LIST_FILE, 'r') as f:
+      processed_image_ids = json.load(f)
+  else:
+    processed_image_ids = detect(category_index)
+
+  # Run evaluation
+  print_header('Process results')
+  evaluate(processed_image_ids, categories_list)
+
   # Store benchmark results
-  openme = {}
-  openme['setup_time_s'] = setup_time
-  openme['test_time_s'] = test_time
-  openme['graph_load_time_s'] = graph_load_time
-  openme['images_load_time_s'] = load_time_total
-  openme['images_load_time_avg_s'] = load_avg_time
-  openme['detection_time_total_s'] = detect_time_total
-  openme['detection_time_avg_s'] = detect_avg_time
-
-  openme['avg_time_ms'] = detect_avg_time * 1000
-  openme['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
-
-  openme['metrics'] = metrics
-
   with open('tmp-ck-timer.json', 'w') as o:
-    json.dump(openme, o, indent=2, sort_keys=True)
+    json.dump(OPENME, o, indent=2, sort_keys=True)
+
+  # Print metrics
+  print('\nSummary:')
+  print('-------------------------------')
+  print('Graph loaded in {:.6f}s'.format(OPENME.get('graph_load_time_s', 0)))
+  print('All images loaded in {:.6f}s'.format(OPENME.get('images_load_time_s', 0)))
+  print('All images detected in {:.6f}s'.format(OPENME.get('detection_time_total_s', 0)))
+  print('Average detection time: {:.6f}s'.format(OPENME.get('detection_time_avg_s', 0)))
+  print('mAP: {}'.format(OPENME['mAP']))
+  print('Recall: {}'.format(OPENME['recall']))
+  print('--------------------------------\n')
+
 
 if __name__ == '__main__':
   tf.app.run()
