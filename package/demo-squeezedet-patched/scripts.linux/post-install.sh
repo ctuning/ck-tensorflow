@@ -23,6 +23,6 @@ case "$x" in
   [nN][oO]|[nN])
     ;;
   *)
-    ${SUDO} ${CK_PYTHON_PIP_BIN_FULL} install --upgrade opencv-python easydict image joblib
+    ${SUDO} ${CK_ENV_COMPILER_PYTHON_FILE} -m pip install --upgrade opencv-python easydict image joblib
     ;;
 esac
