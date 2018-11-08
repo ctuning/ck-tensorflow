@@ -68,12 +68,19 @@ def make_tf_config():
 
 
 def load_pil_image_into_numpy_array(image):
-  # check if not RGB and convert to RGB
+  # Check if not RGB and convert to RGB
   if image.mode != 'RGB':
     image = image.convert('RGB')
 
+  # Conver to NumPy array
+  img_data = np.array(image.getdata())
+  img_data = img_data.astype(np.uint8)
+
+  # Make batch from single image
   (im_width, im_height) = image.size
-  return np.array(image.getdata()).reshape((1, im_height, im_width, 3)).astype(np.uint8)
+  batch_shape = (1, im_height, im_width, 3)
+  batch_data = img_data.reshape(batch_shape)
+  return batch_data
 
 
 def get_handles_to_tensors():
@@ -95,8 +102,8 @@ def get_handles_to_tensors():
   return tensor_dict, image_tensor
 
 
-def save_detection_txt(image_file, image_pil, output_dict, category_index):
-  (im_width, im_height) = image_pil.size
+def save_detection_txt(image_file, image_size, output_dict, category_index):
+  (im_width, im_height) = image_size
   file_name = os.path.splitext(image_file)[0]
   res_file = os.path.join(DETECTIONS_OUT_DIR, file_name) + '.txt'
   with open(res_file, 'w') as f:
@@ -202,7 +209,8 @@ def detect(category_index):
       output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
       output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
       output_dict['detection_scores'] = output_dict['detection_scores'][0]
-      save_detection_txt(image_file, image, output_dict, category_index)
+
+      save_detection_txt(image_file, image.size, output_dict, category_index)
       save_detection_img(image_file, image_data[0], output_dict, category_index)
 
       if FULL_REPORT:
@@ -255,7 +263,7 @@ def evaluate(processed_image_ids, categories_list):
   if METRIC_TYPE == ck_utils.COCO:
     mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_pycocotools(processed_image_ids, results, annotations)
   elif METRIC_TYPE == ck_utils.COCO_TF:
-    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations)
+    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations, FULL_REPORT)
   else:
     raise ValueError('Metrics type is not supported: {}'.format(METRIC_TYPE))
 

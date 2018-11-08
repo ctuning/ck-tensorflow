@@ -18,6 +18,9 @@ from object_detection.metrics import coco_evaluation
 
 import ck_utils
 
+gt_field = standard_fields.InputDataFields
+det_field = standard_fields.DetectionResultFields
+
 def load_groundtruth(file_path, class_name_to_id_map):
   boxes = []
   classes = []
@@ -28,8 +31,8 @@ def load_groundtruth(file_path, class_name_to_id_map):
       classes.append(class_name_to_id_map[gt.class_name])
   if boxes:
     return {
-      standard_fields.InputDataFields.groundtruth_boxes: np.array(boxes),
-      standard_fields.InputDataFields.groundtruth_classes: np.array(classes)
+      gt_field.groundtruth_boxes: np.array(boxes),
+      gt_field.groundtruth_classes: np.array(classes)
     }
 
 
@@ -50,13 +53,13 @@ def load_detections(file_path):
     scores = [0]
     classes = [0]
   return {
-    standard_fields.DetectionResultFields.detection_boxes: np.array(boxes),
-    standard_fields.DetectionResultFields.detection_scores: np.array(scores),
-    standard_fields.DetectionResultFields.detection_classes: np.array(classes)
+    det_field.detection_boxes: np.array(boxes),
+    det_field.detection_scores: np.array(scores),
+    det_field.detection_classes: np.array(classes)
   }
 
 
-def evaluate_via_tf(categories_list, results_dir, txt_annotatins_dir):
+def evaluate_via_tf(categories_list, results_dir, txt_annotatins_dir, full_report):
   '''
   Calculate COCO metrics via evaluator class included in TF models repository
   https://github.com/tensorflow/models/tree/master/research/object_detection/metrics
@@ -75,9 +78,15 @@ def evaluate_via_tf(categories_list, results_dir, txt_annotatins_dir):
   
   evaluator = coco_evaluation.CocoDetectionEvaluator(categories_list)
 
+  total_dets_count = 0
+  total_gts_count = 0
+  not_found_gts = []
+
   files = ck_utils.get_files(results_dir)
   for file_index, file_name in enumerate(files):
-    if (file_index+1) % 100 == 0:
+    if full_report:
+      print('Loading detections and annotations for {} ({} of {}) ...'.format(file_name, file_index+1, len(files)))
+    elif (file_index+1) % 100 == 0:
       print('Loading detections and annotations: {} of {} ...'.format(file_index+1, len(files)))
 
     gt_file = os.path.join(txt_annotatins_dir, file_name)
@@ -86,15 +95,35 @@ def evaluate_via_tf(categories_list, results_dir, txt_annotatins_dir):
     # Skip files for which there is no groundtruth
     # e.g. COCO_val2014_000000013466.jpg
     gts = load_groundtruth(gt_file, class_name_to_id_map)
-    if not gts: continue 
+    if not gts:
+      not_found_gts.append(file_name)
+      continue 
 
     dets = load_detections(det_file)
+
+    gts_count = gts[gt_field.groundtruth_boxes].shape[0]
+    dets_count = dets[det_field.detection_boxes].shape[0]
+    total_gts_count += gts_count
+    total_dets_count += dets_count
+
+    if full_report:
+      print('  Detections: {}'.format(dets_count))
+      print('  Groundtruth: {}'.format(gts_count))
 
     # Groundtruth should be added first, as adding image checks if there is groundtrush for it
     evaluator.add_single_ground_truth_image_info(image_id=file_name, groundtruth_dict=gts)
     evaluator.add_single_detected_image_info(image_id=file_name, detections_dict=dets)
 
   all_metrics = evaluator.evaluate()
+
+  if not_found_gts:
+    print('Groundtrush not found for {} results:'.format(len(not_found_gts)))
+    for file_name in not_found_gts:
+      print('    {}'.format(file_name))
+
+  print('Total detections: {}'.format(total_dets_count))
+  print('Total groundtruths: {}'.format(total_gts_count))
+  print('Detection rate: {}'.format(float(total_dets_count)/float(total_gts_count)))
   
   mAP = all_metrics['DetectionBoxes_Precision/mAP']
   recall = all_metrics['DetectionBoxes_Recall/AR@100']
@@ -117,6 +146,7 @@ def evaluate_via_pycocotools(image_ids_list, results_dir, annotations_file):
   cocoEval.accumulate()
   cocoEval.summarize()
 
+  # These are the same names as object returned by CocoDetectionEvaluator has
   all_metrics = {
     "DetectionBoxes_Precision/mAP": cocoEval.stats[0], 
     "DetectionBoxes_Precision/mAP@.50IOU": cocoEval.stats[1], 

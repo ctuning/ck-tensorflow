@@ -70,10 +70,10 @@ def load_image_list(images_dir, images_count, skip_images):
 class Detection:
   def __init__(self, line):
     splitted = line.split()
-    self.y1 = float(splitted[0])
-    self.x1 = float(splitted[1])
-    self.y2 = float(splitted[2])
-    self.x2 = float(splitted[3])
+    self.x1 = float(splitted[0])
+    self.y1 = float(splitted[1])
+    self.x2 = float(splitted[2])
+    self.y2 = float(splitted[3])
     self.score = float(splitted[4])
     self.class_id = int(splitted[5])
     self.class_name = ' '.join(splitted[6:])
