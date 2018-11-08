@@ -2,7 +2,7 @@
 # Installation script for CK packages.
 #
 # See CK LICENSE.txt for licensing details.
-# See CK Copyright.txt for copyright details.
+# See CK COPYRIGHT.txt for copyright details.
 #
 # Developer(s): Grigori Fursin, 2017
 #
