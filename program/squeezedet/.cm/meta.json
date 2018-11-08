@@ -23,7 +23,17 @@
       "local": "yes",
       "name": "Tensorflow library",
       "sort": 40,
-      "tags": "lib,tensorflow"
+      "tags": "lib,tensorflow",
+      "version_from": [
+        1,
+        4,
+        0
+      ],
+      "version_to": [
+        1,
+        10,
+        99
+      ]
     }
   },
   "data_name": "TensorFlow SqueezeDet",
