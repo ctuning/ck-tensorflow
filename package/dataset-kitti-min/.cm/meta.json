@@ -38,6 +38,7 @@
     "KITTImin",
     "KITTI-min",
     "KITTI_min",
+    "object-detection",
     "channel-stable"
   ],
   "template":"yes"

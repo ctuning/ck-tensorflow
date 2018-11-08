@@ -41,6 +41,7 @@
     "KITTIFULL",
     "KITTI-FULL",
     "KITTI_FULL",
+    "object-detection",
     "channel-stable"
   ]
 }

@@ -4,7 +4,7 @@ rem
 rem Installation script for CK packages.
 rem
 rem See CK LICENSE.txt for licensing details.
-rem See CK Copyright.txt for copyright details.
+rem See CK COPYRIGHT.txt for copyright details.
 rem
 rem Developer(s): Grigori Fursin, 2017
 rem

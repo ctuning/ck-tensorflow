@@ -74,6 +74,4 @@ def setup(i):
     env[ep+'_MODEL']=p1
     env[ep+'_PIPELINE_NAME']=os.path.basename(fp)
 
-
     return {'return':0, 'bat':s}
-

@@ -16,7 +16,7 @@ def setup(i):
               self_cfg         - meta of module soft
               ck_kernel        - import CK kernel module (to reuse functions)
 
-              host_os_uoa      - host OS UOA
+              host_os_uoa      - host OS UOApatch code
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
 
@@ -46,20 +46,21 @@ def setup(i):
 
     """
 
-    env = i['env']
+    # Get variables
     cus = i.get('customize',{})
+
+    env = i['env']
     ep = cus['env_prefix']
 
-    full_path = cus.get('full_path','')
-    object_detection_dir = os.path.dirname(full_path)
-    research_models_dir = os.path.dirname(object_detection_dir)
-    slim_models_dir = os.path.join(research_models_dir, 'slim')
+    install_dir = os.path.dirname(cus.get('full_path',''))
 
-    env[ep] = research_models_dir
-    env[ep+'_OBJ_DET_DIR'] = object_detection_dir
+    install_env = cus.get('install_env', {})
 
-    env['PYTHONPATH'] = slim_models_dir + os.pathsep + \
-                        research_models_dir + os.pathsep + \
-                        '$PYTHONPATH'
+    # Init common variables, they are set for all models
+    env[ep+'_MODEL_NAME'] = install_env['MODEL_NAME']
+    env[ep+'_DATASET_TYPE'] = install_env['DATASET_TYPE']
+    env[ep+'_FROZEN_GRAPH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])
+    env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
+    env[ep+'_LABELMAP_FILE'] = os.path.join(install_dir, install_env['LABELMAP_FILE'])
 
     return {'return': 0, 'bat': ''}

@@ -96,8 +96,11 @@ def setup(i):
       full_labels_path = os.path.join(full_path, labels_dir)
       env[ep + "_LABELS_DIR"] = full_labels_path
       env['CK_ENV_DATASET_LABELS_DIR'] = full_labels_path
+      env['CK_ENV_DATASET_ANNOTATIONS'] = full_labels_path
     env[ep]=full_path
     env['CK_SQUEEZENET_KITTI']=full_path
+
+    env['CK_ENV_DATASET_TYPE']='kitti'
 
     return {'return':0, 'bat':s}
 
