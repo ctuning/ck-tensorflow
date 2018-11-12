@@ -20,8 +20,8 @@ def convert(detections_dir, target_dir, dataset_type, model_dataset_type, metric
   depending on target results format.
   '''
 
-  if metric_type == helper.COCO_TF:
-    return detections_dir;
+  if metric_type == helper.COCO_TF or metric_type == helper.OID:
+    return detections_dir
   
   detection_files = helper.get_files(detections_dir)
 
@@ -42,7 +42,7 @@ def convert_to_kitti(detection_files, detections_dir, target_dir, model_dataset_
       rf.readline() # first line is image size
       for line in rf:
         det = helper.Detection(line)
-        res = detection_to_kitti_string(model_dataset_type)
+        res = detection_to_kitti_string(det, model_dataset_type)
         if (res):
           wf.write(res)  
   return target_dir

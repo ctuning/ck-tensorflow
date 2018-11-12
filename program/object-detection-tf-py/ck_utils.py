@@ -12,6 +12,7 @@ import shutil
 
 KITTI = 'kitti'
 COCO = 'coco'
+OID = 'openimages'
 
 # This is only used for METRIC_TYPE
 COCO_TF = 'coco_tf'
@@ -105,5 +106,9 @@ def filename_to_id(file_name, dataset_type):
   # In COCO dataset ID is a number which is a part of filename
   if dataset_type == COCO:
     return int(re.split(r'_', short_name)[2])
+
+  # In OpenImages dataset image identifies by its name
+  if dataset_type == OID:
+    return short_name
 
   raise ValueError('Unknown datase type {}'.format(dataset_type))  
