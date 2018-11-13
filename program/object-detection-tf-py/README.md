@@ -8,11 +8,6 @@
 $ ck pull repo:ck-tensorflow
 ```
 
-You may need `ck-caffe` repository too as it contains packages for object detection datasets:
-```bash
-$ ck pull repo --url=https://github.com/dividiti/ck-caffe
-```
-
 ### TensorFlow
 
 Install from source:
@@ -48,11 +43,11 @@ $ ck install package --tags=tensorflowmodel,object-detection
 $ ck install package --tags=dataset,object-detection
 ```
 
-**NB:** If you have already installed dataset `coco` or `kitti`, you should probably renew them:
+**NB:** If you have previously installed the `coco` or `kitti` datasets, you should probably renew them:
 ```bash
 $ ck refresh env:{dataset-env-uoa}
 ```
-where `dataset-env-uoa` it one of env identifiers returned by 
+where `dataset-env-uoa` is one of the env identifiers returned by:
 ```bash
 $ ck show env --tags=dataset,kitti
 $ ck show env --tags=dataset,coco
@@ -68,19 +63,19 @@ $ ck run object-detection-tf-py
 
 #### `CK_BATCH_COUNT`
 
-A number of images t be processed.
+The number of images to be processed.
 
 Default: `1`
 
 #### `CK_SAVE_IMAGES`
 
-Save processed images with detected boxes painted above.
+Save processed images with detected boxes overlaid on top.
 
 Default: `NO`
 
 #### `CK_METRIC_TYPE`
 
-A way to calculate metrics.
+The way to calculate metrics.
 
 Available values:
 
@@ -88,10 +83,10 @@ Available values:
 Default for `dataset-kitti-*`
 
 ##### `COCO`
-Use evaluation method from official [MSCOCO evaluation protocol](http://cocodataset.org/#detections-eval) implemented as ck-package `ck-env:package:tool-coco`. Default for `dataset-coco-*`.
+Use the evaluation method from the official [MSCOCO evaluation protocol](http://cocodataset.org/#detections-eval) implemented as the CK package `ck-env:package:tool-coco`. Default for `dataset-coco-*`.
 
 ##### `COCO_TF`
-Ue evaluation method from [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) implemented as ck-package `ck-tensorflow:package:tensorflowmodel-api`.
+Use the evaluation method from [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) implemented as the CK package `ck-tensorflow:package:tensorflowmodel-api`.
 
 ##### `VOC` (**TBD**)
 Default for `dataset-voc-*`
@@ -99,7 +94,7 @@ Default for `dataset-voc-*`
 ##### `OID` (**TBD**)
 Default for `dataset-oid-*`
 
-If the parameter is not set then a tool specific for selected dataset will be used.
+If the parameter is not set, then the tool specific for the selected dataset will be used.
 
 ```bash
 $ ck run object-detection-tf-py --env.CK_METRIC_TYPE=KITTI
