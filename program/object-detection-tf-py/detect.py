@@ -39,7 +39,6 @@ IMAGES_DIR = os.getenv("CK_ENV_DATASET_IMAGE_DIR")
 DATASET_TYPE = os.getenv("CK_ENV_DATASET_TYPE")
 # Annotations can be a directory or a single file, depending on dataset type
 ANNOTATIONS_PATH = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
-ANNOTATIONS_DIR = os.getenv("CK_ENV_DATASET_ANNOTATIONS_DIR")
 
 # Program parameters
 IMAGE_COUNT = int(os.getenv('CK_BATCH_COUNT', 1))
@@ -267,8 +266,7 @@ def evaluate(processed_image_ids, categories_list):
   elif METRIC_TYPE == ck_utils.COCO_TF:
     mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations, FULL_REPORT)
   elif METRIC_TYPE == ck_utils.OID:
-    mAP, _, all_metrics = calc_metrics_oid.evaluate(results,
-        os.path.join(ANNOTATIONS_DIR, annotations), LABELMAP_FILE)
+    mAP, _, all_metrics = calc_metrics_oid.evaluate(results, annotations, LABELMAP_FILE, FULL_REPORT)
     recall = 'N/A'
 
   else:
