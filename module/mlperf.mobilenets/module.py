@@ -1,15 +1,15 @@
 #
 # Collective Knowledge (Raw data access (json))
 #
-# 
-# 
 #
-# Developer: 
+#
+#
+# Developer:
 #
 
 cfg={}  # Will be updated by CK (meta description of this module)
 work={} # Will be updated by CK (temporal data)
-ck=None # Will be updated by CK (initialized CK kernel) 
+ck=None # Will be updated by CK (initialized CK kernel)
 
 import os
 import sys
@@ -53,8 +53,6 @@ def get_raw_data(i):
             }
 
     """
-
-    repo_uoa = 'ck-request-asplos18-mobilenets-armcl-opencl-accuracy-500'
 
     def get_experimental_results(repo_uoa, tags='explore-mobilenets-accuracy', accuracy=True,
                                  module_uoa='experiment', _library=None, _platform=None):
@@ -176,7 +174,7 @@ def get_raw_data(i):
                             'success': characteristics['run'].get('run_success', 'n/a'),
                             'accuracy_top1': characteristics['run'].get('accuracy_top1', 0),
                             'accuracy_top5': characteristics['run'].get('accuracy_top5', 0),
-                            'frame_predictions': characteristics['run'].get('frame_predictions', []),
+                            # 'frame_predictions': characteristics['run'].get('frame_predictions', []),
                         }
                         for (repetition_id, characteristics) in zip(range(num_repetitions), characteristics_list)
                     ]
@@ -198,18 +196,13 @@ def get_raw_data(i):
                             # runtime characteristics
                             'success': characteristics['run'].get('run_success', 'n/a'),
                             'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
-                            'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
+                            #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         }
                         for (repetition_id, characteristics) in zip(range(num_repetitions), characteristics_list)
                     ]
                 index = [
                     'platform', 'library', 'model', 'multiplier', 'resolution', 'batch_size', 'convolution_method', 'repetition_id'
                 ]
-
-                # HACK: Backup data with another key because set_index makes this data unavailable
-                for datum in data:
-                    for key in index:
-                        datum['_' + key] = datum[key]
 
                 # Construct a DataFrame.
                 df = pd.DataFrame(data)
@@ -226,27 +219,52 @@ def get_raw_data(i):
             result = pd.DataFrame(columns=['success'])
         return result
 
-    # Return a new DataFrame with only the performance and accuracy metrics.
-    def merge_performance_accuracy(df_performance, df_accuracy, 
-                                   reference_platform=None, reference_lib=None, reference_convolution_method='direct',
-                                   performance_metric='time_avg_ms', accuracy_metric='accuracy_top1'):
-        df = df_performance[[performance_metric]]
-        accuracy_list = []
+    # Return a performance DataFrame with additional accuracy metrics
+    def merge_accuracy_to_performance(df_performance, df_accuracy):
+        df = df_performance[['time_avg_ms']]
+        accuracy_top1_list, accuracy_top5_list = [], []
         for index, row in df.iterrows():
-            (platform, lib, model, multiplier, resolution, batch_size, convolution_method) = index
-            if reference_platform: platform = reference_platform
-            try:
-                accuracy = df_accuracy.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)][accuracy_metric]
-            except:
-                if reference_lib: lib = reference_lib
-                convolution_method = reference_convolution_method
-                accuracy = df_accuracy.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)][accuracy_metric]
-            accuracy_list.append(accuracy)
-        df = df.assign(accuracy_top1=accuracy_list) # FIXME: assign to the value of accuracy_metric
+            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
+            row = df_accuracy.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)]
+            accuracy_top1_list.append(row['accuracy_top1'][0])
+            accuracy_top5_list.append(row['accuracy_top5'][0])
+        df = df.assign(accuracy_top1=accuracy_top1_list)
+        df = df.assign(accuracy_top5=accuracy_top5_list)
         return df
 
+
+    # Return a accuracy DataFrame with additional performance metrics
+    def merge_performance_to_accuracy(df_performance, df_accuracy):
+        df = df_accuracy[['accuracy_top1', 'accuracy_top5']]
+        time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
+        for index, row in df.iterrows():
+            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
+            row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)]
+
+            time_avg = row['time_avg_ms']
+            time_avg_mean = time_avg.mean()
+            time_avg_mean_ms.append(time_avg.mean())
+            time_avg_min_ms.append(time_avg.mean() - time_avg.std())
+            time_avg_max_ms.append(time_avg.mean() + time_avg.std())
+
+        df = df.assign(time_avg_min_ms=time_avg_min_ms)
+        df = df.assign(time_avg_max_ms=time_avg_max_ms)
+        df = df.assign(time_avg_mean_ms=time_avg_mean_ms)
+        return df
+
+    def df_as_record(df):
+        for index, record in df.to_dict(orient='index').items():
+            record.update( {n:v for n,v in zip(df.index.names, index) } )
+            yield record
+
     # prepare table
-    df = get_experimental_results(repo_uoa=repo_uoa)
+    all_repos = ''
+
+    df_acc = get_experimental_results(repo_uoa=all_repos,
+        tags='explore-mobilenets-accuracy', accuracy=True)
+    df_perf = get_experimental_results(repo_uoa=all_repos,
+        tags='explore-mobilenets-performance', accuracy=False)
+
 
     def to_value(i):
         if type(i) is np.ndarray:
@@ -260,45 +278,36 @@ def get_raw_data(i):
 
         return i
 
-    props = [
-        '_platform',
-        '_library',
-        '_model',
-        '_batch_size',
-        'batch_count',
-        '_convolution_method',
-        '_resolution',
-        '_multiplier',
-        '_repetition_id',
-        'success',
-        'time_avg_ms',
-        'time_total_ms',
-    ]
+    df_merged = merge_performance_to_accuracy(df_perf, df_acc)
 
     table = []
-    # for record in df.groupby(level=df.index.names[:-1]):
-    # for record in df.to_dict(orient='records'):
-    for record in df.to_dict(orient='records'):
+    for record in df_as_record(df_merged):
         row = {}
+        props = [
+            'platform',
+            'library',
+            'model',
+            'batch_size',
+            'batch_count',
+            'convolution_method',
+            'resolution',
+            'multiplier',
+            'accuracy_top1',
+            'accuracy_top5',
+        ]
         for prop in props:
             row[prop] = to_value(record.get(prop, ''))
 
+        row['time_avg_ms'] = to_value(record.get('time_avg_mean_ms', ''))
+        row['time_avg_ms#min'] = to_value(record.get('time_avg_min_ms', ''))
+        row['time_avg_ms#max'] = to_value(record.get('time_avg_max_ms', ''))
+
+        row['##data_uid'] = ''
+
         table.append(row)
+    merged_table = table
 
-    #     # energies = [ iteration['energy'] for iteration in record['report']['iterations'] ]
-    #     # fevs = list(range(len(energies)))
-    #     # last_energy = energies[-1]
-    #     # minimizer_method = record.get('_minimizer_method', '')
-    #     # last_fev = row['nfev']-1 if minimizer_method=='my_cobyla' or 'my_nelder_mead' else row['nfev']
-
-    #     # row['__energies'] = energies
-    #     # row['__fevs'] = fevs
-
-    #     # row['##data_uid'] = "{}:{}".format(record['_point'], record['_repetition_id'])
-
-    #     table.append(row)
-
-    return { 'return': 0, 'table': table }
+    return { 'return': 0, 'table': merged_table }
 
 ##############################################################################
 # get raw config for repo widget
