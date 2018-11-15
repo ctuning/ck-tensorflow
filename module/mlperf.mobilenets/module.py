@@ -158,6 +158,7 @@ def get_raw_data(i):
                 if accuracy:
                     data = [
                         {
+                            'point': point,
                             # features
                             'platform': platform,
                             'library': library,
@@ -181,6 +182,7 @@ def get_raw_data(i):
                 else: # performance
                     data = [
                         {
+                            'point': point,
                             # features
                             'platform': platform,
                             'library': library,
@@ -221,7 +223,7 @@ def get_raw_data(i):
 
     # Return a performance DataFrame with additional accuracy metrics
     def merge_accuracy_to_performance(df_performance, df_accuracy):
-        df = df_performance[['time_avg_ms']]
+        df = df_performance
         accuracy_top1_list, accuracy_top5_list = [], []
         for index, row in df.iterrows():
             (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
@@ -235,7 +237,7 @@ def get_raw_data(i):
 
     # Return a accuracy DataFrame with additional performance metrics
     def merge_performance_to_accuracy(df_performance, df_accuracy):
-        df = df_accuracy[['accuracy_top1', 'accuracy_top5']]
+        df = df_accuracy
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         for index, row in df.iterrows():
             (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
@@ -302,7 +304,7 @@ def get_raw_data(i):
         row['time_avg_ms#min'] = to_value(record.get('time_avg_min_ms', ''))
         row['time_avg_ms#max'] = to_value(record.get('time_avg_max_ms', ''))
 
-        row['##data_uid'] = ''
+        row['##data_uid'] = to_value(record.get('point', ''))
 
         table.append(row)
     merged_table = table
