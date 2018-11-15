@@ -55,6 +55,11 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
+        "post_process_via_ck": "yes",
+        "post_process_cmds": [
+          "python ../postprocess.py"
+        ],
+
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py",
         "run_output_files": [
           "tmp-ck-timer.json"

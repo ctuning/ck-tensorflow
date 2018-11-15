@@ -14,18 +14,13 @@ import shutil
 import time
 import PIL
 
+import ck_utils
+
 import tensorflow as tf
 
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 from object_detection.utils import ops as utils_ops
-
-import ck_utils
-import converter_results
-import converter_annotations
-import calc_metrics_kitti
-import calc_metrics_coco
-import calc_metrics_oid
 
 CUR_DIR = os.getcwd()
 
@@ -52,6 +47,8 @@ RESULTS_OUT_DIR = os.path.join(CUR_DIR, "results")
 FULL_REPORT = os.getenv('CK_SILENT_MODE') == 'NO'
 SKIP_DETECTION = os.getenv('CK_SKIP_DETECTION') == 'YES'
 IMAGE_LIST_FILE = 'processed_images_id.json'
+TIMER_JSON = 'tmp-ck-timer.json'
+ENV_JSON = 'env.json'
 
 OPENME = {}
 
@@ -236,52 +233,10 @@ def detect(category_index):
   OPENME['avg_time_ms'] = detect_avg_time * 1000
   OPENME['avg_fps'] = 1.0 / detect_avg_time if detect_avg_time > 0 else 0
 
+  with open(TIMER_JSON, 'w') as o:
+    json.dump(OPENME, o, indent=2, sort_keys=True)
+
   return processed_image_ids
-
-
-def evaluate(processed_image_ids, categories_list):
-  # Convert annotations from original format of the dataset
-  # to a format specific for a tool that will calculate metrics
-  if DATASET_TYPE != METRIC_TYPE:
-    print('\nConvert annotations from {} to {} ...'.format(DATASET_TYPE, METRIC_TYPE))
-    annotations = converter_annotations.convert(ANNOTATIONS_PATH, 
-                                                ANNOTATIONS_OUT_DIR,
-                                                DATASET_TYPE,
-                                                METRIC_TYPE)
-  else: annotations = ANNOTATIONS_PATH
-
-  # Convert detection results from our universal text format
-  # to a format specific for a tool that will calculate metrics
-  print('\nConvert results to {} ...'.format(METRIC_TYPE))
-  results = converter_results.convert(DETECTIONS_OUT_DIR, 
-                                      RESULTS_OUT_DIR,
-                                      DATASET_TYPE,
-                                      MODEL_DATASET_TYPE,
-                                      METRIC_TYPE)
-
-  # Run evaluation tool
-  print('\nEvaluate metrics as {} ...'.format(METRIC_TYPE))
-  if METRIC_TYPE == ck_utils.COCO:
-    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_pycocotools(processed_image_ids, results, annotations)
-  elif METRIC_TYPE == ck_utils.COCO_TF:
-    mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations, FULL_REPORT)
-  elif METRIC_TYPE == ck_utils.OID:
-    mAP, _, all_metrics = calc_metrics_oid.evaluate(results, annotations, LABELMAP_FILE, FULL_REPORT)
-    recall = 'N/A'
-
-  else:
-    raise ValueError('Metrics type is not supported: {}'.format(METRIC_TYPE))
-
-  OPENME['mAP'] = mAP
-  OPENME['recall'] = recall
-  OPENME['metrics'] = all_metrics
-
-
-def print_header(s):
-  print('\n' + '*'*80)
-  print('* ' + s)
-  print('*'*80)
-
 
 def main(_):
   # Print settings
@@ -307,33 +262,29 @@ def main(_):
   print('Categories: {}'.format(categories_list))
 
   # Run detection if needed
-  print_header('Process images')
+  ck_utils.print_header('Process images')
   if SKIP_DETECTION:
     print('\nSkip detection, evaluate previous results')
-    with open(IMAGE_LIST_FILE, 'r') as f:
-      processed_image_ids = json.load(f)
   else:
     processed_image_ids = detect(category_index)
+  
+  ENV={}
+  ENV['PYTHONPATH'] = os.getenv('PYTHONPATH')
+  ENV['LABELMAP_FILE'] = LABELMAP_FILE
+  ENV['MODEL_DATASET_TYPE'] = MODEL_DATASET_TYPE
+  ENV['DATASET_TYPE'] = DATASET_TYPE
+  ENV['ANNOTATIONS_PATH'] = ANNOTATIONS_PATH
+  ENV['METRIC_TYPE'] = METRIC_TYPE
+  ENV['IMAGES_OUT_DIR'] = IMAGES_OUT_DIR
+  ENV['DETECTIONS_OUT_DIR'] = DETECTIONS_OUT_DIR
+  ENV['ANNOTATIONS_OUT_DIR'] = ANNOTATIONS_OUT_DIR
+  ENV['RESULTS_OUT_DIR'] = RESULTS_OUT_DIR
+  ENV['FULL_REPORT'] = FULL_REPORT
+  ENV['IMAGE_LIST_FILE'] = IMAGE_LIST_FILE
+  ENV['TIMER_JSON'] = TIMER_JSON
 
-  # Run evaluation
-  print_header('Process results')
-  evaluate(processed_image_ids, categories_list)
-
-  # Store benchmark results
-  with open('tmp-ck-timer.json', 'w') as o:
-    json.dump(OPENME, o, indent=2, sort_keys=True)
-
-  # Print metrics
-  print('\nSummary:')
-  print('-------------------------------')
-  print('Graph loaded in {:.6f}s'.format(OPENME.get('graph_load_time_s', 0)))
-  print('All images loaded in {:.6f}s'.format(OPENME.get('images_load_time_s', 0)))
-  print('All images detected in {:.6f}s'.format(OPENME.get('detection_time_total_s', 0)))
-  print('Average detection time: {:.6f}s'.format(OPENME.get('detection_time_avg_s', 0)))
-  print('mAP: {}'.format(OPENME['mAP']))
-  print('Recall: {}'.format(OPENME['recall']))
-  print('--------------------------------\n')
-
+  with open(ENV_JSON, 'w') as o:
+    json.dump(ENV, o, indent=2, sort_keys=True)
 
 if __name__ == '__main__':
   tf.app.run()
