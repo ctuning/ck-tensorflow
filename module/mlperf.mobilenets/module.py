@@ -136,6 +136,9 @@ def get_raw_data(i):
                 print(r['dict']['tags'])
                 continue
             if _library and _library!=library: continue
+
+            meta = r['dict']['meta']
+
             # For each point.
             for point in r['points']:
                 point_file_path = os.path.join(r['path'], 'ckp-%s.0001.json' % point)
@@ -155,53 +158,47 @@ def get_raw_data(i):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
                 model = 'v1-%.2f-%d' % (multiplier, resolution)
-                if accuracy:
-                    data = [
-                        {
-                            'point': point,
-                            # features
-                            'platform': platform,
-                            'library': library,
-                            # choices
-                            'model': model,
-                            'batch_size': batch_size,
-                            'batch_count': batch_count,
-                            'convolution_method': convolution_method,
-                            'resolution': resolution,
-                            'multiplier': multiplier,
-                            # statistical repetition
-                            'repetition_id': repetition_id,
-                            # runtime characteristics
-                            'success': characteristics['run'].get('run_success', 'n/a'),
+                cpu_freq = point_data_raw['choices']['cpu_freq']
+                gpu_freq = point_data_raw['choices']['gpu_freq']
+
+                data = []
+                for repetition_id, characteristics in enumerate(characteristics_list):
+                    datum = {
+                        # features
+                        'platform': platform,
+                        'library': library,
+                        # choices
+                        'model': model,
+                        'batch_size': batch_size,
+                        'batch_count': batch_count,
+                        'convolution_method': convolution_method,
+                        'resolution': resolution,
+                        'multiplier': multiplier,
+                        'cpu_freq': cpu_freq,
+                        'gpu_freq': gpu_freq,
+                        # statistical repetition
+                        'repetition_id': repetition_id,
+                        # runtime characteristics
+                        'success': characteristics['run'].get('run_success', 'n/a'),
+                        # meta
+                        'os_name': meta['os_name'],
+                        'cpu_name': meta['cpu_name'],
+                        'gpgpu_name': meta['gpgpu_name'],
+                    }
+                    if accuracy:
+                        datum.update({
                             'accuracy_top1': characteristics['run'].get('accuracy_top1', 0),
                             'accuracy_top5': characteristics['run'].get('accuracy_top5', 0),
                             # 'frame_predictions': characteristics['run'].get('frame_predictions', []),
-                        }
-                        for (repetition_id, characteristics) in zip(range(num_repetitions), characteristics_list)
-                    ]
-                else: # performance
-                    data = [
-                        {
-                            'point': point,
-                            # features
-                            'platform': platform,
-                            'library': library,
-                            # choices
-                            'model': model,
-                            'batch_size': batch_size,
-                            'batch_count': batch_count,
-                            'convolution_method': convolution_method,
-                            'resolution': resolution,
-                            'multiplier': multiplier,
-                            # statistical repetition
-                            'repetition_id': repetition_id,
-                            # runtime characteristics
-                            'success': characteristics['run'].get('run_success', 'n/a'),
+                        })
+                    else:
+                        datum.update({
                             'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
-                        }
-                        for (repetition_id, characteristics) in zip(range(num_repetitions), characteristics_list)
-                    ]
+                        })
+
+                    data.append(datum)
+
                 index = [
                     'platform', 'library', 'model', 'multiplier', 'resolution', 'batch_size', 'convolution_method', 'repetition_id'
                 ]
@@ -296,6 +293,11 @@ def get_raw_data(i):
             'multiplier',
             'accuracy_top1',
             'accuracy_top5',
+            'cpu_freq',
+            'gpu_freq',
+            'os_name',
+            'cpu_name',
+            'gpgpu_name',
         ]
         for prop in props:
             row[prop] = to_value(record.get(prop, ''))
@@ -303,8 +305,6 @@ def get_raw_data(i):
         row['time_avg_ms'] = to_value(record.get('time_avg_mean_ms', ''))
         row['time_avg_ms#min'] = to_value(record.get('time_avg_min_ms', ''))
         row['time_avg_ms#max'] = to_value(record.get('time_avg_max_ms', ''))
-
-        row['##data_uid'] = to_value(record.get('point', ''))
 
         table.append(row)
     merged_table = table

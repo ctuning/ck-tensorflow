@@ -18,10 +18,16 @@
       { "key":"batch_size",         "name":"Batch size"},
       { "key":"convolution_method", "name":"Convolution method"},
       { "key":"resolution",         "name":"Resolution"},
-      { "key":"multiplier",         "name":"Multiplier"}
+      { "key":"multiplier",         "name":"Multiplier"},
+      { "key":"cpu_name",           "name": "CPU name" },
+      { "key":"cpu_freq",           "name": "CPU freq (MHz)" },
+      { "key":"gpgpu_name",         "name": "GPGPU name" },
+      { "key":"gpu_freq",           "name": "GPU freq (MHz)" },
+      { "key":"os_name",            "name": "OS name" }
     ],
 
-    "selector":[],
+    "selector":[
+    ],
 
     "selector3":[
       { "name":"Plot dimension 1 (X)",  "key":"plot_dimension1"  },
@@ -53,7 +59,12 @@
       { "key":"multiplier",         "name":"Multiplier",                          "view_key":"multiplier",      "format":"%.3f" },
       { "key":"time_avg_ms",        "name":"Image recognition time (ms)",         "view_key":"time_avg_ms",     "format":"%.3f" },
       { "key":"accuracy_top1",      "name":"Image recognition accuracy (top 1)",  "view_key":"accuracy_top1",   "format":"%.3f" },
-      { "key":"accuracy_top5",      "name":"Image recognition accuracy (top 5)",  "view_key":"accuracy_top5",   "format":"%.3f" }
+      { "key":"accuracy_top5",      "name":"Image recognition accuracy (top 5)",  "view_key":"accuracy_top5",   "format":"%.3f" },
+      { "key":"cpu_name",           "name":"CPU name" },
+      { "key":"cpu_freq",           "name":"CPU freq (MHz)" },
+      { "key":"gpgpu_name",         "name":"GPGPU name" },
+      { "key":"gpu_freq",           "name":"GPU freq (MHz)" },
+      { "key":"os_name",            "name":"OS name" }
     ]
   }
 }
