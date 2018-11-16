@@ -15,7 +15,7 @@ ENV_JSON = 'env.json'
 with open(ENV_JSON, 'r') as f:
   ENV = json.load(f)
 for path in ENV['PYTHONPATH'].split(':'):
-  sys.path.append(path)
+  sys.path.insert(0, path)
 CUR_DIR = os.getcwd()
 sys.path.append(os.path.dirname(CUR_DIR))
 
