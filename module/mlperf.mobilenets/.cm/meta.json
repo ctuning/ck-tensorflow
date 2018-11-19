@@ -45,6 +45,7 @@
       { "key":"resolution",         "name":"Resolution",              "view_key":"resolution"},
       { "key":"multiplier",         "name":"Multiplier",              "view_key":"multiplier"},
       { "key":"time_avg_ms",        "name":"Image recognition time (ms)",         "view_key":"time_avg_ms"},
+      { "key":"time_min_ms",        "name":"Image recognition time min (ms)",     "view_key":"time_min_ms"},
       { "key":"accuracy_top1",      "name":"Image recognition accuracy (top 1)",  "view_key":"accuracy_top1"},
       { "key":"accuracy_top5",      "name":"Image recognition accuracy (top 5)",  "view_key":"accuracy_top5"}
     ],

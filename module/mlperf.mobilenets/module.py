@@ -236,6 +236,7 @@ def get_raw_data(i):
     def merge_performance_to_accuracy(df_performance, df_accuracy):
         df = df_accuracy
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
+        time_min_min_ms, time_min_max_ms = [], []
         for index, row in df.iterrows():
             (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
             row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)]
@@ -245,10 +246,14 @@ def get_raw_data(i):
             time_avg_mean_ms.append(time_avg.mean())
             time_avg_min_ms.append(time_avg.mean() - time_avg.std())
             time_avg_max_ms.append(time_avg.mean() + time_avg.std())
+            time_min_min_ms.append(time_avg.min())
+            time_min_max_ms.append(time_avg.max())
 
         df = df.assign(time_avg_min_ms=time_avg_min_ms)
         df = df.assign(time_avg_max_ms=time_avg_max_ms)
         df = df.assign(time_avg_mean_ms=time_avg_mean_ms)
+        df = df.assign(time_min_min_ms=time_min_min_ms)
+        df = df.assign(time_min_max_ms=time_min_max_ms)
         return df
 
     def df_as_record(df):
@@ -305,6 +310,10 @@ def get_raw_data(i):
         row['time_avg_ms'] = to_value(record.get('time_avg_mean_ms', ''))
         row['time_avg_ms#min'] = to_value(record.get('time_avg_min_ms', ''))
         row['time_avg_ms#max'] = to_value(record.get('time_avg_max_ms', ''))
+
+        row['time_min_ms'] = to_value(record.get('time_min_min_ms', ''))
+        row['time_min_ms#min'] = to_value(record.get('time_min_min_ms', ''))
+        row['time_min_ms#max'] = to_value(record.get('time_min_max_ms', ''))
 
         table.append(row)
     merged_table = table
