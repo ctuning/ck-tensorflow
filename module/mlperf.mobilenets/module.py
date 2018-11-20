@@ -78,6 +78,7 @@ def get_raw_data(i):
                 '18.03-e40997bb'    : 'armcl-18.03',
                 'request-d8f69c13'  : 'armcl-dv/dt', # armcl-18.03+
                 '18.05-b3a371bc'    : 'armcl-18.05',
+                '18.08-52ba29e9'    : 'armcl-18.08',
                 # ArmCL tags on Firefly.
                 '17.12-48bc34e'     : 'armcl-17.12',
                 '18.01-f45d5a9'     : 'armcl-18.01',
@@ -102,22 +103,33 @@ def get_raw_data(i):
             firefly_gpu   = 'Mali-T860 MP4'
             firefly_gpu_mhz = '800 MHz'
 
+            # Mate
+            mate_model      = 'BLA-L09'
+            mate_name       = 'HUAWEI BLA-L09'
+            mate_id         = 'mate'
+            mate_gpu        = 'Mali-G72 MP12'
+            mate_gpu_mhz    = '767 MHz'
+
             # Platform mappings
             model_to_id = {
                 firefly_model : firefly_id,
-                hikey_model   : hikey_id
+                hikey_model   : hikey_id,
+                mate_model    : mate_id,
             }
             id_to_name = {
                 firefly_id : firefly_name,
-                hikey_id   : hikey_name
+                hikey_id   : hikey_name,
+                mate_id    : mate_name,
             }
             id_to_gpu = {
                 firefly_id : firefly_gpu,
-                hikey_id   : hikey_gpu
+                hikey_id   : hikey_gpu,
+                mate_id    : mate_gpu,
             }
             id_to_gpu_mhz = {
                 firefly_id : firefly_gpu_mhz,
-                hikey_id   : hikey_gpu_mhz
+                hikey_id   : hikey_gpu_mhz,
+                mate_id    : mate_gpu_mhz,
             }
 
             # Convolution method mapping
