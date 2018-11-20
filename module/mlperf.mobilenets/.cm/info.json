@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "98c849f7764a8fba",
+  "backup_module_uid": "032630d041b4fd8a",
+  "backup_module_uoa": "module",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2018-11-14T12:09:00.627646",
+    "version": [
+      "1",
+      "9",
+      "6"
+    ]
+  },
+  "data_name": "mlperf.mobilenets"
+}
