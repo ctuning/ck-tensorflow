@@ -84,6 +84,7 @@ def get_raw_data(i):
                 '18.01-f45d5a9'     : 'armcl-18.01',
                 '18.03-e40997b'     : 'armcl-18.03',
                 '18.05-b3a371b'     : 'armcl-18.05',
+                '18.08-52ba29e'     : 'armcl-18.08',
                 # TensorFlow tags.
                 'tensorflow-1.7'    : 'tensorflow-1.7',
                 'tensorflow-1.8'    : 'tensorflow-1.8',
@@ -103,9 +104,9 @@ def get_raw_data(i):
             firefly_gpu   = 'Mali-T860 MP4'
             firefly_gpu_mhz = '800 MHz'
 
-            # Mate
+            # Huawei Mate 10 Pro
             mate_model      = 'BLA-L09'
-            mate_name       = 'HUAWEI BLA-L09'
+            mate_name       = 'Huawei BLA-L09'
             mate_id         = 'mate'
             mate_gpu        = 'Mali-G72 MP12'
             mate_gpu_mhz    = '767 MHz'
