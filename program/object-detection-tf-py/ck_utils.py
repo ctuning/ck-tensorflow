@@ -112,3 +112,9 @@ def filename_to_id(file_name, dataset_type):
     return short_name
 
   raise ValueError('Unknown datase type {}'.format(dataset_type))  
+
+
+def print_header(s):
+  print('\n' + '*'*80)
+  print('* ' + s)
+  print('*'*80)
