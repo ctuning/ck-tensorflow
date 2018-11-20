@@ -168,7 +168,9 @@ def get_raw_data(i):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
                 else:
+                    # ReQuEST data uses WIDTH_MULTIPLIER; new data uses MULTIPLIER.
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
+                    if multiplier==-1: multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
                 model = 'v1-%.2f-%d' % (multiplier, resolution)
                 cpu_freq = point_data_raw['choices']['cpu_freq']
@@ -285,7 +287,7 @@ def get_raw_data(i):
             yield record
 
     # prepare table
-    all_repos = ''
+    all_repos = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
 
     df_acc = get_experimental_results(repo_uoa=all_repos,
         tags='explore-mobilenets-accuracy', accuracy=True)
