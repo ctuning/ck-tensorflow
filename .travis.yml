@@ -87,6 +87,7 @@ install:
     -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
     -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu        # prebuilt TF package
     -       ck install package --tags=lib,python-package,pillow                 # to prevent confusion with pre-installed version on Macs @ Travis
+    -       ck install package --tags=lib,python-package,numpy                  # to prevent confusion with pre-installed version on Macs @ Travis
     -       ck install package --tags=lib,python-package,scipy                  # to prevent confusion with pre-installed version on Macs @ Travis
 
 script:
