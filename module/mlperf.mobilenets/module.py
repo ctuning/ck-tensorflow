@@ -161,6 +161,15 @@ def get_raw_data(i):
                 cpu_freq = point_data_raw['choices']['cpu_freq']
                 gpu_freq = point_data_raw['choices']['gpu_freq']
 
+                dataset_raw = point_data_raw['choices']['env'].get('CK_ENV_DATASET_IMAGENET_VAL', '')
+                dataset = ''
+                if 'val-min-resized' in dataset_raw:
+                    dataset = 'val-min-resized'
+                elif 'val-min' in dataset_raw:
+                    dataset = 'val-min'
+                elif 'val' in dataset_raw:
+                    dataset = 'val'
+
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
                     datum = {
@@ -189,6 +198,7 @@ def get_raw_data(i):
                         datum.update({
                             'accuracy_top1': characteristics['run'].get('accuracy_top1', 0),
                             'accuracy_top5': characteristics['run'].get('accuracy_top5', 0),
+                            'dataset': dataset,
                             # 'frame_predictions': characteristics['run'].get('frame_predictions', []),
                         })
                     else:
@@ -303,6 +313,7 @@ def get_raw_data(i):
             'os_name',
             'cpu_name',
             'gpgpu_name',
+            'dataset',
         ]
         for prop in props:
             row[prop] = to_value(record.get(prop, ''))
