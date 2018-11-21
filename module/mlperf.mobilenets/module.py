@@ -158,32 +158,35 @@ def get_raw_data(i):
                 point_file_path = os.path.join(r['path'], 'ckp-%s.0001.json' % point)
                 with open(point_file_path) as point_file:
                     point_data_raw = json.load(point_file)
-                characteristics_list = point_data_raw['characteristics_list']
+
+                point_env               = point_data_raw['choices']['env']
+                characteristics_list    = point_data_raw['characteristics_list']
+
                 num_repetitions = len(characteristics_list)
                 platform = model_to_id[point_data_raw['features']['platform']['platform']['model']]
                 if _platform and _platform!=platform: continue
-                batch_size = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_SIZE',-1))
-                batch_count = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_COUNT',-1))
-                # ReQuEST data uses _METHOD_HINT; new data uses _METHOD. Try both.
-                # TODO: Introduce chaining? (See also multiplier below.)
-                convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD',1))]
-                data_layout = point_data_raw['choices']['env'].get('CK_DATA_LAYOUT','NHWC')
+                batch_size = np.int64(point_env.get('CK_BATCH_SIZE',-1))
+                batch_count = np.int64(point_env.get('CK_BATCH_COUNT',-1))
+
+                convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT', 1))
+                convolution_method = convolution_method_to_name[np.int64( convolution_method_from_env )]
+
+                data_layout = point_env.get('CK_DATA_LAYOUT','NHWC')
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
-                    multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
-                    resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
-                    version = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
+                    multiplier = np.float64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
+                    resolution = np.int64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
+                    version = np.int64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
                 else:
-                    # ReQuEST data uses _WIDTH_MULTIPLIER; new data uses _MULTIPLIER. Try both.
-                    # TODO: Introduce chaining? (See also convolution_method above.)
-                    multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
-                    if multiplier==-1: multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_MULTIPLIER',-1))
-                    resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
+                    multiplier_from_env = point_env.get('CK_ENV_MOBILENET_MULTIPLIER', point_env.get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER', -1))
+                    multiplier = np.float64( multiplier_from_env )
+
+                    resolution = np.int64(point_env.get('CK_ENV_MOBILENET_RESOLUTION',-1))
                     version = 1
                 model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
                 cpu_freq = point_data_raw['choices']['cpu_freq']
                 gpu_freq = point_data_raw['choices']['gpu_freq']
 
-                dataset_raw = point_data_raw['choices']['env'].get('CK_ENV_DATASET_IMAGENET_VAL', '')
+                dataset_raw = point_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
                 if 'val-min-resized' in dataset_raw:
                     dataset = 'val-min-resized'
