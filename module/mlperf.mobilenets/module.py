@@ -78,46 +78,58 @@ def get_raw_data(i):
                 '18.03-e40997bb'    : 'armcl-18.03',
                 'request-d8f69c13'  : 'armcl-dv/dt', # armcl-18.03+
                 '18.05-b3a371bc'    : 'armcl-18.05',
+                '18.08-52ba29e9'    : 'armcl-18.08',
                 # ArmCL tags on Firefly.
                 '17.12-48bc34e'     : 'armcl-17.12',
                 '18.01-f45d5a9'     : 'armcl-18.01',
                 '18.03-e40997b'     : 'armcl-18.03',
                 '18.05-b3a371b'     : 'armcl-18.05',
+                '18.08-52ba29e'     : 'armcl-18.08',
                 # TensorFlow tags.
                 'tensorflow-1.7'    : 'tensorflow-1.7',
                 'tensorflow-1.8'    : 'tensorflow-1.8',
+                'tflite-0.1.7'      : 'tflite-0.1.7',
             }
 
-            # Platforms
+            # TODO: Move the platform mappings to meta.
+            # Linaro HiKey960
             hikey_model = 'HiKey960\x00'
             hikey_name  = 'Linaro HiKey960'
             hikey_id    = 'hikey-960'
             hikey_gpu   = 'Mali-G71 MP8'
             hikey_gpu_mhz = '807 MHz'
-
             # Firefly RK3399
             firefly_model = 'Rockchip RK3399 Firefly Board (Linux Opensource)\x00'
             firefly_name  = 'Firefly RK3399'
             firefly_id    = 'firefly'
             firefly_gpu   = 'Mali-T860 MP4'
             firefly_gpu_mhz = '800 MHz'
-
+            # Huawei Mate 10 Pro
+            mate_model      = 'BLA-L09'
+            mate_name       = 'Huawei BLA-L09'
+            mate_id         = 'mate'
+            mate_gpu        = 'Mali-G72 MP12'
+            mate_gpu_mhz    = '767 MHz'
             # Platform mappings
             model_to_id = {
                 firefly_model : firefly_id,
-                hikey_model   : hikey_id
+                hikey_model   : hikey_id,
+                mate_model    : mate_id,
             }
             id_to_name = {
                 firefly_id : firefly_name,
-                hikey_id   : hikey_name
+                hikey_id   : hikey_name,
+                mate_id    : mate_name,
             }
             id_to_gpu = {
                 firefly_id : firefly_gpu,
-                hikey_id   : hikey_gpu
+                hikey_id   : hikey_gpu,
+                mate_id    : mate_gpu,
             }
             id_to_gpu_mhz = {
                 firefly_id : firefly_gpu_mhz,
-                hikey_id   : hikey_gpu_mhz
+                hikey_id   : hikey_gpu_mhz,
+                mate_id    : mate_gpu_mhz,
             }
 
             # Convolution method mapping
@@ -150,14 +162,22 @@ def get_raw_data(i):
                 if _platform and _platform!=platform: continue
                 batch_size = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_COUNT',-1))
-                convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD_HINT',1))]
-                if library.startswith('tensorflow-'):
+                # ReQuEST data uses _METHOD_HINT; new data uses _METHOD. Try both.
+                # TODO: Introduce chaining? (See also multiplier below.)
+                convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD',1))]
+                data_layout = point_data_raw['choices']['env'].get('CK_DATA_LAYOUT','NHWC')
+                if library.startswith('tensorflow-') or library.startswith('tflite-'):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
+                    version = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
                 else:
+                    # ReQuEST data uses _WIDTH_MULTIPLIER; new data uses _MULTIPLIER. Try both.
+                    # TODO: Introduce chaining? (See also convolution_method above.)
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
+                    if multiplier==-1: multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
-                model = 'v1-%.2f-%d' % (multiplier, resolution)
+                    version = 1
+                model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
                 cpu_freq = point_data_raw['choices']['cpu_freq']
                 gpu_freq = point_data_raw['choices']['gpu_freq']
 
@@ -181,8 +201,10 @@ def get_raw_data(i):
                         'batch_size': batch_size,
                         'batch_count': batch_count,
                         'convolution_method': convolution_method,
-                        'resolution': resolution,
+                        'data_layout': data_layout,
                         'multiplier': multiplier,
+                        'resolution': resolution,
+                        'version': version,
                         'cpu_freq': cpu_freq,
                         'gpu_freq': gpu_freq,
                         # statistical repetition
@@ -204,6 +226,7 @@ def get_raw_data(i):
                     else:
                         datum.update({
                             'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
+                            #'time_avg_ms': characteristics['run']['execution_time']*1e+3,
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         })
 
@@ -272,7 +295,7 @@ def get_raw_data(i):
             yield record
 
     # prepare table
-    all_repos = ''
+    all_repos = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9' # 'mobilenet-v2-tflite-0.1.7'
 
     df_acc = get_experimental_results(repo_uoa=all_repos,
         tags='explore-mobilenets-accuracy', accuracy=True)
@@ -294,6 +317,7 @@ def get_raw_data(i):
 
     df_merged = merge_performance_to_accuracy(df_perf, df_acc)
 
+    debug_output = i.get('out')=='con'
     table = []
     for record in df_as_record(df_merged):
         row = {}
@@ -304,8 +328,10 @@ def get_raw_data(i):
             'batch_size',
             'batch_count',
             'convolution_method',
+            'data_layout',
             'resolution',
             'multiplier',
+            'version',
             'accuracy_top1',
             'accuracy_top5',
             'cpu_freq',
@@ -327,6 +353,9 @@ def get_raw_data(i):
         row['time_min_ms#max'] = to_value(record.get('time_min_max_ms', ''))
 
         table.append(row)
+        if debug_output:
+            ck.out(str(row))
+
     merged_table = table
 
     return { 'return': 0, 'table': merged_table }
