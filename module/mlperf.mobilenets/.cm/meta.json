@@ -23,7 +23,7 @@
       { "key":"convolution_method", "name":"Convolution method"},
       { "key":"data_layout",        "name":"Data layout"},
       { "key":"os_name",            "name":"OS name (host)"},
-      { "key":"cpu_name",           "name":"CPU name (host)"},
+      { "key":"cpu_name",           "name":"CPU name (target)"},
       { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpgpu_name",         "name":"GPGPU name"},
       { "key":"gpu_freq",           "name":"GPU freq (MHz)"}
@@ -72,7 +72,7 @@
       { "key":"accuracy_top1",      "name":"Image recognition accuracy (top 1)",   "view_key":"accuracy_top1", "format":"%.3f"},
       { "key":"accuracy_top5",      "name":"Image recognition accuracy (top 5)",   "view_key":"accuracy_top5", "format":"%.3f"},
       { "key":"os_name",            "name":"OS name (host)"},
-      { "key":"cpu_name",           "name":"CPU name (host)"},
+      { "key":"cpu_name",           "name":"CPU name (target)"},
       { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpgpu_name",         "name":"GPGPU name"},
       { "key":"gpu_freq",           "name":"GPU freq (MHz)"}

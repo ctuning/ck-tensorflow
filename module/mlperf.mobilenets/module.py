@@ -15,6 +15,7 @@ import os
 import sys
 import json
 import re
+from collections import defaultdict
 
 import pandas as pd
 import numpy as np
@@ -55,6 +56,41 @@ def get_raw_data(i):
             }
 
     """
+
+    cpu_code_to_cpu_name_cache = {}
+
+    def map_cpu_code_to_cpu_name( cpu_code ):
+
+        def search_platform_cpu_by( field_name ):
+            r = ck.access({ "action":       "search",
+                            "module_uoa":   "platform.cpu",
+                            "search_dict":  {   "features": {
+                                                    field_name: cpu_code,
+                                                }
+                                            },
+                            "add_meta":"yes",
+            })
+            lst = r.get('lst', [])
+            if len(lst)==1:
+                return lst[0]
+            else:
+                return None
+
+        if not cpu_code in cpu_code_to_cpu_name_cache:
+
+            entry = search_platform_cpu_by( 'ck_cpu_name' )
+            if not entry:
+                entry = search_platform_cpu_by( 'name' )
+
+            if entry:
+                cpu_name = entry['meta']['features'].get('ck_arch_real_name', cpu_code) # the entry may be found, but may lack 'ck_arch_real_name'
+            else:
+                cpu_name = cpu_code     # the entry was not found at all
+
+            cpu_code_to_cpu_name_cache[ cpu_code ] = cpu_name
+
+        return cpu_code_to_cpu_name_cache[ cpu_code ]
+
 
     def get_experimental_results(repo_uoa, tags='explore-mobilenets-accuracy', accuracy=True,
                                  module_uoa='experiment', _library=None, _platform=None):
@@ -195,6 +231,13 @@ def get_raw_data(i):
                 elif 'val' in dataset_raw:
                     dataset = 'val'
 
+                cpu_names = [ map_cpu_code_to_cpu_name(cpu_dict['ck_cpu_name']) for cpu_dict in point_data_raw['features']['platform']['cpu_misc'].values() ]
+
+                cpu_count_by_type = defaultdict(int)
+                for cpu_name in cpu_names:
+                    cpu_count_by_type[cpu_name] += 1
+                combined_cpu_name = ' + '.join( [ '{}x {}'.format(v, k) for (k,v) in cpu_count_by_type.items() ] )
+
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
                     datum = {
@@ -218,7 +261,7 @@ def get_raw_data(i):
                         'success': characteristics['run'].get('run_success', 'n/a'),
                         # meta
                         'os_name': meta['os_name'],
-                        'cpu_name': meta['cpu_name'],
+                        'cpu_name': combined_cpu_name,
                         'gpgpu_name': meta['gpgpu_name'],
                     }
                     if accuracy:
@@ -299,8 +342,11 @@ def get_raw_data(i):
             record.update( {n:v for n,v in zip(df.index.names, index) } )
             yield record
 
-    # prepare table
-    selected_repo = i.get('selected_repo', 'mobilenet-v1-armcl-opencl-18.08-52ba29e9') # 'mobilenet-v2-tflite-0.1.7'
+    #default_selected_repo = ''
+    default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
+    #default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
+
+    selected_repo = i.get('selected_repo', default_selected_repo)
 
     df_acc = get_experimental_results(repo_uoa=selected_repo,
         tags='explore-mobilenets-accuracy', accuracy=True)
