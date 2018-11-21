@@ -318,6 +318,7 @@ def get_raw_data(i):
 
     df_merged = merge_performance_to_accuracy(df_perf, df_acc)
 
+    debug_output = i.get('out')=='con'
     table = []
     for record in df_as_record(df_merged):
         row = {}
@@ -354,6 +355,9 @@ def get_raw_data(i):
         row['time_min_ms#max'] = to_value(record.get('time_min_max_ms', ''))
 
         table.append(row)
+        if debug_output:
+            ck.out(str(row))
+
     merged_table = table
 
     return { 'return': 0, 'table': merged_table }
