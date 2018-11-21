@@ -91,27 +91,25 @@ def get_raw_data(i):
                 'tflite-0.1.7'      : 'tflite-0.1.7',
             }
 
-            # Platforms
+            # TODO: Move the platform mappings to meta.
+            # Linaro HiKey960
             hikey_model = 'HiKey960\x00'
             hikey_name  = 'Linaro HiKey960'
             hikey_id    = 'hikey-960'
             hikey_gpu   = 'Mali-G71 MP8'
             hikey_gpu_mhz = '807 MHz'
-
             # Firefly RK3399
             firefly_model = 'Rockchip RK3399 Firefly Board (Linux Opensource)\x00'
             firefly_name  = 'Firefly RK3399'
             firefly_id    = 'firefly'
             firefly_gpu   = 'Mali-T860 MP4'
             firefly_gpu_mhz = '800 MHz'
-
             # Huawei Mate 10 Pro
             mate_model      = 'BLA-L09'
             mate_name       = 'Huawei BLA-L09'
             mate_id         = 'mate'
             mate_gpu        = 'Mali-G72 MP12'
             mate_gpu_mhz    = '767 MHz'
-
             # Platform mappings
             model_to_id = {
                 firefly_model : firefly_id,
@@ -164,16 +162,17 @@ def get_raw_data(i):
                 if _platform and _platform!=platform: continue
                 batch_size = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_COUNT',-1))
-                # FIXME: ReQuEST data uses CK_CONVOLUTION_METHOD_HINT.
+                # ReQuEST data uses _METHOD_HINT; new data uses _METHOD. Try both.
+                # TODO: Introduce chaining? (See also multiplier below.)
                 convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD',1))]
-                # TODO: Use CK_DATA_LAYOUT for filtering.
                 data_layout = point_data_raw['choices']['env'].get('CK_DATA_LAYOUT','NHWC')
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
                     version = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
                 else:
-                    # ReQuEST data uses WIDTH_MULTIPLIER; new data uses MULTIPLIER.
+                    # ReQuEST data uses _WIDTH_MULTIPLIER; new data uses _MULTIPLIER. Try both.
+                    # TODO: Introduce chaining? (See also convolution_method above.)
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
                     if multiplier==-1: multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
