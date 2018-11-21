@@ -231,12 +231,13 @@ def get_raw_data(i):
                 elif 'val' in dataset_raw:
                     dataset = 'val'
 
+                target_os_name  = point_data_raw['features']['platform']['os']['name']
                 cpu_names = [ map_cpu_code_to_cpu_name(cpu_dict['ck_cpu_name']) for cpu_dict in point_data_raw['features']['platform']['cpu_misc'].values() ]
 
                 cpu_count_by_type = defaultdict(int)
                 for cpu_name in cpu_names:
                     cpu_count_by_type[cpu_name] += 1
-                combined_cpu_name = ' + '.join( [ '{} MP{}'.format(k,v) for (k,v) in cpu_count_by_type.items() ] )
+                target_cpu_name = ' + '.join( [ '{} MP{}'.format(k,v) for (k,v) in cpu_count_by_type.items() ] )
 
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
@@ -260,8 +261,8 @@ def get_raw_data(i):
                         # runtime characteristics
                         'success': characteristics['run'].get('run_success', 'n/a'),
                         # meta
-                        'os_name': meta['os_name'],
-                        'cpu_name': combined_cpu_name,
+                        'os_name': target_os_name,
+                        'cpu_name': target_cpu_name,
                         'gpgpu_name': meta['gpgpu_name'],
                     }
                     if accuracy:
