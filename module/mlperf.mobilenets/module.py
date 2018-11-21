@@ -44,6 +44,8 @@ def init(i):
 def get_raw_data(i):
     """
     Input:  {
+              selected_repo     - which repository to take the data from.
+                                    If explicitly set to '' will not filter by repository and take all available data.
             }
 
     Output: {
@@ -295,11 +297,11 @@ def get_raw_data(i):
             yield record
 
     # prepare table
-    all_repos = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9' # 'mobilenet-v2-tflite-0.1.7'
+    selected_repo = i.get('selected_repo', 'mobilenet-v1-armcl-opencl-18.08-52ba29e9') # 'mobilenet-v2-tflite-0.1.7'
 
-    df_acc = get_experimental_results(repo_uoa=all_repos,
+    df_acc = get_experimental_results(repo_uoa=selected_repo,
         tags='explore-mobilenets-accuracy', accuracy=True)
-    df_perf = get_experimental_results(repo_uoa=all_repos,
+    df_perf = get_experimental_results(repo_uoa=selected_repo,
         tags='explore-mobilenets-performance', accuracy=False)
 
 
