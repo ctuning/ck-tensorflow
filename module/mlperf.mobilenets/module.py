@@ -236,7 +236,7 @@ def get_raw_data(i):
                 cpu_count_by_type = defaultdict(int)
                 for cpu_name in cpu_names:
                     cpu_count_by_type[cpu_name] += 1
-                combined_cpu_name = ' + '.join( [ '{}x {}'.format(v, k) for (k,v) in cpu_count_by_type.items() ] )
+                combined_cpu_name = ' + '.join( [ '{} MP{}'.format(k,v) for (k,v) in cpu_count_by_type.items() ] )
 
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
@@ -342,8 +342,8 @@ def get_raw_data(i):
             record.update( {n:v for n,v in zip(df.index.names, index) } )
             yield record
 
-    #default_selected_repo = ''
-    default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
+    default_selected_repo = ''
+    #default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
     #default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
