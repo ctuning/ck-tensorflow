@@ -334,6 +334,7 @@ def get_raw_data(i):
             'cpu_name',
             'gpgpu_name',
             'dataset',
+            'data_layout',
         ]
         for prop in props:
             row[prop] = to_value(record.get(prop, ''))
