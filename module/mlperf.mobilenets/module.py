@@ -129,46 +129,7 @@ def get_raw_data(i):
                 'tflite-0.1.7'      : 'tflite-0.1.7',
             }
 
-            # TODO: Move the platform mappings to meta.
-            # Linaro HiKey960
-            hikey_model = 'HiKey960\x00'
-            hikey_name  = 'Linaro HiKey960'
-            hikey_id    = 'hikey-960'
-            hikey_gpu   = 'Mali-G71 MP8'
-            hikey_gpu_mhz = '807 MHz'
-            # Firefly RK3399
-            firefly_model = 'Rockchip RK3399 Firefly Board (Linux Opensource)\x00'
-            firefly_name  = 'Firefly RK3399'
-            firefly_id    = 'firefly'
-            firefly_gpu   = 'Mali-T860 MP4'
-            firefly_gpu_mhz = '800 MHz'
-            # Huawei Mate 10 Pro
-            mate_model      = 'BLA-L09'
-            mate_name       = 'Huawei BLA-L09'
-            mate_id         = 'mate'
-            mate_gpu        = 'Mali-G72 MP12'
-            mate_gpu_mhz    = '767 MHz'
-            # Platform mappings
-            model_to_id = {
-                firefly_model : firefly_id,
-                hikey_model   : hikey_id,
-                mate_model    : mate_id,
-            }
-            id_to_name = {
-                firefly_id : firefly_name,
-                hikey_id   : hikey_name,
-                mate_id    : mate_name,
-            }
-            id_to_gpu = {
-                firefly_id : firefly_gpu,
-                hikey_id   : hikey_gpu,
-                mate_id    : mate_gpu,
-            }
-            id_to_gpu_mhz = {
-                firefly_id : firefly_gpu_mhz,
-                hikey_id   : hikey_gpu_mhz,
-                mate_id    : mate_gpu_mhz,
-            }
+            platform_config = cfg['platform_config']
 
             # Convolution method mapping
             convolution_method_to_name = [
@@ -199,7 +160,8 @@ def get_raw_data(i):
                 characteristics_list    = point_data_raw['characteristics_list']
 
                 num_repetitions = len(characteristics_list)
-                platform = model_to_id[point_data_raw['features']['platform']['platform']['model']]
+                platform = platform_config[point_data_raw['features']['platform']['platform']['model']]['id']
+
                 if _platform and _platform!=platform: continue
                 batch_size = np.int64(point_env.get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_env.get('CK_BATCH_COUNT',-1))
