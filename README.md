@@ -293,8 +293,8 @@ using Collective Knowledge Technology:
 * [CK-CNTK](https://github.com/ctuning/ck-cntk)
 * [CK-TinyDNN](https://github.com/ctuning/ck-tiny-dnn)
 * [CK-MVNC (Movidius Neural Compute Stick)](https://github.com/ctuning/ck-mvnc)
-* [CK-TensorRT](https://github.com/dividiti/ck-tensorrt)
-* [CK-KaNN](https://github.com/dividiti/ck-kann)
+* [CK-TensorRT](https://github.com/ctuning/ck-tensorrt)
+* [CK-KaNN](https://github.com/ctuning/ck-kann)
 
 We continue gradually exposing various design and optimization
 choices including full parameterization of existing models.
