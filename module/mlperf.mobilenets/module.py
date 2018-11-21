@@ -331,7 +331,7 @@ def get_raw_data(i):
             'data_layout',
             'resolution',
             'multiplier',
-            'version'
+            'version',
             'accuracy_top1',
             'accuracy_top5',
             'cpu_freq',
