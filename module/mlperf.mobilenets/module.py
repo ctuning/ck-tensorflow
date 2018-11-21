@@ -88,6 +88,7 @@ def get_raw_data(i):
                 # TensorFlow tags.
                 'tensorflow-1.7'    : 'tensorflow-1.7',
                 'tensorflow-1.8'    : 'tensorflow-1.8',
+                'tflite-0.1.7'      : 'tflite-0.1.7',
             }
 
             # Platforms
@@ -167,15 +168,17 @@ def get_raw_data(i):
                 convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD',1))]
                 # TODO: Use CK_DATA_LAYOUT for filtering.
                 data_layout = point_data_raw['choices']['env'].get('CK_DATA_LAYOUT','NHWC')
-                if library.startswith('tensorflow-'):
+                if library.startswith('tensorflow-') or library.startswith('tflite-'):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
+                    version = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
                 else:
                     # ReQuEST data uses WIDTH_MULTIPLIER; new data uses MULTIPLIER.
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER',-1))
                     if multiplier==-1: multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_MOBILENET_RESOLUTION',-1))
-                model = 'v1-%.2f-%d' % (multiplier, resolution)
+                    version = 1
+                model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
                 cpu_freq = point_data_raw['choices']['cpu_freq']
                 gpu_freq = point_data_raw['choices']['gpu_freq']
 
@@ -200,8 +203,9 @@ def get_raw_data(i):
                         'batch_count': batch_count,
                         'convolution_method': convolution_method,
                         'data_layout': data_layout,
-                        'resolution': resolution,
                         'multiplier': multiplier,
+                        'resolution': resolution,
+                        'version': version,
                         'cpu_freq': cpu_freq,
                         'gpu_freq': gpu_freq,
                         # statistical repetition
@@ -223,6 +227,7 @@ def get_raw_data(i):
                     else:
                         datum.update({
                             'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
+                            #'time_avg_ms': characteristics['run']['execution_time']*1e+3,
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         })
 
@@ -291,7 +296,7 @@ def get_raw_data(i):
             yield record
 
     # prepare table
-    all_repos = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
+    all_repos = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9' # 'mobilenet-v2-tflite-0.1.7'
 
     df_acc = get_experimental_results(repo_uoa=all_repos,
         tags='explore-mobilenets-accuracy', accuracy=True)
@@ -326,6 +331,7 @@ def get_raw_data(i):
             'data_layout',
             'resolution',
             'multiplier',
+            'version'
             'accuracy_top1',
             'accuracy_top5',
             'cpu_freq',
