@@ -165,6 +165,8 @@ def get_raw_data(i):
                 batch_count = np.int64(point_data_raw['choices']['env'].get('CK_BATCH_COUNT',-1))
                 # FIXME: ReQuEST data uses CK_CONVOLUTION_METHOD_HINT.
                 convolution_method = convolution_method_to_name[np.int64(point_data_raw['choices']['env'].get('CK_CONVOLUTION_METHOD',1))]
+                # TODO: Use CK_DATA_LAYOUT for filtering.
+                data_layout = point_data_raw['choices']['env'].get('CK_DATA_LAYOUT','NHWC')
                 if library.startswith('tensorflow-'):
                     multiplier = np.float64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
                     resolution = np.int64(point_data_raw['choices']['env'].get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
@@ -197,6 +199,7 @@ def get_raw_data(i):
                         'batch_size': batch_size,
                         'batch_count': batch_count,
                         'convolution_method': convolution_method,
+                        'data_layout': data_layout,
                         'resolution': resolution,
                         'multiplier': multiplier,
                         'cpu_freq': cpu_freq,
@@ -330,6 +333,7 @@ def get_raw_data(i):
             'cpu_name',
             'gpgpu_name',
             'dataset',
+            'data_layout',
         ]
         for prop in props:
             row[prop] = to_value(record.get(prop, ''))
