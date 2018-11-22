@@ -9,7 +9,7 @@
       "for_web": "yes"
     }
   },
-  "desc": "Raw data access (json)",
+  "desc": "Raw data (JSON) access for MLPerf MobilNets visualization widget",
   "platform_config": {
         "HiKey960\u0000": {
             "name":     "Linaro HiKey960",
@@ -44,8 +44,8 @@
       { "key":"data_layout",        "name":"Data layout"},
       { "key":"os_name",            "name":"OS name (target)"},
       { "key":"cpu_name",           "name":"CPU name (target)"},
-      { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpgpu_name",         "name":"GPGPU name"},
+      { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpu_freq",           "name":"GPU freq (MHz)"}
     ],
 
@@ -93,8 +93,8 @@
       { "key":"accuracy_top5",      "name":"Image recognition accuracy (top 5)",   "view_key":"accuracy_top5", "format":"%.3f"},
       { "key":"os_name",            "name":"OS name (target)"},
       { "key":"cpu_name",           "name":"CPU name (target)"},
-      { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpgpu_name",         "name":"GPGPU name"},
+      { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
       { "key":"gpu_freq",           "name":"GPU freq (MHz)"}
     ]
   }
