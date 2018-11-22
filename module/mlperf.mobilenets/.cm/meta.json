@@ -17,24 +17,24 @@
         "2":    "winograd"
   },
   "platform_config": {
-        "HiKey960\u0000": {
-            "name":     "Linaro HiKey960",
-            "id":       "hikey-960",
-            "gpu":      "Mali-G71 MP8",
-            "gpu_mhz":  "807 MHz"
-        },
-        "Rockchip RK3399 Firefly Board (Linux Opensource)\u0000": {
-            "name":     "Firefly RK3399",
-            "id":       "firefly",
-            "gpu":      "Mali-T860 MP4",
-            "gpu_mhz":  "800 MHz"
-        },
-        "BLA-L09": {
-            "name":     "Huawei BLA-L09",
-            "id":       "mate",
-            "gpu":      "Mali-G72 MP12",
-            "gpu_mhz":  "767 MHz"
-        }
+     "HiKey960\u0000": {
+       "name":     "Linaro HiKey960",
+       "id":       "linaro-hikey960",
+       "gpu":      "Mali-G71 MP8",
+       "gpu_mhz":  "807 MHz"
+     },
+     "Rockchip RK3399 Firefly Board (Linux Opensource)\u0000": {
+       "name":     "Firefly RK3399",
+       "id":       "firefly-rk3399",
+       "gpu":      "Mali-T860 MP4",
+       "gpu_mhz":  "800 MHz"
+     },
+     "BLA-L09": {
+       "name":     "Huawei Mate 10 Pro",
+       "id":       "huawei-mate10pro",
+       "gpu":      "Mali-G72 MP12",
+       "gpu_mhz":  "767 MHz"
+     }
   },
   "data_config": {
     "selector2":[
