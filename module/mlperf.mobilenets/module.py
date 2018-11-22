@@ -284,6 +284,8 @@ def get_raw_data(i):
             (platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
             # Handle abnormal situation when no corresponding performance data is available.
             try:
+                # FIXME: Patch the old TFLite performance data.
+                if library.startswith('tflite-') and convolution_method=='default': convolution_method='direct'
                 row = df_performance.loc[(platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout)]
             except:
                 ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
