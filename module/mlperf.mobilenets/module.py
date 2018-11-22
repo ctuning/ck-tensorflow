@@ -97,7 +97,7 @@ def get_raw_data(i):
 
         r = ck.access({'action':'search', 'repo_uoa':repo_uoa, 'module_uoa':module_uoa, 'tags':tags})
         if r['return']>0:
-            print('Error: %s' % r['error'])
+            ck.out('Error: %s' % r['error'])
             exit(1)
         experiments = r['lst']
 
@@ -106,7 +106,7 @@ def get_raw_data(i):
             data_uoa = experiment['data_uoa']
             r = ck.access({'action':'list_points', 'repo_uoa':repo_uoa, 'module_uoa':module_uoa, 'data_uoa':data_uoa})
             if r['return']>0:
-                print('Error: %s' % r['error'])
+                ck.out('Error: %s' % r['error'])
                 exit(1)
             # Mapping of expected library tags to reader-friendly names.
             tag_to_name = {
@@ -130,9 +130,7 @@ def get_raw_data(i):
                 'tflite-0.1.7'      : 'tflite-0.1.7',
             }
 
-            platform_config = cfg['platform_config']
-
-            # Convolution method mapping
+            # Convolution method mapping.
             convolution_method_to_name = [
                 'gemm',
                 'direct',
@@ -144,8 +142,7 @@ def get_raw_data(i):
             if len(library_tags)==1:
                 library = tag_to_name[library_tags[0]]
             else:
-                print('[Warning] Bad library tags. Skipping experiment with tags:')
-                print(r['dict']['tags'])
+                ck.out('[Warning] Bad library tags: "%s". Skipping...' % str(r['dict']['tags']))
                 continue
             if _library and _library!=library: continue
 
@@ -162,31 +159,36 @@ def get_raw_data(i):
 
                 num_repetitions = len(characteristics_list)
 
+                # Platform.
                 if _platform and _platform!=platform: continue
                 platform_model = point_data_raw['features']['platform']['platform']['model']
+                platform_config = cfg['platform_config']
                 platform = platform_config.get(platform_model, {'name':platform_model})['name']
-
+                # Batch size and count.
                 batch_size = np.int64(point_env.get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_env.get('CK_BATCH_COUNT',-1))
-
-                convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT', 1))
+                # Convolution method.
+                convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',1))
                 convolution_method = convolution_method_to_name[np.int64( convolution_method_from_env )]
-
-                data_layout = point_env.get('CK_DATA_LAYOUT','NHWC')
+                # FIXME: The new TFLite accuracy data doesn't define CK_CONVOLUTION_METHOD, but the old performance data does. Otherwise, the below would work.
+                #convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',-1))
+                #convolution_method = convolution_method_to_name[np.int64( convolution_method_from_env )] if convolution_method_from_env!=-1 else 'default'
+                # Data layout.
+                data_layout = point_env.get('CK_DATA_LAYOUT','default')
+                # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
-                    multiplier = np.float64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1))
-                    resolution = np.int64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1))
-                    version = np.int64(point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1))
+                    multiplier_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1)
+                    resolution_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1)
+                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',2) # FIXME: 2 is the correct default only for the old TFLite data.
                 else:
                     multiplier_from_env = point_env.get('CK_ENV_MOBILENET_MULTIPLIER', point_env.get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER', -1))
-                    multiplier = np.float64( multiplier_from_env )
-
-                    resolution = np.int64(point_env.get('CK_ENV_MOBILENET_RESOLUTION',-1))
-                    version = 1
+                    resolution_from_env = point_env.get('CK_ENV_MOBILENET_RESOLUTION',-1)
+                    version_from_env    = 1
+                multiplier = np.float64(multiplier_from_env)
+                resolution = np.int64(resolution_from_env)
+                version = np.int64(version_from_env)
                 model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
-                cpu_freq = point_data_raw['choices']['cpu_freq']
-                gpu_freq = point_data_raw['choices']['gpu_freq']
-
+                # Dataset.
                 dataset_raw = point_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
                 if 'val-min-resized' in dataset_raw:
@@ -195,14 +197,16 @@ def get_raw_data(i):
                     dataset = 'val-min'
                 elif 'val' in dataset_raw:
                     dataset = 'val'
-
-                target_os_name  = point_data_raw['features']['platform']['os']['name']
+                # Target names for CPU and OS.
+                target_os_name = point_data_raw['features']['platform']['os']['name']
                 cpu_names = [ map_cpu_code_to_cpu_name(cpu_dict['ck_cpu_name']) for cpu_dict in point_data_raw['features']['platform']['cpu_misc'].values() ]
-
                 cpu_count_by_type = defaultdict(int)
                 for cpu_name in cpu_names:
                     cpu_count_by_type[cpu_name] += 1
                 target_cpu_name = ' + '.join( [ '{} MP{}'.format(k,v) for (k,v) in cpu_count_by_type.items() ] )
+                # Frequencies for CPU and GPU.
+                cpu_freq = point_data_raw['choices']['cpu_freq']
+                gpu_freq = point_data_raw['choices']['gpu_freq']
 
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
@@ -239,8 +243,8 @@ def get_raw_data(i):
                         })
                     else:
                         datum.update({
-                            'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
-                            #'time_avg_ms': characteristics['run']['execution_time']*1e+3,
+                            #'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
+                            'time_avg_ms': characteristics['run']['execution_time']*1e+3, # FIXME 'execution time' is for the old TFLite performance data.
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         })
 
@@ -265,7 +269,9 @@ def get_raw_data(i):
             result = pd.DataFrame(columns=['success'])
         return result
 
-    # Return a performance DataFrame with additional accuracy metrics
+
+    # Return a performance DataFrame with additional accuracy metrics.
+    # FIXME: Remove as not used?
     def merge_accuracy_to_performance(df_performance, df_accuracy):
         df = df_performance
         accuracy_top1_list, accuracy_top5_list = [], []
@@ -279,22 +285,37 @@ def get_raw_data(i):
         return df
 
 
-    # Return a accuracy DataFrame with additional performance metrics
+    # Return an accuracy DataFrame with additional performance metrics.
     def merge_performance_to_accuracy(df_performance, df_accuracy):
         df = df_accuracy
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
         for index, row in df.iterrows():
             (platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
-            row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout)]
+            # Handle abnormal situation when no corresponding performance data is available.
+            try:
+                row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout)]
+            except:
+                ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
+                for index_p, row_p in df_performance.iterrows():
+                    ck.out(str(index_p))
+                    break
+                row = None
 
-            time_avg = row['time_avg_ms']
-            time_avg_mean = time_avg.mean()
-            time_avg_mean_ms.append(time_avg.mean())
-            time_avg_min_ms.append(time_avg.mean() - time_avg.std())
-            time_avg_max_ms.append(time_avg.mean() + time_avg.std())
-            time_min_min_ms.append(time_avg.min())
-            time_min_max_ms.append(time_avg.max())
+            if row is not None:
+                time_avg = row['time_avg_ms']
+                time_avg_mean = time_avg.mean()
+                time_avg_mean_ms.append(time_avg.mean())
+                time_avg_min_ms.append(time_avg.mean() - time_avg.std())
+                time_avg_max_ms.append(time_avg.mean() + time_avg.std())
+                time_min_min_ms.append(time_avg.min())
+                time_min_max_ms.append(time_avg.max())
+            else:
+                time_avg_mean_ms.append(0)
+                time_avg_min_ms.append(0)
+                time_avg_max_ms.append(0)
+                time_min_min_ms.append(0)
+                time_min_max_ms.append(0)
 
         df = df.assign(time_avg_min_ms=time_avg_min_ms)
         df = df.assign(time_avg_max_ms=time_avg_max_ms)
@@ -310,7 +331,7 @@ def get_raw_data(i):
 
     default_selected_repo = ''
     #default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
-    #default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
+    default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
