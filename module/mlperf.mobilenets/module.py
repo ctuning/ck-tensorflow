@@ -106,6 +106,11 @@ def get_raw_data(i):
             exit(1)
         experiments = r['lst']
 
+        tag_to_library_exception = {    # Only add exceptions here!
+            'request-d8f69c13':         'armcl-18.03+', # armcl-dv/dt
+            '18.05-0acd60ed-request':   'armcl-18.05+',
+        }
+
         dfs = []
         for experiment in experiments:
             data_uoa = experiment['data_uoa']
@@ -113,27 +118,23 @@ def get_raw_data(i):
             if r['return']>0:
                 ck.out('Error: %s' % r['error'])
                 exit(1)
-            # Mapping of expected library tags to reader-friendly names.
-            tag_to_name = {
-                # ArmCL tags on HiKey.
-                '17.12-48bc34ea'    : 'armcl-17.12',
-                '18.01-f45d5a9b'    : 'armcl-18.01',
-                '18.03-e40997bb'    : 'armcl-18.03',
-                'request-d8f69c13'  : 'armcl-18.03+', # armcl-dv/dt
-                '18.05-b3a371bc'    : 'armcl-18.05',
-                '18.05-0acd60ed-request': 'armcl-18.05+',
-                '18.08-52ba29e9'    : 'armcl-18.08',
-                # ArmCL tags on Firefly.
-                '17.12-48bc34e'     : 'armcl-17.12',
-                '18.01-f45d5a9'     : 'armcl-18.01',
-                '18.03-e40997b'     : 'armcl-18.03',
-                '18.05-b3a371b'     : 'armcl-18.05',
-                '18.08-52ba29e'     : 'armcl-18.08',
-                # TensorFlow tags.
-                'tensorflow-1.7'    : 'tensorflow-1.7',
-                'tensorflow-1.8'    : 'tensorflow-1.8',
-                'tflite-0.1.7'      : 'tflite-0.1.7',
-            }
+
+            library = None
+            for tag in r['dict']['tags']:
+                if tag in tag_to_library_exception:
+                    library = tag_to_library_exception[tag]
+                elif tag.startswith('tflite-') or tag.startswith('tensorflow-'):
+                    library = tag
+                    break
+                else:
+                    match_version = re.search('^(\d{2}\.\d{2})-\w+$', tag)
+                    if match_version:
+                        library = 'armcl-' + match_version.group(1)
+                        break
+
+            if not library:
+                ck.out('[Warning] Bad library tags: "%s". Skipping...' % str(r['dict']['tags']))
+                continue
 
             # Convolution method mapping.
             convolution_method_to_name = [
@@ -141,14 +142,6 @@ def get_raw_data(i):
                 'direct',
                 'winograd'
             ]
-
-            # Library.
-            library_tags = [ tag for tag in r['dict']['tags'] if tag in tag_to_name.keys() ]
-            if len(library_tags)==1:
-                library = tag_to_name[library_tags[0]]
-            else:
-                ck.out('[Warning] Bad library tags: "%s". Skipping...' % str(r['dict']['tags']))
-                continue
 
             meta = r['dict']['meta']
 
