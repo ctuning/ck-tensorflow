@@ -244,7 +244,7 @@ def get_raw_data(i):
                     data.append(datum)
 
                 index = [
-                    'platform', 'library', 'model', 'multiplier', 'resolution', 'batch_size', 'convolution_method', 'repetition_id'
+                    'platform', 'library', 'model', 'multiplier', 'resolution', 'batch_size', 'convolution_method', 'data_layout', 'repetition_id'
                 ]
 
                 # Construct a DataFrame.
@@ -267,8 +267,8 @@ def get_raw_data(i):
         df = df_performance
         accuracy_top1_list, accuracy_top5_list = [], []
         for index, row in df.iterrows():
-            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
-            row = df_accuracy.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)]
+            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
+            row = df_accuracy.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout)]
             accuracy_top1_list.append(row['accuracy_top1'][0])
             accuracy_top5_list.append(row['accuracy_top5'][0])
         df = df.assign(accuracy_top1=accuracy_top1_list)
@@ -282,8 +282,8 @@ def get_raw_data(i):
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
         for index, row in df.iterrows():
-            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, repetition_id) = index
-            row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method)]
+            (platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
+            row = df_performance.loc[(platform, lib, model, multiplier, resolution, batch_size, convolution_method, data_layout)]
 
             time_avg = row['time_avg_ms']
             time_avg_mean = time_avg.mean()
