@@ -1,10 +1,16 @@
 #
-# Collective Knowledge (Raw data access (json))
+# Copyright (c) 2018 cTuning foundation.
+# See CK COPYRIGHT.txt for copyright details.
 #
+# SPDX-License-Identifier: BSD-3-Clause.
+# See CK LICENSE.txt for licensing details.
 #
+# Collective Knowledge - raw data access (JSON).
 #
-#
-# Developer:
+# Developers:
+# - Nikolay Istomin, Xored.
+# - Anton Lokhmotov, dividiti.
+# - Leo Gordon, dividiti.
 #
 
 cfg={}  # Will be updated by CK (meta description of this module)
