@@ -125,6 +125,7 @@ def get_raw_data(i):
             for tag in r['dict']['tags']:
                 if tag in tag_to_library_exception:
                     library = tag_to_library_exception[tag]
+                    break
                 elif tag.startswith('tflite-') or tag.startswith('tensorflow-'):
                     library = tag
                     break
