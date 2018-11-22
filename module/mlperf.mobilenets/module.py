@@ -337,7 +337,7 @@ def get_raw_data(i):
 
     default_selected_repo = ''
     #default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
-    default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
+    #default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
