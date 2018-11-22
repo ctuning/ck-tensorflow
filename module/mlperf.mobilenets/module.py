@@ -243,8 +243,8 @@ def get_raw_data(i):
                         })
                     else:
                         datum.update({
-                            #'time_avg_ms': characteristics['run']['prediction_time_avg_s']*1e+3,
-                            'time_avg_ms': characteristics['run']['execution_time']*1e+3, # FIXME 'execution time' is for the old TFLite performance data.
+                            # FIXME: Checking 'execution time' is only needed for the old TFLite performance data.
+                            'time_avg_ms': 1e+3*characteristics['run'].get('prediction_time_avg_s', characteristics['run'].get('execution_time', 0.0))
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         })
 
