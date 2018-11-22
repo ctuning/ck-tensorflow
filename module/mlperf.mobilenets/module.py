@@ -98,8 +98,7 @@ def get_raw_data(i):
         return cpu_code_to_cpu_name_cache[ cpu_code ]
 
 
-    def get_experimental_results(repo_uoa, tags='explore-mobilenets-accuracy', accuracy=True,
-                                 module_uoa='experiment', _library=None, _platform=None):
+    def get_experimental_results(repo_uoa, module_uoa='experiment', tags='explore-mobilenets-accuracy', accuracy=True):
 
         r = ck.access({'action':'search', 'repo_uoa':repo_uoa, 'module_uoa':module_uoa, 'tags':tags})
         if r['return']>0:
@@ -150,7 +149,6 @@ def get_raw_data(i):
             else:
                 ck.out('[Warning] Bad library tags: "%s". Skipping...' % str(r['dict']['tags']))
                 continue
-            if _library and _library!=library: continue
 
             meta = r['dict']['meta']
 
@@ -166,7 +164,6 @@ def get_raw_data(i):
                 num_repetitions = len(characteristics_list)
 
                 # Platform.
-                if _platform and _platform!=platform: continue
                 platform_model = point_data_raw['features']['platform']['platform']['model']
                 platform_config = cfg['platform_config']
                 platform = platform_config.get(platform_model, {'name':platform_model})['name']
