@@ -161,9 +161,11 @@ def get_raw_data(i):
                 characteristics_list    = point_data_raw['characteristics_list']
 
                 num_repetitions = len(characteristics_list)
-                platform = platform_config[point_data_raw['features']['platform']['platform']['model']]['id']
 
                 if _platform and _platform!=platform: continue
+                platform_model = point_data_raw['features']['platform']['platform']['model']
+                platform = platform_config.get(platform_model, {'name':platform_model})['name']
+
                 batch_size = np.int64(point_env.get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_env.get('CK_BATCH_COUNT',-1))
 
