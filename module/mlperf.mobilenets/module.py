@@ -114,8 +114,9 @@ def get_raw_data(i):
                 '17.12-48bc34ea'    : 'armcl-17.12',
                 '18.01-f45d5a9b'    : 'armcl-18.01',
                 '18.03-e40997bb'    : 'armcl-18.03',
-                'request-d8f69c13'  : 'armcl-dv/dt', # armcl-18.03+
+                'request-d8f69c13'  : 'armcl-18.03+', # armcl-dv/dt
                 '18.05-b3a371bc'    : 'armcl-18.05',
+                '18.05-0acd60ed-request': 'armcl-18.05+',
                 '18.08-52ba29e9'    : 'armcl-18.08',
                 # ArmCL tags on Firefly.
                 '17.12-48bc34e'     : 'armcl-17.12',
