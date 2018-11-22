@@ -110,6 +110,8 @@ def get_raw_data(i):
             'request-d8f69c13':         'armcl-18.03+', # armcl-dv/dt
             '18.05-0acd60ed-request':   'armcl-18.05+',
         }
+        platform_config             = cfg['platform_config']
+        convolution_method_to_name  = cfg['convolution_method_to_name']
 
         dfs = []
         for experiment in experiments:
@@ -136,13 +138,6 @@ def get_raw_data(i):
                 ck.out('[Warning] Bad library tags: "%s". Skipping...' % str(r['dict']['tags']))
                 continue
 
-            # Convolution method mapping.
-            convolution_method_to_name = [
-                'gemm',
-                'direct',
-                'winograd'
-            ]
-
             meta = r['dict']['meta']
 
             # For each point.
@@ -158,18 +153,16 @@ def get_raw_data(i):
 
                 # Platform.
                 platform_model = point_data_raw['features']['platform']['platform']['model']
-                platform_config = cfg['platform_config']
                 platform = platform_config.get(platform_model, {'name':platform_model})['name']
+
                 # Batch size and count.
                 batch_size = np.int64(point_env.get('CK_BATCH_SIZE',-1))
                 batch_count = np.int64(point_env.get('CK_BATCH_COUNT',-1))
+
                 # Convolution method.
-                convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',1))
-                convolution_method = convolution_method_to_name[np.int64( convolution_method_from_env )]
-                # FIXME: The new TFLite accuracy data doesn't define CK_CONVOLUTION_METHOD, but the old performance data does. Otherwise, the below would work.
-                #convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',-1))
-                #convolution_method = convolution_method_to_name[np.int64( convolution_method_from_env )] if convolution_method_from_env!=-1 else 'default'
-                # Data layout.
+                convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',"-1"))
+                convolution_method = convolution_method_to_name[ str(convolution_method_from_env) ]
+
                 data_layout = point_env.get('CK_DATA_LAYOUT','default')
                 # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
