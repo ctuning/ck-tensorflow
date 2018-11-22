@@ -169,11 +169,11 @@ def get_raw_data(i):
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
                     multiplier_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1)
                     resolution_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1)
-                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',2) # FIXME: 2 is the correct default only for the old TFLite data.
+                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
                 else:
                     multiplier_from_env = point_env.get('CK_ENV_MOBILENET_MULTIPLIER', point_env.get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER', -1))
                     resolution_from_env = point_env.get('CK_ENV_MOBILENET_RESOLUTION',-1)
-                    version_from_env    = 1
+                    version_from_env    = point_env.get('CK_ENV_MOBILENET_VERSION',1)
                 multiplier = np.float64(multiplier_from_env)
                 resolution = np.int64(resolution_from_env)
                 version = np.int64(version_from_env)
@@ -233,8 +233,7 @@ def get_raw_data(i):
                         })
                     else:
                         datum.update({
-                            # FIXME: Checking 'execution time' is only needed for the old TFLite performance data.
-                            'time_avg_ms': 1e+3*characteristics['run'].get('prediction_time_avg_s', characteristics['run'].get('execution_time', 0.0))
+                            'time_avg_ms': 1e+3*characteristics['run'].get('prediction_time_avg_s',0.0)
                             #'time_total_ms': characteristics['run']['prediction_time_total_s']*1e+3,
                         })
 
@@ -284,8 +283,6 @@ def get_raw_data(i):
             (platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
             # Handle abnormal situation when no corresponding performance data is available.
             try:
-                # FIXME: Patch the old TFLite performance data.
-                if library.startswith('tflite-') and convolution_method=='default': convolution_method='direct'
                 row = df_performance.loc[(platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout)]
             except:
                 ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
@@ -319,8 +316,8 @@ def get_raw_data(i):
             yield record
 
     default_selected_repo = ''
+    default_selected_repo = 'mlperf-mobilenets'
     #default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
-    #default_selected_repo = 'mobilenet-v2-tflite-0.1.7'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
