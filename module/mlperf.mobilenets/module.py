@@ -263,21 +263,6 @@ def get_raw_data(i):
         return result
 
 
-    # Return a performance DataFrame with additional accuracy metrics.
-    # FIXME: Remove as not used?
-    def merge_accuracy_to_performance(df_performance, df_accuracy):
-        df = df_performance
-        accuracy_top1_list, accuracy_top5_list = [], []
-        for index, row in df.iterrows():
-            (platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
-            row = df_accuracy.loc[(platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout)]
-            accuracy_top1_list.append(row['accuracy_top1'][0])
-            accuracy_top5_list.append(row['accuracy_top5'][0])
-        df = df.assign(accuracy_top1=accuracy_top1_list)
-        df = df.assign(accuracy_top5=accuracy_top5_list)
-        return df
-
-
     # Return an accuracy DataFrame with additional performance metrics.
     def merge_performance_to_accuracy(df_performance, df_accuracy):
         df = df_accuracy
