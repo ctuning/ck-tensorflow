@@ -127,7 +127,7 @@ def get_raw_data(i):
                 if tag in tag_to_library_exception:
                     library = tag_to_library_exception[tag]
                     break
-                elif tag.startswith('tflite-') or tag.startswith('tensorflow-'):
+                elif tag.startswith('tf-') or tag.startswith('tflite-') or tag.startswith('tensorflow-'):
                     library = tag
                     break
                 else:
@@ -285,6 +285,7 @@ def get_raw_data(i):
         # mean-std..mean+std for time_avg_ms, min..max for time_min_ms.
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
+        rate_max_s = []
         # Iterate over the indices of the accuracy DataFrame and
         # find corresponding rows in the performance DataFrame.
         for index, _ in df.iterrows():
@@ -312,18 +313,22 @@ def get_raw_data(i):
                 time_avg_max_ms.append(time_avg.mean() + time_avg.std(ddof=0))
                 time_min_min_ms.append(time_avg.min())
                 time_min_max_ms.append(time_avg.max())
+                rate_max_s.append(1e+3/time_avg.min())
             else:
                 time_avg_mean_ms.append(0)
                 time_avg_min_ms.append(0)
                 time_avg_max_ms.append(0)
                 time_min_min_ms.append(0)
                 time_min_max_ms.append(0)
+                rate_max_s.append(0)
 
         df = df.assign(time_avg_min_ms=time_avg_min_ms)
         df = df.assign(time_avg_max_ms=time_avg_max_ms)
         df = df.assign(time_avg_mean_ms=time_avg_mean_ms)
         df = df.assign(time_min_min_ms=time_min_min_ms)
         df = df.assign(time_min_max_ms=time_min_max_ms)
+        df = df.assign(rate_max_s=rate_max_s)
+
         return df
 
     def df_as_record(df):
@@ -333,7 +338,7 @@ def get_raw_data(i):
 
     default_selected_repo = ''
     default_selected_repo = 'mlperf-mobilenets'
-    default_selected_repo = 'linaro-hikey960-18.08-52ba29e9-mobilenet-v1-0.25-128'
+#    default_selected_repo = 'linaro-hikey960-18.08-52ba29e9-mobilenet-v1-0.25-128'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
@@ -395,6 +400,8 @@ def get_raw_data(i):
         row['time_min_ms'] = to_value(record.get('time_min_min_ms', ''))
         row['time_min_ms#min'] = to_value(record.get('time_min_min_ms', ''))
         row['time_min_ms#max'] = to_value(record.get('time_min_max_ms', ''))
+
+        row['rate_max_s'] = to_value(record.get('rate_max_s', ''))
 
         table.append(row)
         if debug_output:
