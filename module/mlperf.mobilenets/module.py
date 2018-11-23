@@ -224,7 +224,8 @@ def get_raw_data(i):
                         'convolution_method': convolution_method, # 3 choices: DEFAULT, GEMM, DIRECT
                         'data_layout': data_layout,               # 2 choices: NCHW, NHWC
                         'kernel_tuner': kernel_tuner,             # 2 choices: NONE, DEFAULT
-                        'methodXlayout': '%s X %s' % (convolution_method, data_layout), # 3x2 choices
+                        'methodXlayout': '%s X %s' % (convolution_method, data_layout), # 3X2 choices
+                        'methodXtuner': '%s X %s' % (convolution_method, kernel_tuner), # 3X2 choices
                         'cpu_freq': cpu_freq,
                         'gpu_freq': gpu_freq,
                         # statistical repetition
@@ -256,7 +257,7 @@ def get_raw_data(i):
                     'model', 'version', 'multiplier', 'resolution',       # model
                     'batch_size',                                         # TODO: batch_count?
                     'convolution_method', 'data_layout', 'kernel_tuner',  # ArmCL specific
-                    'methodXlayout',                                      # combined keys
+                    'methodXlayout', 'methodXtuner',                      # combined keys
                     'repetition_id'
                 ]
 
@@ -373,6 +374,7 @@ def get_raw_data(i):
             'data_layout',
             'kernel_tuner',
             'methodXlayout',
+            'methodXtuner',
             'accuracy_top1',
             'accuracy_top5',
             'os_name',
