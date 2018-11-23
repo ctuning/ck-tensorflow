@@ -43,6 +43,7 @@
   "data_config": {
     "selector2":[
       { "key":"platform",           "name":"Platform"},
+      { "key":"os_name",            "name":"OS name (target)"},
       { "key":"library",            "name":"Library"},
       { "key":"dataset",            "name":"Dataset"},
       { "key":"model",              "name":"Model"},
@@ -54,11 +55,8 @@
       { "key":"convolution_method", "name":"Convolution method"},
       { "key":"data_layout",        "name":"Data layout"},
       { "key":"kernel_tuner",       "name":"Kernel tuner"},
-      { "key":"os_name",            "name":"OS name (target)"},
       { "key":"cpu_name",           "name":"CPU name (target)"},
-      { "key":"gpgpu_name",         "name":"GPGPU name"},
-      { "key":"cpu_freq",           "name":"CPU freq (MHz)"},
-      { "key":"gpu_freq",           "name":"GPU freq (MHz)"}
+      { "key":"gpgpu_name",         "name":"GPGPU name"}
     ],
 
     "selector":[
