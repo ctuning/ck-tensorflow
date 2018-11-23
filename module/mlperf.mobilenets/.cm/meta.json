@@ -82,6 +82,7 @@
       { "key":"convolution_method", "name":"Convolution method",      "view_key":"convolution_method"},
       { "key":"data_layout",        "name":"Data layout",             "view_key":"data_layout"},
       { "key":"kernel_tuner",       "name":"Kernel tuner",            "view_key":"kernel_tuner"},
+      { "key":"tunerXlayout",       "name":"Tuner X Layout",          "view_key":"tunerXlayout"},
       { "key":"methodXlayout",      "name":"Method X Layout",         "view_key":"methodXlayout"},
       { "key":"methodXtuner",       "name":"Method X Tuner",          "view_key":"methodXtuner"},
       { "key":"time_min_ms",        "name":"Image recognition time (minimum, ms)", "view_key":"time_min_ms",   "format":"%.3f"},
