@@ -21,6 +21,7 @@ import os
 import sys
 import json
 import re
+import traceback
 from collections import defaultdict
 
 import pandas as pd
@@ -167,6 +168,9 @@ def get_raw_data(i):
                 # Data layout.
                 data_layout = point_env.get('CK_DATA_LAYOUT','default')
 
+                # Kernel tuner.
+                kernel_tuner = point_env.get('CK_LWS_TUNER_TYPE','default')
+
                 # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
                     version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
@@ -216,6 +220,7 @@ def get_raw_data(i):
                         'batch_count': batch_count,
                         'convolution_method': convolution_method,
                         'data_layout': data_layout,
+                        'kernel_tuner': kernel_tuner,
                         'multiplier': multiplier,
                         'resolution': resolution,
                         'version': version,
@@ -247,9 +252,9 @@ def get_raw_data(i):
 
                 index = [
                     'platform', 'library',
-                    'model', 'version', 'multiplier', 'resolution', # model
-                    'batch_size',                                   # TODO: batch_count?
-                    'convolution_method', 'data_layout',            # ArmCL specific
+                    'model', 'version', 'multiplier', 'resolution',       # model
+                    'batch_size',                                         # TODO: batch_count?
+                    'convolution_method', 'data_layout', 'kernel_tuner',  # ArmCL specific
                     'repetition_id'
                 ]
 
@@ -272,6 +277,8 @@ def get_raw_data(i):
     # Return an accuracy DataFrame with additional performance metrics.
     def merge_performance_to_accuracy(df_performance, df_accuracy):
         df = df_accuracy
+        # Show variation appropriate for each execution time metric:
+        # mean-std..mean+std for time_avg_ms, min..max for time_min_ms.
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
         # Iterate over the indices of the accuracy DataFrame and
@@ -282,15 +289,23 @@ def get_raw_data(i):
                 # Chop off the last key (repetition_id).
                 row = df_performance.loc[index[:-1]]
             except:
-                ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
                 row = None
+                ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
+#                # Show trace.
+#                ck.out('-'*80)
+#                traceback.print_exc()
+#                ck.out('-'*80)
+#                # Show sample index structure for performance data.
+#                for index_perf, _ in df_performance.iterrows():
+#                    ck.out('- performance data index: %s' % str(index_perf))
+#                    break
 
             if row is not None:
                 time_avg = row['time_avg_ms']
-                time_avg_mean = time_avg.mean()
                 time_avg_mean_ms.append(time_avg.mean())
-                time_avg_min_ms.append(time_avg.mean() - time_avg.std())
-                time_avg_max_ms.append(time_avg.mean() + time_avg.std())
+                # NB: Setting ddof=0 avoids getting nan when there's only one repetition.
+                time_avg_min_ms.append(time_avg.mean() - time_avg.std(ddof=0))
+                time_avg_max_ms.append(time_avg.mean() + time_avg.std(ddof=0))
                 time_min_min_ms.append(time_avg.min())
                 time_min_max_ms.append(time_avg.max())
             else:
@@ -350,6 +365,7 @@ def get_raw_data(i):
             'batch_count',
             'convolution_method',
             'data_layout',
+            'kernel_tuner',
             'resolution',
             'multiplier',
             'version',
