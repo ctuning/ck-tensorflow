@@ -164,20 +164,23 @@ def get_raw_data(i):
                 convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',"-1"))
                 convolution_method = convolution_method_to_name[ str(convolution_method_from_env) ]
 
+                # Data layout.
                 data_layout = point_env.get('CK_DATA_LAYOUT','default')
+
                 # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
+                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
                     multiplier_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1)
                     resolution_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1)
-                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
                 else:
+                    version_from_env    = point_env.get('CK_ENV_MOBILENET_VERSION',1)
                     multiplier_from_env = point_env.get('CK_ENV_MOBILENET_MULTIPLIER', point_env.get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER', -1))
                     resolution_from_env = point_env.get('CK_ENV_MOBILENET_RESOLUTION',-1)
-                    version_from_env    = point_env.get('CK_ENV_MOBILENET_VERSION',1)
+                version = np.int64(version_from_env)
                 multiplier = np.float64(multiplier_from_env)
                 resolution = np.int64(resolution_from_env)
-                version = np.int64(version_from_env)
                 model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
+
                 # Dataset.
                 dataset_raw = point_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
@@ -187,6 +190,7 @@ def get_raw_data(i):
                     dataset = 'val-min'
                 elif 'val' in dataset_raw:
                     dataset = 'val'
+
                 # Target names for CPU and OS.
                 target_os_name = point_data_raw['features']['platform']['os']['name']
                 cpu_names = [ map_cpu_code_to_cpu_name(cpu_dict['ck_cpu_name']) for cpu_dict in point_data_raw['features']['platform']['cpu_misc'].values() ]
@@ -194,10 +198,12 @@ def get_raw_data(i):
                 for cpu_name in cpu_names:
                     cpu_count_by_type[cpu_name] += 1
                 target_cpu_name = ' + '.join( [ '{} MP{}'.format(k,v) for (k,v) in cpu_count_by_type.items() ] )
+
                 # Frequencies for CPU and GPU.
                 cpu_freq = point_data_raw['choices']['cpu_freq']
                 gpu_freq = point_data_raw['choices']['gpu_freq']
 
+                # Construct an individual DataFrame.
                 data = []
                 for repetition_id, characteristics in enumerate(characteristics_list):
                     datum = {
@@ -308,7 +314,7 @@ def get_raw_data(i):
 
     default_selected_repo = ''
     default_selected_repo = 'mlperf-mobilenets'
-    #default_selected_repo = 'mobilenet-v1-armcl-opencl-18.08-52ba29e9'
+    default_selected_repo = 'linaro-hikey960-18.08-52ba29e9-mobilenet-v1-0.25-128'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
