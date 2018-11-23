@@ -240,7 +240,11 @@ def get_raw_data(i):
                     data.append(datum)
 
                 index = [
-                    'platform', 'library', 'model', 'version', 'multiplier', 'resolution', 'batch_size', 'convolution_method', 'data_layout', 'repetition_id'
+                    'platform', 'library',
+                    'model', 'version', 'multiplier', 'resolution', # model
+                    'batch_size',                                   # TODO: batch_count?
+                    'convolution_method', 'data_layout',            # ArmCL specific
+                    'repetition_id'
                 ]
 
                 # Construct a DataFrame.
@@ -279,11 +283,13 @@ def get_raw_data(i):
         df = df_accuracy
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
-        for index, row in df.iterrows():
-            (platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout, repetition_id) = index
-            # Handle abnormal situation when no corresponding performance data is available.
+        # Iterate over the indices of the accuracy DataFrame and
+        # find corresponding rows in the performance DataFrame.
+        for index, _ in df.iterrows():
+            # Catch abnormal situation when no corresponding performance data is available.
             try:
-                row = df_performance.loc[(platform, library, model, version, multiplier, resolution, batch_size, convolution_method, data_layout)]
+                # Chop off the last key (repetition_id).
+                row = df_performance.loc[index[:-1]]
             except:
                 ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
                 row = None
