@@ -285,10 +285,18 @@ def get_raw_data(i):
         # mean-std..mean+std for time_avg_ms, min..max for time_min_ms.
         time_avg_min_ms, time_avg_max_ms, time_avg_mean_ms = [], [], []
         time_min_min_ms, time_min_max_ms = [], []
-        rate_max_s = []
+        # Show only peak values the throughput metrics (images per second
+        # and images per second per Watt).
+        rate_max_s, rate_max_s_w = [], []
         # Iterate over the indices of the accuracy DataFrame and
         # find corresponding rows in the performance DataFrame.
         for index, _ in df.iterrows():
+            # Obtain peak power from meta.
+            power_w = 1e+3
+            for platform in cfg['platform_config'].values():
+                if platform['name']==index[0]:
+                    power_w = platform['power_w']
+                    break
             # Catch abnormal situation when no corresponding performance data is available.
             try:
                 # Chop off the last key (repetition_id).
@@ -314,6 +322,7 @@ def get_raw_data(i):
                 time_min_min_ms.append(time_avg.min())
                 time_min_max_ms.append(time_avg.max())
                 rate_max_s.append(1e+3/time_avg.min())
+                rate_max_s_w.append(1e+3/time_avg.min()/power_w)
             else:
                 time_avg_mean_ms.append(0)
                 time_avg_min_ms.append(0)
@@ -321,6 +330,7 @@ def get_raw_data(i):
                 time_min_min_ms.append(0)
                 time_min_max_ms.append(0)
                 rate_max_s.append(0)
+                rate_max_s_w.append(0)
 
         df = df.assign(time_avg_min_ms=time_avg_min_ms)
         df = df.assign(time_avg_max_ms=time_avg_max_ms)
@@ -328,6 +338,7 @@ def get_raw_data(i):
         df = df.assign(time_min_min_ms=time_min_min_ms)
         df = df.assign(time_min_max_ms=time_min_max_ms)
         df = df.assign(rate_max_s=rate_max_s)
+        df = df.assign(rate_max_s_w=rate_max_s_w)
 
         return df
 
@@ -401,7 +412,8 @@ def get_raw_data(i):
         row['time_min_ms#min'] = to_value(record.get('time_min_min_ms', ''))
         row['time_min_ms#max'] = to_value(record.get('time_min_max_ms', ''))
 
-        row['rate_max_s'] = to_value(record.get('rate_max_s', ''))
+        row['rate_max_s']   = to_value(record.get('rate_max_s', ''))
+        row['rate_max_s_w'] = to_value(record.get('rate_max_s_w', ''))
 
         table.append(row)
         if debug_output:
