@@ -166,10 +166,10 @@ def get_raw_data(i):
                 convolution_method = convolution_method_to_name[ str(convolution_method_from_env) ]
 
                 # Data layout.
-                data_layout = point_env.get('CK_DATA_LAYOUT','default')
+                data_layout = point_env.get('CK_DATA_LAYOUT','-')
 
                 # Kernel tuner.
-                kernel_tuner = point_env.get('CK_LWS_TUNER_TYPE','default')
+                kernel_tuner = point_env.get('CK_LWS_TUNER_TYPE','-')
 
                 # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
@@ -349,7 +349,6 @@ def get_raw_data(i):
 
     default_selected_repo = ''
     default_selected_repo = 'mlperf-mobilenets'
-#    default_selected_repo = 'linaro-hikey960-18.08-52ba29e9-mobilenet-v1-0.25-128'
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
