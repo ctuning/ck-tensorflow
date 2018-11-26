@@ -11,14 +11,16 @@
   },
   "desc": "Raw data (JSON) access for MLPerf MobilNets visualization widget",
   "convolution_method_to_name": {
-        "-1":        "-",
-        "0":         "GEMM",
-        "1":         "DIRECT",
-        "2":         "WINOGRAD",
-        "DEFAULT":   "DEFAULT",
-        "GEMM":      "GEMM",
-        "DIRECT":    "DIRECT",
-        "WINOGRAD":  "WINOGRAD"
+    "-1":        "-",
+    "0":         "GEMM",
+    "1":         "DIRECT",
+    "2":         "WINOGRAD",
+    "DEFAULT":   "DEFAULT",
+    "GEMM":      "GEMM",
+    "DIRECT":    "DIRECT",
+    "WINOGRAD":  "WINOGRAD"
+  },
+  "prefilter_config": {
   },
   "platform_config": {
      "HiKey960\u0000": {

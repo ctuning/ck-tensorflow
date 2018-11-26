@@ -112,6 +112,7 @@ def get_raw_data(i):
             '18.05-0acd60ed-request':   'armcl-18.05+',
         }
         platform_config             = cfg['platform_config']
+        prefilter_config            = cfg['prefilter_config']
         convolution_method_to_name  = cfg['convolution_method_to_name']
 
         dfs = []
@@ -164,12 +165,18 @@ def get_raw_data(i):
                 # Convolution method.
                 convolution_method_from_env = point_env.get('CK_CONVOLUTION_METHOD', point_env.get('CK_CONVOLUTION_METHOD_HINT',"-1"))
                 convolution_method = convolution_method_to_name[ str(convolution_method_from_env) ]
+                convolution_method_deny = prefilter_config.get('convolution_method_deny')
+                if convolution_method_deny and convolution_method in convolution_method_deny: continue
 
                 # Data layout.
                 data_layout = point_env.get('CK_DATA_LAYOUT','-')
+                data_layout_deny = prefilter_config.get('data_layout_deny')
+                if data_layout_deny and data_layout in data_layout_deny: continue
 
                 # Kernel tuner.
                 kernel_tuner = point_env.get('CK_LWS_TUNER_TYPE','-')
+                kernel_tuner_deny = prefilter_config.get('kernel_tuner_deny')
+                if kernel_tuner_deny and kernel_tuner in kernel_tuner_deny: continue
 
                 # Model.
                 if library.startswith('tensorflow-') or library.startswith('tflite-'):
