@@ -65,6 +65,7 @@ def get_raw_data(i):
     """
 
     cpu_code_to_cpu_name_cache = {}
+    prefilter_mode  = i.get('prefilter_mode', 'all')
 
     def map_cpu_code_to_cpu_name( cpu_code ):
 
@@ -112,7 +113,7 @@ def get_raw_data(i):
             '18.05-0acd60ed-request':   'armcl-18.05+',
         }
         platform_config             = cfg['platform_config']
-        prefilter_config            = cfg['prefilter_config']
+        prefilter_config            = cfg['prefilter_config'][prefilter_mode]
         convolution_method_to_name  = cfg['convolution_method_to_name']
 
         dfs = []

@@ -21,9 +21,13 @@
     "WINOGRAD":  "WINOGRAD"
   },
   "prefilter_config": {
-    "convolution_method_deny": [ "GEMM", "DIRECT", "WINOGRAD" ],
-    "data_layout_deny":        [ "NCHW" ],
-    "kernel_tuner_deny":       [ "NONE" ]
+    "all": {
+    },
+    "highlights": {
+        "convolution_method_deny": [ "GEMM", "DIRECT", "WINOGRAD" ],
+        "data_layout_deny":        [ "NCHW" ],
+        "kernel_tuner_deny":       [ "NONE" ]
+    }
   },
   "platform_config": {
      "HiKey960\u0000": {
