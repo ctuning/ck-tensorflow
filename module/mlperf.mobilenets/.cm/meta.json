@@ -50,6 +50,13 @@
        "gpu":      "Mali-G72 MP12",
        "gpu_mhz":  767,
        "power_w":  7.93
+     },
+     "SM-G950U1": {
+       "name":     "Samsung Galaxy S8 US",
+       "id":       "samsung-galaxys8us",
+       "gpu":      "Adreno 540",
+       "gpu_mhz":  710,
+       "power_w":  3.45
      }
   },
   "data_config": {
