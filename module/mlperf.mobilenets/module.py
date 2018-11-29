@@ -358,6 +358,9 @@ def get_raw_data(i):
     default_selected_repo = ''
     default_selected_repo = 'mlperf-mobilenets'
 
+    # TODO: Deal with kernel_tuner='DEFAULT' not being contained in the accuracy data.
+    #default_selected_repo = 'linaro-hikey960-18.11-b9abeae08-mobilenet-v1-1.00-224'
+
     selected_repo = i.get('selected_repo', default_selected_repo)
 
     df_acc = get_experimental_results(repo_uoa=selected_repo,
