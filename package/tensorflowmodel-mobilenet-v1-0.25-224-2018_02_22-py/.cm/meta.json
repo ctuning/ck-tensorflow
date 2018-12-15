@@ -11,7 +11,7 @@
       "MODEL_WEIGHTS_ARE_CHECKPOINTS": "YES",
       "MODULE_FILE": "mobilenet-model.py",
       "PACKAGE_NAME": "mobilenet_v1_0.25_224.tgz",
-      "PACKAGE_URL": "http://download.tensorflow.org/models/mobilenet_v1_2018_02_22",
+      "PACKAGE_URL": "https://zenodo.org/record/2271498/files",
       "WEIGHTS_FILE": "mobilenet_v1_0.25_224.ckpt"
     },
     "no_os_in_suggested_path": "yes",
