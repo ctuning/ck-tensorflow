@@ -15,7 +15,7 @@
     "model_id": "mobilenet_v1",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
-    "version": "20170714"
+    "version": "20180128"
   },
   "deps": {
     "tensorflow-model-api": {
