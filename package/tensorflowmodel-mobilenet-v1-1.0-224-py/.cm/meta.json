@@ -1,6 +1,6 @@
 {
   "check_exit_status": "yes",
-  "comment": "OUTDATED - 20170614",
+  "comment": "DEPRECATED",
   "customize": {
     "install_env": {
       "MODEL_IMAGE_HEIGHT": "224",
@@ -18,7 +18,7 @@
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "skip_file_check": "yes",
-    "version": "1_1.0_224"
+    "version": "1_1.0_224_2017_06_14"
   },
   "end_full_path_universal": "mobilenet-model.py",
   "only_for_host_os_tags": [
