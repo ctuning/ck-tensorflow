@@ -129,7 +129,7 @@ def get_raw_data(i):
                 if tag in tag_to_library_exception:
                     library = tag_to_library_exception[tag]
                     break
-                elif tag.startswith('tf-') or tag.startswith('tflite-') or tag.startswith('tensorflow-'):
+                elif tag.startswith('tf') or tag.startswith('tflite') or tag.startswith('tensorflow'):
                     library = tag
                     break
                 else:
@@ -143,6 +143,14 @@ def get_raw_data(i):
                 continue
 
             meta = r['dict']['meta']
+
+            # Access from the pipeline some info that is only available in
+            # experimental points when running via exploration scripts.
+            pipeline_file_path = os.path.join(r['path'], 'pipeline.json')
+            with open(pipeline_file_path) as pipeline_file:
+                pipeline_data_raw = json.load(pipeline_file)
+            weights_env = pipeline_data_raw['dependencies']['weights']['dict']['env']
+            dataset_env = pipeline_data_raw['dependencies']['imagenet-val']['dict']['env']
 
             # For each point.
             for point in r['points']:
@@ -180,10 +188,10 @@ def get_raw_data(i):
                 if kernel_tuner_deny and kernel_tuner in kernel_tuner_deny: continue
 
                 # Model.
-                if library.startswith('tensorflow-') or library.startswith('tflite-'):
-                    version_from_env    = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
-                    multiplier_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1)
-                    resolution_from_env = point_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1)
+                if library.startswith('tensorflow') or library.startswith('tflite'):
+                    version_from_env    = weights_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_VERSION',1)
+                    multiplier_from_env = weights_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_MULTIPLIER',-1)
+                    resolution_from_env = weights_env.get('CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION',-1)
                 else:
                     version_from_env    = point_env.get('CK_ENV_MOBILENET_VERSION',1)
                     multiplier_from_env = point_env.get('CK_ENV_MOBILENET_MULTIPLIER', point_env.get('CK_ENV_MOBILENET_WIDTH_MULTIPLIER', -1))
@@ -194,7 +202,7 @@ def get_raw_data(i):
                 model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
 
                 # Dataset.
-                dataset_raw = point_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
+                dataset_raw = dataset_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
                 if 'val-min-resized' in dataset_raw:
                     dataset = 'val-min-resized'
@@ -244,7 +252,7 @@ def get_raw_data(i):
                         # meta
                         'os_name': target_os_name,
                         'cpu_name': target_cpu_name,
-                        'gpgpu_name': meta['gpgpu_name'],
+                        'gpgpu_name': meta.get('gpgpu_name',''),
                     }
                     if accuracy:
                         datum.update({
@@ -264,9 +272,9 @@ def get_raw_data(i):
                 index = [
                     'platform', 'library',
                     'model', 'version', 'multiplier', 'resolution',       # model
-                    'batch_size',                                         # TODO: batch_count?
-                    'convolution_method', 'data_layout', 'kernel_tuner',  # ArmCL specific
-                    'tunerXlayout', 'methodXlayout', 'methodXtuner',      # combined keys
+                    'batch_size', # 'batch_count', # if introduce batch_count, uncomment exception handling below
+                    'convolution_method', 'data_layout', 'kernel_tuner',  # ArmCL specific: extra keys
+                    'tunerXlayout', 'methodXlayout', 'methodXtuner',      # ArmCL specific: combined keys
                     'repetition_id'
                 ]
 
@@ -311,15 +319,37 @@ def get_raw_data(i):
                 row = df_performance.loc[index[:-1]]
             except:
                 row = None
-                ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
-#                # Show trace.
-#                ck.out('-'*80)
-#                traceback.print_exc()
-#                ck.out('-'*80)
-#                # Show sample index structure for performance data.
-#                for index_perf, _ in df_performance.iterrows():
-#                    ck.out('- performance data index: %s' % str(index_perf))
-#                    break
+                 # NB: Code below is only needed if batch_count becomes part of index.
+#                # One common problem is that accuracy data is typically obtained over a large
+#                # set of images (e.g. batch_count=50000), while performance data may be obtained
+#                # over a minimal one (e.g. batch_count=2 for TFLite), so we should try for
+#                # all batch counts in the performance data. Care must be taken not to include
+#                # batch counts only available for other platforms, libraries, models, etc.
+#                batch_count_position = 7 # TODO: obtain position from df.index.names
+#                df_performance_to_batch_count = df_performance.loc[index[:batch_count_position]]
+#                batch_counts = set(df_performance_to_batch_count.index.get_level_values(level='batch_count'))
+#                for batch_count in batch_counts:
+#                    # Insert a new batch_count into the index.
+#                    index_ = list(index)
+#                    index_[batch_count_position] = batch_count
+#                    index__ = tuple(index_)
+#                    try:
+#                        # Chop off the last key (repetition_id).
+#                        row = df_performance.loc[index__[:-1]]
+#                        break
+#                    except:
+#                        ck.out('[Warning] Trying performance data with index: "%s"... Failure!' % str(index__))
+#                        # Try another batch_count if available.
+#                        continue
+                # Show exception trace.
+                ck.out('-'*80)
+                traceback.print_exc()
+                ck.out('-'*80)
+                # Show sample index structure for performance data.
+                for index_perf, _ in df_performance.iterrows():
+                    ck.out('- performance data index: %s' % str(index_perf))
+                    break
+                ck.out('')
 
             if row is not None:
                 time_avg = row['time_avg_ms']
@@ -332,6 +362,7 @@ def get_raw_data(i):
                 rate_max_s.append(1e+3/time_avg.min())
                 rate_max_s_w.append(1e+3/time_avg.min()/power_w)
             else:
+                ck.out('[Warning] Found no performance data corresponding to accuracy data with index: "%s". Plotting at zero time...' % str(index))
                 time_avg_mean_ms.append(0)
                 time_avg_min_ms.append(0)
                 time_avg_max_ms.append(0)
@@ -363,11 +394,8 @@ def get_raw_data(i):
 
     selected_repo = i.get('selected_repo', default_selected_repo)
 
-    df_acc = get_experimental_results(repo_uoa=selected_repo,
-        tags='explore-mobilenets-accuracy', accuracy=True)
-    df_perf = get_experimental_results(repo_uoa=selected_repo,
-        tags='explore-mobilenets-performance', accuracy=False)
-
+    df_acc  = get_experimental_results(repo_uoa=selected_repo, tags='accuracy',    accuracy=True)
+    df_perf = get_experimental_results(repo_uoa=selected_repo, tags='performance', accuracy=False)
 
     def to_value(i):
         if type(i) is np.ndarray:
