@@ -1,21 +1,21 @@
 {
-  "backup_data_uid": "eb8d19e9f25a3e16", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "eb8d19e9f25a3e16",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "author": "Grigori Fursin", 
-    "author_email": "Grigori.Fursin@cTuning.org", 
-    "author_webpage": "http://fursin.net", 
-    "copyright": "See CK COPYRIGHT.txt for copyright details", 
-    "engine": "CK", 
-    "iso_datetime": "2018-02-26T12:43:09.956785", 
-    "license": "See CK LICENSE.txt for licensing details", 
+    "author": "Grigori Fursin",
+    "author_email": "Grigori.Fursin@cTuning.org",
+    "author_webpage": "http://fursin.net",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2018-02-26T12:43:09.956785",
+    "license": "See CK LICENSE.txt for licensing details",
     "version": [
-      "1", 
-      "9", 
-      "4", 
+      "1",
+      "9",
+      "4",
       "1"
     ]
-  }, 
+  },
   "data_name": "lib-tensorflow-1.6.0-src-cpu"
 }

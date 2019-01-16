@@ -5,10 +5,10 @@
     "force_ask_path": "yes",
     "install_env": {
       "PACKAGE_NAME": "SqueezeDetPlus.zip",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/t8gvsyou0hbfnqk",
       "PACKAGE_WGET": "YES",
-      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET_EXTRA": "-O SqueezeDetPlus.zip"
     },
     "meta_file": "model.ckpt-95000.meta",
@@ -22,7 +22,7 @@
     "linux": "model.ckpt-95000",
     "win": "model.ckpt-95000"
   },
-  "package_extra_name":" (SqueezeDetPlus)",
+  "package_extra_name": " (SqueezeDetPlus)",
   "process_script": "install",
   "soft_uoa": "00ea54addb99aab8",
   "suggested_path": "squeezedetmodel-squeezedet-plus",

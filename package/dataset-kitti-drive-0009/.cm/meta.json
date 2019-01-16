@@ -1,31 +1,31 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "extra_dir": "", 
-    "force_ask_path": "yes", 
+    "extra_dir": "",
+    "force_ask_path": "yes",
     "install_env": {
-      "PACKAGE_WGET": "YES", 
-      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
-      "PACKAGE_URL": "http://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0009",
-      "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
-      "PACKAGE_UNZIP": "YES",
       "IMAGE_DIR": "image_02/data",
-      "LABELS_DIR": ""
-    }, 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "no", 
+      "LABELS_DIR": "",
+      "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
+      "PACKAGE_SKIP_CLEAN_OBJ": "YES",
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNZIP": "YES",
+      "PACKAGE_URL": "http://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0009",
+      "PACKAGE_WGET": "YES"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "no",
     "version": "drive-0009"
-  }, 
-  "deps": {}, 
+  },
+  "deps": {},
   "end_full_path": {
-    "linux": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png", 
+    "linux": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png",
     "win": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png"
-  }, 
-  "need_cpu_info": "no", 
-  "process_script": "install", 
-  "soft_uoa": "dd47415baf24025e", 
+  },
+  "need_cpu_info": "no",
+  "process_script": "install",
+  "soft_uoa": "dd47415baf24025e",
   "suggested_path": "dataset-kitti",
   "tags": [
     "dataset",
@@ -44,7 +44,7 @@
     "channel-stable"
   ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

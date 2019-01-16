@@ -3,26 +3,26 @@
   "customize": {
     "extra_dir": "",
     "force_ask_path": "yes",
-    "no_os_in_suggested_path": "yes",
-    "no_ver_in_suggested_path": "no",
     "install_env": {
       "IMAGE_DIR": "image-min",
-      "LABELS_DIR": "label-min",
-      "KITTI_MD5": "5ce0da610dbc0588892094d11c769287",
       "KITTI_ARCHIVE": "kitti-min.tar",
-      "KITTI_URL": "https://www.dropbox.com/s/uvl210b3f71zono/kitti-min.tar?dl=0"
+      "KITTI_MD5": "5ce0da610dbc0588892094d11c769287",
+      "KITTI_URL": "https://www.dropbox.com/s/uvl210b3f71zono/kitti-min.tar?dl=0",
+      "LABELS_DIR": "label-min"
     },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "no",
     "params": {
-      "min":"yes"
+      "min": "yes"
     },
     "version": "min"
   },
   "deps": {},
-  "need_cpu_info": "no",
   "end_full_path": {
     "linux": "image-min/000000.png",
     "win": "image-min/000000.png"
   },
+  "need_cpu_info": "no",
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
   "suggested_path": "dataset-kitti",
@@ -41,5 +41,6 @@
     "object-detection",
     "channel-stable"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "Kitti dataset"
 }

@@ -1,64 +1,19 @@
 {
-  "run_deps": {
-    "python": {
-      "local": "yes",
-      "name": "Python interpreter",
-      "sort": 5,
-      "tags": "compiler,python"
-    },
-    "dataset": {
-      "local": "yes",
-      "sort": 20,
-      "name": "Object detection dataset", 
-      "tags": "dataset,object-detection"
-    },
-    "model":{
-      "local": "yes",
-      "name": "TensorFlow object detection model",
-      "sort": 30,
-      "tags": "tensorflowmodel,object-detection"
-    },
-    "tool-coco":{
-      "local": "yes",
-      "name": "Python API for COCO",
-      "sort": 40,
-      "tags": "tool,coco"
-    },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Pillow python library",
-      "sort": 50,
-      "tags": "lib,python-package,pillow"
-    },
-    "lib-python-numpy": {
-      "local": "yes",
-      "name": "NumPy python library",
-      "sort": 60,
-      "tags": "lib,python-package,numpy"
-    },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "Tensorflow library",
-      "sort": 70,
-      "tags": "lib,tensorflow",
-      "no_tags": "tensorflow_cc,vstatic"
-    }
-  },
   "backup_data_uid": "e604d4895f811451",
   "data_name": "object-detection-tf-py",
-  "program": "yes",
-  "process_in_tmp": "yes",
   "no_compile": "yes",
   "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python ../postprocess.py"
         ],
+        "post_process_via_ck": "yes",
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py",
         "run_output_files": [
           "tmp-ck-timer.json"
@@ -66,16 +21,63 @@
       }
     }
   },
+  "run_deps": {
+    "dataset": {
+      "local": "yes",
+      "name": "Object detection dataset",
+      "sort": 20,
+      "tags": "dataset,object-detection"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 60,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "Tensorflow library",
+      "no_tags": "tensorflow_cc,vstatic",
+      "sort": 70,
+      "tags": "lib,tensorflow"
+    },
+    "model": {
+      "local": "yes",
+      "name": "TensorFlow object detection model",
+      "sort": 30,
+      "tags": "tensorflowmodel,object-detection"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "compiler,python"
+    },
+    "tool-coco": {
+      "local": "yes",
+      "name": "Python API for COCO",
+      "sort": 40,
+      "tags": "tool,coco"
+    }
+  },
   "run_vars": {
     "CK_BATCH_COUNT": 1,
-    "CK_SKIP_IMAGES": 0,
-    "CK_SAVE_IMAGES": "NO",
     "CK_METRIC_TYPE": "",
-    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "CK_SAVE_IMAGES": "NO",
+    "CK_SILENT_MODE": "NO",
+    "CK_SKIP_IMAGES": 0,
     "CK_TF_CPU_NUM_OF_PROCESSORS": 0,
-    "CK_SILENT_MODE": "NO"
+    "CK_TF_GPU_MEMORY_PERCENT": 33
   },
   "tags": [
     "tensorflow-object-detection"
-  ]
+  ],
+  "template": "yes",
+  "template_type": "object detection via TensorFlow (Python)"
 }

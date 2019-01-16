@@ -79,6 +79,7 @@
     "channel-stable"
   ],
   "template": "yes",
+  "template_type": "TensorFlow AI framework (for CUDA)",
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "lib-tensorflow-1.1.0-cpu",
     "module_uoa": "package"

@@ -1,20 +1,20 @@
 {
-  "backup_data_uid": "3bf4d1e95d5aa501", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "3bf4d1e95d5aa501",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "author": "cTuning foundation", 
-    "author_email": "admin@cTuning.org", 
-    "author_webpage": "http://cTuning.org", 
-    "copyright": "See CK COPYRIGHT.txt for copyright details", 
-    "engine": "CK", 
-    "iso_datetime": "2018-09-07T12:17:33.177608", 
-    "license": "See CK LICENSE.txt for licensing details", 
+    "author": "cTuning foundation",
+    "author_email": "admin@cTuning.org",
+    "author_webpage": "http://cTuning.org",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2018-09-07T12:17:33.177608",
+    "license": "See CK LICENSE.txt for licensing details",
     "version": [
-      "1", 
-      "9", 
+      "1",
+      "9",
       "5"
     ]
-  }, 
+  },
   "data_name": "lib-tensorflow-1.10.1-cpu"
 }

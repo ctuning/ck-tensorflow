@@ -1,41 +1,41 @@
 {
   "compile_deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "C++ compiler", 
-      "sort": 0, 
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
       "tags": "compiler,lang-cpp"
     }
-  }, 
+  },
   "compiler_add_include_as_env_from_deps": [
-    "CK_ENV_LIB_STDCPP_INCLUDE", 
+    "CK_ENV_LIB_STDCPP_INCLUDE",
     "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA"
-  ], 
-  "compiler_env": "CK_CXX", 
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
   "linker_add_lib_as_env": [
-    "CK_CXX_EXTRA", 
+    "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
-  ], 
-  "main_language": "cpp", 
+  ],
+  "main_language": "cpp",
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  ],
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
       "run_time": {
         "run_cmd_main": "$#BIN_FILE#$"
       }
     }
-  }, 
-  "skip_bin_ext": "yes", 
+  },
+  "skip_bin_ext": "yes",
   "source_files": [
     "evaluate_object.cpp"
-  ], 
+  ],
   "tags": [
     "kitti-eval-tool"
-  ], 
+  ],
   "target_file": "eval_detection"
 }

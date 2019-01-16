@@ -79,7 +79,6 @@
     "vcuda",
     "channel-stable"
   ],
-  "template": "yes",
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "lib-tensorflow-1.1.0-cpu",
     "module_uoa": "package"

@@ -5,8 +5,8 @@
     "force_ask_path": "yes",
     "install_env": {
       "PACKAGE_NAME": "ResNet50.zip",
-      "PACKAGE_UNZIP": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/aesfxr1mxdrc7zl",
       "PACKAGE_WGET": "YES",
       "PACKAGE_WGET_EXTRA": "-O ResNet50.zip"

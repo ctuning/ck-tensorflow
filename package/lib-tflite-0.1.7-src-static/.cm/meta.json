@@ -5,8 +5,8 @@
     "install_env": {
       "PACKAGE_GIT": "YES",
       "PACKAGE_GIT_CHECKOUT": "tflite-v0.1.7",
-      "PACKAGE_SUB_DIR": "src",
       "PACKAGE_PATCH": "YES",
+      "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
     "version": "0.1.7"
@@ -20,8 +20,8 @@
     }
   },
   "end_full_path": {
-    "linux": "lib/libtensorflow-lite.a",
-    "android": "lib/libtensorflow-lite.a"
+    "android": "lib/libtensorflow-lite.a",
+    "linux": "lib/libtensorflow-lite.a"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [
@@ -48,9 +48,10 @@
     "v0",
     "channel-stable"
   ],
+  "template": "yes",
+  "template_type": "TFLite AI framework (static)",
   "use_scripts_from_another_entry": {
     "data_uoa": "0eb9f24b67b17d68",
     "module_uoa": "script"
-  },
-  "template":"yes"
+  }
 }

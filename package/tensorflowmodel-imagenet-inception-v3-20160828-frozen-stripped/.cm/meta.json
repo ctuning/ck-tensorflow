@@ -1,45 +1,44 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "extra_dir": "", 
-    "file_model":"inception_v3_2016_08_28_frozen.pb",
-    "file_labels":"imagenet_slim_labels.txt",
     "add_to_env": {
-      "_INPUT_LAYER":"input",
-      "_OUTPUT_LAYER":"InceptionV3/Predictions/Softmax"
+      "_INPUT_LAYER": "input",
+      "_OUTPUT_LAYER": "InceptionV3/Predictions/Softmax"
     },
+    "extra_dir": "",
+    "file_labels": "imagenet_slim_labels.txt",
+    "file_model": "inception_v3_2016_08_28_frozen.pb",
     "install_env": {
-      "PACKAGE_NAME": "inception_v3_2016_08_28_frozen.pb.tar.gz", 
+      "PACKAGE_NAME": "inception_v3_2016_08_28_frozen.pb.tar.gz",
       "PACKAGE_NAME1": "inception_v3_2016_08_28_frozen.pb.tar",
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_UNGZIP": "YES", 
-      "PACKAGE_UNTAR": "YES", 
-      "PACKAGE_URL": "https://storage.googleapis.com/download.tensorflow.org/models", 
-
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNGZIP": "YES",
+      "PACKAGE_UNTAR": "YES",
+      "PACKAGE_URL": "https://storage.googleapis.com/download.tensorflow.org/models",
       "PACKAGE_WGET": "YES"
-    }, 
-    "no_os_in_suggested_path": "yes", 
+    },
+    "no_os_in_suggested_path": "yes",
     "version": "v3-20160828-frozen"
-  }, 
+  },
   "end_full_path_universal": "inception_v3_2016_08_28_frozen.pb",
-  "package_extra_name": " (imagenet, inception v3, 20160828)", 
-  "process_script": "install", 
-  "soft_uoa": "13a3e54526868246", 
-  "suggested_path": "tensorflow-model-imagenet-inception", 
+  "package_extra_name": " (imagenet, inception v3, 20160828)",
+  "process_script": "install",
+  "soft_uoa": "13a3e54526868246",
+  "suggested_path": "tensorflow-model-imagenet-inception",
   "tags": [
-    "tensorflow", 
-    "weights", 
-    "tensorflowmodel", 
-    "google", 
-    "imagenet", 
-    "inception", 
+    "tensorflow",
+    "weights",
+    "tensorflowmodel",
+    "google",
+    "imagenet",
+    "inception",
     "inception-v3",
-    "v20160828-frozen", 
+    "v20160828-frozen",
     "stripped",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

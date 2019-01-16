@@ -1,9 +1,9 @@
 {
-"auto_detect": "yes",
+  "auto_detect": "yes",
   "customize": {
-    "env_prefix": "CK_ENV_MODEL_SQUEEZEDET",
     "check_that_exists": "yes",
     "ck_version": 10,
+    "env_prefix": "CK_ENV_MODEL_SQUEEZEDET",
     "limit_recursion_dir_search": {
       "linux": 5,
       "win": 5
@@ -20,4 +20,3 @@
     "squeezedetmodel"
   ]
 }
-

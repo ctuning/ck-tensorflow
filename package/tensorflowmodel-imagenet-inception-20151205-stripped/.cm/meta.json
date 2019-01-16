@@ -1,41 +1,41 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "extra_dir": "", 
-    "file_model":"tensorflow_inception_stripped.pb",
-    "file_labels":"imagenet_comp_graph_label_strings.txt",
     "add_to_env": {
-      "_INPUT_LAYER":"Mul",
-      "_OUTPUT_LAYER":"softmax"
+      "_INPUT_LAYER": "Mul",
+      "_OUTPUT_LAYER": "softmax"
     },
+    "extra_dir": "",
+    "file_labels": "imagenet_comp_graph_label_strings.txt",
+    "file_model": "tensorflow_inception_stripped.pb",
     "install_env": {
-      "PACKAGE_NAME": "inception_dec_2015_stripped.zip", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_UNZIP": "YES", 
-      "PACKAGE_URL": "https://storage.googleapis.com/download.tensorflow.org/models", 
+      "PACKAGE_NAME": "inception_dec_2015_stripped.zip",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_UNZIP": "YES",
+      "PACKAGE_URL": "https://storage.googleapis.com/download.tensorflow.org/models",
       "PACKAGE_WGET": "YES"
-    }, 
-    "no_os_in_suggested_path": "yes", 
+    },
+    "no_os_in_suggested_path": "yes",
     "version": "201512"
-  }, 
+  },
   "end_full_path_universal": "tensorflow_inception_stripped.pb",
-  "package_extra_name": " (imagenet, inception, 20151205, stripped)", 
-  "process_script": "install", 
-  "soft_uoa": "13a3e54526868246", 
-  "suggested_path": "tensorflow-model-imagenet-inception-20151205-stripped", 
+  "package_extra_name": " (imagenet, inception, 20151205, stripped)",
+  "process_script": "install",
+  "soft_uoa": "13a3e54526868246",
+  "suggested_path": "tensorflow-model-imagenet-inception-20151205-stripped",
   "tags": [
-    "tensorflow", 
-    "model", 
-    "tensorflowmodel", 
-    "google", 
-    "imagenet", 
-    "stripped", 
-    "inception", 
+    "tensorflow",
+    "model",
+    "tensorflowmodel",
+    "google",
+    "imagenet",
+    "stripped",
+    "inception",
     "v201512",
     "channel-stable"
   ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

@@ -1,45 +1,45 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "force_ask_path": "yes", 
+    "force_ask_path": "yes",
     "install_env": {
-      "MODULE_FILE": "alexnet-model.py",
-      "PACKAGE_NAME": "bvlc_alexnet.npy", 
-      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_URL": "https://www.cs.toronto.edu/~guerzhoy/tf_alexnet", 
-      "PACKAGE_WGET": "YES", 
-      "WEIGHTS_FILE": "bvlc_alexnet.npy",
+      "MODEL_CONVERT_TO_BGR": "YES",
       "MODEL_IMAGE_HEIGHT": 227,
       "MODEL_IMAGE_WIDTH": 227,
-      "MODEL_CONVERT_TO_BGR": "YES"
-    }, 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
-    "skip_file_check": "yes", 
+      "MODULE_FILE": "alexnet-model.py",
+      "PACKAGE_NAME": "bvlc_alexnet.npy",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_URL": "https://www.cs.toronto.edu/~guerzhoy/tf_alexnet",
+      "PACKAGE_WGET": "YES",
+      "WEIGHTS_FILE": "bvlc_alexnet.npy"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes",
     "version": "ImageNet"
-  }, 
+  },
   "end_full_path": {
     "linux": "alexnet-model.py"
-  }, 
+  },
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (alexnet)", 
-  "process_script": "install", 
-  "soft_uoa": "439b9f1757f27091", 
+  ],
+  "package_extra_name": " (alexnet)",
+  "process_script": "install",
+  "soft_uoa": "439b9f1757f27091",
   "suggested_path": "tensorflowmodel-alexnet-py",
   "tags": [
     "tensorflowmodel",
-    "weights", 
-    "python", 
+    "weights",
+    "python",
     "alexnet"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

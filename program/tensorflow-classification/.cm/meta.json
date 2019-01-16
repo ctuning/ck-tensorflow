@@ -1,43 +1,43 @@
 {
-  "backup_data_uid": "1b749fbac94afc81", 
+  "backup_data_uid": "1b749fbac94afc81",
   "compile_deps": {
     "lib-tensorflow": {
-      "local": "yes", 
-      "name": "TensorFlow library", 
-      "skip_default": "yes", 
-      "skip_pruning_by_other_deps": "yes", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "TensorFlow library",
+      "skip_default": "yes",
+      "skip_pruning_by_other_deps": "yes",
+      "sort": 10,
       "tags": "lib,tensorflow"
-    }, 
+    },
     "tensorflow-model": {
-      "local": "yes", 
-      "name": "TensorFlow model (net and weights)", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "TensorFlow model (net and weights)",
+      "sort": 20,
       "tags": "tensorflowmodel,native"
     }
-  }, 
-  "data_name": "tensorflow-classification", 
-  "no_compile": "yes", 
-  "no_target_file": "yes", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  },
+  "data_name": "tensorflow-classification",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
       "dataset_tags": [
-        "image", 
-        "jpeg", 
+        "image",
+        "jpeg",
         "dataset"
-      ], 
-      "ignore_return_code": "no", 
+      ],
+      "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify_image.py --model_dir=$<<CK_ENV_MODEL_TENSORFLOW>>$ --image_file=$#dataset_path#$$#dataset_filename#$"
       }
     }
-  }, 
-  "run_vars": {}, 
+  },
+  "run_vars": {},
   "tags": [
-    "tensorflow-classification", 
-    "ck-ai-image-classification", 
+    "tensorflow-classification",
+    "ck-ai-image-classification",
     "demo"
   ]
 }

@@ -1,5 +1,46 @@
 {
+  "data_name": "YAD2K",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "run_cmds": {
+    "convert": {
+      "ignore_return_code": "no",
+      "name": "Convert demo model",
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/yad2k.py $<<CK_ENV_YAD2K>>$/yolo.cfg $<<CK_ENV_YAD2K>>$/yolo.weights $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
+      },
+      "sort": 5
+    },
+    "test": {
+      "ignore_return_code": "no",
+      "name": "Test demo model",
+      "run_time": {
+        "run_cmd_main": "cd $<<CK_ENV_YAD2K>>$; $<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/test_yolo.py $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
+      },
+      "sort": 10
+    }
+  },
   "run_deps": {
+    "lib-cudart": {
+      "local": "yes",
+      "name": "CUDA runtime",
+      "sort": 25,
+      "tags": "compiler,cuda,lang-c-cuda"
+    },
+    "lib-keras": {
+      "local": "yes",
+      "name": "Keras library",
+      "sort": 40,
+      "tags": "lib,keras"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 20,
+      "tags": "lib,tensorflow"
+    },
     "python": {
       "local": "yes",
       "name": "Python interpreter",
@@ -11,47 +52,6 @@
       "name": "YAD2K",
       "sort": 50,
       "tags": "yad2k-src"
-    },
-    "lib-cudart": {
-      "local": "yes",
-      "name": "CUDA runtime",
-      "sort": 25,
-      "tags": "compiler,cuda,lang-c-cuda"
-    },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "sort": 20,
-      "tags": "lib,tensorflow"
-    },
-    "lib-keras": {
-      "local": "yes",
-      "name": "Keras library",
-      "sort": 40,
-      "tags": "lib,keras"
-    }
-  },
-  "data_name": "YAD2K",
-  "program": "yes",
-  "process_in_tmp": "yes",
-  "no_compile": "yes",
-  "no_target_file": "yes",
-  "run_cmds": {
-    "convert":{
-      "ignore_return_code": "no",
-      "name":"Convert demo model",
-      "sort":5,
-      "run_time":{
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/yad2k.py $<<CK_ENV_YAD2K>>$/yolo.cfg $<<CK_ENV_YAD2K>>$/yolo.weights $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
-      }
-    },
-    "test":{
-      "ignore_return_code": "no",
-      "name":"Test demo model",
-      "sort":10,
-      "run_time":{
-        "run_cmd_main": "cd $<<CK_ENV_YAD2K>>$; $<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_YAD2K>>$/test_yolo.py $<<CK_ENV_YAD2K>>$/model_data/yolo.h5"
-      }
     }
   },
   "tags": [

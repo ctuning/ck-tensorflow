@@ -1,42 +1,42 @@
 {
-  "backup_data_uid": "246b4593aa8b2a72", 
+  "backup_data_uid": "246b4593aa8b2a72",
   "data_name": "tensorflow-freeze",
-  "no_compile": "yes", 
-  "no_target_file": "yes", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
-      "ignore_return_code": "no", 
+      "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../freeze.py"
       }
     }
-  }, 
+  },
   "run_deps": {
-    "python": {
-      "local": "yes",
-      "name": "Python",
-      "sort": 10,
-      "tags": "compiler,python"
-    },
-    "model-and-weights": {
-      "local": "yes", 
-      "name": "TensorFlow-Python model and weights", 
-      "sort": 20,
-      "tags": "tensorflow-model,weights,python"
-    }, 
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
       "sort": 30,
       "tags": "lib,tensorflow"
+    },
+    "model-and-weights": {
+      "local": "yes",
+      "name": "TensorFlow-Python model and weights",
+      "sort": 20,
+      "tags": "tensorflow-model,weights,python"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 10,
+      "tags": "compiler,python"
     }
   },
   "run_vars": {
-    "CK_FREEZE_AS_TEXT": "NO", 
+    "CK_FREEZE_AS_TEXT": "NO",
     "CK_TARGET_PB_FILE": ""
-  }, 
+  },
   "tags": [
     "tensorflow-freeze"
   ]

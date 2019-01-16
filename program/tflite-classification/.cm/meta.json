@@ -1,101 +1,101 @@
 {
-  "backup_data_uid": "1a1ae632cabc15f4", 
+  "backup_data_uid": "1a1ae632cabc15f4",
   "build_compiler_vars": {
     "XOPENME": ""
-  }, 
+  },
   "compile_deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "C++ compiler", 
-      "sort": 0, 
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
       "tags": "compiler,lang-cpp"
-    }, 
+    },
     "libjpeg": {
-      "local": "yes", 
-      "name": "Jpeg library", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "Jpeg library",
+      "sort": 20,
       "tags": "lib,libjpeg"
-    }, 
+    },
     "library": {
-      "local": "yes", 
-      "name": "TensorFlow Lite C++ API", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "TensorFlow Lite C++ API",
+      "sort": 10,
       "tags": "lib,tensorflow-lite,vstatic"
-    }, 
+    },
     "xopenme": {
-      "local": "yes", 
-      "name": "xOpenME library", 
-      "sort": 30, 
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 30,
       "tags": "lib,xopenme"
     }
-  }, 
+  },
   "compiler_add_include_as_env_from_deps": [
-    "CK_ENV_LIB_STDCPP_INCLUDE", 
-    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA", 
-    "CK_ENV_LIB_TF_INCLUDE0", 
+    "CK_ENV_LIB_STDCPP_INCLUDE",
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA",
+    "CK_ENV_LIB_TF_INCLUDE0",
     "CK_ENV_LIB_TF_INCLUDE1"
-  ], 
-  "compiler_env": "CK_CXX", 
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
-  "data_name": "tensorflow-lite-classification", 
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$", 
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
+  "data_name": "tensorflow-lite-classification",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
   "linker_add_lib_as_env": [
-    "CK_CXX_EXTRA", 
+    "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
-  ], 
-  "main_language": "cpp", 
+  ],
+  "main_language": "cpp",
   "only_for_target_os_tags": [
-    "linux", 
+    "linux",
     "android"
-  ], 
+  ],
   "print_files_after_run": [
-    "tmp-output1.tmp", 
+    "tmp-output1.tmp",
     "tmp-output2.tmp"
-  ], 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  ],
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
       "dataset_tags": [
-        "image", 
-        "jpeg", 
+        "image",
+        "jpeg",
         "dataset"
-      ], 
+      ],
       "run_time": {
-        "fine_grain_timer_file": "tmp-ck-timer.json", 
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "script_name": "preprocess"
-        }, 
-        "run_cmd_main": "$#BIN_FILE#$ --graph=$<<CK_ENV_TENSORFLOW_MODEL_TFLITE>>$ --image=$#dataset_path#$$#dataset_filename#$ --labels=$<<CK_ENV_LABELS_FILE>>$", 
-        "run_cmd_out1": "tmp-output1.tmp", 
-        "run_cmd_out2": "tmp-output2.tmp", 
-        "run_correctness_output_files": [], 
+        },
+        "run_cmd_main": "$#BIN_FILE#$ --graph=$<<CK_ENV_TENSORFLOW_MODEL_TFLITE>>$ --image=$#dataset_path#$$#dataset_filename#$ --labels=$<<CK_ENV_LABELS_FILE>>$",
+        "run_cmd_out1": "tmp-output1.tmp",
+        "run_cmd_out2": "tmp-output2.tmp",
+        "run_correctness_output_files": [],
         "run_output_files": [
-          "tmp-output1.tmp", 
-          "tmp-output2.tmp", 
+          "tmp-output1.tmp",
+          "tmp-output2.tmp",
           "tmp-ck-timer.json"
         ]
       }
     }
-  }, 
+  },
   "run_deps": {
     "weights": {
-      "force_target_as_host": "yes", 
-      "local": "yes", 
-      "name": "TensorFlow-Python model and weights", 
-      "no_tags": "mobilenet-all", 
-      "sort": 40, 
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "TensorFlow-Python model and weights",
+      "no_tags": "mobilenet-all",
+      "sort": 40,
       "tags": "tensorflowmodel,weights,tflite"
     }
-  }, 
-  "skip_bin_ext": "yes", 
+  },
+  "skip_bin_ext": "yes",
   "source_files": [
     "classify.cpp"
-  ], 
+  ],
   "tags": [
-    "tensorflow-lite-classification-cpp", 
+    "tensorflow-lite-classification-cpp",
     "demo"
-  ], 
-  "target_file": "classification", 
+  ],
+  "target_file": "classification",
   "version": "1.0.0"
 }

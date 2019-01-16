@@ -1,62 +1,62 @@
 {
   "run_cmds": {
     "test": {
-      "ignore_return_code": "no", 
+      "ignore_return_code": "no",
       "run_time": {
         "pre_process_via_ck": {
           "script_name": "preprocess"
-        }, 
+        },
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../squeezedet.py"
       }
     }
-  }, 
+  },
   "run_deps": {
     "demo-squeezedet": {
-      "local": "yes", 
-      "name": "SqueezeDet demo sources", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "SqueezeDet demo sources",
+      "sort": 20,
       "tags": "tensorflow,demo,squeezedet"
-    }, 
+    },
     "detection-dataset": {
-      "local": "yes", 
-      "name": "Detection dataset", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "Detection dataset",
+      "sort": 10,
       "tags": "dataset,kitti"
-    }, 
+    },
     "lib-tensorflow": {
-      "local": "yes", 
-      "name": "Tensorflow library", 
-      "no_tags": "vshared", 
-      "sort": 40, 
+      "local": "yes",
+      "name": "Tensorflow library",
+      "no_tags": "vshared",
+      "sort": 40,
       "tags": "lib,tensorflow"
-    }, 
+    },
     "python": {
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "Python",
+      "sort": 10,
       "tags": "compiler,python"
-    }, 
+    },
     "squeezedet-model": {
-      "local": "yes", 
-      "name": "SqueezeDet model", 
-      "skip_default": "yes", 
-      "sort": 30, 
+      "local": "yes",
+      "name": "SqueezeDet model",
+      "skip_default": "yes",
+      "sort": 30,
       "tags": "model,tensorflow,squeezedetmodel"
     }
-  }, 
+  },
   "run_vars": {
-    "CK_BATCH_COUNT": 1, 
-    "CK_BATCH_SIZE": 1, 
-    "CK_DETECTION_IOU": 0.5, 
-    "CK_FALSE_POSITIVE_THRESHOLD": 0.9, 
-    "CK_RESULTS_DIR": "detections", 
-    "CK_TF_GPU_MEMORY_PERCENT": 33, 
-    "TF_CPP_MIN_LOG_LEVEL": 3, 
+    "CK_BATCH_COUNT": 1,
+    "CK_BATCH_SIZE": 1,
+    "CK_DETECTION_IOU": 0.5,
+    "CK_FALSE_POSITIVE_THRESHOLD": 0.9,
+    "CK_RESULTS_DIR": "detections",
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "TF_CPP_MIN_LOG_LEVEL": 3,
     "TF_CPP_MIN_LOG_LEVEL_COMMENT": "Supress TF debug output"
-  }, 
+  },
   "tags": [
-    "tensorflow", 
-    "squeezedet", 
+    "tensorflow",
+    "squeezedet",
     "object-detection"
   ]
 }

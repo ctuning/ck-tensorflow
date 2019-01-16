@@ -1,90 +1,89 @@
 {
-  "comment": "may have problem running on Windows", 
+  "comment": "may have problem running on Windows",
   "customize": {
-    "extra_dir": "", 
+    "extra_dir": "",
     "install_env": {
-      "GPU_ENABLED": 0, 
-      "TENSORFLOW_PACKAGE_VER": "1.11.0", 
+      "GPU_ENABLED": 0,
+      "TENSORFLOW_PACKAGE_VER": "1.11.0",
       "TF_CUDA": "YES"
-    }, 
+    },
     "supported_python_ver2_on_win": [
-      5, 
+      5,
       6
-    ], 
+    ],
     "version": "1.11.0"
-  }, 
+  },
   "deps": {
     "compiler.cuda": {
-      "add_to_path": "yes", 
-      "local": "yes", 
-      "name": "CUDA compiler >=9.0 <9.1", 
-      "sort": 40, 
-      "tags": "compiler,lang-c-cuda", 
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "CUDA compiler >=9.0 <9.1",
+      "sort": 40,
+      "tags": "compiler,lang-c-cuda",
       "version_from": [
-        9, 
-        0, 
+        9,
+        0,
         0
-      ], 
+      ],
       "version_to": [
-        9, 
-        0, 
+        9,
+        0,
         999
       ]
-    }, 
+    },
     "lib.cudnn": {
-      "add_to_path": "yes", 
-      "local": "yes", 
-      "name": "cuDNN library (cuDNN >=7.0 required!)", 
-      "sort": 50, 
-      "tags": "lib,cudnn,dnn,cuda", 
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "cuDNN library (cuDNN >=7.0 required!)",
+      "sort": 50,
+      "tags": "lib,cudnn,dnn,cuda",
       "version_from": [
-        7, 
-        0, 
+        7,
+        0,
         0
       ]
-    }, 
+    },
     "python": {
-      "add_to_path": "yes", 
-      "local": "yes", 
-      "name": "Python", 
-      "sort": 20, 
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python",
+      "sort": 20,
       "tags": "compiler,python"
     }
-  }, 
+  },
   "end_full_path": {
-    "linux": "lib/tensorflow/__init__.py", 
+    "linux": "lib/tensorflow/__init__.py",
     "win": "lib/tensorflow/__init__.py"
-  }, 
-  "need_cpu_info": "yes", 
+  },
+  "need_cpu_info": "yes",
   "only_for_host_os_tags": [
-    "linux", 
+    "linux",
     "windows"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (prebuilt, cuda)", 
-  "process_script": "install", 
-  "soft_uoa": "30db354f469bb178", 
-  "suggested_path": "tensorflow-prebuilt-cuda", 
+  ],
+  "package_extra_name": " (prebuilt, cuda)",
+  "process_script": "install",
+  "soft_uoa": "30db354f469bb178",
+  "suggested_path": "tensorflow-prebuilt-cuda",
   "tags": [
-    "lib", 
-    "tensorflow", 
-    "tensorflow-cuda", 
-    "v1", 
-    "v1.11", 
-    "v1.11.0", 
-    "vprebuilt", 
-    "vcuda", 
+    "lib",
+    "tensorflow",
+    "tensorflow-cuda",
+    "v1",
+    "v1.11",
+    "v1.11.0",
+    "vprebuilt",
+    "vcuda",
     "channel-stable"
-  ], 
-  "template": "yes", 
+  ],
   "use_preprocess_scripts_from_another_entry": {
-    "data_uoa": "lib-tensorflow-1.1.0-cpu", 
+    "data_uoa": "lib-tensorflow-1.1.0-cpu",
     "module_uoa": "package"
-  }, 
+  },
   "use_scripts_from_another_entry": {
-    "data_uoa": "lib-tensorflow-1.4.0-cpu", 
+    "data_uoa": "lib-tensorflow-1.4.0-cpu",
     "module_uoa": "package"
   }
 }

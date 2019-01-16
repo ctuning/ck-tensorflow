@@ -1,71 +1,57 @@
 {
-  "backup_data_uid": "b4025ad44457764b", 
+  "backup_data_uid": "b4025ad44457764b",
   "data_name": "image-classification-tf-py",
-  "no_compile": "yes", 
-  "no_target_file": "yes", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
-      "ignore_return_code": "no", 
+      "ignore_return_code": "no",
       "run_time": {
-        "fine_grain_timer_file": "tmp-ck-timer.json", 
-        "post_process_via_ck": "yes",
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "post_process_cmds": [
           "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
         ],
+        "post_process_via_ck": "yes",
         "pre_process_via_ck": {
-          "module_uoa": "script",
           "data_uoa": "689867d1939a781d",
+          "module_uoa": "script",
           "script_name": "preprocess"
         },
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py", 
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../classify.py",
         "run_output_files": [
           "tmp-ck-timer.json"
         ]
       }
     }
-  }, 
+  },
   "run_deps": {
-    "python": {
+    "imagenet-aux": {
+      "force_target_as_host": "yes",
       "local": "yes",
-      "name": "Python",
-      "sort": 5,
-      "tags": "compiler,python"
+      "name": "ImageNet dataset (aux)",
+      "sort": 30,
+      "tags": "dataset,imagenet,aux"
     },
     "imagenet-val": {
       "force_target_as_host": "yes",
-      "local": "yes", 
-      "name": "ImageNet dataset (val)", 
-      "sort": 20, 
-      "tags": "dataset,imagenet,raw,val"
-    },
-    "imagenet-aux": {
-      "force_target_as_host": "yes",
-      "local": "yes", 
-      "name": "ImageNet dataset (aux)", 
-      "sort": 30, 
-      "tags": "dataset,imagenet,aux"
-    },
-    "weights": {
-      "force_target_as_host": "yes",
-      "local": "yes", 
-      "name": "TensorFlow-Python model and weights", 
-      "sort": 40, 
-      "tags": "tensorflowmodel,weights,python",
-      "no_tags": "mobilenet-all"
-    },
-    "lib-python-pillow": {
       "local": "yes",
-      "name": "Pillow python library",
-      "sort": 50,
-      "tags": "lib,python-package,pillow"
+      "name": "ImageNet dataset (val)",
+      "sort": 20,
+      "tags": "dataset,imagenet,raw,val"
     },
     "lib-python-numpy": {
       "local": "yes",
       "name": "NumPy python library",
       "sort": 60,
       "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
     },
     "lib-python-scipy": {
       "local": "yes",
@@ -76,26 +62,41 @@
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
+      "no_tags": "tensorflow_cc,vstatic",
       "sort": 80,
-      "tags": "lib,tensorflow",
-      "no_tags": "tensorflow_cc,vstatic"
+      "tags": "lib,tensorflow"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 5,
+      "tags": "compiler,python"
+    },
+    "weights": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "TensorFlow-Python model and weights",
+      "no_tags": "mobilenet-all",
+      "sort": 40,
+      "tags": "tensorflowmodel,weights,python"
     }
   },
   "run_vars": {
-    "CK_BATCH_COUNT": 1, 
-    "CK_BATCH_SIZE": 1, 
-    "CK_SKIP_IMAGES": 0, 
-    "CK_TF_GPU_MEMORY_PERCENT": 33,
-    "CK_TF_CPU_NUM_OF_PROCESSORS": 0,
+    "CK_BATCH_COUNT": 1,
+    "CK_BATCH_SIZE": 1,
     "CK_CROP_PERCENT": 87.5,
     "CK_IMAGE_FILE": "",
-    "CK_TMP_IMAGE_SIZE": 0,
+    "CK_RECREATE_CACHE": "NO",
+    "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": 0,
-    "CK_USE_MODEL_MEAN": 0,
-    "CK_RECREATE_CACHE": "NO"
-  }, 
+    "CK_TF_CPU_NUM_OF_PROCESSORS": 0,
+    "CK_TF_GPU_MEMORY_PERCENT": 33,
+    "CK_TMP_IMAGE_SIZE": 0,
+    "CK_USE_MODEL_MEAN": 0
+  },
   "tags": [
     "tensorflow-classification"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "image classification via TensorFlow (Python)"
 }

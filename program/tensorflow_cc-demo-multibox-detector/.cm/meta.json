@@ -1,80 +1,80 @@
 {
-  "FIXME: SHOULD BE compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP1Z>>$", 
-  "backup_data_uid": "61b01b96cc84f33a", 
-  "build_compiler_vars": {}, 
+  "FIXME: SHOULD BE compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP1Z>>$",
+  "backup_data_uid": "61b01b96cc84f33a",
+  "build_compiler_vars": {},
   "compile_deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "C++ compiler", 
-      "sort": 10, 
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 10,
       "tags": "compiler,lang-cpp"
-    }, 
+    },
     "tensorflow_cc": {
-      "local": "yes", 
-      "name": "TensorFlow C++ API", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "TensorFlow C++ API",
+      "sort": 20,
       "tags": "lib,tensorflow_cc"
     }
-  }, 
+  },
   "compiler_add_include_as_env_from_deps": [
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE0", 
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE1", 
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE2", 
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE3", 
-    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE4", 
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE0",
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE1",
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE2",
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE3",
+    "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE4",
     "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE5",
     "CK_ENV_LIB_TENSORFLOW_CC_INCLUDE6"
-  ], 
-  "compiler_env": "CK_CXX", 
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
-  "data_name": "tensorflow-examples-multibox_detector", 
-  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_COMPILER_FLAG_PTHREAD_LIB>>$ $<<CK_ENV_LIB_TENSORFLOW_CC_LINK_EXTRA_LIBS>>$", 
+  ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
+  "data_name": "tensorflow-examples-multibox_detector",
+  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_COMPILER_FLAG_PTHREAD_LIB>>$ $<<CK_ENV_LIB_TENSORFLOW_CC_LINK_EXTRA_LIBS>>$",
   "linker_add_lib_as_env": [
     "CK_ENV_LIB_TENSORFLOW_CC_LIBPROTOBUF"
-  ], 
-  "main_language": "cpp", 
-  "process_in_tmp": "yes", 
-  "program": "yes", 
+  ],
+  "main_language": "cpp",
+  "process_in_tmp": "yes",
+  "program": "yes",
   "run_cmds": {
     "default": {
       "dataset_tags": [
-        "image", 
-        "jpeg", 
+        "image",
+        "jpeg",
         "dataset"
-      ], 
-      "ignore_return_code": "no", 
+      ],
+      "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$#BIN_FILE#$ --box_priors=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_location_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$ --output_score_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_SCORE_LAYER>>$"
       }
-    }, 
+    },
     "image_out": {
       "dataset_tags": [
-        "image", 
-        "jpeg", 
+        "image",
+        "jpeg",
         "dataset"
-      ], 
-      "ignore_return_code": "no", 
+      ],
+      "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$#BIN_FILE#$ --box_priors=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_location_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$ --output_score_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_SCORE_LAYER>>$ --image_out=labeled.png"
       }
     }
-  }, 
+  },
   "run_deps": {
     "tensorflow-model": {
-      "local": "yes", 
+      "local": "yes",
       "name": "Multibox Tensorflow model",
-      "sort": 1, 
+      "sort": 1,
       "tags": "tensorflowmodel,multibox"
     }
-  }, 
+  },
   "source_files": [
     "main.cc"
-  ], 
+  ],
   "tags": [
-    "multibox_detector", 
-    "tensorflow_cc", 
-    "tensorflow", 
+    "multibox_detector",
+    "tensorflow_cc",
+    "tensorflow",
     "example"
-  ], 
+  ],
   "target_file": "main"
 }

@@ -3,13 +3,13 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "DATASET_TYPE": "kitti",
+      "FROZEN_GRAPH": "frozen_inference_graph.pb",
+      "LABELMAP_FILE": "kitti_label_map.pbtxt",
+      "MODEL_NAME": "Faster-RCNN-ResNet101 for KITTI",
       "PACKAGE_NAME": "faster_rcnn_resnet101_kitti_2018_01_28.tar.gz",
       "PACKAGE_NAME1": "faster_rcnn_resnet101_kitti_2018_01_28",
-      "FROZEN_GRAPH": "frozen_inference_graph.pb",
       "PACKAGE_URL": "http://download.tensorflow.org/models/object_detection",
-      "DATASET_TYPE": "kitti",
-      "MODEL_NAME": "Faster-RCNN-ResNet101 for KITTI",
-      "LABELMAP_FILE": "kitti_label_map.pbtxt",
       "WEIGHTS_FILE": "model.ckpt"
     },
     "model_id": "resnet101",
@@ -45,7 +45,7 @@
     "resnet101",
     "vkitti",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
     "data_uoa": "c412930408fb8271",
     "module_uoa": "script"

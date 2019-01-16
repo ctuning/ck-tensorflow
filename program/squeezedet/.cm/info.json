@@ -1,16 +1,16 @@
 {
-  "backup_data_uid": "df7d1490b8aae613", 
-  "backup_module_uid": "b0ac08fe1d3c2615", 
-  "backup_module_uoa": "program", 
+  "backup_data_uid": "df7d1490b8aae613",
+  "backup_module_uid": "b0ac08fe1d3c2615",
+  "backup_module_uoa": "program",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2017-02-26T22:03:53.753061", 
+    "engine": "CK",
+    "iso_datetime": "2017-02-26T22:03:53.753061",
     "version": [
-      "1", 
-      "8", 
-      "6", 
+      "1",
+      "8",
+      "6",
       "1"
     ]
-  }, 
+  },
   "data_name": "TensorFlow SqueezeDet"
 }

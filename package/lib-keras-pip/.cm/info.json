@@ -1,16 +1,16 @@
 {
-  "backup_data_uid": "06c73f93c1a64e14", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "06c73f93c1a64e14",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2017-10-28T13:30:04.055416", 
+    "engine": "CK",
+    "iso_datetime": "2017-10-28T13:30:04.055416",
     "version": [
-      "1", 
-      "9", 
-      "2", 
+      "1",
+      "9",
+      "2",
       "1"
     ]
-  }, 
+  },
   "data_name": "lib-keras-pip"
 }

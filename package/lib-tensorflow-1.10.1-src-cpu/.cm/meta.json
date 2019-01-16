@@ -10,9 +10,9 @@
       "PACKAGE_PATCH": "YES",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
-    }, 
+    },
     "version": "1.10.1"
-  }, 
+  },
   "deps": {
     "bazel": {
       "add_to_path": "no",

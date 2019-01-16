@@ -32,9 +32,6 @@
         "vcuda"
       ],
       "ignore_return_code": "no",
-      "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
-      },
       "run_deps": {
         "lib-cudart": {
           "local": "yes",
@@ -49,6 +46,9 @@
           "tags": "lib,cudnn"
         }
       },
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $#dataset_path#$$#dataset_filename#$ --batch_size=$<<BATCH_SIZE>>$ --num_batches=$<<NUM_BATCHES>>$"
+      },
       "update_deps": {
         "lib-tensorflow": {
           "no_tags": "tensorflow-cpu",
@@ -56,10 +56,6 @@
         }
       }
     }
-  },
-  "run_vars": {
-    "BATCH_SIZE": 32,
-    "NUM_BATCHES": 25
   },
   "run_deps": {
     "lang-python": {
@@ -75,6 +71,10 @@
       "sort": 10,
       "tags": "lib,tensorflow"
     }
+  },
+  "run_vars": {
+    "BATCH_SIZE": 32,
+    "NUM_BATCHES": 25
   },
   "tags": [
     "benchmark",

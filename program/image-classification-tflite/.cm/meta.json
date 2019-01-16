@@ -46,13 +46,13 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
         ],
+        "post_process_via_ck": "yes",
         "pre_process_via_ck": {
-          "module_uoa": "script",
           "data_uoa": "689867d1939a781d",
+          "module_uoa": "script",
           "script_name": "preprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
@@ -104,5 +104,6 @@
     "tensorflow-lite-classification"
   ],
   "target_file": "classification",
-  "template": "yes"
+  "template": "yes",
+  "template_type": "image classification via TFLite (C++)"
 }

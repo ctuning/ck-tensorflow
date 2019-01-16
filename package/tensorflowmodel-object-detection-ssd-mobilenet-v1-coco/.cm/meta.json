@@ -3,15 +3,15 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "DATASET_TYPE": "coco",
+      "FROZEN_GRAPH": "frozen_inference_graph.pb",
+      "LABELMAP_FILE": "mscoco_label_map.pbtxt",
+      "MODEL_NAME": "SSD-MobileNet-v1 for COCO",
       "PACKAGE_NAME": "ssd_mobilenet_v1_coco_2018_01_28.tar.gz",
       "PACKAGE_NAME1": "ssd_mobilenet_v1_coco_2018_01_28",
-      "FROZEN_GRAPH": "frozen_inference_graph.pb",
       "PACKAGE_URL": "http://download.tensorflow.org/models/object_detection",
-      "DATASET_TYPE": "coco",
-      "MODEL_NAME": "SSD-MobileNet-v1 for COCO",
-      "LABELMAP_FILE": "mscoco_label_map.pbtxt",
       "WEIGHTS_FILE": "model.ckpt"
-    }, 
+    },
     "model_id": "mobilenet_v1",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
@@ -45,9 +45,9 @@
     "mobilenet-v1",
     "ssd-mobilenet",
     "ssd-mobilenet-v1",
-    "vcoco", 
+    "vcoco",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
     "data_uoa": "c412930408fb8271",
     "module_uoa": "script"

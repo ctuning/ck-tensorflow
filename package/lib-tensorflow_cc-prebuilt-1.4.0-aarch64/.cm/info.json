@@ -1,16 +1,16 @@
 {
-  "backup_data_uid": "bf0f5d781a461f97", 
-  "backup_module_uid": "1dc07ee0f4742028", 
-  "backup_module_uoa": "package", 
+  "backup_data_uid": "bf0f5d781a461f97",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2017-11-30T11:22:30.721451", 
+    "engine": "CK",
+    "iso_datetime": "2017-11-30T11:22:30.721451",
     "version": [
-      "1", 
-      "9", 
-      "3", 
+      "1",
+      "9",
+      "3",
       "1"
     ]
-  }, 
+  },
   "data_name": "lib-tensorflow_cc-prebuilt-1.4.0-aarch64"
 }

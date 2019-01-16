@@ -2,12 +2,12 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "PACKAGE_NAME": "lib-tflite-prebuilt-static-0.1.7-linux-aarch64.zip",
       "PACKAGE_SKIP_CLEAN_INSTALL": "YES",
       "PACKAGE_SKIP_CLEAN_OBJ": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/jz0q54wuby3sdtu",
-      "PACKAGE_NAME": "lib-tflite-prebuilt-static-0.1.7-linux-aarch64.zip",
       "PACKAGE_WGET": "YES"
     },
     "version": "0.1.7"
@@ -39,6 +39,7 @@
     "channel-stable"
   ],
   "template": "yes",
+  "template_type": "TFLite AI framework",
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"

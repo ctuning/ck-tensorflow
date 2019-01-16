@@ -19,8 +19,8 @@
     }
   },
   "end_full_path": {
-    "linux": "lib/libtensorflow-core.a",
-    "android": "lib/libtensorflow-core.a"
+    "android": "lib/libtensorflow-core.a",
+    "linux": "lib/libtensorflow-core.a"
   },
   "need_cpu_info": "yes",
   "only_for_host_os_tags": [

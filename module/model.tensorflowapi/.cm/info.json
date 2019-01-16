@@ -1,16 +1,16 @@
 {
-  "backup_data_uid": "54493a21023bbe15", 
-  "backup_module_uid": "032630d041b4fd8a", 
-  "backup_module_uoa": "module", 
+  "backup_data_uid": "54493a21023bbe15",
+  "backup_module_uid": "032630d041b4fd8a",
+  "backup_module_uoa": "module",
   "control": {
-    "engine": "CK", 
-    "iso_datetime": "2017-08-09T16:39:35.290880", 
+    "engine": "CK",
+    "iso_datetime": "2017-08-09T16:39:35.290880",
     "version": [
-      "1", 
-      "9", 
-      "1", 
+      "1",
+      "9",
+      "1",
       "1"
     ]
-  }, 
+  },
   "data_name": "model.tensorflowapi"
 }

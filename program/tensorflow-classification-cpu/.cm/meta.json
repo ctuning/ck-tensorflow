@@ -2,21 +2,41 @@
   "backup_data_uid": "1c1cc5d6a4944be7",
   "build_compiler_vars": {
     "CPU_ONLY": "ON",
-    "XOPENME": "",
-    "TF_VIA_MAKE": ""
+    "TF_VIA_MAKE": "",
+    "XOPENME": ""
   },
   "compile_deps": {
     "compiler": {
-      "local": "yes", 
-      "name": "GCC compiler", 
-      "sort": 0, 
+      "local": "yes",
+      "name": "GCC compiler",
+      "sort": 0,
       "tags": "compiler,lang-cpp"
-    }, 
+    },
+    "lib-protobuf": {
+      "local": "yes",
+      "name": "ProtoBuf library",
+      "only_for_target_os_tags": [
+        "android"
+      ],
+      "sort": 110,
+      "tags": "lib,protobuf"
+    },
+    "lib-protobuf-host": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ProtoBuf host compiler",
+      "skip_installed": {
+        "android": "yes",
+        "win": "yes"
+      },
+      "sort": 115,
+      "tags": "lib,protobuf-host,v3.1.0"
+    },
     "lib-tensorflow-make": {
+      "add_dict": "yes",
       "local": "yes",
       "name": "Tensorflow library (via make)",
-      "skip_default":"yes",
-      "add_dict":"yes",
+      "skip_default": "yes",
       "sort": 5,
       "tags": "lib,tensorflow-cpu-make"
     },
@@ -31,36 +51,19 @@
       "name": "xOpenME library",
       "sort": 20,
       "tags": "lib,xopenme"
-    },
-    "lib-protobuf": {
-      "local": "yes", 
-      "name": "ProtoBuf library", 
-      "only_for_target_os_tags": [
-        "android"
-      ], 
-      "sort": 110, 
-      "tags": "lib,protobuf"
-    }, 
-    "lib-protobuf-host": {
-      "force_target_as_host": "yes", 
-      "local": "yes", 
-      "name": "ProtoBuf host compiler", 
-      "skip_installed": {
-        "android": "yes", 
-        "win": "yes"
-      }, 
-      "sort": 115, 
-      "tags": "lib,protobuf-host,v3.1.0"
     }
   },
-  "compiler_env": "CK_CXX",
   "compiler_add_include_as_env_from_deps": [
     "CK_ENV_LIB_STDCPP_INCLUDE",
     "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA",
     "CK_ENV_LIB_TF_PROTO",
     "$<<CK_ENV_LIB_TF_INCLUDE>>$/tensorflow/contrib/makefile/downloads/eigen"
   ],
+  "compiler_env": "CK_CXX",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
   "data_name": "tensorflow-classification-cpu",
+  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_EXTRA_LIB_M>>$ $<<CK_ENV_LIB_STDCPP_STATIC>>$ $<<CK_EXTRA_LIB_LOG>>$ $<<CK_CUSTOM_LIBS>>$",
+  "extra_ld_vars_first": "",
   "main_language": "cpp",
   "only_for_target_os_tags": [
     "windows",
@@ -73,9 +76,6 @@
   ],
   "process_in_tmp": "yes",
   "program": "yes",
-  "extra_ld_vars_first":"",
-  "extra_ld_vars": "$<<CK_EXTRA_LIB_DL>>$ $<<CK_EXTRA_LIB_M>>$ $<<CK_ENV_LIB_STDCPP_STATIC>>$ $<<CK_EXTRA_LIB_LOG>>$ $<<CK_CUSTOM_LIBS>>$", 
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$", 
   "run_cmds": {
     "default": {
       "dataset_tags": [
@@ -87,7 +87,7 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "run_cmd_main": "$#BIN_FILE#$ --labels=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$", 
+        "run_cmd_main": "$#BIN_FILE#$ --labels=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_LABELS>>$ --graph=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_PB>>$ --image=$#dataset_path#$$#dataset_filename#$ --input_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_INPUT_LAYER>>$ --output_layer=$<<CK_ENV_DATASET_TENSORFLOW_STRIPPED_AUX_OUTPUT_LAYER>>$",
         "run_cmd_out1": "tmp-output1.tmp",
         "run_cmd_out2": "tmp-output2.tmp",
         "run_correctness_output_files": [],

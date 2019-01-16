@@ -11,8 +11,7 @@
       "linux": "trainval.txt"
     }
   },
-  "deps": {
-  },
+  "deps": {},
   "soft_name": "KITTI dataset",
   "tags": [
     "dataset",
@@ -20,5 +19,7 @@
     "KITTI",
     "object-detection",
     "images"
-  ]
+  ],
+  "template": "yes",
+  "template_type": "dataset for object detection (Kitti)"
 }

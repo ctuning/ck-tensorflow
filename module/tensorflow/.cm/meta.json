@@ -18,6 +18,8 @@
   "license": "See CK LICENSE.txt for licensing details",
   "module_deps": {
     "experiment.bench.tensorflow": "bca33b04b438d756",
-    "program":"b0ac08fe1d3c2615"
-  }
+    "program": "b0ac08fe1d3c2615"
+  },
+  "workflow": "yes",
+  "workflow_type": "TensorFlow front-end"
 }

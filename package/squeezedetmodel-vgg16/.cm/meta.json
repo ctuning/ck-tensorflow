@@ -6,10 +6,10 @@
     "force_ask_path": "yes",
     "install_env": {
       "PACKAGE_NAME": "VGG16.zip",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_UNZIP": "YES",
       "PACKAGE_URL": "https://www.dropbox.com/s/ztg6id2hn1i99bh",
       "PACKAGE_WGET": "YES",
-      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_WGET_EXTRA": "-O VGG16.zip"
     },
     "meta_file": "model.ckpt-101500.meta",
@@ -17,7 +17,7 @@
     "model_id": "vgg16",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
-    "sort":100,
+    "sort": 100,
     "version": "20161209"
   },
   "end_full_path": {

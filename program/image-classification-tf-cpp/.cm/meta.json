@@ -8,11 +8,11 @@
       "tags": "compiler,lang-cpp"
     },
     "library": {
-      "local": "yes", 
-      "name": "TensorFlow C++ API", 
-      "sort": 20, 
-      "tags": "lib,tensorflow,vstatic",
-      "no_tags": "tensorflow-lite"
+      "local": "yes",
+      "name": "TensorFlow C++ API",
+      "no_tags": "tensorflow-lite",
+      "sort": 20,
+      "tags": "lib,tensorflow,vstatic"
     },
     "xopenme": {
       "local": "yes",
@@ -33,8 +33,8 @@
   ],
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",
+  "data_name": "image-classification-tf-cpp",
   "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
-  "data_name": "image-classification-tf-cpp", 
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -48,16 +48,16 @@
   "program": "yes",
   "run_cmds": {
     "default": {
-      "ignore_return_code": "no", 
+      "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": "yes",
         "post_process_cmds": [
           "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
         ],
+        "post_process_via_ck": "yes",
         "pre_process_via_ck": {
-          "module_uoa": "script",
           "data_uoa": "689867d1939a781d",
+          "module_uoa": "script",
           "script_name": "preprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
@@ -77,38 +77,38 @@
     },
     "imagenet-val": {
       "force_target_as_host": "yes",
-      "local": "yes", 
-      "name": "ImageNet dataset (val)", 
-      "sort": 20, 
+      "local": "yes",
+      "name": "ImageNet dataset (val)",
+      "sort": 20,
       "tags": "dataset,imagenet,raw,val"
     },
     "weights": {
       "force_target_as_host": "yes",
-      "local": "yes", 
-      "name": "TensorFlow model and weights", 
-      "sort": 40, 
-      "tags": "tensorflowmodel,weights,frozen",
-      "no_tags": "mobilenet-all"
+      "local": "yes",
+      "name": "TensorFlow model and weights",
+      "no_tags": "mobilenet-all",
+      "sort": 40,
+      "tags": "tensorflowmodel,weights,frozen"
     }
   },
   "run_vars": {
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
-    "CK_CROP_PERCENT": 87.5, 
+    "CK_CROP_PERCENT": 87.5,
     "CK_IMAGE_FILE": "",
-    "CK_RECREATE_CACHE": "NO", 
+    "CK_RECREATE_CACHE": "NO",
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
-    "CK_TMP_IMAGE_SIZE": 0,
-    "CK_IMAGE_FILE": ""
+    "CK_TMP_IMAGE_SIZE": 0
   },
   "skip_bin_ext": "yes",
   "source_files": [
     "classification.cpp"
   ],
-  "target_file": "classification",
   "tags": [
     "tensorflow-classification"
   ],
-  "template":"yes"
+  "target_file": "classification",
+  "template": "yes",
+  "template_type": "image classification via TensorFlow (C++)"
 }

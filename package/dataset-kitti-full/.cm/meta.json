@@ -2,25 +2,25 @@
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
-    "no_os_in_suggested_path": "yes",
-    "no_ver_in_suggested_path": "no",
-    "force_ask_path":"yes",
+    "force_ask_path": "yes",
     "install_env": {
       "IMAGE_DIR": "training/image_2",
-      "LABELS_DIR": "training/label_2",
       "KITTI_IMAGES_ARCHIVE": "data_object_image_2.zip",
+      "KITTI_IMAGES_URL": "http://kitti.is.tue.mpg.de/kitti/data_object_image_2.zip",
       "KITTI_LABELS_ARCHIVE": "data_object_label_2.zip",
-      "KITTI_IMAGES_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_image_2.zip",
-      "KITTI_LABELS_URL":"http://kitti.is.tue.mpg.de/kitti/data_object_label_2.zip"
+      "KITTI_LABELS_URL": "http://kitti.is.tue.mpg.de/kitti/data_object_label_2.zip",
+      "LABELS_DIR": "training/label_2"
     },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "no",
     "version": "full"
   },
   "deps": {},
-  "need_cpu_info": "no",
   "end_full_path": {
     "linux": "training/image_2/000000.png",
     "win": "training/image_2/000000.png"
   },
+  "need_cpu_info": "no",
   "process_script": "install",
   "soft_uoa": "dd47415baf24025e",
   "suggested_path": "dataset-kitti",

@@ -1,9 +1,9 @@
 {
-"auto_detect": "yes",
+  "auto_detect": "yes",
   "customize": {
-    "env_prefix": "CK_ENV_LIB_KERAS",
     "check_that_exists": "yes",
     "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_KERAS",
     "limit_recursion_dir_search": {
       "linux": 10
     },

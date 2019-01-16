@@ -20,10 +20,8 @@
     "version": "2_1.0_96"
   },
   "end_full_path_universal": "mobilenet-model.py",
-  "only_for_host_os_tags": [
-  ],
-  "only_for_target_os_tags": [
-  ],
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [],
   "package_extra_name": " (mobilenet-v2-1.0-96)",
   "process_script": "install",
   "soft_uoa": "439b9f1757f27091",

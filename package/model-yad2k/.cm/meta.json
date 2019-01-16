@@ -2,19 +2,19 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
-      "YAD2K_URL": "https://github.com/allanzelener/YAD2K",
-      "INSTALL_DEMO":"yes",
-      "WEIGHTS_URL":"http://pjreddie.com/media/files/yolo.weights",
-      "CFG_URL":"https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolo.cfg"
+      "CFG_URL": "https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolo.cfg",
+      "INSTALL_DEMO": "yes",
+      "WEIGHTS_URL": "http://pjreddie.com/media/files/yolo.weights",
+      "YAD2K_URL": "https://github.com/allanzelener/YAD2K"
     },
-    "version":"1.0"
+    "version": "1.0"
   },
   "deps": {
-    "python": {
+    "lib.keras": {
       "local": "yes",
-      "name": "Python 3",
-      "sort": 20,
-      "tags": "compiler,python,v3"
+      "name": "Keras library, TensorFlow based",
+      "sort": 30,
+      "tags": "keras,lib"
     },
     "lib.tensorflow": {
       "local": "yes",
@@ -22,11 +22,11 @@
       "sort": 25,
       "tags": "lib,tensorflow-cuda"
     },
-    "lib.keras": {
+    "python": {
       "local": "yes",
-      "name": "Keras library, TensorFlow based",
-      "sort": 30,
-      "tags": "keras,lib"
+      "name": "Python 3",
+      "sort": 20,
+      "tags": "compiler,python,v3"
     }
   },
   "end_full_path": {

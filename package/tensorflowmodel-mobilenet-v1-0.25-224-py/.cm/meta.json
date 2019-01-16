@@ -21,8 +21,7 @@
     "version": "1_0.25_224"
   },
   "end_full_path_universal": "mobilenet-model.py",
-  "only_for_host_os_tags": [
-  ],
+  "only_for_host_os_tags": [],
   "only_for_target_os_tags": [
     "windows",
     "linux"

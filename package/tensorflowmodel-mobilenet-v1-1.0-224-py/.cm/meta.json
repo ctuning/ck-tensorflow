@@ -21,8 +21,7 @@
     "version": "1_1.0_224_2017_06_14"
   },
   "end_full_path_universal": "mobilenet-model.py",
-  "only_for_host_os_tags": [
-  ],
+  "only_for_host_os_tags": [],
   "only_for_target_os_tags": [
     "windows",
     "linux"
@@ -40,6 +39,8 @@
     "mobilenet-v1-1.0-224",
     "2017_06_14"
   ],
+  "template": "yes",
+  "template_type": "TensorFlow model - MobileNet v1",
   "use_scripts_from_another_entry": {
     "data_uoa": "6b1b2b254718b69a",
     "module_uoa": "script"

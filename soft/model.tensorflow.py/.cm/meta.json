@@ -15,5 +15,6 @@
     "weights",
     "python"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "TensorFlow model (Python)"
 }

@@ -1,46 +1,46 @@
 {
-  "check_exit_status": "yes", 
+  "check_exit_status": "yes",
   "customize": {
-    "force_ask_path": "yes", 
+    "force_ask_path": "yes",
     "install_env": {
-      "MODULE_FILE": "googlenet-model.py",
-      "PACKAGE_NAME": "googlenet.npy", 
-      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES", 
-      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_URL_OLD": "https://lexiondebug.blob.core.windows.net/mlmodel/models",
-      "PACKAGE_URL": "https://www.dropbox.com/s/vxp12d9e7cq6aun",
-      "PACKAGE_WGET": "YES", 
-      "WEIGHTS_FILE": "googlenet.npy",
+      "MODEL_CONVERT_TO_BGR": "YES",
       "MODEL_IMAGE_HEIGHT": 227,
       "MODEL_IMAGE_WIDTH": 227,
-      "MODEL_CONVERT_TO_BGR": "YES"
-    }, 
-    "no_os_in_suggested_path": "yes", 
-    "no_ver_in_suggested_path": "yes", 
-    "skip_file_check": "yes", 
+      "MODULE_FILE": "googlenet-model.py",
+      "PACKAGE_NAME": "googlenet.npy",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_URL": "https://www.dropbox.com/s/vxp12d9e7cq6aun",
+      "PACKAGE_URL_OLD": "https://lexiondebug.blob.core.windows.net/mlmodel/models",
+      "PACKAGE_WGET": "YES",
+      "WEIGHTS_FILE": "googlenet.npy"
+    },
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "skip_file_check": "yes",
     "version": "ImageNet"
-  }, 
+  },
   "end_full_path": {
     "linux": "googlenet-model.py"
-  }, 
+  },
   "only_for_host_os_tags": [
     "linux"
-  ], 
+  ],
   "only_for_target_os_tags": [
     "linux"
-  ], 
-  "package_extra_name": " (googlenet)", 
-  "process_script": "install", 
-  "soft_uoa": "439b9f1757f27091", 
+  ],
+  "package_extra_name": " (googlenet)",
+  "process_script": "install",
+  "soft_uoa": "439b9f1757f27091",
   "suggested_path": "tensorflowmodel-googlenet-py",
   "tags": [
     "tensorflowmodel",
-    "weights", 
-    "python", 
+    "weights",
+    "python",
     "googlenet"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
-    "data_uoa": "cd9ccc74060b3d18", 
+    "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
   }
 }

@@ -6,9 +6,18 @@
       "TENSORFLOW_PACKAGE_VER": "1.3.0",
       "TF_CUDA": "NO"
     },
-    "supported_python_ver2_on_win":[5,6],
-    "supported_python_ver2_on_mac":[4,5],
-    "supported_python_ver2_on_linux":[4,5],
+    "supported_python_ver2_on_linux": [
+      4,
+      5
+    ],
+    "supported_python_ver2_on_mac": [
+      4,
+      5
+    ],
+    "supported_python_ver2_on_win": [
+      5,
+      6
+    ],
     "version": "1.3.0"
   },
   "deps": {

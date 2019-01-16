@@ -17,5 +17,6 @@
     "tensorflow",
     "vstatic"
   ],
-  "template":"yes"
+  "template": "yes",
+  "template_type": "TensorFlow library (C++)"
 }

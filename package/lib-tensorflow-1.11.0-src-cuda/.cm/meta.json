@@ -93,7 +93,7 @@
     "v1.11",
     "v1",
     "channel-stable"
-  ], 
+  ],
   "use_scripts_from_another_entry": {
     "data_uoa": "9024d3aaf2cdc47d",
     "module_uoa": "script"

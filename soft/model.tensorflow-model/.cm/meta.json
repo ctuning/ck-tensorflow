@@ -1,9 +1,9 @@
 {
-"auto_detect": "yes",
+  "auto_detect": "yes",
   "customize": {
-    "env_prefix": "CK_ENV_MODEL_TENSORFLOW_API",
     "check_that_exists": "yes",
     "ck_version": 10,
+    "env_prefix": "CK_ENV_MODEL_TENSORFLOW_API",
     "limit_recursion_dir_search": {
       "linux": 5,
       "win": 5
@@ -19,4 +19,3 @@
     "model"
   ]
 }
-
