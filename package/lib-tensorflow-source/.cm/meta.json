@@ -1,0 +1,28 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "PACKAGE_BUILD_TYPE": "none", 
+      "PACKAGE_GIT": "YES", 
+      "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES", 
+      "PACKAGE_SKIP_LINUX_MAKE": "YES", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
+    }, 
+    "use_git_revision": "yes"
+  }, 
+  "end_full_path_universal": "src$#sep#$tensorflow$#sep#$tensorflow.bzl", 
+  "process_script": "install", 
+  "soft_uoa": "30db354f469bb178", 
+  "suggested_path": "lib-tensorflow-source", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "source"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18", 
+    "module_uoa": "script"
+  }
+}
