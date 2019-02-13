@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "cecb9516584497ac", 
+  "backup_module_uid": "5e1100048ab875d7", 
+  "backup_module_uoa": "soft", 
+  "control": {
+    "engine": "CK", 
+    "iso_datetime": "2019-02-13T17:55:07.417987", 
+    "version": [
+      "1", 
+      "9", 
+      "6", 
+      "1"
+    ]
+  }, 
+  "data_name": "dataset.tensorflow.slim"
+}

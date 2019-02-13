@@ -1,0 +1,38 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "version": "10"
+  }, 
+  "deps": {
+    "tensorflow": {
+      "local": "yes", 
+      "name": "TensorFlow Library", 
+      "skip_from_bat": "yes", 
+      "sort": 10, 
+      "tags": "lib,tensorflow"
+    },
+    "tensorflow-model-api": {
+      "local": "yes", 
+      "name": "TensorFlow Models (Source)", 
+      "skip_from_bat": "yes", 
+      "sort": 20, 
+      "tags": "tensorflowmodel,api"
+    }
+  }, 
+  "end_full_path_universal": "install/cifar10_train.tfrecord", 
+  "need_cpu_info": "no", 
+  "process_script": "install", 
+  "soft_uoa": "cecb9516584497ac", 
+  "suggested_path": "dataset-tf-slim-cifar10", 
+  "tags": [
+    "dataset", 
+    "tensorflow",
+    "slim",
+    "tensorflow-slim", 
+    "cifar10", 
+    "channel-stable"
+  ]
+}

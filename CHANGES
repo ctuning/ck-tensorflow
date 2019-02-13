@@ -1,3 +1,5 @@
+2019.02.13 - [FGG] added TF Slim model CIFAR10 for SysML'19 reproducible papers
+
 2018.12.15 - [FGG] redirected mobilenet packages to Zenodo
 
 2018.09.27 - [FGG] fixed TF 1.10.1 package for Windows (use 1.10.0 instead)
