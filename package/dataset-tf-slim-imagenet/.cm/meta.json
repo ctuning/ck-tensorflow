@@ -1,0 +1,45 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "extra_dir": "", 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "version": "10"
+  }, 
+  "deps": {
+    "bazel": {
+      "local": "yes", 
+      "name": "Bazel", 
+      "skip_from_bat": "yes", 
+      "sort": 5, 
+      "tags": "tool,bazel"
+    },
+    "tensorflow": {
+      "local": "yes", 
+      "name": "TensorFlow Library", 
+      "skip_from_bat": "yes", 
+      "sort": 10, 
+      "tags": "lib,tensorflow"
+    }, 
+    "tensorflow-model-api": {
+      "local": "yes", 
+      "name": "TensorFlow Models (Source)", 
+      "skip_from_bat": "yes", 
+      "sort": 20, 
+      "tags": "tensorflowmodel,api"
+    }
+  }, 
+  "end_full_path_universal": "install/train-00001-of-01024", 
+  "need_cpu_info": "no", 
+  "process_script": "install", 
+  "soft_uoa": "cecb9516584497ac", 
+  "suggested_path": "dataset-tf-slim-imagenet", 
+  "tags": [
+    "dataset", 
+    "tensorflow", 
+    "slim", 
+    "tensorflow-slim", 
+    "imagenet", 
+    "channel-stable"
+  ]
+}
