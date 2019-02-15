@@ -1,0 +1,33 @@
+{
+  "check_exit_status": "yes", 
+  "customize": {
+    "install_env": {
+      "MODEL_NORMALIZE_DATA": "YES", 
+      "PACKAGE_NAME": "resnet50_v1.pb",
+      "PACKAGE_URL": "https://zenodo.org/record/2535873/files"
+    }, 
+    "no_os_in_suggested_path": "yes", 
+    "no_ver_in_suggested_path": "yes", 
+    "skip_file_check": "yes", 
+    "version": "1.5"
+  }, 
+  "end_full_path_universal": "resnet50_v1.pb",
+  "only_for_host_os_tags": [], 
+  "only_for_target_os_tags": [], 
+  "package_extra_name": " (resnet50-v1.5)", 
+  "process_script": "install", 
+  "soft_uoa": "439b9f1757f27091", 
+  "suggested_path": "tensorflowmodel-resnet50-v1.5-mlperf",
+  "tags": [
+    "tensorflowmodel", 
+    "frozen", 
+    "resnet", 
+    "resnet50", 
+    "resnet50-v1.5", 
+    "mlperf"
+  ], 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "6b1b2b254718b69a", 
+    "module_uoa": "script"
+  }
+}
