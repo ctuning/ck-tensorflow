@@ -16,6 +16,8 @@ def ck_preprocess(i):
   # If weights will be already provided as frozen file,
   # the code will still be working even though a bit excessive.
   MODEL_DIR = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_ROOT')
+  INPUT_LAYER_NAME = ''
+  OUTPUT_LAYER_NAME = ''
   for filename in os.listdir(MODEL_DIR):
     if filename.endswith('.pb'):
       MODEL_FROZEN_FILE = filename
@@ -31,6 +33,8 @@ def ck_preprocess(i):
             elif key_name[0] == 'Output:':
               OUTPUT_LAYER_NAME = key_name[1].strip()
                                                        
+  INPUT_LAYER_NAME = INPUT_LAYER_NAME or dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME')
+  OUTPUT_LAYER_NAME = OUTPUT_LAYER_NAME or dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME')
   
   if not MODEL_FROZEN_FILE:
     return {'return': 1, 'error': 'Frozen graph is not found in the selected model package'}
