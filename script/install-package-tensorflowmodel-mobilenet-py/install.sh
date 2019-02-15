@@ -45,10 +45,10 @@ THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cp ${THIS_SCRIPT_DIR}/mobilenet-model.py .
 
-if [ ${VERSION} == "1" ]; then
+if [ "${VERSION}" == "1" ]; then
   cp ${THIS_SCRIPT_DIR}/mobilenet_v1.py .
 fi
-if [ ${VERSION} == "2" ]; then
+if [ "${VERSION}" == "2" ]; then
   cp ${THIS_SCRIPT_DIR}/mobilenet_v2.py .
   cp ${THIS_SCRIPT_DIR}/mobilenet.py .
   cp ${THIS_SCRIPT_DIR}/conv_blocks.py .
