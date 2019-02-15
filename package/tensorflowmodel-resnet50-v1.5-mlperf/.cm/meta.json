@@ -2,6 +2,8 @@
   "check_exit_status": "yes", 
   "customize": {
     "install_env": {
+      "MODEL_IMAGE_HEIGHT": "224",
+      "MODEL_IMAGE_WIDTH": "224",
       "MODEL_NORMALIZE_DATA": "YES", 
       "PACKAGE_NAME": "resnet50_v1.pb",
       "PACKAGE_URL": "https://zenodo.org/record/2535873/files"
