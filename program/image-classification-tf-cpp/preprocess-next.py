@@ -15,8 +15,7 @@ def ck_preprocess(i):
   # But we have to find frozen graph file in model's directory.
   # If weights will be already provided as frozen file,
   # the code will still be working even though a bit excessive.
-  MODEL_WEIGHTS = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
-  MODEL_DIR, _ = os.path.split(MODEL_WEIGHTS)
+  MODEL_DIR = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_ROOT')
   for filename in os.listdir(MODEL_DIR):
     if filename.endswith('.pb'):
       MODEL_FROZEN_FILE = filename

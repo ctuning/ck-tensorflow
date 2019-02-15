@@ -16,8 +16,7 @@ def ck_preprocess(i):
   # But we have to find tflite graph file in model's directory.
   # If weights will be already provided as tflite file,
   # the code will still be working even though a bit excessive.
-  MODEL_WEIGHTS = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_WEIGHTS')
-  MODEL_DIR, _ = os.path.split(MODEL_WEIGHTS)
+  MODEL_DIR = dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_ROOT')
   for filename in os.listdir(MODEL_DIR):
     if filename.endswith('.tflite'):
       MODEL_TFLITE_FILE = filename
