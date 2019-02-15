@@ -5,8 +5,12 @@
       "MODEL_IMAGE_HEIGHT": "224",
       "MODEL_IMAGE_WIDTH": "224",
       "MODEL_NORMALIZE_DATA": "YES", 
+
       "PACKAGE_NAME": "resnet50_v1.pb",
-      "PACKAGE_URL": "https://zenodo.org/record/2535873/files"
+      "PACKAGE_URL": "https://zenodo.org/record/2535873/files",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_SKIP_CLEAN_PACKAGE": "YES",
+      "PACKAGE_WGET": "YES"
     }, 
     "no_os_in_suggested_path": "yes", 
     "no_ver_in_suggested_path": "yes", 
@@ -29,7 +33,7 @@
     "mlperf"
   ], 
   "use_scripts_from_another_entry": {
-    "data_uoa": "6b1b2b254718b69a", 
+    "data_uoa": "download-and-install-package",
     "module_uoa": "script"
   }
 }
