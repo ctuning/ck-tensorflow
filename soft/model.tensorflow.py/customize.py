@@ -82,18 +82,25 @@ def setup(i):
 
     ep=cus['env_prefix']
 
-    # Init common variables, they are set for all models
-    if 'WEIGHTS_FILE' in install_env:
-      env[ep+'_WEIGHTS']=os.path.join(pi, install_env['WEIGHTS_FILE'])
-    if 'MODULE_FILE' in install_env:
-      env[ep+'_MODULE']=os.path.join(pi, install_env['MODULE_FILE'])
+    # Provide the installation root where all files live:
+    env[ep + '_ROOT'] = pi
 
-    # Init model specific variables
-    # They should be started with MODEL_ prefix e.g. MODEL_MOBILENET_RESOLUTION
+    # Init common variables, they are set for all models:
+    #
+    # This group should end with _FILE prefix e.g. TFLITE_FILE
+    # This suffix will be cut off and prefixed by cus['env_prefix']
+    # so we'll get vars like CK_ENV_TENSORFLOW_MODEL_TFLITE
+    for varname in install_env.keys():
+        if varname.endswith('_FILE'):
+            env[ep + '_' + varname[:-len('_FILE')]] = os.path.join(pi, install_env[varname])
+
+    # Init model-specific variables:
+    #
+    # This other group should be started with MODEL_ prefix e.g. MODEL_MOBILENET_RESOLUTION
     # This prefix will be cut off as it already contained in cus['env_prefix']
     # so we'll get vars like CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION
     for varname in install_env.keys():
-      if varname.startswith('MODEL_'):
-        env[ep+varname[len('MODEL'):]] = install_env[varname]
+        if varname.startswith('MODEL_'):
+            env[ep+varname[len('MODEL'):]] = install_env[varname]
     
     return {'return':0, 'bat':s}
