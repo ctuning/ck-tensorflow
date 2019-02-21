@@ -29,7 +29,8 @@
     "CK_ENV_LIB_TF_INCLUDE2",
     "CK_ENV_LIB_TF_INCLUDE3",
     "CK_ENV_LIB_TF_INCLUDE4",
-    "CK_ENV_LIB_TF_INCLUDE5"
+    "CK_ENV_LIB_TF_INCLUDE5",
+    "CK_ENV_LIB_TF_INCLUDE6"
   ],
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$",

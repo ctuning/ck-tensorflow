@@ -90,5 +90,7 @@ def setup(i):
     env[ep+'_INCLUDE3'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'eigen')
     env[ep+'_INCLUDE4'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'gen', 'proto')
     env[ep+'_INCLUDE5'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'nsync', 'public')
+    env[ep+'_INCLUDE5'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'nsync', 'public')
+    env[ep+'_INCLUDE6'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'makefile', 'downloads', 'absl')
 
     return {'return': 0, 'bat': s}
