@@ -1,0 +1,66 @@
+{
+  "backup_data_uid": "3fc6868e5524e49a", 
+  "build_compiler_vars": {}, 
+  "data_name": "image-classification-tflite-py", 
+  "main_language": "python", 
+  "no_compile": "yes", 
+  "no_target_file": "yes", 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_LIB_TF_SRC_SRC>>$$#dir_sep#$tensorflow$#dir_sep#$lite$#dir_sep#$examples$#dir_sep#$python$#dir_sep#$label_image.py --model_file $<<CK_ENV_TENSORFLOW_MODEL_TFLITE>>$ --label_file $<<CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT>>$ --image $<<CK_ENV_DATASET_IMAGENET_VAL>>$$#dir_sep#$$<<IMAGE_FILENAME>>$"
+      }
+    }
+  },
+  "run_deps": {
+    "imagenet-aux": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (aux)",
+      "sort": 10,
+      "tags": "dataset,imagenet,aux"
+    },
+    "imagenet-val": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (val)",
+      "sort": 20,
+      "tags": "dataset,imagenet,raw,val"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python",
+      "sort": 30,
+      "tags": "compiler,python"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 40,
+      "tags": "lib,tensorflow,vprebuilt"
+    },
+    "tensorflow-source": {
+      "local": "yes", 
+      "name": "Tensorflow source", 
+      "sort": 50, 
+      "tags": "tensorflow,source"
+    },
+    "model": {
+      "local": "yes",
+      "name": "TFlite model",
+      "sort": 60,
+      "tags": "tensorflowmodel,weights,tflite"
+    }
+  },
+  "run_vars": {
+    "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG"
+  }, 
+  "tags": [
+    "program",
+    "lang-python",
+    "tensorflow-classification"
+  ]
+}
