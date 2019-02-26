@@ -13,6 +13,7 @@
     "use_git_revision": "yes"
   }, 
   "end_full_path_universal": "src$#sep#$tensorflow$#sep#$tensorflow.bzl", 
+  "package_extra_name": " (source only)",
   "process_script": "install", 
   "soft_uoa": "30db354f469bb178", 
   "suggested_path": "lib-tensorflow-source", 
