@@ -6,7 +6,7 @@
       "MODEL_IMAGE_WIDTH": "224",
       "MODEL_NORMALIZE_DATA": "YES", 
       "MODEL_INPUT_LAYER_NAME": "input_tensor:0",
-      "MODEL_OUTPUT_LAYER_NAME": "ArgMax:0",
+      "MODEL_OUTPUT_LAYER_NAME": "softmax_tensor:0",
 
       "PACKAGE_NAME": "resnet50_v1.pb",
       "PACKAGE_URL": "https://zenodo.org/record/2535873/files",
