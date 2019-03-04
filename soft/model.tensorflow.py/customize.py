@@ -76,14 +76,36 @@ def setup(i):
 
     env=i['env']
 
-    pi=os.path.dirname(fp)
-
-    install_env = cus.get('install_env', {})
+    install_root    = os.path.dirname(fp)
+    install_env     = cus.get('install_env', {})
 
     ep=cus['env_prefix']
 
     # Provide the installation root where all files live:
-    env[ep + '_ROOT'] = pi
+    env[ep + '_ROOT'] = install_root
+
+    # Omit the trivial preprocessing step by detecting the necessary model files during installation
+    #
+    # These automatically detected values take lower precedence and can be overridden by values in install_env
+    #
+    for filename in os.listdir(install_root):
+        filepath = os.path.join(install_root, filename)
+        if filename.endswith('.pb'):
+            env[ep + '_TF_FROZEN_FILENAME'] = filename
+            env[ep + '_TF_FROZEN_FILEPATH'] = filepath
+        elif filename.endswith('.tflite'):
+            env[ep + '_TFLITE_FILENAME'] = filename
+            env[ep + '_TFLITE_FILEPATH'] = filepath
+        elif filename.endswith('_info.txt'):
+            # Read input and output layer names from graph info file
+            with open(filepath, 'r') as f:
+                for line in f:
+                    line_parts = line.split(' ')
+                    if len(line_parts) == 2:
+                        if line_parts[0] == 'Input:':
+                            env[ep + '_INPUT_LAYER_NAME'] = line_parts[1].strip()
+                        elif line_parts[0] == 'Output:':
+                            env[ep + '_OUTPUT_LAYER_NAME'] = line_parts[1].strip()
 
     # Init common variables, they are set for all models:
     #
@@ -92,7 +114,7 @@ def setup(i):
     # so we'll get vars like CK_ENV_TENSORFLOW_MODEL_TFLITE
     for varname in install_env.keys():
         if varname.endswith('_FILE'):
-            env[ep + '_' + varname[:-len('_FILE')]] = os.path.join(pi, install_env[varname])
+            env[ep + '_' + varname[:-len('_FILE')]] = os.path.join(install_root, install_env[varname])
 
     # Init model-specific variables:
     #
