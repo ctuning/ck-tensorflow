@@ -15,32 +15,26 @@
     "version": "1.5"
   }, 
   "deps": {
-    "lib-numpy": {
-      "local": "yes",
-      "name": "Numpy library",
-      "sort": 20,
-      "tags": "lib,python-package,numpy"
-    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
-      "sort": 40,
+      "sort": 10,
       "tags": "lib,tensorflow,vprebuilt"
     },
     "source-model": {
       "local": "yes",
       "name": "TFlite model",
-      "sort": 60,
+      "sort": 20,
       "tags": "tensorflowmodel,weights,mlperf,resnet"
     }
   },
   "end_full_path_universal": "resnet50_v1.tflite", 
   "only_for_host_os_tags": [], 
   "only_for_target_os_tags": [], 
-  "package_extra_name": " (resnet50-v1.5)", 
+  "package_extra_name": " (resnet50-v1.5 in TFlite)",
   "process_script": "install", 
   "soft_uoa": "439b9f1757f27091", 
-  "suggested_path": "tflite-model-resnet50-v1.5-mlperf", 
+  "suggested_path": "tflite-model-resnet50-v1.5",
   "tags": [
     "tflite", 
     "model",
