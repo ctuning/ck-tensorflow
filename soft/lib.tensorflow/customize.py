@@ -69,18 +69,20 @@ def setup(i):
     ep=cus['env_prefix']
 
     p1=os.path.dirname(fp)
-    pl=os.path.dirname(p1)
-    pi=os.path.dirname(pl)
+    lib_path        = os.path.dirname(p1)
+    install_path    = os.path.dirname(lib_path )
+    bin_path        = os.path.join(install_path , 'python_deps_site', 'bin')
 
-    env[ep]=pi
-    env[ep+'_LIB']=pl
+    env[ep]         = install_path
+    env[ep+'_LIB']  = lib_path
+    env[ep+'_BIN']  = bin_path
 
     # Path to bundled protobuf.
-    pb=os.path.join(pl,'external','protobuf_archive','python')
+    pb=os.path.join(lib_path ,'external','protobuf_archive','python')
 
     if winh=='yes':
-        s+='\nset PYTHONPATH='+pl+';'+pb+';%PYTHONPATH%\n'
+        s+='\nset PYTHONPATH='+lib_path +';'+pb+';%PYTHONPATH%\n'
     else:
-        s+='\nexport PYTHONPATH='+pl+':'+pb+':${PYTHONPATH}\n'
+        s+='\nexport PYTHONPATH='+lib_path +':'+pb+':${PYTHONPATH}\nexport PATH='+bin_path+':${PATH}\n'
 
     return {'return':0, 'bat':s}
