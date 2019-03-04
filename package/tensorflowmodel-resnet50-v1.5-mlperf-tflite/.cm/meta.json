@@ -7,10 +7,10 @@
       "MODEL_INPUT_LAYER_NAME": "input_tensor", 
       "MODEL_NORMALIZE_DATA": "YES", 
       "MODEL_OUTPUT_LAYER_NAME": "softmax_tensor", 
-      "PACKAGE_NAME": "resnet50_v1.tflite", 
+      "PACKAGE_NAME": "resnet50-v1-mlperf-tflite.tgz", 
       "PACKAGE_SKIP_CLEAN_PACKAGE": "YES", 
       "PACKAGE_SKIP_LINUX_MAKE": "YES", 
-      "PACKAGE_URL": "https://www.dropbox.com/s/ir3e4jznmdhnxd5/", 
+      "PACKAGE_URL": "https://www.dropbox.com/s/y8oo09y60j1kyu5/",
       "PACKAGE_WGET": "YES"
     }, 
     "no_os_in_suggested_path": "yes", 
