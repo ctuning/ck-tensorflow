@@ -11,7 +11,7 @@
     "default": {
       "ignore_return_code": "no", 
       "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_LIB_TF_SRC_SRC>>$$#dir_sep#$tensorflow$#dir_sep#$lite$#dir_sep#$examples$#dir_sep#$python$#dir_sep#$label_image.py --model_file $<<CK_ENV_TENSORFLOW_MODEL_TFLITE>>$ --label_file $<<CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT>>$ --image $<<CK_ENV_DATASET_IMAGENET_VAL>>$$#dir_sep#$$<<IMAGE_FILENAME>>$"
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ $<<CK_ENV_LIB_TF_SRC_SRC>>$$#dir_sep#$tensorflow$#dir_sep#$lite$#dir_sep#$examples$#dir_sep#$python$#dir_sep#$label_image.py --model_file \"$<<CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH>>$\" --label_file \"$<<CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT>>$\" --image \"$<<CK_ENV_DATASET_IMAGENET_VAL>>$$#dir_sep#$$<<IMAGE_FILENAME>>$\""
       }
     }
   },
