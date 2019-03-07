@@ -11,7 +11,7 @@
   }, 
   "soft_name": "TensorFlow library source",
   "tags": [
-    "lib", 
+    "uninstalled",
     "tensorflow",
     "source"
   ], 

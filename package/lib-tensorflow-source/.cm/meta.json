@@ -16,9 +16,9 @@
   "package_extra_name": " (source only)",
   "process_script": "install", 
   "soft_uoa": "lib.tensorflow.source",
-  "suggested_path": "lib-tensorflow-source", 
+  "suggested_path": "tensorflow-source",
   "tags": [
-    "lib", 
+    "uninstalled",
     "tensorflow", 
     "source"
   ], 
