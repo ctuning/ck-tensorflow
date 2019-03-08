@@ -5,7 +5,7 @@
       "MODEL_IMAGE_HEIGHT": "224", 
       "MODEL_IMAGE_WIDTH": "224", 
       "MODEL_INPUT_LAYER_NAME": "input_tensor", 
-      "MODEL_NORMALIZE_DATA": "YES", 
+      "MODEL_NORMALIZE_DATA": "0",
       "MODEL_OUTPUT_LAYER_NAME": "softmax_tensor", 
       "PACKAGE_NAME": "resnet50_v1.tflite.gz", 
       "PACKAGE_SKIP_CLEAN_PACKAGE": "YES", 
