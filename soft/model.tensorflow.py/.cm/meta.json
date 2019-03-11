@@ -9,9 +9,10 @@
       "win": "*-model.py"
     }
   },
-  "soft_name": "TensorFlow python model and weights",
+  "soft_name": "TensorFlow model and weights",
   "tags": [
     "tensorflowmodel",
+    "model",
     "weights",
     "python"
   ],
