@@ -106,6 +106,8 @@ def ck_preprocess(i):
   # input image size: https://github.com/ctuning/ck-tensorflow/issues/67
   if has_dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'):
     IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH'))
+  elif has_dep_env('weights', 'CK_ENV_ONNX_MODEL_IMAGE_WIDTH'):
+    IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_ONNX_MODEL_IMAGE_WIDTH'))
   else:
     if has_dep_env('weights', 'CK_ENV_MOBILENET_RESOLUTION'):
       IMAGE_SIZE = int(dep_env('weights', 'CK_ENV_MOBILENET_RESOLUTION'))
@@ -223,14 +225,14 @@ def ck_preprocess(i):
   def to_flag(val):
     return 1 if val and (str(val).upper() == "YES" or int(val) == 1) else 0
 
-  # TF specific variable
-  tf_normalize = dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA")
+  # model-specific variable
+  normalize = dep_env('weights', "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA") or dep_env('weights', "CK_ENV_ONNX_MODEL_NORMALIZE_DATA")
 
   new_env['RUN_OPT_IMAGE_LIST'] = IMAGE_LIST_FILE
   new_env['RUN_OPT_RESULT_DIR'] = RESULTS_DIR
   new_env['RUN_OPT_IMAGE_DIR'] = CACHE_DIR
   new_env['RUN_OPT_IMAGE_SIZE'] = IMAGE_SIZE
-  new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or tf_normalize)
+  new_env['RUN_OPT_NORMALIZE_DATA'] = to_flag(my_env("CK_NORMALIZE_DATA") or normalize)
   new_env['RUN_OPT_SUBTRACT_MEAN'] = to_flag(my_env("CK_SUBTRACT_MEAN"))
   new_env['RUN_OPT_BATCH_COUNT'] = my_env('CK_BATCH_COUNT')
   new_env['RUN_OPT_BATCH_SIZE'] = my_env('CK_BATCH_SIZE')
