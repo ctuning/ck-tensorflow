@@ -39,6 +39,8 @@
   "tags": [
     "lib",
     "tensorflow",
+    "lite",
+    "tflite",
     "tensorflow-lite",
     "tensorflow-static",
     "vsrc",
