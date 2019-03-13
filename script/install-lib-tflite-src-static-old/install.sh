@@ -62,19 +62,33 @@ echo "Preparing sources ..."
 echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TFLITE_DIR=${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/lite
-TFLITE_MAKE_DIR=${TFLITE_DIR}/tools/make
+TFLITE_DIR=${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/lite
 
-remove_dir_if_exists ${TFLITE_MAKE_DIR}/gen
+remove_dir_if_exists ${TFLITE_DIR}/gen
 
-cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_MAKE_DIR}
+cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_DIR}
+
+# These files reference to some external functionality that seems no more available:
+# $CK-TOOLS/$TF/src/third_party/fft2d can't be downloaded from the address mentioned there.
+# Library itself can be built successfully, but linking of an application
+# (e.g.: ck compile program:image-classification-tflite) fails with message
+# spectrogram.cc:(.text+0x47a): undefined reference to `rdft'
+exclude_from_build ${TFLITE_DIR}/kernels/internal/spectrogram.h
+exclude_from_build ${TFLITE_DIR}/kernels/internal/spectrogram.cc
+exclude_from_build ${TFLITE_DIR}/kernels/audio_spectrogram.cc
+#if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.h ]; then
+#  mv ${TFLITE_DIR}/kernels/internal/spectrogram.h ${TFLITE_DIR}/kernels/internal/spectrogram.~h
+#fi
+#if [ -f ${TFLITE_DIR}/kernels/internal/spectrogram.cc ]; then
+# mv ${TFLITE_DIR}/kernels/internal/spectrogram.cc ${TFLITE_DIR}/kernels/internal/spectrogram.~cc
+#fi
 
 echo "--------------------------------";
 echo "Download dependencies ..."
 echo ""
 
-if [ ! -d ${TFLITE_MAKE_DIR}/downloads ]; then
-  ${TFLITE_MAKE_DIR}/download_dependencies.sh
+if [ ! -d tensorflow/contrib/lite/downloads ]; then
+  ./tensorflow/contrib/lite/download_dependencies.sh
   exit_if_error
 fi
 
@@ -86,7 +100,7 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo
   echo "Building Android package..."
   
-  make -f ${TFLITE_MAKE_DIR}/Makefile \
+  make -f tensorflow/contrib/lite/Makefile \
          TARGET=ANDROID \
          NDK_ROOT="$CK_ANDROID_NDK_ROOT_DIR" \
          ANDROID_ARCH="$CK_ANDROID_ABI" \
@@ -97,13 +111,13 @@ else
   echo
   echo "Building Linux package..."
 
-  make -f ${TFLITE_MAKE_DIR}/Makefile
+  make -f tensorflow/contrib/lite/Makefile
   exit_if_error
 fi
 
 # Copy target files
 remove_dir_if_exists ${INSTALL_DIR}/lib
 mkdir ${INSTALL_DIR}/lib
-cp ${TFLITE_MAKE_DIR}/gen/lib/libtensorflow-lite.a ${INSTALL_DIR}/lib
+cp ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/lite/gen/lib/libtensorflow-lite.a ${INSTALL_DIR}/lib
 
 return 0

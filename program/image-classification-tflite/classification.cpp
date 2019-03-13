@@ -8,8 +8,13 @@
 
 #include "benchmark.h"
 
-#include "tensorflow/contrib/lite/kernels/register.h"
-#include "tensorflow/contrib/lite/model.h"
+#ifdef TF_LITE_1_13
+  #include "tensorflow/lite/kernels/register.h"
+  #include "tensorflow/lite/model.h"
+#else
+  #include "tensorflow/contrib/lite/kernels/register.h"
+  #include "tensorflow/contrib/lite/model.h"
+#endif
 
 using namespace std;
 using namespace CK;
