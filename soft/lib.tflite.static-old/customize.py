@@ -84,7 +84,6 @@ def setup(i):
     env[ep] = install_dir
     env[ep+'_LIB'] = lib_dir
     env[ep+'_INCLUDE0'] = src_dir
-    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'flatbuffers', 'include')
-    env['CK_ENV_LIB_TF_DEF'] = '-DTF_LITE_1_13'
+    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'contrib', 'lite', 'downloads', 'flatbuffers', 'include')
 
     return {'return': 0, 'bat': s}

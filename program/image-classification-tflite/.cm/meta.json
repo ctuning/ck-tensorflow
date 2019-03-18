@@ -27,7 +27,7 @@
     "CK_ENV_LIB_TF_INCLUDE1"
   ],
   "compiler_env": "CK_CXX",
-  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ -Wall -Wno-sign-compare",
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "image-classification-tflite",
   "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
   "linker_add_lib_as_env": [
