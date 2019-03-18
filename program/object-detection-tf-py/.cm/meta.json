@@ -11,7 +11,7 @@
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "post_process_cmds": [
-          "python ../postprocess.py"
+          "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../postprocess.py"
         ],
         "post_process_via_ck": "yes",
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py",
