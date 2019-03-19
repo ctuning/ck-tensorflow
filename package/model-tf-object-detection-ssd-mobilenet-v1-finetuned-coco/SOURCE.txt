@@ -1,0 +1,22 @@
+The original "educated" model was downloaded from here:
+
+https://drive.google.com/file/d/1YnWT3Yv0L9PTcSVEZ2_kfF7n53o_r9Tp/view?usp=sharing
+
+Later it was converted to "frozen" graph with `Tensorflow models API`:
+https://github.com/tensorflow/models
+
+BASH-script for conversion (need to run from `<Tensorflow models API>/research/` directory):
+
+```
+export PYTHONPATH=<Tensorflow python library>:${PYTHONPATH}
+export PYTHONPATH=<Tensorflow models API>/research/slim:${PYTHONPATH}
+python object_detection/export_inference_graph.py \
+    --input_type image_tensor \
+    --pipeline_config_path  <MODEL_DIRECTORY>/mobilenet_v1_ssd_finetuned/pipeline.config \
+    --trained_checkpoint_prefix <MODEL_DIRECTORY>/mobilenet_v1_ssd_finetuned/model.ckpt-97016 \
+    --output_directory <MODEL_DIRECTORY>/mobilenet_v1_ssd_finetuned_coco
+```
+
+*** NOTE *** :
+Tensorflow-1.11 was used
+Python version 3 used for build Tensorflow API and build Tensorflow models API 
