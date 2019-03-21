@@ -124,5 +124,11 @@ def setup(i):
     for varname in install_env.keys():
         if varname.startswith('MODEL_'):
             env[ep+varname[len('MODEL'):]] = install_env[varname]
+
+    # Just copy those without any change in the name:
+    #
+    for varname in install_env.keys():
+        if varname.startswith('CK_MODEL_'):
+            env[varname] = install_env[varname]
     
     return {'return':0, 'bat':s}
