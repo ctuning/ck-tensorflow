@@ -46,12 +46,13 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_cmds": [
-          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
-        ],
-        "post_process_via_ck": "yes",
+        "post_process_via_ck": {
+          "data_uoa": "b98ee24399ef4c3a",
+          "module_uoa": "script",
+          "script_name": "postprocess"
+        },
         "pre_process_via_ck": {
-          "data_uoa": "689867d1939a781d",
+          "data_uoa": "b98ee24399ef4c3a",
           "module_uoa": "script",
           "script_name": "preprocess"
         },
