@@ -1,0 +1,68 @@
+{
+  "backup_data_uid": "1c0c024883901888",
+  "build_compiler_vars": {},
+  "data_name": "image-classification-tf-frozen-py",
+  "main_language": "python",
+  "no_compile": "yes",
+  "no_target_file": "yes",
+  "process_in_tmp": "yes",
+  "program": "yes",
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no",
+      "run_time": {
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../tf_classify.py"
+      }
+    }
+  },
+  "run_deps": {
+    "imagenet-aux": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (aux)",
+      "sort": 10,
+      "tags": "dataset,imagenet,aux"
+    },
+    "imagenet-val": {
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "ImageNet dataset (val)",
+      "sort": 20,
+      "tags": "dataset,imagenet,raw,val"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 30,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 40,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 50,
+      "tags": "lib,tensorflow"
+    },
+    "model": {
+      "local": "yes",
+      "name": "Tensorflow model",
+      "sort": 30,
+      "tags": "tf,model"
+    }
+  },
+  "run_vars": {
+    "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG"
+  },
+  "tags": [
+    "program",
+    "lang-python",
+    "tensorflow",
+    "tf",
+    "classification"
+  ]
+}

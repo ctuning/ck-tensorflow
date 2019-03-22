@@ -1,0 +1,15 @@
+{
+  "backup_data_uid": "1c0c024883901888",
+  "backup_module_uid": "b0ac08fe1d3c2615",
+  "backup_module_uoa": "program",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2019-03-22T19:11:33.385243",
+    "version": [
+      "1",
+      "9",
+      "7"
+    ]
+  },
+  "data_name": "image-classification-tf-frozen-py"
+}
