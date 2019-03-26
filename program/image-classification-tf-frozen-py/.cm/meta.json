@@ -8,7 +8,28 @@
   "process_in_tmp": "yes",
   "program": "yes",
   "run_cmds": {
-    "default": {
+    "preprocessed": {
+      "ignore_return_code": "no",
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json",
+        "pre_process_with_deps": {
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "preprocess",
+          "function_name":  "ck_preprocess"
+        },
+        "post_process_via_ck": {
+          "data_uoa": "b98ee24399ef4c3a",
+          "module_uoa": "script",
+          "script_name": "postprocess"
+        },
+        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../tf_classify_preprocessed.py",
+        "run_output_files": [
+          "tmp-ck-timer.json"
+        ]
+      }
+    },
+    "barebones": {
       "ignore_return_code": "no",
       "run_time": {
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../tf_classify.py"
@@ -48,7 +69,7 @@
       "sort": 50,
       "tags": "lib,tensorflow"
     },
-    "model": {
+    "weights": {
       "local": "yes",
       "name": "Tensorflow model",
       "sort": 30,
@@ -56,7 +77,15 @@
     }
   },
   "run_vars": {
-    "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG"
+    "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG",
+    "CK_BATCH_COUNT": 1,
+    "CK_BATCH_SIZE": 1,
+    "CK_CROP_PERCENT": 87.5,
+    "CK_IMAGE_FILE": "",
+    "CK_RECREATE_CACHE": "NO",
+    "CK_SKIP_IMAGES": 0,
+    "CK_SUBTRACT_MEAN": "YES",
+    "CK_TMP_IMAGE_SIZE": 0
   },
   "tags": [
     "program",
