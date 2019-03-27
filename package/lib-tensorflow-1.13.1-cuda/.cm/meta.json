@@ -17,16 +17,16 @@
     "compiler.cuda": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "CUDA compiler ==9.0",
+      "name": "CUDA compiler >=10.0",
       "sort": 40,
       "tags": "compiler,lang-c-cuda",
       "version_from": [
-        9,
+        10,
         0,
         0
       ],
       "version_to": [
-        9,
+        10,
         0,
         999
       ]
