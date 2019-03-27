@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Installation script for the TensorFlow library.
+# Installation script for the TensorFlow Lite library.
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
@@ -101,17 +101,19 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo "Building Android package..."
   
   make -f tensorflow/contrib/lite/Makefile \
+       -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
          TARGET=ANDROID \
          NDK_ROOT="$CK_ANDROID_NDK_ROOT_DIR" \
          ANDROID_ARCH="$CK_ANDROID_ABI" \
-         ANDROID_API="$CK_ANDROID_API_LEVEL"\
+         ANDROID_API="$CK_ANDROID_API_LEVEL" \
          CC_PREFIX="$CC_PREFIX"
   exit_if_error
 else
   echo
   echo "Building Linux package..."
 
-  make -f tensorflow/contrib/lite/Makefile
+  make -f tensorflow/contrib/lite/Makefile \
+       -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
   exit_if_error
 fi
 

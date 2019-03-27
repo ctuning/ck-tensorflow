@@ -51,7 +51,7 @@
     "channel-stable"
   ],
   "template": "yes",
-  "template_type": "TFLite AI framework (static)",
+  "template_type": "TFLite ML framework (static)",
   "use_scripts_from_another_entry": {
     "data_uoa": "0eb9f24b67b17d68",
     "module_uoa": "script"
