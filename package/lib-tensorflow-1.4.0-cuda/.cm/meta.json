@@ -24,7 +24,7 @@
     "lib.cudnn": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "cuDNN library (cuDNN 6.0 required!)",
+      "name": "cuDNN library >=6.0",
       "sort": 50,
       "tags": "lib,cudnn,dnn,cuda"
     },

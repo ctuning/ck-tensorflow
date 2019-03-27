@@ -34,7 +34,7 @@
     "lib.cudnn": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "cuDNN library (cuDNN >=7.0 required!)",
+      "name": "cuDNN library >=7.0",
       "sort": 50,
       "tags": "lib,cudnn,dnn,cuda",
       "version_from": [
@@ -79,7 +79,7 @@
     "channel-stable"
   ],
   "template": "yes",
-  "template_type": "TensorFlow AI framework (for CUDA)",
+  "template_type": "TensorFlow ML framework (for CUDA)",
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "lib-tensorflow-1.1.0-cpu",
     "module_uoa": "package"

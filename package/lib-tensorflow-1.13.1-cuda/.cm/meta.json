@@ -17,7 +17,7 @@
     "compiler.cuda": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "CUDA compiler >=10.0",
+      "name": "CUDA compiler ==10.0",
       "sort": 40,
       "tags": "compiler,lang-c-cuda",
       "version_from": [
@@ -34,7 +34,7 @@
     "lib.cudnn": {
       "add_to_path": "yes",
       "local": "yes",
-      "name": "cuDNN library (cuDNN >=7.0 required!)",
+      "name": "cuDNN library >=7.0",
       "sort": 50,
       "tags": "lib,cudnn,dnn,cuda",
       "version_from": [
