@@ -51,29 +51,29 @@
       "sort": 20,
       "tags": "dataset,imagenet,raw,val"
     },
-    "lib-python-numpy": {
-      "local": "yes",
-      "name": "NumPy python library",
-      "sort": 30,
-      "tags": "lib,python-package,numpy"
-    },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Pillow python library",
-      "sort": 40,
-      "tags": "lib,python-package,pillow"
-    },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "TensorFlow library",
-      "sort": 50,
-      "tags": "lib,tensorflow"
-    },
     "weights": {
       "local": "yes",
       "name": "Tensorflow model",
       "sort": 30,
       "tags": "tf,model"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 40,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "TensorFlow library",
+      "sort": 60,
+      "tags": "lib,tensorflow"
     }
   },
   "run_vars": {
