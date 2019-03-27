@@ -13,7 +13,7 @@ output_layer_name   = os.environ['CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME']
 normalize_data      = os.environ['CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA']
 imagenet_path       = os.environ['CK_ENV_DATASET_IMAGENET_VAL']
 labels_path         = os.environ['CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
-data_layout         = os.environ['CK_MODEL_DATA_LAYOUT']
+data_layout         = os.environ['ML_MODEL_DATA_LAYOUT']
 
 normalize_data_bool = normalize_data in ('YES', 'yes', 'ON', 'on', '1')
 
