@@ -54,7 +54,15 @@ def load_preprocessed_batch(image_list, image_index):
         batch_data.append( [img] )
         image_index += 1
 
-    return np.concatenate(batch_data, axis=0), image_index
+    nhwc_data = np.concatenate(batch_data, axis=0)
+
+    if data_layout == 'NHWC':
+        #print(nhwc_data.shape)
+        return nhwc_data, image_index
+    else:
+        nchw_data = nhwc_data.transpose(0,3,1,2)
+        #print(nchw_data.shape)
+        return nchw_data, image_index
 
 
 def load_graph(frozen_graph_filename):
