@@ -37,7 +37,7 @@ def load_preprocessed_batch(image_list, image_index):
         img_file = os.path.join(IMAGE_DIR, image_list[image_index])
         img = np.fromfile(img_file, np.uint8)
         img = img.reshape((IMAGE_SIZE, IMAGE_SIZE, 3))
-        img = img.astype(np.float)
+        img = img.astype(np.float32)
 
         # Normalize
         if MODEL_NORMALIZE_DATA:
@@ -49,11 +49,12 @@ def load_preprocessed_batch(image_list, image_index):
                 img = img - MODEL_MEAN_VALUE
             else:
                 img = img - np.mean(img)
-        # Put to batch
-        batch_data.append(img)
+
+        # Add img to batch
+        batch_data.append( [img] )
         image_index += 1
 
-    return batch_data, image_index
+    return np.concatenate(batch_data, axis=0), image_index
 
 
 def load_graph(frozen_graph_filename):
