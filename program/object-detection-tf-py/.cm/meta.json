@@ -24,26 +24,26 @@
   "run_deps": {
     "dataset": {
       "local": "yes",
-      "name": "Object detection dataset",
+      "name": "Object Detection dataset",
       "sort": 20,
       "tags": "dataset,object-detection"
     },
     "lib-python-numpy": {
       "local": "yes",
-      "name": "NumPy python library",
+      "name": "NumPy Python library",
       "sort": 60,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
       "local": "yes",
-      "name": "Pillow python library",
+      "name": "Pillow Python library",
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
     "lib-tensorflow": {
       "local": "yes",
-      "name": "Tensorflow library",
-      "no_tags": "tensorflow_cc,vstatic",
+      "name": "TensorFlow library",
+      "no_tags": "tensorflow_cc,vstatic,source",
       "sort": 70,
       "tags": "lib,tensorflow"
     },
@@ -73,11 +73,11 @@
     "CK_SILENT_MODE": "NO",
     "CK_SKIP_IMAGES": 0,
     "CK_TF_CPU_NUM_OF_PROCESSORS": 0,
-    "CK_TF_GPU_MEMORY_PERCENT": 33
+    "CK_TF_GPU_MEMORY_PERCENT": 50
   },
   "tags": [
     "tensorflow-object-detection"
   ],
   "template": "yes",
-  "template_type": "object detection via TensorFlow (Python)"
+  "template_type": "Object Detection via TensorFlow (Python)"
 }
