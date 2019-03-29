@@ -19,6 +19,9 @@ for path in ENV['PYTHONPATH'].split(':'):
 CUR_DIR = os.getcwd()
 sys.path.append(os.path.dirname(CUR_DIR))
 
+# Silence a warning (https://github.com/tensorflow/models/issues/3786)
+import matplotlib; matplotlib.use('Agg')
+
 import ck_utils
 import converter_results
 import converter_annotations
