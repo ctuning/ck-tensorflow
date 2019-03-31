@@ -81,7 +81,7 @@
     "weights": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "TensorFlow-Python model and weights",
+      "name": "TensorFlow-Lite model and weights",
       "no_tags": "mobilenet-all",
       "sort": 30,
       "tags": "tensorflowmodel,weights,tflite"
@@ -102,9 +102,12 @@
     "classification.cpp"
   ],
   "tags": [
-    "tensorflow-lite-classification"
+    "tensorflow-lite-classification",
+    "tensorflow-lite",
+    "classification",
+    "image-classification"
   ],
   "target_file": "classification",
   "template": "yes",
-  "template_type": "image classification via TFLite (C++)"
+  "template_type": "Image Classification via TFLite (C++)"
 }
