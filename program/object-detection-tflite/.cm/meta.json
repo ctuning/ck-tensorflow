@@ -1,0 +1,145 @@
+{
+  "backup_data_uid": "81ff2123447a8b0f", 
+  "compile_deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "C++ compiler", 
+      "sort": 0, 
+      "tags": "compiler,lang-cpp"
+    }, 
+    "library": {
+      "local": "yes", 
+      "name": "TensorFlow Lite C++ API", 
+      "sort": 20, 
+      "tags": "lib,tensorflow-lite,tflite,vstatic"
+    },
+    "flatbuffers": {
+      "local": "yes", 
+      "name": "flatbuffers library", 
+      "sort": 90, 
+      "tags": "lib,flatbuffers"
+    },
+    "xopenme": {
+      "local": "yes", 
+      "name": "xOpenME library", 
+      "sort": 100, 
+      "tags": "lib,xopenme"
+    }
+  }, 
+  "compiler_add_include_as_env_from_deps": [
+    "CK_ENV_LIB_STDCPP_INCLUDE", 
+    "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA", 
+    "CK_ENV_LIB_TF_INCLUDE0", 
+    "CK_ENV_LIB_TF_INCLUDE1", 
+    "CK_ENV_LIB_TF_INCLUDE2"
+  ], 
+  "compiler_env": "CK_CXX", 
+  "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
+  "data_name": "object-detection-tflite", 
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$", 
+  "linker_add_lib_as_env": [
+    "CK_CXX_EXTRA", 
+    "CK_ENV_LIB_STDCPP_STATIC"
+  ], 
+  "main_language": "cpp", 
+  "only_for_target_os_tags": [
+    "linux", 
+    "android"
+  ], 
+  "process_in_tmp": "yes", 
+  "program": "yes", 
+  "run_cmds": {
+    "default": {
+      "ignore_return_code": "no", 
+      "run_time": {
+        "fine_grain_timer_file": "tmp-ck-timer.json", 
+        "post_process_cmds": [
+          "python $#ck_take_from_{script:24c98b0cee248d93}#$postprocess.py"
+        ],
+        "post_process_via_ck": "yes",
+        "pre_process_with_deps": {
+          "data_uoa":       "24c98b0cee248d93",
+          "module_uoa":     "script",
+          "script_name":    "preprocess",
+          "function_name":  "ck_preprocess"
+        },
+        "run_cmd_main": "$#BIN_FILE#$", 
+        "run_output_files": [
+          "tmp-ck-timer.json"
+        ]
+      }
+    }
+  }, 
+  "run_deps": {
+    "dataset": {
+      "local": "yes",
+      "name": "Object detection dataset",
+      "sort": 20,
+      "tags": "dataset,object-detection"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "NumPy python library",
+      "sort": 30,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Pillow python library",
+      "sort": 40,
+      "tags": "lib,python-package,pillow"
+    },
+    "tool-coco": {
+      "local": "yes",
+      "name": "Python API for COCO",
+      "sort": 50,
+      "tags": "tool,coco"
+    },
+    "weights": {
+      "force_target_as_host": "yes", 
+      "local": "yes", 
+      "name": "TensorFlow model", 
+      "sort": 60, 
+      "tags": "ssd,tflite,model,object-detection"
+    },
+    "flatbuffers": {
+      "local": "yes",
+      "name": "flatbuffers library",
+      "sort": 70,
+      "tags": "lib,flatbuffers"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
+    },
+    "lib-tensorflow": {
+      "local": "yes",
+      "name": "Tensorflow library",
+      "no_tags": "tensorflow_cc,vstatic",
+      "sort": 70,
+      "tags": "lib,tensorflow"
+    }
+  }, 
+  "run_vars": {
+    "CK_BATCH_COUNT": 1, 
+    "CK_BATCH_SIZE": 1, 
+    "CK_CROP_PERCENT": 87.5, 
+    "CK_IMAGE_FILE": "", 
+    "CK_RECREATE_CACHE": "NO", 
+    "CK_SKIP_IMAGES": 0, 
+    "CK_SUBTRACT_MEAN": "YES", 
+    "CK_TMP_IMAGE_SIZE": 0
+  }, 
+  "skip_bin_ext": "yes", 
+  "source_files": [
+    "detect.cpp"
+  ], 
+  "tags": [
+    "tensorflow-lite-detection"
+  ], 
+  "target_file": "detect", 
+  "template": "yes", 
+  "template_type": "SSD detection via TFLite (C++)"
+}
