@@ -146,8 +146,6 @@ def evaluate_via_pycocotools(image_ids_list, results_dir, annotations_file):
   cocoEval.accumulate()
   cocoEval.summarize()
 
-  print("!!!!!!! cocoEval.stats:", cocoEval.stats)
-
   # These are the same names as object returned by CocoDetectionEvaluator has
   all_metrics = {
     "DetectionBoxes_Precision/mAP": cocoEval.stats[0], 
