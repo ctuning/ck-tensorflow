@@ -32,30 +32,37 @@ sys.path.append(SCRIPT_DIR)
 CUR_DIR = os.getcwd()
 
 import ck_utils
-import converter_results
+
 import converter_annotations
-import calc_metrics_kitti
+import converter_results
+
 import calc_metrics_coco
+import calc_metrics_kitti
 import calc_metrics_oid
+
 from object_detection.utils import label_map_util
 
-# TODO:
-LABELMAP_FILE = ENV['LABELMAP_FILE']
-MODEL_DATASET_TYPE = ENV['MODEL_DATASET_TYPE']
-DATASET_TYPE = ENV['DATASET_TYPE']
+
 ANNOTATIONS_PATH = ENV['ANNOTATIONS_PATH']
-METRIC_TYPE = ENV['METRIC_TYPE']
-IMAGES_OUT_DIR = ENV['IMAGES_OUT_DIR']
-DETECTIONS_OUT_DIR = ENV['DETECTIONS_OUT_DIR']
+
 ANNOTATIONS_OUT_DIR = ENV['ANNOTATIONS_OUT_DIR']
+DETECTIONS_OUT_DIR = ENV['DETECTIONS_OUT_DIR']
+IMAGES_OUT_DIR = ENV['IMAGES_OUT_DIR']
 RESULTS_OUT_DIR = ENV['RESULTS_OUT_DIR']
-FULL_REPORT = ENV['FULL_REPORT']
+
 IMAGE_LIST_FILE = ENV['IMAGE_LIST_FILE']
+LABELMAP_FILE = ENV['LABELMAP_FILE']
+
+DATASET_TYPE = ENV['DATASET_TYPE']
+METRIC_TYPE = ENV['METRIC_TYPE']
+MODEL_DATASET_TYPE = ENV['MODEL_DATASET_TYPE']
+
+FULL_REPORT = ENV['FULL_REPORT']
 TIMER_JSON = ENV['TIMER_JSON']
 
 def ck_postprocess(i):
 
-  def evaluate(annotationsprocessed_image_ids, categories_list):
+  def evaluate(processed_image_ids, categories_list):
     # Convert annotations from original format of the dataset
     # to a format specific for a tool that will calculate metrics
     if DATASET_TYPE != METRIC_TYPE:

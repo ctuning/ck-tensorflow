@@ -26,7 +26,6 @@
 #include "coco.hpp"
 
 
-
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
@@ -101,28 +100,26 @@ namespace CK {
     };
 
     template<char delimiter>
-    class WordDelimitedBy : public std::string
-    {
+    class WordDelimitedBy : public std::string {
     };
 
     template<char delimiter>
-    std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
-    {
+    std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
         std::getline(is, output, delimiter);
         return is;
     }
 
-    inline float max(float a, float b) { return a > b ? a: b;}
+    inline float max(float a, float b) { return a > b ? a : b; }
 
-    inline float min(float a, float b) { return a > b ? b: a;}
+    inline float min(float a, float b) { return a > b ? b : a; }
 
     // Check if `box` intersects (x1, y1, x2, y2) greater than `treshold` of area
     bool is_box_hidden_by_other(DetectionBox box,
-                            float x1,
-                            float y1,
-                            float x2,
-                            float y2,
-                            float threshold) {
+                                float x1,
+                                float y1,
+                                float x2,
+                                float y2,
+                                float threshold) {
         float n1 = max(box.x1, x1);
         float n2 = min(box.x2, x2);
         float m1 = max(box.y1, y1);
@@ -167,22 +164,22 @@ namespace CK {
             std::ifstream settings_file("env.ini");
             if (!settings_file)
                 throw "Unable to open 'env.ini' file";
-            std::map <std::string, std::string> settings_from_file;
+            std::map<std::string, std::string> settings_from_file;
             for (std::string s; !getline(settings_file, s).fail();) {
-		std::cout << s << std::endl;
+                std::cout << s << std::endl;
                 std::istringstream iss(s);
                 std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<'='>>(iss)),
                                              std::istream_iterator<WordDelimitedBy<'='>>());
-		if (row.size() == 1) 
-		    settings_from_file.emplace(row[0], "");
-		else
-    		    settings_from_file.emplace(row[0], row[1]);
+                if (row.size() == 1)
+                    settings_from_file.emplace(row[0], "");
+                else
+                    settings_from_file.emplace(row[0], row[1]);
             }
             std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
             if (model_dataset_type == "coco") {
                 _model_classes = COCO_CLASSES;
             } else {
-                throw("Unsupported model dataset type: " + model_dataset_type);
+                throw ("Unsupported model dataset type: " + model_dataset_type);
             }
             _graph_file = settings_from_file["MODEL_TFLITE_GRAPH"];
             _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
@@ -227,7 +224,7 @@ namespace CK {
             for (std::string s; !getline(file, s).fail();) {
                 std::istringstream iss(s);
                 std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<';'>>(iss)),
-                         std::istream_iterator<WordDelimitedBy<';'>>());
+                                             std::istream_iterator<WordDelimitedBy<';'>>());
                 FileInfo fileInfo = {row[0], std::stoi(row[1]), std::stoi(row[2])};
                 _image_list.emplace_back(fileInfo);
             }
@@ -238,23 +235,35 @@ namespace CK {
         }
 
         const std::vector<FileInfo> &image_list() const { return _image_list; }
+
         const std::vector<std::string> &model_classes() const { return _model_classes; }
 
         int batch_count() { return _batch_count; }
+
         int batch_size() { return _batch_size; }
+
         int image_size_height() { return _image_size_height; }
+
         int image_size_width() { return _image_size_width; }
+
         int num_channels() { return _num_channels; }
+
         int number_of_threads() { return _number_of_threads; }
 
-        bool correct_background() { return _correct_background;}
-        bool full_report() { return _full_report;}
-        bool normalize_img() { return _normalize_img;}
-        bool subtract_mean() { return _subtract_mean;}
+        bool correct_background() { return _correct_background; }
+
+        bool full_report() { return _full_report; }
+
+        bool normalize_img() { return _normalize_img; }
+
+        bool subtract_mean() { return _subtract_mean; }
+
         bool verbose() { return _verbose; };
 
         std::string graph_file() { return _graph_file; }
+
         std::string images_dir() { return _images_dir; }
+
         std::string detections_out_dir() { return _detections_out_dir; }
 
     private:
@@ -439,8 +448,8 @@ namespace CK {
 
     class ResultData {
     public:
-        ResultData(BenchmarkSettings *s): _size(s->max_detections + 1)  {
-            _buffer = new std::string [_size];
+        ResultData(BenchmarkSettings *s) : _size(s->max_detections + 1) {
+            _buffer = new std::string[_size];
         }
 
         ~ResultData() {
@@ -460,6 +469,7 @@ namespace CK {
 
 
         std::string *data() const { return _buffer; }
+
     private:
         std::string *_buffer;
         const int _size;
@@ -511,8 +521,8 @@ namespace CK {
             int size = _out_data->size();
             for (auto image_file : batch_images) {
                 _out_converter->convert(_boxes_ptr + offset * size * 4,
-                                        _classes_ptr + offset * size ,
-                                        _scores_ptr + offset * size ,
+                                        _classes_ptr + offset * size,
+                                        _scores_ptr + offset * size,
                                         _num_ptr + offset,
                                         _out_data.get(),
                                         image_file,
@@ -588,7 +598,7 @@ namespace CK {
                               int buffer_size,
                               std::vector<std::string> model_classes,
                               bool correct_background) {
-        int class_id_add = correct_background ? 1: 0;
+        int class_id_add = correct_background ? 1 : 0;
         for (int i = 0; i < detection_boxes.size(); i++) {
             std::ostringstream stringStream;
             std::string class_name = detection_boxes[i].class_id < model_classes.size()
@@ -626,9 +636,9 @@ namespace CK {
 
             for (int i = 0; i < *num; i++) {
                 float y1 = boxes[i * sizeof(float)] * src.height;
-                float x1 = boxes[i * sizeof(float) + 1] * src.width ;
+                float x1 = boxes[i * sizeof(float) + 1] * src.width;
                 float y2 = boxes[i * sizeof(float) + 2] * src.height;
-                float x2 = boxes[i * sizeof(float) + 3] * src.width ;
+                float x2 = boxes[i * sizeof(float) + 3] * src.width;
                 float score = scores[i];
                 int detected_class = int(classes[i]);
                 add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);

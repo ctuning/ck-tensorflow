@@ -25,11 +25,11 @@ class TFLiteBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
 public:
     TFLiteBenchmark(BenchmarkSettings *settings, tflite::Interpreter *interpreter, int input_index)
             : Benchmark<TData, TInConverter, TOutConverter>(
-                settings, interpreter->typed_tensor<TData>(input_index),
-                interpreter->typed_output_tensor<TData>(0),
-                interpreter->typed_output_tensor<TData>(1),
-                interpreter->typed_output_tensor<TData>(2),
-                interpreter->typed_output_tensor<TData>(3)) {
+            settings, interpreter->typed_tensor<TData>(input_index),
+            interpreter->typed_output_tensor<TData>(0),
+            interpreter->typed_output_tensor<TData>(1),
+            interpreter->typed_output_tensor<TData>(2),
+            interpreter->typed_output_tensor<TData>(3)) {
     }
 };
 
