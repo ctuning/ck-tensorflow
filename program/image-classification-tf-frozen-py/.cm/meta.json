@@ -88,10 +88,9 @@
     "CK_TMP_IMAGE_SIZE": 0
   },
   "tags": [
-    "program",
-    "lang-python",
-    "tensorflow",
+    "image-classification",
     "tf",
-    "classification"
+    "tensorflow",
+    "lang-python"
   ]
 }

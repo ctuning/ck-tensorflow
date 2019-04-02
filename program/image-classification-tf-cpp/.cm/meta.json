@@ -107,7 +107,9 @@
     "classification.cpp"
   ],
   "tags": [
-    "tensorflow-classification"
+    "image-classification",
+    "tf",
+    "lang-cpp"
   ],
   "target_file": "classification",
   "template": "yes",

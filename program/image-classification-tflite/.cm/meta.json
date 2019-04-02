@@ -102,10 +102,9 @@
     "classification.cpp"
   ],
   "tags": [
-    "tensorflow-lite-classification",
-    "tensorflow-lite",
-    "classification",
-    "image-classification"
+    "image-classification",
+    "tflite",
+    "lang-cpp"
   ],
   "target_file": "classification",
   "template": "yes",

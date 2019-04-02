@@ -59,8 +59,8 @@
     "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG"
   }, 
   "tags": [
-    "program",
-    "lang-python",
-    "tensorflow-classification"
+    "image-classification",
+    "tflite",
+    "lang-python"
   ]
 }
