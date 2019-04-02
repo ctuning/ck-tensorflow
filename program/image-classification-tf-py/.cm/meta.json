@@ -95,7 +95,9 @@
     "CK_USE_MODEL_MEAN": 0
   },
   "tags": [
-    "tensorflow-classification"
+    "image-classification",
+    "tf",
+    "lang-python"
   ],
   "template": "yes",
   "template_type": "Image Classification via TensorFlow (Python)"
