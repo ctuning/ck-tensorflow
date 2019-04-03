@@ -12,16 +12,15 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "pre_process_with_deps": {
+        "pre_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
           "module_uoa":     "script",
-          "script_name":    "preprocess",
-          "function_name":  "ck_preprocess"
+          "script_name":    "preprocess"
         },
         "post_process_via_ck": {
-          "data_uoa": "b98ee24399ef4c3a",
-          "module_uoa": "script",
-          "script_name": "postprocess"
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "postprocess"
         },
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../tf_classify_preprocessed.py",
         "run_output_files": [
