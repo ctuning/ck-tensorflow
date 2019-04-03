@@ -88,6 +88,12 @@
       "sort": 40,
       "tags": "lib,python-package,pillow"
     },
+    "lib-python-matplotlib": {
+      "local": "yes",
+      "name": "MatPlotLib python library",
+      "sort": 45,
+      "tags": "lib,python-package,matplotlib"
+    },
     "tool-coco": {
       "local": "yes",
       "name": "Python API for COCO",
