@@ -169,6 +169,7 @@ int main(int argc, char *argv[]) {
                     throw "Failed to invoke tflite";
                 session.measure_end_prediction();
 
+                benchmark->non_max_suppression(session.batch_files());
                 benchmark->save_results(session.batch_files());
             }
         });

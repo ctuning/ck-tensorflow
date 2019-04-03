@@ -482,6 +482,8 @@ namespace CK {
         virtual void load_images(const std::vector<FileInfo> &batch_images) = 0;
 
         virtual void save_results(const std::vector<FileInfo> &batch_images) = 0;
+
+        virtual void non_max_suppression(const std::vector<FileInfo> &batch_images) = 0;
     };
 
 
@@ -516,7 +518,7 @@ namespace CK {
             }
         }
 
-        void save_results(const std::vector<FileInfo> &batch_images) override {
+        void non_max_suppression(const std::vector<FileInfo> &batch_images) override {
             int offset = 0;
             int size = _out_data->size();
             for (auto image_file : batch_images) {
@@ -528,14 +530,19 @@ namespace CK {
                                         image_file,
                                         _settings->model_classes(),
                                         _settings->correct_background());
-                std::size_t found = image_file.name.find_last_of(".");
-                std::string result_name = image_file.name.substr(0, found) + ".txt";
-                std::string file_name = _settings->detections_out_dir() + "/" + result_name;
-                _out_data->save(file_name);
                 offset += 1;
             }
         }
 
+
+        void save_results(const std::vector<FileInfo> &batch_images) override {
+            for (auto image_file : batch_images) {
+                std::size_t found = image_file.name.find_last_of(".");
+                std::string result_name = image_file.name.substr(0, found) + ".txt";
+                std::string file_name = _settings->detections_out_dir() + "/" + result_name;
+                _out_data->save(file_name);
+            }
+        }
     private:
         TData *_in_ptr;
         TData *_boxes_ptr;
