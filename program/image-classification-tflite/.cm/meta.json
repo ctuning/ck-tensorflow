@@ -46,15 +46,15 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": {
-          "data_uoa": "b98ee24399ef4c3a",
-          "module_uoa": "script",
-          "script_name": "postprocess"
-        },
         "pre_process_via_ck": {
-          "data_uoa": "b98ee24399ef4c3a",
-          "module_uoa": "script",
-          "script_name": "preprocess"
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "preprocess"
+        },
+        "post_process_via_ck": {
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_output_files": [
@@ -84,7 +84,7 @@
       "name": "TensorFlow-Lite model and weights",
       "no_tags": "mobilenet-all",
       "sort": 30,
-      "tags": "tensorflowmodel,weights,tflite"
+      "tags": "model,tflite,image-classification"
     }
   },
   "run_vars": {

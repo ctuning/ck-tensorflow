@@ -52,14 +52,15 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_cmds": [
-          "python $#ck_take_from_{script:689867d1939a781d}#$postprocess.py"
-        ],
-        "post_process_via_ck": "yes",
         "pre_process_via_ck": {
-          "data_uoa": "689867d1939a781d",
-          "module_uoa": "script",
-          "script_name": "preprocess"
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "preprocess"
+        },
+        "post_process_via_ck": {
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_output_files": [
@@ -89,7 +90,7 @@
       "name": "TensorFlow model and weights",
       "no_tags": "mobilenet-all",
       "sort": 40,
-      "tags": "tensorflowmodel,weights,frozen"
+      "tags": "model,tf,image-classification"
     }
   },
   "run_vars": {

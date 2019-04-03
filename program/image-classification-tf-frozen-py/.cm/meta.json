@@ -54,7 +54,7 @@
       "local": "yes",
       "name": "Tensorflow model",
       "sort": 30,
-      "tags": "model,image-classification,tf"
+      "tags": "model,tf,image-classification"
     },
     "lib-python-numpy": {
       "local": "yes",

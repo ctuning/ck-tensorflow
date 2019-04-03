@@ -48,11 +48,11 @@
       "sort": 50, 
       "tags": "tensorflow,source"
     },
-    "model": {
+    "weights": {
       "local": "yes",
       "name": "TFlite model",
       "sort": 60,
-      "tags": "tensorflowmodel,weights,tflite"
+      "tags": "model,tflite,image-classification"
     }
   },
   "run_vars": {
