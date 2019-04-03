@@ -57,11 +57,10 @@
           "python $#ck_take_from_{script:24c98b0cee248d93}#$postprocess.py"
         ],
         "post_process_via_ck": "yes",
-        "pre_process_with_deps": {
+        "pre_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
           "module_uoa":     "script",
-          "script_name":    "preprocess",
-          "function_name":  "ck_preprocess"
+          "script_name":    "preprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_output_files": [
@@ -113,6 +112,12 @@
       "name": "xOpenME library",
       "sort": 100,
       "tags": "lib,xopenme"
+    },
+    "tensorflowmodel-api": {
+      "local": "yes",
+      "name": "Tensorflow model API",
+      "sort": 80,
+      "tags": "tensorflowmodel,api"
     },
     "lib-tensorflow": {
       "local": "yes",
