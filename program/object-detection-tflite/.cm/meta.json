@@ -53,14 +53,15 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_cmds": [
-          "python $#ck_take_from_{script:24c98b0cee248d93}#$postprocess.py"
-        ],
-        "post_process_via_ck": "yes",
         "pre_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
           "module_uoa":     "script",
           "script_name":    "preprocess"
+        },
+        "post_process_via_ck": {
+          "data_uoa":       "24c98b0cee248d93",
+          "module_uoa":     "script",
+          "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_output_files": [
@@ -105,7 +106,7 @@
       "local": "yes",
       "name": "TensorFlow model",
       "sort": 60,
-      "tags": "ssd,tflite,model,object-detection"
+      "tags": "model,tflite,model,object-detection,ssd"
     },
     "flatbuffers": {
       "local": "yes",

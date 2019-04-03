@@ -10,10 +10,9 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_cmds": [
-          "python ../postprocess.py"
-        ],
-        "post_process_via_ck": "yes",
+        "post_process_via_ck": {
+          "script_name":    "postprocess"
+        },
         "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../detect.py",
         "run_output_files": [
           "tmp-ck-timer.json"
@@ -40,6 +39,12 @@
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
+    "lib-python-matplotlib": {
+      "local": "yes",
+      "name": "MatPlotLib python library",
+      "sort": 45,
+      "tags": "lib,python-package,matplotlib"
+    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
@@ -47,11 +52,11 @@
       "sort": 70,
       "tags": "lib,tensorflow"
     },
-    "model": {
+    "weights": {
       "local": "yes",
       "name": "TensorFlow object detection model",
       "sort": 30,
-      "tags": "tensorflowmodel,object-detection"
+      "tags": "model,tf,object-detection,ssd"
     },
     "python": {
       "local": "yes",
