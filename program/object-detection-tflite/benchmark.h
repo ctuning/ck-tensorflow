@@ -44,6 +44,8 @@ namespace CK {
         X_VAR_TIME_IMG_LOAD_AVG,
         X_VAR_TIME_CLASSIFY_TOTAL,
         X_VAR_TIME_CLASSIFY_AVG,
+        X_VAR_TIME_NON_MAX_SUPPRESSION_TOTAL,
+        X_VAR_TIME_NON_MAX_SUPPRESSION_AVG,
 
         X_VAR_COUNT
     };
@@ -303,9 +305,13 @@ namespace CK {
 
         float total_prediction_time() const { return _total_prediction_time; }
 
+        float total_non_max_suppression_time() const { return _non_max_suppression_time.total(); }
+
         float avg_load_images_time() const { return _loading_time.avg(); }
 
         float avg_prediction_time() const { return _prediction_time.avg(); }
+
+        float avg_non_max_suppression_time() const { return _non_max_suppression_time.avg(); }
 
         bool get_next_batch() {
             if (_batch_index + 1 == _settings->batch_count())
@@ -352,6 +358,18 @@ namespace CK {
             return duration;
         }
 
+        /// Finish measuring of non_max_suppression stage
+        float measure_end_non_max_suppression() {
+            float duration = measure_end();
+            _total_prediction_time += duration;
+            if (_settings->full_report() || _settings->verbose())
+                std::cout << "non_max_suppression completed in " << duration << " s" << std::endl;
+            // Skip first batch in order to account warming-up the system
+            if (_batch_index > 0 || _settings->batch_count() == 1)
+                _non_max_suppression_time.add(duration);
+            return duration;
+        }
+
         int batch_index() const { return _batch_index; }
 
         const std::vector<FileInfo> &batch_files() const { return _batch_files; }
@@ -360,6 +378,7 @@ namespace CK {
         int _batch_index = -1;
         Accumulator _loading_time;
         Accumulator _prediction_time;
+        Accumulator _non_max_suppression_time;
         BenchmarkSettings *_settings;
         float _total_prediction_time = 0;
         std::vector<FileInfo> _batch_files;
@@ -386,6 +405,8 @@ namespace CK {
         store_value_f(X_VAR_TIME_IMG_LOAD_AVG, "images_load_time_avg_s", s.avg_load_images_time());
         store_value_f(X_VAR_TIME_CLASSIFY_TOTAL, "prediction_time_total_s", s.total_prediction_time());
         store_value_f(X_VAR_TIME_CLASSIFY_AVG, "prediction_time_avg_s", s.avg_prediction_time());
+        store_value_f(X_VAR_TIME_NON_MAX_SUPPRESSION_TOTAL, "non_max_suppression_time_total_s", s.total_non_max_suppression_time());
+        store_value_f(X_VAR_TIME_NON_MAX_SUPPRESSION_AVG, "non_max_suppression_avg_s", s.avg_non_max_suppression_time());
 
         // Finish xopenmp
         xopenme_dump_state();
@@ -543,6 +564,7 @@ namespace CK {
                 _out_data->save(file_name);
             }
         }
+
     private:
         TData *_in_ptr;
         TData *_boxes_ptr;

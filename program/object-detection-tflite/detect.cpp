@@ -169,7 +169,10 @@ int main(int argc, char *argv[]) {
                     throw "Failed to invoke tflite";
                 session.measure_end_prediction();
 
+                session.measure_begin();
                 benchmark->non_max_suppression(session.batch_files());
+                session.measure_end_non_max_suppression();
+
                 benchmark->save_results(session.batch_files());
             }
         });
