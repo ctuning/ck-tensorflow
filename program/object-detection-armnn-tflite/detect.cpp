@@ -189,7 +189,6 @@ int main(int argc, char *argv[]) {
                                  "Supported types are: Float32 (%d), UInt8 (%d)",
                                  int(input_type), int(armnn::DataType::Float32), int(armnn::DataType::QuantisedAsymm8));
             }
-            cout << "!!! CP: 6 !!!" << endl;
 /*
 
             if (in_height != settings.image_size_height() ||
