@@ -105,7 +105,12 @@ def filename_to_id(file_name, dataset_type):
 
   # In COCO dataset ID is a number which is a part of filename
   if dataset_type == COCO:
-    return int(re.split(r'_', short_name)[2])
+    # COCO 2017: 000000000139.jpg
+    # COCO 2014: COCO_val2014_000000000042.jpg
+    if short_name[0] == '0':
+      return int(short_name)
+    else:
+      return int(re.split(r'_', short_name)[2])
 
   # In OpenImages dataset image identifies by its name
   if dataset_type == OID:
