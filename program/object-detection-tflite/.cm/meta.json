@@ -74,39 +74,39 @@
     "dataset": {
       "local": "yes",
       "name": "Object Detection dataset",
-      "sort": 20,
+      "sort": 10,
       "tags": "dataset,object-detection"
-    },
-    "lib-python-numpy": {
-      "local": "yes",
-      "name": "Python NumPy library",
-      "sort": 30,
-      "tags": "lib,python-package,numpy"
-    },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Python Pillow library",
-      "sort": 40,
-      "tags": "lib,python-package,pillow"
-    },
-    "lib-python-matplotlib": {
-      "local": "yes",
-      "name": "Python Matplotlib library",
-      "sort": 45,
-      "tags": "lib,python-package,matplotlib"
-    },
-    "tool-coco": {
-      "local": "yes",
-      "name": "Python API for COCO",
-      "sort": 50,
-      "tags": "tool,coco"
     },
     "weights": {
       "force_target_as_host": "yes",
       "local": "yes",
       "name": "Object Detection model",
-      "sort": 60,
+      "sort": 20,
       "tags": "model,tflite,object-detection"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 30,
+      "tags": "compiler,lang-python"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 40,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Python Pillow library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-python-matplotlib": {
+      "local": "yes",
+      "name": "Python Matplotlib library",
+      "sort": 60,
+      "tags": "lib,python-package,matplotlib"
     },
     "flatbuffers": {
       "local": "yes",
@@ -114,17 +114,23 @@
       "sort": 70,
       "tags": "lib,flatbuffers"
     },
-    "xopenme": {
-      "local": "yes",
-      "name": "xOpenME library",
-      "sort": 100,
-      "tags": "lib,xopenme"
-    },
     "tensorflowmodel-api": {
       "local": "yes",
       "name": "TensorFlow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
+    },
+    "tool-coco": {
+      "local": "yes",
+      "name": "Python API for COCO",
+      "sort": 90,
+      "tags": "tool,coco"
+    },
+    "xopenme": {
+      "local": "yes",
+      "name": "xOpenME library",
+      "sort": 100,
+      "tags": "lib,xopenme"
     }
   },
   "run_vars": {
