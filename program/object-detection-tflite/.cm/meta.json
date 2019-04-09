@@ -9,13 +9,13 @@
     },
     "library": {
       "local": "yes",
-      "name": "TensorFlow Lite C++ API",
+      "name": "TensorFlow Lite library",
       "sort": 20,
       "tags": "lib,tensorflow-lite,tflite,vstatic"
     },
     "flatbuffers": {
       "local": "yes",
-      "name": "flatbuffers library",
+      "name": "FlatBuffers library",
       "sort": 90,
       "tags": "lib,flatbuffers"
     },
@@ -73,25 +73,25 @@
   "run_deps": {
     "dataset": {
       "local": "yes",
-      "name": "Object detection dataset",
+      "name": "Object Detection dataset",
       "sort": 20,
       "tags": "dataset,object-detection"
     },
     "lib-python-numpy": {
       "local": "yes",
-      "name": "NumPy python library",
+      "name": "Python NumPy library",
       "sort": 30,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
       "local": "yes",
-      "name": "Pillow python library",
+      "name": "Python Pillow library",
       "sort": 40,
       "tags": "lib,python-package,pillow"
     },
     "lib-python-matplotlib": {
       "local": "yes",
-      "name": "MatPlotLib python library",
+      "name": "Python Matplotlib library",
       "sort": 45,
       "tags": "lib,python-package,matplotlib"
     },
@@ -104,13 +104,13 @@
     "weights": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "TensorFlow model",
+      "name": "Object Detection model",
       "sort": 60,
-      "tags": "model,tflite,model,object-detection,ssd"
+      "tags": "model,tflite,object-detection"
     },
     "flatbuffers": {
       "local": "yes",
-      "name": "flatbuffers library",
+      "name": "FlatBuffers library",
       "sort": 70,
       "tags": "lib,flatbuffers"
     },
@@ -122,7 +122,7 @@
     },
     "tensorflowmodel-api": {
       "local": "yes",
-      "name": "Tensorflow model API",
+      "name": "TensorFlow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
     }
@@ -137,9 +137,11 @@
     "detect.cpp"
   ],
   "tags": [
-    "tensorflow-lite-detection"
+    "object-detection",
+    "tflite",
+    "lang-cpp"
   ],
   "target_file": "detect",
   "template": "yes",
-  "template_type": "SSD detection via TFLite (C++)"
+  "template_type": "Object Detection via TFLite (C++)"
 }
