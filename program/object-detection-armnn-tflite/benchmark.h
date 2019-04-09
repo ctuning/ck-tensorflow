@@ -127,9 +127,13 @@ namespace CK {
         float m1 = max(box.y1, y1);
         float m2 = min(box.y2, y2);
         if (n1 > n2 || m1 > m2) return false;
+
         float intersection_area = (n2 - n1) * (m2 - m1);
         float box_area = (x2 - x1) * (y2 - y1);
-        if (box_area * threshold > intersection_area) return false;
+        float main_box_area = (box.x2 - box.x1) * (box.y2 - box.y1);
+    	float iou = intersection_area / (box_area + main_box_area - intersection_area);
+	    if (iou < threshold) return false;
+
         return true;
     }
 
