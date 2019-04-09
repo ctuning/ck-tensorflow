@@ -264,9 +264,9 @@ namespace CK {
 
         bool subtract_mean() { return _subtract_mean; }
 
-        bool use_neon() { return _subtract_mean; }
+        bool use_neon() { return _use_neon; }
 
-        bool use_opencl() { return _subtract_mean; }
+        bool use_opencl() { return _use_opencl; }
 
         bool verbose() { return _verbose; };
 
