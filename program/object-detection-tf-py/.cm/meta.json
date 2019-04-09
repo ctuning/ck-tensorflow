@@ -27,24 +27,6 @@
       "sort": 20,
       "tags": "dataset,object-detection"
     },
-    "lib-python-numpy": {
-      "local": "yes",
-      "name": "NumPy Python library",
-      "sort": 60,
-      "tags": "lib,python-package,numpy"
-    },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Pillow Python library",
-      "sort": 50,
-      "tags": "lib,python-package,pillow"
-    },
-    "lib-python-matplotlib": {
-      "local": "yes",
-      "name": "MatPlotLib python library",
-      "sort": 45,
-      "tags": "lib,python-package,matplotlib"
-    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
@@ -54,7 +36,7 @@
     },
     "weights": {
       "local": "yes",
-      "name": "TensorFlow object detection model",
+      "name": "TensorFlow Object Detection model",
       "sort": 30,
       "tags": "model,tf,object-detection,ssd"
     },
@@ -63,6 +45,24 @@
       "name": "Python interpreter",
       "sort": 5,
       "tags": "compiler,python"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 60,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-matplotlib": {
+      "local": "yes",
+      "name": "Python Matplotlib library",
+      "sort": 45,
+      "tags": "lib,python-package,matplotlib"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Python Pillow library",
+      "sort": 50,
+      "tags": "lib,python-package,pillow"
     },
     "tool-coco": {
       "local": "yes",
@@ -81,7 +81,9 @@
     "CK_TF_GPU_MEMORY_PERCENT": 50
   },
   "tags": [
-    "tensorflow-object-detection"
+    "object-detection",
+    "tf",
+    "lang-python"
   ],
   "template": "yes",
   "template_type": "Object Detection via TensorFlow (Python)"
