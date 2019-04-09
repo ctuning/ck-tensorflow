@@ -101,10 +101,19 @@ int main(int argc, char *argv[]) {
         //std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
         std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuRef};
         if( settings.use_neon() && settings.use_opencl()) {
+	    if (settings.verbose()) {
+		cout << "Enable CPU and GPU acceleration" << endl;
+	    }
             optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
         } else if( settings.use_neon() ) {
+	    if (settings.verbose()) {
+		cout << "Enable CPU acceleration" << endl;
+	    }
             optOptions = {armnn::Compute::CpuAcc};
         } else if( settings.use_opencl() ) {
+	    if (settings.verbose()) {
+		cout << "Enable GPU acceleration" << endl;
+	    }
             optOptions = {armnn::Compute::GpuAcc};
         }
 
@@ -114,9 +123,7 @@ int main(int argc, char *argv[]) {
             if (!model)
                 throw std::string("Failed to load graph from file ") + settings.graph_file().c_str();
             if (settings.verbose()) {
-                cout << "Loaded model " << settings.graph_file() << endl;
-                model->error_reporter();
-                cout << "resolved reporter" << endl;
+                cout << "Loaded model: " << settings.graph_file() << endl;
             }
 
             armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile(settings.graph_file().c_str());
@@ -139,7 +146,6 @@ int main(int argc, char *argv[]) {
             std::size_t outSize1 = outShape1[0] * outShape1[1];
             std::size_t outSize2 = outShape2[0] * outShape2[1];
             std::size_t outSize3 = outShape3[0];
-
 
             armnn::IOptimizedNetworkPtr optNet = armnn::Optimize(*network, optOptions, runtime->GetDeviceSpec());
 
@@ -189,27 +195,6 @@ int main(int argc, char *argv[]) {
                                  "Supported types are: Float32 (%d), UInt8 (%d)",
                                  int(input_type), int(armnn::DataType::Float32), int(armnn::DataType::QuantisedAsymm8));
             }
-/*
-
-            if (in_height != settings.image_size_height() ||
-                in_width != settings.image_size_width() ||
-                in_channels != settings.num_channels())
-                throw format("Dimensions of graph's input do not correspond to dimensions of input image (%d*%d*%d*%d)",
-                             settings.batch_size(),
-                             settings.image_size_height(),
-                             settings.image_size_width(),
-                             settings.num_channels());
-
-            if (settings.verbose()) {
-                cout << format("Input tensor dimensions (NHWC): %d*%d*%d*%d", in_num, in_height, in_width, in_channels)
-                     << endl;
-                cout << format("Detection boxes tensor dimensions: %d*%d*%d", frames, boxes_count, boxes_length)
-                     << endl;
-                cout << format("Detection classes tensor dimensions: %d*%d", frames, classes_count) << endl;
-                cout << format("Detection scores tensor dimensions: %d*%d", frames, scores_count) << endl;
-                cout << format("Number of detections tensor dimensions: %d*1", frames) << endl;
-            }
-*/
         });
 
         cout << "\nProcessing batches..." << endl;
