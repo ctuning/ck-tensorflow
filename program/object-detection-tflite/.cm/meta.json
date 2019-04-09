@@ -125,13 +125,6 @@
       "name": "Tensorflow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
-    },
-    "lib-tensorflow": {
-      "local": "yes",
-      "name": "Tensorflow library",
-      "no_tags": "tensorflow_cc,vstatic",
-      "sort": 70,
-      "tags": "lib,tensorflow"
     }
   },
   "run_vars": {
