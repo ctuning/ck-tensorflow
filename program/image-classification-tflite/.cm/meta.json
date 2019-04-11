@@ -85,6 +85,30 @@
       "no_tags": "mobilenet-all",
       "sort": 30,
       "tags": "model,tflite,image-classification"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 40,
+      "tags": "compiler,python"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 50,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Python Pillow library",
+      "sort": 70,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-python-scipy": {
+      "local": "yes",
+      "name": "Python SciPy library",
+      "sort": 60,
+      "tags": "lib,python-package,scipy"
     }
   },
   "run_vars": {
