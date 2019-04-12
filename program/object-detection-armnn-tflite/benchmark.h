@@ -25,7 +25,8 @@
 
 #include "coco.hpp"
 
-
+#define TFLITE_MAX_DETECTIONS 10
+#define OUT_BUFFER_SIZE 11
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
@@ -163,8 +164,6 @@ namespace CK {
 
     class BenchmarkSettings {
     public:
-        const int max_detections = 10;
-
         BenchmarkSettings() {
             //Load settings
             std::ifstream settings_file("env.ini");
@@ -483,7 +482,7 @@ namespace CK {
 
     class ResultData {
     public:
-        ResultData(BenchmarkSettings *s) : _size(s->max_detections + 1) {
+        ResultData(BenchmarkSettings *s) : _size(OUT_BUFFER_SIZE) {
             _buffer = new std::string[_size];
         }
 
@@ -638,7 +637,6 @@ namespace CK {
 
     void boxes_info_to_output(std::vector<DetectionBox> detection_boxes,
                               std::string *buffer,
-                              int buffer_size,
                               std::vector<std::string> model_classes,
                               bool correct_background) {
         int class_id_add = correct_background ? 1 : 0;
@@ -656,7 +654,7 @@ namespace CK {
                          << class_name;
             buffer[i] = stringStream.str();
         }
-        for (int i = detection_boxes.size(); i < buffer_size; i++) buffer[i] = "";
+        for (int i = detection_boxes.size(); i < OUT_BUFFER_SIZE-1; i++) buffer[i] = "";
     }
 
     class OutCopy {
@@ -686,7 +684,7 @@ namespace CK {
                 int detected_class = int(classes[i]);
                 add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
             }
-            boxes_info_to_output(detection_boxes, buffer + 1, *num, model_classes, correct_background);
+            boxes_info_to_output(detection_boxes, buffer + 1, model_classes, correct_background);
         }
     };
 
@@ -719,7 +717,7 @@ namespace CK {
                 int detected_class = int(classes[i]);
                 add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
             }
-            boxes_info_to_output(detection_boxes, buffer + 1, *num, model_classes, correct_background);
+            boxes_info_to_output(detection_boxes, buffer + 1, model_classes, correct_background);
         }
     };
 
