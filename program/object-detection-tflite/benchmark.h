@@ -25,7 +25,8 @@
 
 #include "coco.hpp"
 
-
+#define TFLITE_MAX_DETECTIONS 10
+#define OUT_BUFFER_SIZE 11
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
@@ -92,15 +93,6 @@ namespace CK {
         int height;
     };
 
-    struct DetectionBox {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float score;
-        int class_id;
-    };
-
     template<char delimiter>
     class WordDelimitedBy : public std::string {
     };
@@ -111,60 +103,10 @@ namespace CK {
         return is;
     }
 
-    inline float max(float a, float b) { return a > b ? a : b; }
-
-    inline float min(float a, float b) { return a > b ? b : a; }
-
-    // Check if `box` intersects (x1, y1, x2, y2) greater than `treshold` of area
-    bool is_box_hidden_by_other(DetectionBox box,
-                                float x1,
-                                float y1,
-                                float x2,
-                                float y2,
-                                float threshold) {
-        float n1 = max(box.x1, x1);
-        float n2 = min(box.x2, x2);
-        float m1 = max(box.y1, y1);
-        float m2 = min(box.y2, y2);
-        if (n1 > n2 || m1 > m2) return false;
-
-        float intersection_area = (n2 - n1) * (m2 - m1);
-        float box_area = (x2 - x1) * (y2 - y1);
-        float main_box_area = (box.x2 - box.x1) * (box.y2 - box.y1);
-    	float iou = intersection_area / (box_area + main_box_area - intersection_area);
-	    if (iou < threshold) return false;
-
-        return true;
-    }
-
-    // Analog of tf.image.non_max_suppression
-    void add_element_to_box(
-            std::vector<DetectionBox> &detection_boxes,
-            float x1,
-            float y1,
-            float x2,
-            float y2,
-            float score,
-            int class_id,
-            int width,
-            int height) {
-        if (y2 < 0.0f || x2 < 0.0f || y1 > height || x1 > width) return;
-        if (y1 < 0.0f) y1 = 0.0f;
-        if (x1 < 0.0f) x1 = 0.0f;
-        if (y2 > height) y2 = height;
-        if (x2 > width) x2 = width;
-        for (int i = 0; i < detection_boxes.size(); i++) {
-            if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, 0.5)) return;
-        }
-        detection_boxes.push_back({x1, y1, x2, y2, score, class_id});
-    }
-
 //----------------------------------------------------------------------
 
     class BenchmarkSettings {
     public:
-        const int max_detections = 10;
-
         BenchmarkSettings() {
             //Load settings
             std::ifstream settings_file("env.ini");
@@ -473,7 +415,7 @@ namespace CK {
 
     class ResultData {
     public:
-        ResultData(BenchmarkSettings *s) : _size(s->max_detections + 1) {
+        ResultData(BenchmarkSettings *s) : _size(OUT_BUFFER_SIZE) {
             _buffer = new std::string[_size];
         }
 
@@ -626,27 +568,30 @@ namespace CK {
 
 //----------------------------------------------------------------------
 
-    void boxes_info_to_output(std::vector<DetectionBox> detection_boxes,
-                              std::string *buffer,
-                              int buffer_size,
-                              std::vector<std::string> model_classes,
-                              bool correct_background) {
+    void box_to_output(float x1,
+                       float y1,
+                       float x2,
+                       float y2,
+                       float score,
+                       int detected_class,
+                       std::string &buffer,
+                       std::vector<std::string> &model_classes,
+                       bool correct_background) {
         int class_id_add = correct_background ? 1 : 0;
-        for (int i = 0; i < detection_boxes.size(); i++) {
-            std::ostringstream stringStream;
-            std::string class_name = detection_boxes[i].class_id < model_classes.size()
-                                     ? model_classes[detection_boxes[i].class_id]
-                                     : "unknown";
-            stringStream << std::setprecision(2)
-                         << std::showpoint << std::fixed
-                         << detection_boxes[i].x1 << " " << detection_boxes[i].y1 << " "
-                         << detection_boxes[i].x2 << " " << detection_boxes[i].y2 << " "
-                         << std::setprecision(3)
-                         << detection_boxes[i].score << " " << detection_boxes[i].class_id + class_id_add << " "
-                         << class_name;
-            buffer[i] = stringStream.str();
-        }
-        for (int i = detection_boxes.size(); i < buffer_size; i++) buffer[i] = "";
+
+        std::ostringstream stringStream;
+        std::string class_name = detected_class < model_classes.size()
+                                 ? model_classes[detected_class]
+                                 : "unknown";
+        stringStream << std::setprecision(2)
+                     << std::showpoint << std::fixed
+                     << x1 << " " << y1 << " "
+                     << x2 << " " << y2 << " "
+                     << std::setprecision(3)
+                     << score << " " << detected_class + class_id_add << " "
+                     << class_name;
+        buffer = stringStream.str();
+
     }
 
     class OutCopy {
@@ -663,20 +608,19 @@ namespace CK {
                      bool correct_background) const {
             std::string *buffer = target->data();
             buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
-            if (*num == 0) return;
-
-            std::vector<DetectionBox> detection_boxes = {};
 
             for (int i = 0; i < *num; i++) {
-                float y1 = boxes[i * sizeof(float)] * src.height;
-                float x1 = boxes[i * sizeof(float) + 1] * src.width;
-                float y2 = boxes[i * sizeof(float) + 2] * src.height;
-                float x2 = boxes[i * sizeof(float) + 3] * src.width;
+                float y1 = boxes[i * 4] * src.height;
+                float x1 = boxes[i * 4 + 1] * src.width;
+                float y2 = boxes[i * 4 + 2] * src.height;
+                float x2 = boxes[i * 4 + 3] * src.width;
                 float score = scores[i];
                 int detected_class = int(classes[i]);
-                add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
+
+                box_to_output(x1, y1, x2, y2, score, detected_class, buffer[i+1], model_classes, correct_background);
             }
-            boxes_info_to_output(detection_boxes, buffer + 1, *num, model_classes, correct_background);
+
+            for (int i = *num + 1; i < OUT_BUFFER_SIZE; i++) buffer[i] = "";
         }
     };
 
@@ -698,8 +642,6 @@ namespace CK {
             buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
             if (*num == 0) return;
 
-            std::vector<DetectionBox> detection_boxes = {};
-
             for (int i = 0; i < *num; i++) {
                 float y1 = boxes[i * sizeof(float)] * src.height / 255.0f;
                 float x1 = boxes[i * sizeof(float) + 1] * src.width / 255.0f;
@@ -707,9 +649,9 @@ namespace CK {
                 float x2 = boxes[i * sizeof(float) + 3] * src.width / 255.0f;
                 float score = scores[i] / 255.0f;
                 int detected_class = int(classes[i]);
-                add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
+
+                box_to_output(x1, y1, x2, y2, score, detected_class, buffer[i+1], model_classes, correct_background);
             }
-            boxes_info_to_output(detection_boxes, buffer + 1, *num, model_classes, correct_background);
         }
     };
 

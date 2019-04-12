@@ -15,6 +15,7 @@
 
 
 #include "benchmark.h"
+#include "non_max_suppression.h"
 
 using namespace std;
 using namespace CK;
@@ -65,6 +66,8 @@ int main(int argc, char *argv[]) {
             }
 
             tflite::ops::builtin::BuiltinOpResolver resolver;
+            resolver.AddCustom("TFLite_Detection_PostProcess", Register_NMS());
+
             tflite::InterpreterBuilder(*model, resolver)(&interpreter);
             if (!interpreter)
                 throw string("Failed to construct interpreter");
