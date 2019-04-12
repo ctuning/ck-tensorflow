@@ -116,7 +116,7 @@ namespace CK {
 
     inline float min(float a, float b) { return a > b ? b : a; }
 
-    // Check if `box` intersects (x1, y1, x2, y2) greater than `treshold` of area
+    // Check if `box` intersects (x1, y1, x2, y2) greater than area `threshold`.
     bool is_box_hidden_by_other(DetectionBox box,
                                 float x1,
                                 float y1,
@@ -132,8 +132,8 @@ namespace CK {
         float intersection_area = (n2 - n1) * (m2 - m1);
         float box_area = (x2 - x1) * (y2 - y1);
         float main_box_area = (box.x2 - box.x1) * (box.y2 - box.y1);
-    	float iou = intersection_area / (box_area + main_box_area - intersection_area);
-	    if (iou < threshold) return false;
+        float iou = intersection_area / (box_area + main_box_area - intersection_area);
+        if (iou < threshold) return false;
 
         return true;
     }
@@ -155,7 +155,7 @@ namespace CK {
         if (y2 > height) y2 = height;
         if (x2 > width) x2 = width;
         for (int i = 0; i < detection_boxes.size(); i++) {
-            if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, 0.5)) return;
+            if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, 0.3)) return;
         }
         detection_boxes.push_back({x1, y1, x2, y2, score, class_id});
     }
