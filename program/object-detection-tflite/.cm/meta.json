@@ -11,7 +11,12 @@
       "local": "yes",
       "name": "TensorFlow Lite library",
       "sort": 20,
-      "tags": "lib,tensorflow-lite,tflite,vstatic"
+      "tags": "lib,tensorflow-lite,tflite,vstatic",
+      "version_from": [
+        1,
+        13,
+        1
+      ]
     },
     "flatbuffers": {
       "local": "yes",
