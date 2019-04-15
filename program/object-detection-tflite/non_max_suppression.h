@@ -2,8 +2,13 @@
 // Created by ivan on 4/10/19.
 //
 
-#ifndef UNTITLED_NON_MAX_SUPPRESSION_H
-#define UNTITLED_NON_MAX_SUPPRESSION_H
+#ifndef NMS_NON_MAX_SUPPRESSION_H
+#define NMS_NON_MAX_SUPPRESSION_H
+
+#define NMS_MAX_DETECTIONS 100
+#define NMS_SCORE_THRESHOLD 0.3f
+#define NMS_IOU_THRESHOLD 0.6f
+
 
 #include "tensorflow/lite/kernels/kernel_util.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -67,7 +72,7 @@ void add_detection_to_vector(
     if (y2 > 1.0f) y2 = 1.0f;
     if (x2 > 1.0f) x2 = 1.0f;
     for (int i = 0; i < detection_boxes.size(); i++) {
-        if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, 0.5)) return;
+        if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, NMS_IOU_THRESHOLD)) return;
     }
     detection_boxes.push_back({x1, y1, x2, y2, score, class_id});
 }
@@ -83,7 +88,7 @@ TfLiteStatus NMS_Prepare(TfLiteContext *context, TfLiteNode *node) {
         output[i] = GetOutput(context, node, i);
     }
 
-    int num_dims[] = {40, 10, 10, 1};
+    int num_dims[] = {4*NMS_MAX_DETECTIONS, NMS_MAX_DETECTIONS, NMS_MAX_DETECTIONS, 1};
     int count = sizeof(num_dims) / sizeof(*num_dims);
 
     for (int i = 0; i < count; ++i) {
@@ -101,7 +106,6 @@ TfLiteStatus NMS_Eval(TfLiteContext *context, TfLiteNode *node) {
 
     const int in_tensors_count = 3;
     const int out_tensors_count = 4;
-    const float score_threshold = 0.05f;
 
     const TfLiteTensor **input = new const TfLiteTensor*[in_tensors_count];
     int in_sizes[3];
@@ -144,38 +148,43 @@ TfLiteStatus NMS_Eval(TfLiteContext *context, TfLiteNode *node) {
     int *box_nums = new int[box_count];
     for (int i = 0; i < box_count; i++) {
         //Normalize probabilities for box
-        float min = in_scores[i*classes_count];
-        float sum = 0;
-        for (int j = 0; j < classes_count; j++) {
-            int index = i*classes_count + j;
-            if (min > in_scores[index]) {
-                min = in_scores[index];
-            }
-            sum += in_scores[index];
-        }
-        sum -= min * classes_count;
-        for (int j = 0; j < classes_count; j++) {
-            int index = i*classes_count + j;
-            in_scores[index] = (in_scores[index] - min) / sum;
-        }
+//        float min = in_scores[i*classes_count];
+//        float sum = 0;
+//        for (int j = 0; j < classes_count; j++) {
+//            int index = i*classes_count + j;
+//            if (min > in_scores[index]) {
+//                min = in_scores[index];
+//            }
+//            sum += in_scores[index];
+//        }
+//        sum -= min * classes_count;
+//        for (int j = 0; j < classes_count; j++) {
+//            int index = i*classes_count + j;
+//            in_scores[index] = (in_scores[index] - min) / sum;
+//        }
 
         // Find most probable class
-        int index_max = 0;
-        float max = in_scores[i*classes_count];
-        for (int j = 1; j < classes_count; j++) {
+        int index_max = 1;
+        float max = in_scores[i*classes_count + 1];
+        for (int j = 2; j < classes_count; j++) {
             int index = i*classes_count + j;
             if (max < in_scores[index]) {
                 max = in_scores[index];
                 index_max = j;
             }
         }
-        scores[i] = max;
-        classes[i] = index_max;
+        if (max > NMS_SCORE_THRESHOLD) {
+            scores[i] = max;
+            classes[i] = index_max;
+        } else {
+            scores[i] = in_scores[i*classes_count]; // better 0.0f for speed up
+            classes[i] = 0;
+        }
         box_nums[i] = i;
     }
 
     std::vector<DetectionBox> detection_boxes;
-    detection_boxes.reserve(10);
+    detection_boxes.reserve(NMS_MAX_DETECTIONS);
 
     // Sort detections by descending probability
     // and add to resulting array
@@ -189,7 +198,7 @@ TfLiteStatus NMS_Eval(TfLiteContext *context, TfLiteNode *node) {
                 max = scores[j];
             }
         }
-        if (max < score_threshold) break;
+        if (max < NMS_SCORE_THRESHOLD) break;
         if (i != index) {
             swap_float(scores[i], scores[index]);
             swap_int(classes[i], classes[index]);
@@ -221,9 +230,10 @@ TfLiteStatus NMS_Eval(TfLiteContext *context, TfLiteNode *node) {
 
         if (y1 > y2) swap_float(y1, y2);
         if (x1 > x2) swap_float(x1, x2);
+	//std::cout << "c: " << classes[i] << "  p: " << scores[i] << std::endl;
         add_detection_to_vector(detection_boxes, x1, y1, x2, y2, scores[i], classes[i]);
 
-        if (detection_boxes.size() == 10) break;
+        if (detection_boxes.size() == NMS_MAX_DETECTIONS) break;
     }
 
     for (int i = 0; i < detection_boxes.size(); i++) {
@@ -248,4 +258,4 @@ TfLiteRegistration *Register_NMS() {
     return &r;
 }
 
-#endif //UNTITLED_NON_MAX_SUPPRESSION_H
+#endif //NMS_NON_MAX_SUPPRESSION_H

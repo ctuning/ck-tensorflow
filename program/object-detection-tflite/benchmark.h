@@ -25,8 +25,8 @@
 
 #include "coco.hpp"
 
-#define TFLITE_MAX_DETECTIONS 10
-#define OUT_BUFFER_SIZE 11
+#define TFLITE_MAX_DETECTIONS 100
+#define OUT_BUFFER_SIZE 101
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
