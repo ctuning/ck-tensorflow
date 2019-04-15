@@ -5,8 +5,10 @@ ifeq ($(TARGET),ANDROID)
 # NDK_ROOT=/path/to/your/ndk
 # You need to have an Android version of the protobuf libraries compiled to link
 # in. The compile_android_protobuf.sh script may help.
-
 	ANDROID_HOST_OS_ARCH :=
+	ifeq ($(HOST_OS),linux)
+		ANDROID_HOST_OS_ARCH=linux
+	endif
 	ifeq ($(HOST_OS),LINUX)
 		ANDROID_HOST_OS_ARCH=linux
 	endif
@@ -14,7 +16,7 @@ ifeq ($(TARGET),ANDROID)
 		ANDROID_HOST_OS_ARCH=darwin
 	endif
 	ifeq ($(HOST_OS),WINDOWS)
-    $(error "windows is not supported.")
+		$(error "windows is not supported.")
 	endif
 
 	ifeq ($(ARCH),x86_32)
@@ -71,10 +73,12 @@ ifeq ($(TARGET),ANDROID)
 	endif
     
 	ifndef NDK_ROOT
-    $(error "NDK_ROOT is not defined.")
+		$(error "NDK_ROOT is not defined.")
 	endif
+
 	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-g++
 	CC := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-gcc
+
 	CCFLAGS +=\
 --sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
 -Wno-narrowing \
