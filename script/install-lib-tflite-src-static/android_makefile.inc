@@ -76,8 +76,9 @@ ifeq ($(TARGET),ANDROID)
 		$(error "NDK_ROOT is not defined.")
 	endif
 
-	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-g++
-	CC := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-gcc
+	TARGET_TOOLCHAIN_PREFIX := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-
+	CXX := $(TARGET_TOOLCHAIN_PREFIX)g++
+	CC  := $(TARGET_TOOLCHAIN_PREFIX)gcc
 
 	CCFLAGS +=\
 --sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
@@ -94,10 +95,13 @@ $(MARCH_OPTION) \
 -fPIE \
 -fPIC
 
+        SYS_ROOT := platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH)
+$(info $(SYS_ROOT))
+$(info $(NDK_ROOT)/$(SYS_ROOT)/usr/include/$(BIN_PREFIX))
 	INCLUDES = \
 -I$(NDK_ROOT) \
--I$(NDK_ROOT)/sysroot/usr/include \
--I$(NDK_ROOT)/sysroot/usr/include/$(BIN_PREFIX) \
+-I$(NDK_ROOT)/$(SYS_ROOT)/usr/include \
+-I$(NDK_ROOT)/$(SYS_ROOT)/usr/include/$(BIN_PREFIX) \
 -I$(NDK_ROOT)/sources/android/support/include \
 -I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/include \
 -I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH)/include \
@@ -112,11 +116,11 @@ $(MARCH_OPTION) \
 -I$(GENDIR)
 
 	LIBS := \
+-llog \
 -lstdc++ \
 -lgnustl_static
 
 	LD := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/$(BIN_PREFIX)/bin/ld
-
 	LDFLAGS := \
 $(MARCH_OPTION) \
 -L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH) \
@@ -124,12 +128,13 @@ $(MARCH_OPTION) \
 -pie \
 -v
 
-CCFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
-CXXFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
-LDFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	CCFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	CXXFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	LDFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
 
-	AR := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-ar
+	AR := $(TARGET_TOOLCHAIN_PREFIX)ar
 	ARFLAGS := r
+
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 
 endif  # ANDROID

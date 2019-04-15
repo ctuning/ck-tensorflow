@@ -67,7 +67,7 @@ TFLITE_MAKE_DIR=${TFLITE_DIR}/tools/make
 
 remove_dir_if_exists ${TFLITE_MAKE_DIR}/gen
 
-cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_MAKE_DIR}
+cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_MAKE_DIR}/targets/
 
 echo "--------------------------------";
 echo "Download dependencies ..."
@@ -85,15 +85,13 @@ echo ""
 if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo
   echo "Building Android package..."
-  
   make -f ${TFLITE_MAKE_DIR}/Makefile \
        -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
          TARGET=ANDROID \
-         NDK_ROOT="$CK_ANDROID_NDK_ROOT_DIR" \
-         ANDROID_ARCH="$CK_ANDROID_ABI" \
-         ANDROID_API="$CK_ANDROID_API_LEVEL" \
-         CC_PREFIX="$CC_PREFIX" \
-         LDFLAGS="${CK_EXTRA_LIB_DL}"
+         ARCH="${HOSTTYPE}" \
+         NDK_ROOT="${CK_ANDROID_NDK_ROOT_DIR}" \
+         ANDROID_API="${CK_ANDROID_API_LEVEL}" \
+         ANDROID_ARCH="${CK_ANDROID_ABI}"
   exit_if_error
 else
   echo
