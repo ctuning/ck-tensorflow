@@ -11,7 +11,6 @@
 # It builds a static TFLite library using scripts provided in the
 # `${CK_TOOLS}/lib-tflite-*-src-static/src/tensorflow/lite/tools/make/` directory.
 #
-set > ~/set.log
 
 function exit_if_error() {
  if [ "${?}" != "0" ]; then exit 1; fi
