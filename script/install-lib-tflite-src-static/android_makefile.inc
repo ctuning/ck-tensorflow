@@ -28,7 +28,6 @@ ifeq ($(TARGET),ANDROID)
 	ifndef ANDROID_ARCH
 		ANDROID_ARCH := armeabi-v7a
 	endif
-
 	ifeq ($(ANDROID_ARCH),arm64-v8a)
 		TOOLCHAIN := aarch64-linux-android-4.9
 		SYSROOT_ARCH := arm64
@@ -71,14 +70,28 @@ ifeq ($(TARGET),ANDROID)
 		BIN_PREFIX := x86_64-linux-android
 		MARCH_OPTION :=
 	endif
-    
+
 	ifndef NDK_ROOT
 		$(error "NDK_ROOT is not defined.")
 	endif
 
-	TARGET_TOOLCHAIN_PREFIX := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-
-	CXX := $(TARGET_TOOLCHAIN_PREFIX)g++
-	CC  := $(TARGET_TOOLCHAIN_PREFIX)gcc
+	ifndef COMPILER_TOOLCHAIN_NAME
+		COMPILER_TOOLCHAIN_NAME := gcc
+	endif
+	ifeq ($(COMPILER_TOOLCHAIN_NAME),gcc)
+		GCC_PREFIX := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-
+		CXX := $(GCC_PREFIX)g++
+		CC  := $(GCC_PREFIX)gcc
+	endif
+	ifeq ($(COMPILER_TOOLCHAIN_NAME),clang)
+		# $(NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/
+		CLANG_PREFIX := $(NDK_ROOT)/toolchains/llvm/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/
+		CXX := $(CLANG_PREFIX)clang++
+		CC  := $(CLANG_PREFIX)clang
+	endif
+	# TODO: error if $(COMPILER_TOOLCHAIN_NAME) is neither gcc nor clang.
+$(info CC=$(CC))
+$(info CXX=$(CXX))
 
 	CCFLAGS +=\
 --sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
@@ -96,8 +109,6 @@ $(MARCH_OPTION) \
 -fPIC
 
         SYS_ROOT := platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH)
-$(info $(SYS_ROOT))
-$(info $(NDK_ROOT)/$(SYS_ROOT)/usr/include/$(BIN_PREFIX))
 	INCLUDES = \
 -I$(NDK_ROOT) \
 -I$(NDK_ROOT)/$(SYS_ROOT)/usr/include \
@@ -132,7 +143,7 @@ $(MARCH_OPTION) \
 	CXXFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
 	LDFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
 
-	AR := $(TARGET_TOOLCHAIN_PREFIX)ar
+	AR := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-ar
 	ARFLAGS := r
 
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
