@@ -1,5 +1,5 @@
 diff --git a/tensorflow/lite/tools/make/Makefile b/tensorflow/lite/tools/make/Makefile
-index 994f660..e06eb88 100644
+index 994f660..337d7f9 100644
 --- a/tensorflow/lite/tools/make/Makefile
 +++ b/tensorflow/lite/tools/make/Makefile
 @@ -1,3 +1,5 @@
@@ -27,6 +27,19 @@ index 994f660..e06eb88 100644
  OBJDIR := $(GENDIR)obj/
  BINDIR := $(GENDIR)bin/
  LIBDIR := $(GENDIR)lib/
+@@ -157,9 +162,9 @@ BENCHMARK_LIB := $(LIBDIR)$(BENCHMARK_LIB_NAME)
+ BENCHMARK_BINARY := $(BINDIR)$(BENCHMARK_BINARY_NAME)
+ MINIMAL_BINARY := $(BINDIR)minimal
+ 
+-CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
+-CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
+-AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
++#CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
++#CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
++#AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
+ 
+ MINIMAL_OBJS := $(addprefix $(OBJDIR), \
+ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(MINIMAL_SRCS))))
 @@ -180,7 +185,7 @@ $(OBJDIR)%.o: %.c
  	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
  
