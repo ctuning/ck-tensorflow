@@ -157,6 +157,8 @@ namespace CK {
             _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
             _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
             _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
+            _use_neon = settings_from_file["USE_NEON"] == "True";
+            _use_opencl = settings_from_file["USE_OPENCL"] == "True";
 
             _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), "1"));
             _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
@@ -191,6 +193,8 @@ namespace CK {
                 std::cout << "Batch size: " << _batch_size << std::endl;
                 std::cout << "Normalize: " << _normalize_img << std::endl;
                 std::cout << "Subtract mean: " << _subtract_mean << std::endl;
+                std::cout << "Use NEON: " << _use_neon << std::endl;
+                std::cout << "Use OPENCL: " << _use_opencl << std::endl;
             }
 
             // Create results dir if none
@@ -244,6 +248,10 @@ namespace CK {
         bool normalize_img() { return _normalize_img; }
 
         bool subtract_mean() { return _subtract_mean; }
+
+        bool use_neon() { return _use_neon; }
+
+        bool use_opencl() { return _use_opencl; }
 
         bool verbose() { return _verbose; };
 
@@ -315,6 +323,8 @@ namespace CK {
         bool _full_report;
         bool _normalize_img;
         bool _subtract_mean;
+        bool _use_neon;
+        bool _use_opencl;
         bool _verbose;
     };
 
