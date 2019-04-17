@@ -6,6 +6,9 @@
  * See CK LICENSE.txt for licensing details.
  */
 
+#ifndef BENCHMARK_HEADER_FILE
+#define BENCHMARK_HEADER_FILE
+
 #pragma once
 
 #include <stdio.h>
@@ -20,13 +23,13 @@
 #include <string.h>
 #include <vector>
 #include <map>
+#include <cwctype>
+#include <locale>
 
 #include <xopenme.h>
 
 #include "coco.hpp"
 
-#define TFLITE_MAX_DETECTIONS 100
-#define OUT_BUFFER_SIZE 101
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
@@ -103,6 +106,21 @@ namespace CK {
         return is;
     }
 
+    inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
+    inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
+
+    bool get_yes_no(std::string answer) {
+        std::locale loc;
+        for (std::string::size_type i=0; i<answer.length(); ++i)
+            answer[i] = std::tolower(answer[i],loc);
+        if (answer == "1" || answer == "yes") return true;
+        return false;
+    }
+    bool get_yes_no(char *answer) {
+        if (answer == nullptr) return false;
+        return get_yes_no(std::string(answer));
+    }
+
 //----------------------------------------------------------------------
 
     class BenchmarkSettings {
@@ -131,19 +149,36 @@ namespace CK {
             }
             _graph_file = settings_from_file["MODEL_TFLITE_GRAPH"];
             _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
+            _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
             _images_file = settings_from_file["PREPROCESSED_FILES"];
-            _number_of_threads = std::stoi(settings_from_file["NUMBER_OF_PROCESSORS"]);
-            _batch_count = std::stoi(settings_from_file["IMAGE_COUNT"]);
-            _batch_size = std::stoi(settings_from_file["BATCH_SIZE"]);
             _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
             _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
             _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
             _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
             _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
             _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
-            _full_report = settings_from_file["FULL_REPORT"] == "True";
-            _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
-            _verbose = settings_from_file["VERBOSE"] == "True";
+
+            _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), "1"));
+            _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
+            _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
+            _full_report = get_yes_no(getenv("FULL_REPORT"));
+            _verbose = get_yes_no(getenv("VERBOSE"));
+
+            _default_model_settings=!get_yes_no(getenv("CUSTOM_MODEL_SETTINGS"));
+
+            if (!_default_model_settings) {
+                _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "-1"));
+                _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), "-1"));
+                _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "-1"));
+                _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), "-1"));
+                _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), "-1.0"));
+                _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), "-1.0"));
+                _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), "-1.0"));
+                _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), "-1.0"));
+                _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), "-1.0"));
+                _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), "-1.0"));
+            }
+
             // Print settings
             if (_verbose || _full_report) {
                 std::cout << "Graph file: " << _graph_file << std::endl;
@@ -190,6 +225,8 @@ namespace CK {
 
         int batch_size() { return _batch_size; }
 
+        int detections_buffer_size() { return _m_max_detections + 1; }
+
         int image_size_height() { return _image_size_height; }
 
         int image_size_width() { return _image_size_width; }
@@ -200,13 +237,45 @@ namespace CK {
 
         bool correct_background() { return _correct_background; }
 
-        bool full_report() { return _full_report; }
+        bool default_model_settings() { return _default_model_settings; }
+
+        bool full_report() { return _full_report || _verbose; }
 
         bool normalize_img() { return _normalize_img; }
 
         bool subtract_mean() { return _subtract_mean; }
 
         bool verbose() { return _verbose; };
+
+        int get_max_detections() { return _m_max_detections; };
+        void set_max_detections(int i) { _m_max_detections = i;}
+
+        int get_max_classes_per_detection() { return _m_max_classes_per_detection; };
+        void set_max_classes_per_detection(int i) { _m_max_classes_per_detection = i;}
+
+        int get_detections_per_class() { return _m_detections_per_class; };
+        void set_detections_per_class(int i) { _m_detections_per_class = i;}
+
+        int get_num_classes() { return _m_num_classes; };
+        void set_num_classes(int i) { _m_num_classes = i;}
+
+        float get_nms_score_threshold() { return _m_nms_score_threshold; };
+        void set_nms_score_threshold(float i) { _m_nms_score_threshold = i;}
+
+        float get_nms_iou_threshold() { return _m_nms_iou_threshold; };
+        void set_nms_iou_threshold(float i) { _m_nms_iou_threshold = i;}
+
+        float get_h_scale() { return _m_h_scale; };
+        void set_h_scale(float i) { _m_h_scale = i;}
+
+        float get_w_scale() { return _m_w_scale; };
+        void set_w_scale(float i) { _m_w_scale = i;}
+
+        float get_x_scale() { return _m_x_scale; };
+        void set_x_scale(float i) { _m_x_scale = i;}
+
+        float get_y_scale() { return _m_y_scale; };
+        void set_y_scale(float i) { _m_y_scale = i;}
 
         std::string graph_file() { return _graph_file; }
 
@@ -229,8 +298,20 @@ namespace CK {
         int _image_size_width;
         int _num_channels;
         int _number_of_threads;
+        int _m_max_classes_per_detection;
+        int _m_max_detections;
+        int _m_detections_per_class;
+        int _m_num_classes;
+
+        float _m_nms_score_threshold;
+        float _m_nms_iou_threshold;
+        float _m_h_scale;
+        float _m_w_scale;
+        float _m_x_scale;
+        float _m_y_scale;
 
         bool _correct_background;
+        bool _default_model_settings;
         bool _full_report;
         bool _normalize_img;
         bool _subtract_mean;
@@ -286,7 +367,7 @@ namespace CK {
         /// Finish measuring of batch loading stage
         float measure_end_load_images() {
             float duration = measure_end();
-            if (_settings->full_report() || _settings->verbose())
+            if (_settings->verbose())
                 std::cout << "Batch loaded in " << duration << " s" << std::endl;
             _loading_time.add(duration);
             return duration;
@@ -296,7 +377,7 @@ namespace CK {
         float measure_end_prediction() {
             float duration = measure_end();
             _total_prediction_time += duration;
-            if (_settings->full_report() || _settings->verbose())
+            if (_settings->verbose())
                 std::cout << "Batch classified in " << duration << " s" << std::endl;
             // Skip first batch in order to account warming-up the system
             if (_batch_index > 0 || _settings->batch_count() == 1)
@@ -308,7 +389,7 @@ namespace CK {
         float measure_end_non_max_suppression() {
             float duration = measure_end();
             _total_prediction_time += duration;
-            if (_settings->full_report() || _settings->verbose())
+            if (_settings->verbose())
                 std::cout << "non_max_suppression completed in " << duration << " s" << std::endl;
             // Skip first batch in order to account warming-up the system
             if (_batch_index > 0 || _settings->batch_count() == 1)
@@ -415,7 +496,7 @@ namespace CK {
 
     class ResultData {
     public:
-        ResultData(BenchmarkSettings *s) : _size(OUT_BUFFER_SIZE) {
+        ResultData(BenchmarkSettings *s) : _size(s->detections_buffer_size()) {
             _buffer = new std::string[_size];
         }
 
@@ -462,8 +543,7 @@ namespace CK {
                   TData *boxes_ptr,
                   TData *classes_ptr,
                   TData *scores_ptr,
-                  TData *num_ptr) {
-            _settings = settings;
+                  TData *num_ptr): _settings(settings) {
             _in_ptr = in_ptr;
             _boxes_ptr = boxes_ptr;
             _classes_ptr = classes_ptr;
@@ -500,7 +580,6 @@ namespace CK {
                 offset += 1;
             }
         }
-
 
         void save_results(const std::vector<FileInfo> &batch_images) override {
             for (auto image_file : batch_images) {
@@ -596,7 +675,7 @@ namespace CK {
 
     class OutCopy {
     public:
-        OutCopy(const BenchmarkSettings *s) {}
+        OutCopy(BenchmarkSettings *s): _settings(s) {}
 
         void convert(const float *boxes,
                      const float *classes,
@@ -620,15 +699,17 @@ namespace CK {
                 box_to_output(x1, y1, x2, y2, score, detected_class, buffer[i+1], model_classes, correct_background);
             }
 
-            for (int i = *num + 1; i < OUT_BUFFER_SIZE; i++) buffer[i] = "";
+            for (int i = *num + 1; i < _settings->detections_buffer_size(); i++) buffer[i] = "";
         }
+    private:
+        BenchmarkSettings *_settings;
     };
 
 //----------------------------------------------------------------------
 
     class OutDequantize {
     public:
-        OutDequantize(const BenchmarkSettings *s) {}
+        OutDequantize(BenchmarkSettings *s): _settings(s) {}
 
         void convert(const uint8_t *boxes,
                      const uint8_t *classes,
@@ -652,7 +733,13 @@ namespace CK {
 
                 box_to_output(x1, y1, x2, y2, score, detected_class, buffer[i+1], model_classes, correct_background);
             }
+
+            for (int i = *num + 1; i < _settings->detections_buffer_size(); i++) buffer[i] = "";
         }
+    private:
+        BenchmarkSettings *_settings;
     };
 
 } // namespace CK
+
+#endif

@@ -1,8 +1,21 @@
+/*
+ * Copyright (c) 2018 cTuning foundation.
+ * See CK COPYRIGHT.txt for copyright details.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause.
+ * See CK LICENSE.txt for licensing details.
+ */
+
+/*
+ * There are only 80 categories. the rest have numerical notations.
+ * https://arxiv.org/pdf/1405.0312.pdf
+ * (page 7)
+ */
+
 #ifndef COCO_CLASSES_HEADER_FILE
+#define COCO_CLASSES_HEADER_FILE
 
 #include <vector>
-
-#define COCO_CLASSES_HEADER_FILE
 
 const std::vector<std::string> COCO_CLASSES = {
         "person",
