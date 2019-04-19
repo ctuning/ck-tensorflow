@@ -91,17 +91,17 @@ int main(int argc, char *argv[]) {
             if (settings.verbose()) {
                 cout << "Enable CPU and GPU acceleration" << endl;
             }
-            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc, armnn::Compute::CpuRef};
+            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
         } else if( settings.use_neon() ) {
             if (settings.verbose()) {
                 cout << "Enable CPU acceleration" << endl;
             }
-            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::CpuRef};
+            optOptions = {armnn::Compute::CpuAcc};
         } else if( settings.use_opencl() ) {
 	        if (settings.verbose()) {
                 cout << "Enable GPU acceleration" << endl;
             }
-            optOptions = {armnn::Compute::GpuAcc, armnn::Compute::CpuRef};
+            optOptions = {armnn::Compute::GpuAcc};
         }
 
         cout << endl << "Loading graph..." << endl;
