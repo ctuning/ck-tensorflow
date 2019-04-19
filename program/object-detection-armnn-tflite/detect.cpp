@@ -8,11 +8,7 @@
 
 #include <iomanip>
 #include <vector>
-
-#include "tensorflow/lite/kernels/register.h"
-#include "tensorflow/lite/model.h"
-#include "tensorflow/lite/optional_debug_tools.h"
-
+#include <iterator>
 
 #include "armnn/ArmNN.hpp"
 #include "armnn/Exceptions.hpp"
@@ -25,19 +21,6 @@
 using namespace std;
 using namespace CK;
 
-
-template<typename TData, typename TInConverter, typename TOutConverter>
-class TFLiteBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
-public:
-    TFLiteBenchmark(BenchmarkSettings *settings, tflite::Interpreter *interpreter, int input_index)
-            : Benchmark<TData, TInConverter, TOutConverter>(
-            settings, interpreter->typed_tensor<TData>(input_index),
-            interpreter->typed_output_tensor<TData>(0),
-            interpreter->typed_output_tensor<TData>(1),
-            interpreter->typed_output_tensor<TData>(2),
-            interpreter->typed_output_tensor<TData>(3)) {
-    }
-};
 
 template <typename TData, typename TInConverter, typename TOutConverter>
 class ArmNNBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
@@ -85,9 +68,13 @@ int main(int argc, char *argv[]) {
 
         BenchmarkSession session(&settings);
 
-        //unique_ptr<IBenchmark> benchmark;
-        unique_ptr<tflite::FlatBufferModel> model;
-        unique_ptr<tflite::Interpreter> interpreter;
+        if (settings.verbose()) {
+            armnn::ConfigureLogging(true, false, armnn::LogSeverity::Trace);
+        } else if (settings.full_report()) {
+            armnn::ConfigureLogging(true, false, armnn::LogSeverity::Info);
+        } else {
+            armnn::ConfigureLogging(true, false, armnn::LogSeverity::Error);
+        }
 
         unique_ptr<IBenchmark> benchmark;
         armnnTfLiteParser::ITfLiteParserPtr parser = armnnTfLiteParser::ITfLiteParser::Create();
@@ -101,34 +88,30 @@ int main(int argc, char *argv[]) {
         //std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
         std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuRef};
         if( settings.use_neon() && settings.use_opencl()) {
-	    if (settings.verbose()) {
-		cout << "Enable CPU and GPU acceleration" << endl;
-	    }
-            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
+            if (settings.verbose()) {
+                cout << "Enable CPU and GPU acceleration" << endl;
+            }
+            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc, armnn::Compute::CpuRef};
         } else if( settings.use_neon() ) {
-	    if (settings.verbose()) {
-		cout << "Enable CPU acceleration" << endl;
-	    }
-            optOptions = {armnn::Compute::CpuAcc};
+            if (settings.verbose()) {
+                cout << "Enable CPU acceleration" << endl;
+            }
+            optOptions = {armnn::Compute::CpuAcc, armnn::Compute::CpuRef};
         } else if( settings.use_opencl() ) {
-	    if (settings.verbose()) {
-		cout << "Enable GPU acceleration" << endl;
-	    }
-            optOptions = {armnn::Compute::GpuAcc};
+	        if (settings.verbose()) {
+                cout << "Enable GPU acceleration" << endl;
+            }
+            optOptions = {armnn::Compute::GpuAcc, armnn::Compute::CpuRef};
         }
 
         cout << endl << "Loading graph..." << endl;
         measure_setup([&] {
-            model = tflite::FlatBufferModel::BuildFromFile(settings.graph_file().c_str());
-            if (!model)
-                throw std::string("Failed to load graph from file ") + settings.graph_file().c_str();
-            if (settings.verbose()) {
-                cout << "Loaded model: " << settings.graph_file() << endl;
-            }
-
             armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile(settings.graph_file().c_str());
             if (!network)
                 throw "Failed to load graph from file " + settings.graph_file();
+            if (settings.verbose()) {
+                cout << "Loaded model: " << settings.graph_file() << endl;
+            }
 
             armnnTfLiteParser::BindingPointInfo inputBindingInfo = parser->GetNetworkInputBindingInfo(0, "normalized_input_image_tensor");
             armnnTfLiteParser::BindingPointInfo outputBindingInfo = parser->GetNetworkOutputBindingInfo(0, "TFLite_Detection_PostProcess");
