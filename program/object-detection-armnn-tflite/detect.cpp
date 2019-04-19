@@ -131,6 +131,12 @@ int main(int argc, char *argv[]) {
             std::size_t outSize3 = outShape3[0];
 
             armnn::IOptimizedNetworkPtr optNet = armnn::Optimize(*network, optOptions, runtime->GetDeviceSpec());
+	    if (optNet == nullptr) {
+		cerr << endl << "\033[1;31mERROR:\033[0m" << endl
+		     << "Fail to create a neural network from model with selected parameters..." << endl
+		     << "(Probably NEON or OPENCL acceleration is not supported?)" << endl;
+		exit(-1);
+	    }
 
             runtime->LoadNetwork(networkIdentifier, std::move(optNet));
 
