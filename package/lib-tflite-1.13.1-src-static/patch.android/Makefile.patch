@@ -1,0 +1,51 @@
+diff --git a/tensorflow/lite/tools/make/Makefile b/tensorflow/lite/tools/make/Makefile
+index 994f660..337d7f9 100644
+--- a/tensorflow/lite/tools/make/Makefile
++++ b/tensorflow/lite/tools/make/Makefile
+@@ -1,3 +1,5 @@
++SHELL := /bin/bash
++
+ # Find where we're running from, so we can store generated files here.
+ ifeq ($(origin MAKEFILE_DIR), undefined)
+ 	MAKEFILE_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+@@ -101,6 +103,9 @@ $(wildcard tensorflow/lite/kernels/internal/optimized/*.c) \
+ $(wildcard tensorflow/lite/kernels/internal/reference/*.c) \
+ $(wildcard tensorflow/lite/tools/make/downloads/farmhash/src/farmhash.cc) \
+ $(wildcard tensorflow/lite/tools/make/downloads/fft2d/fftsg.c)
++ifeq ($(TARGET),ANDROID)
++	CORE_CC_ALL_SRCS += $(NDK_ROOT)/sources/android/cpufeatures/cpu-features.c
++endif # ANDROID
+ endif
+ # Remove any duplicates.
+ CORE_CC_ALL_SRCS := $(sort $(CORE_CC_ALL_SRCS))
+@@ -147,7 +152,7 @@ ALL_SRCS := \
+ 	$(BENCHMARK_SRCS)
+ 
+ # Where compiled objects are stored.
+-GENDIR := $(MAKEFILE_DIR)/gen/$(TARGET)_$(TARGET_ARCH)/
++GENDIR := $(MAKEFILE_DIR)/gen/
+ OBJDIR := $(GENDIR)obj/
+ BINDIR := $(GENDIR)bin/
+ LIBDIR := $(GENDIR)lib/
+@@ -157,9 +162,9 @@ BENCHMARK_LIB := $(LIBDIR)$(BENCHMARK_LIB_NAME)
+ BENCHMARK_BINARY := $(BINDIR)$(BENCHMARK_BINARY_NAME)
+ MINIMAL_BINARY := $(BINDIR)minimal
+ 
+-CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
+-CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
+-AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
++#CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
++#CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
++#AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
+ 
+ MINIMAL_OBJS := $(addprefix $(OBJDIR), \
+ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(MINIMAL_SRCS))))
+@@ -180,7 +185,7 @@ $(OBJDIR)%.o: %.c
+ 	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
+ 
+ # The target that's compiled if there's no command-line arguments.
+-all: $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
++all: $(LIB_PATH) # $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+ 
+ # The target that's compiled for micro-controllers
+ micro: $(LIB_PATH)

@@ -5,8 +5,10 @@ ifeq ($(TARGET),ANDROID)
 # NDK_ROOT=/path/to/your/ndk
 # You need to have an Android version of the protobuf libraries compiled to link
 # in. The compile_android_protobuf.sh script may help.
-
 	ANDROID_HOST_OS_ARCH :=
+	ifeq ($(HOST_OS),linux)
+		ANDROID_HOST_OS_ARCH=linux
+	endif
 	ifeq ($(HOST_OS),LINUX)
 		ANDROID_HOST_OS_ARCH=linux
 	endif
@@ -14,7 +16,7 @@ ifeq ($(TARGET),ANDROID)
 		ANDROID_HOST_OS_ARCH=darwin
 	endif
 	ifeq ($(HOST_OS),WINDOWS)
-    $(error "windows is not supported.")
+		$(error "windows is not supported.")
 	endif
 
 	ifeq ($(ARCH),x86_32)
@@ -26,7 +28,6 @@ ifeq ($(TARGET),ANDROID)
 	ifndef ANDROID_ARCH
 		ANDROID_ARCH := armeabi-v7a
 	endif
-
 	ifeq ($(ANDROID_ARCH),arm64-v8a)
 		TOOLCHAIN := aarch64-linux-android-4.9
 		SYSROOT_ARCH := arm64
@@ -69,31 +70,50 @@ ifeq ($(TARGET),ANDROID)
 		BIN_PREFIX := x86_64-linux-android
 		MARCH_OPTION :=
 	endif
-    
+
 	ifndef NDK_ROOT
-    $(error "NDK_ROOT is not defined.")
+		$(error "NDK_ROOT is not defined.")
 	endif
-	CXX := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-g++
-	CC := $(CC_PREFIX) $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-gcc
+
+	ifndef COMPILER_TOOLCHAIN_NAME
+		COMPILER_TOOLCHAIN_NAME := gcc
+	endif
+	ifeq ($(COMPILER_TOOLCHAIN_NAME),gcc)
+		GCC_PREFIX := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-
+		CXX := $(GCC_PREFIX)g++
+		CC  := $(GCC_PREFIX)gcc
+	endif
+	ifeq ($(COMPILER_TOOLCHAIN_NAME),clang)
+		# $(NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/
+		CLANG_PREFIX := $(NDK_ROOT)/toolchains/llvm/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/
+		CXX := $(CLANG_PREFIX)clang++
+		CC  := $(CLANG_PREFIX)clang
+	endif
+	# TODO: error if $(COMPILER_TOOLCHAIN_NAME) is neither gcc nor clang.
+
 	CCFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
+$(COMPILER_FLAGS_OBLIGATORY) \
 -Wno-narrowing \
 -fomit-frame-pointer \
 $(MARCH_OPTION) \
 -fPIE \
 -fPIC
 	CXXFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
+$(COMPILER_FLAGS_OBLIGATORY) \
 -Wno-narrowing \
 -fomit-frame-pointer \
 $(MARCH_OPTION) \
 -fPIE \
 -fPIC
 
+$(info CC = $(CC))
+$(info CXX = $(CXX))
+
+        SYS_ROOT := platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH)
 	INCLUDES = \
 -I$(NDK_ROOT) \
--I$(NDK_ROOT)/sysroot/usr/include \
--I$(NDK_ROOT)/sysroot/usr/include/$(BIN_PREFIX) \
+-I$(NDK_ROOT)/$(SYS_ROOT)/usr/include \
+-I$(NDK_ROOT)/$(SYS_ROOT)/usr/include/$(BIN_PREFIX) \
 -I$(NDK_ROOT)/sources/android/support/include \
 -I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/include \
 -I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH)/include \
@@ -108,11 +128,11 @@ $(MARCH_OPTION) \
 -I$(GENDIR)
 
 	LIBS := \
+-llog \
 -lstdc++ \
 -lgnustl_static
 
 	LD := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/$(BIN_PREFIX)/bin/ld
-
 	LDFLAGS := \
 $(MARCH_OPTION) \
 -L$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/$(ANDROID_ARCH) \
@@ -120,12 +140,13 @@ $(MARCH_OPTION) \
 -pie \
 -v
 
-CCFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
-CXXFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
-LDFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	CCFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	CXXFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
+	LDFLAGS+=-D__ANDROID_API__=$(ANDROID_API)
 
 	AR := $(NDK_ROOT)/toolchains/$(TOOLCHAIN)/prebuilt/$(ANDROID_HOST_OS_ARCH)/bin/$(BIN_PREFIX)-ar
 	ARFLAGS := r
+
 	LIBFLAGS += -Wl,--allow-multiple-definition -Wl,--whole-archive
 
 endif  # ANDROID

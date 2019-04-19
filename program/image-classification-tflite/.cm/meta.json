@@ -9,7 +9,7 @@
     },
     "library": {
       "local": "yes",
-      "name": "TensorFlow C++ API",
+      "name": "TensorFlow Lite API",
       "sort": 20,
       "tags": "lib,tensorflow-lite,vstatic"
     },
@@ -29,7 +29,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "image-classification-tflite",
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_EXTRA_LIB_LOG>>$",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -81,10 +81,34 @@
     "weights": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "TensorFlow-Lite model and weights",
+      "name": "TensorFlow Lite model and weights",
       "no_tags": "mobilenet-all",
       "sort": 30,
       "tags": "model,tflite,image-classification"
+    },
+    "python": {
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 40,
+      "tags": "compiler,python"
+    },
+    "lib-python-numpy": {
+      "local": "yes",
+      "name": "Python NumPy library",
+      "sort": 50,
+      "tags": "lib,python-package,numpy"
+    },
+    "lib-python-pillow": {
+      "local": "yes",
+      "name": "Python Pillow library",
+      "sort": 70,
+      "tags": "lib,python-package,pillow"
+    },
+    "lib-python-scipy": {
+      "local": "yes",
+      "name": "Python SciPy library",
+      "sort": 60,
+      "tags": "lib,python-package,scipy"
     }
   },
   "run_vars": {

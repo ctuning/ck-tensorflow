@@ -1,15 +1,15 @@
 #! /bin/bash
 
 #
-# Installation script for the TensorFlow library.
+# Installation script for the TensorFlow Lite library (TFLite).
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
 #
 #
-# This is the script for installing packages `lib-tensorflow-*-src-static`.
-# It builds static TensorFlow library using provided scripts in
-# `${CK-TOOLS}/lib-tensorflow-*-src-static/src/tensorflow/contrib/makefile/` directory.
+# This script is for installing packages `lib-tflite-*-src-static`.
+# It builds a static TFLite library using scripts provided in the
+# `${CK_TOOLS}/lib-tflite-*-src-static/src/tensorflow/lite/tools/make/` directory.
 #
 
 function exit_if_error() {
@@ -67,7 +67,7 @@ TFLITE_MAKE_DIR=${TFLITE_DIR}/tools/make
 
 remove_dir_if_exists ${TFLITE_MAKE_DIR}/gen
 
-cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_MAKE_DIR}
+cp ${SCRIPT_DIR}/android_makefile.inc ${TFLITE_MAKE_DIR}/targets/
 
 echo "--------------------------------";
 echo "Download dependencies ..."
@@ -85,14 +85,15 @@ echo ""
 if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo
   echo "Building Android package..."
-  
   make -f ${TFLITE_MAKE_DIR}/Makefile \
        -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
          TARGET=ANDROID \
-         NDK_ROOT="$CK_ANDROID_NDK_ROOT_DIR" \
-         ANDROID_ARCH="$CK_ANDROID_ABI" \
-         ANDROID_API="$CK_ANDROID_API_LEVEL" \
-         CC_PREFIX="$CC_PREFIX"
+         ARCH="${HOSTTYPE}" \
+         COMPILER_TOOLCHAIN_NAME="${CK_COMPILER_TOOLCHAIN_NAME}" \
+         COMPILER_FLAGS_OBLIGATORY="${CK_COMPILER_FLAGS_OBLIGATORY}" \
+         NDK_ROOT="${CK_ANDROID_NDK_ROOT_DIR}" \
+         ANDROID_API="${CK_ANDROID_API_LEVEL}" \
+         ANDROID_ARCH="${CK_ANDROID_ABI}"
   exit_if_error
 else
   echo
