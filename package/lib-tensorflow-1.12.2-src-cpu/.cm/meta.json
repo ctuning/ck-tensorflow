@@ -1,0 +1,71 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "git_src_dir": "src",
+    "install_env": {
+      "CK_TF_ENABLE_XLA": "NO",
+      "CK_TF_NEED_CUDA": "NO",
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_GIT_CHECKOUT": "v1.12.2",
+      "PACKAGE_PATCH": "YES",
+      "PACKAGE_SUB_DIR": "src",
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
+    },
+    "version": "1.12.2"
+  },
+  "deps": {
+    "bazel": {
+      "add_to_path": "no",
+      "local": "no",
+      "name": "Bazel tool",
+      "sort": 40,
+      "tags": "tool,bazel",
+      "version_from": [
+        0,
+        11
+      ],
+      "version_to": [
+        0,
+        19,
+        99
+      ]
+    },
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 5,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path": {
+    "linux": "lib/tensorflow/__init__.py"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " (from sources, cpu)",
+  "process_script": "install",
+  "soft_uoa": "30db354f469bb178",
+  "suggested_path": "lib-tensorflow-src-cpu",
+  "tags": [
+    "lib",
+    "bazel",
+    "tensorflow",
+    "tensorflow-cpu",
+    "vsrc",
+    "vcpu",
+    "v1.12.2",
+    "v1.12",
+    "v1",
+    "channel-stable"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "9024d3aaf2cdc47d",
+    "module_uoa": "script"
+  }
+}

@@ -1,0 +1,21 @@
+diff --git a/tensorflow/contrib/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h b/tensorflow/contrib/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+index 0ce64f8..2caad4e 100644
+--- a/tensorflow/contrib/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
++++ b/tensorflow/contrib/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+@@ -83,6 +83,7 @@ struct DepthwiseConvParams {
+ #define OFFSET_OUTPUT_WIDTH 84
+ #define OFFSET_OUTPUT_HEIGHT 88
+ 
++#if 0
+ static_assert(offsetof(DepthwiseConvParams, input_depth) ==
+                   OFFSET_INPUT_DEPTH, "");
+ static_assert(offsetof(DepthwiseConvParams, input_row_size) ==
+@@ -119,7 +120,7 @@ static_assert(offsetof(DepthwiseConvParams, output_width) ==
+                   OFFSET_OUTPUT_WIDTH, "");
+ static_assert(offsetof(DepthwiseConvParams, output_height) ==
+                   OFFSET_OUTPUT_HEIGHT, "");
+-
++#endif
+ template <int32 kDepth, int32 kStrideWidth, int32 kStrideHeight>
+ struct DepthwiseConvWindow {};
+ 
