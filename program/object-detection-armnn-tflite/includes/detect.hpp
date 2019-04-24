@@ -9,7 +9,6 @@
 #ifndef DETECT_HEADER_FILE
 #define DETECT_HEADER_FILE
 
-#include "anchors.hpp"
 #include "benchmark.h"
 
 using namespace std;

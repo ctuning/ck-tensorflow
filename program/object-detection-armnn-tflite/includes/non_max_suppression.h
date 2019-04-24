@@ -139,21 +139,22 @@ void postprocess_detections(Settings *s,
     detection_boxes.reserve(s->get_max_detections());
 
     int add_class_id = correct_background ? -1 : 0;
+    float *anchors = s->get_anchors();
 
     for (int i = 0; i < s->get_max_detections(); i++) {
         if (scores[i] < s->get_nms_score_threshold()) break;
 
-        int index = boxes[i];
-        float ay = ANCHORS[index][0];
-        float ax = ANCHORS[index][1];
-        float ah = ANCHORS[index][2];
-        float aw = ANCHORS[index][3];
+        int index = boxes[i] * 4;
 
-        int index2 = index * 4;
-        float ty = in_boxes[index2];
-        float tx = in_boxes[index2 + 1];
-        float th = in_boxes[index2 + 2];
-        float tw = in_boxes[index2 + 3];
+        float ay = anchors[index];
+        float ax = anchors[index + 1];
+        float ah = anchors[index + 2];
+        float aw = anchors[index + 3];
+
+        float ty = in_boxes[index];
+        float tx = in_boxes[index + 1];
+        float th = in_boxes[index + 2];
+        float tw = in_boxes[index + 3];
 
         float x = (tx / s->get_x_scale()) * aw  + ax;
         float y = (ty / s->get_y_scale()) * ah  + ay;
