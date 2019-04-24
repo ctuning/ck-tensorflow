@@ -16,48 +16,20 @@
 #include "armnn/INetwork.hpp"
 #include "armnnTfLiteParser/ITfLiteParser.hpp"
 
-#include "benchmark.h"
+#include "includes/settings.h"
+#include "includes/detect.hpp"
 
 using namespace std;
 using namespace CK;
 
+int mMaxDetections = 100;
 
-template <typename TData, typename TInConverter, typename TOutConverter>
-class ArmNNBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
-public:
-    ArmNNBenchmark(BenchmarkSettings* settings,
-                   TData *in_ptr,
-                   TData *boxes_ptr,
-                   TData *classes_ptr,
-                   TData *scores_ptr,
-                   TData *detections_count_ptr
-                   )
-            : Benchmark<TData, TInConverter, TOutConverter>(settings, in_ptr, boxes_ptr, classes_ptr, scores_ptr, detections_count_ptr) {
-    }
-};
-
-armnn::InputTensors MakeInputTensors(const std::pair<armnn::LayerBindingId,
-        armnn::TensorInfo>& input, const void* inputTensorData)
-{
-    return { {input.first, armnn::ConstTensor(input.second, inputTensorData) } };
-}
-
-armnn::OutputTensors MakeOutputTensors(const std::pair<armnn::LayerBindingId,
-        armnn::TensorInfo>& output, void* outputTensorData)
-{
-    return { {output.first, armnn::Tensor(output.second, outputTensorData) } };
-}
-
-void AddTensorToOutput(armnn::OutputTensors &v, const std::pair<armnn::LayerBindingId,
-        armnn::TensorInfo>& output, void* outputTensorData ) {
-    v.push_back({output.first, armnn::Tensor(output.second, outputTensorData) });
-}
+Settings settings;
+BenchmarkSession session(&settings);
 
 int main(int argc, char *argv[]) {
     try {
         init_benchmark();
-
-        BenchmarkSettings settings;
 
         if (!settings.graph_file().c_str()) {
             throw string("Model file name is empty");
@@ -65,8 +37,6 @@ int main(int argc, char *argv[]) {
 
         if (settings.batch_size() != 1)
             throw string("Only BATCH_SIZE=1 is currently supported");
-
-        BenchmarkSession session(&settings);
 
         if (settings.verbose()) {
             armnn::ConfigureLogging(true, false, armnn::LogSeverity::Trace);
@@ -107,6 +77,7 @@ int main(int argc, char *argv[]) {
         cout << endl << "Loading graph..." << endl;
         measure_setup([&] {
             armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile(settings.graph_file().c_str());
+            //armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile("detect_cut.tflite");
             if (!network)
                 throw "Failed to load graph from file " + settings.graph_file();
             if (settings.verbose()) {
@@ -114,21 +85,18 @@ int main(int argc, char *argv[]) {
             }
 
             armnnTfLiteParser::BindingPointInfo inputBindingInfo = parser->GetNetworkInputBindingInfo(0, "normalized_input_image_tensor");
-            armnnTfLiteParser::BindingPointInfo outputBindingInfo = parser->GetNetworkOutputBindingInfo(0, "TFLite_Detection_PostProcess");
-            armnnTfLiteParser::BindingPointInfo outputBindingInfo1 = parser->GetNetworkOutputBindingInfo(0, "TFLite_Detection_PostProcess:1");
-            armnnTfLiteParser::BindingPointInfo outputBindingInfo2 = parser->GetNetworkOutputBindingInfo(0, "TFLite_Detection_PostProcess:2");
-            armnnTfLiteParser::BindingPointInfo outputBindingInfo3 = parser->GetNetworkOutputBindingInfo(0, "TFLite_Detection_PostProcess:3");
+            armnnTfLiteParser::BindingPointInfo boxesBindingInfo = parser->GetNetworkOutputBindingInfo(0, "raw_outputs/box_encodings");
+            armnnTfLiteParser::BindingPointInfo scoresBindingInfo = parser->GetNetworkOutputBindingInfo(0, "raw_outputs/class_predictions");
+
 
             armnn::TensorShape inShape = inputBindingInfo.second.GetShape();
-            armnn::TensorShape outShape = outputBindingInfo.second.GetShape();
-            armnn::TensorShape outShape1 = outputBindingInfo1.second.GetShape();
-            armnn::TensorShape outShape2 = outputBindingInfo2.second.GetShape();
-            armnn::TensorShape outShape3 = outputBindingInfo3.second.GetShape();
+            armnn::TensorShape boxesShape = boxesBindingInfo.second.GetShape();
+            armnn::TensorShape scoresShape = scoresBindingInfo.second.GetShape();
+
             std::size_t inSize = inShape[0] * inShape[1] * inShape[2] * inShape[3];
-            std::size_t outSize = outShape[0] * outShape[1] * outShape[2];
-            std::size_t outSize1 = outShape1[0] * outShape1[1];
-            std::size_t outSize2 = outShape2[0] * outShape2[1];
-            std::size_t outSize3 = outShape3[0];
+            std::size_t boxesSize = boxesShape[0] * boxesShape[1] * boxesShape[2];
+            std::size_t scoresSize = scoresShape[0] * scoresShape[1]* scoresShape[2];
+
 
             armnn::IOptimizedNetworkPtr optNet = armnn::Optimize(*network, optOptions, runtime->GetDeviceSpec());
 	    if (optNet == nullptr) {
@@ -141,31 +109,24 @@ int main(int argc, char *argv[]) {
             runtime->LoadNetwork(networkIdentifier, std::move(optNet));
 
             armnn::DataType input_type = inputBindingInfo.second.GetDataType();
-            armnn::DataType output_type = outputBindingInfo.second.GetDataType();
-            armnn::DataType output1_type = outputBindingInfo1.second.GetDataType();
-            armnn::DataType output2_type = outputBindingInfo2.second.GetDataType();
-            armnn::DataType output3_type = outputBindingInfo3.second.GetDataType();
+            armnn::DataType boxes_type = boxesBindingInfo.second.GetDataType();
+            armnn::DataType scores_type = scoresBindingInfo.second.GetDataType();
+
 
             void* input = input_type == armnn::DataType::Float32 ? (void*)new float[inSize] : (void*)new uint8_t[inSize];
-            void* boxes = output_type == armnn::DataType::Float32 ? (void*)new float[outSize] : (void*)new uint8_t[outSize];
-            void* classes = output1_type == armnn::DataType::Float32 ? (void*)new float[outSize1] : (void*)new uint8_t[outSize1];
-            void* scores = output2_type == armnn::DataType::Float32 ? (void*)new float[outSize2] : (void*)new uint8_t[outSize2];
-            void* detections_count = output3_type == armnn::DataType::Float32 ? (void*)new float[outSize3] : (void*)new uint8_t[outSize3];
+            void* boxes = boxes_type == armnn::DataType::Float32 ? (void*)new float[boxesSize] : (void*)new uint8_t[boxesSize];
+            void* scores = scores_type == armnn::DataType::Float32 ? (void*)new float[scoresSize] : (void*)new uint8_t[scoresSize];
 
             inTensors = MakeInputTensors(inputBindingInfo, input);
-            outTensors = MakeOutputTensors(outputBindingInfo, boxes);
-            AddTensorToOutput(outTensors, outputBindingInfo1, classes);
-            AddTensorToOutput(outTensors, outputBindingInfo2, scores);
-            AddTensorToOutput(outTensors, outputBindingInfo3, detections_count);
+            outTensors = MakeOutputTensors(boxesBindingInfo, boxes);
+            AddTensorToOutput(outTensors, scoresBindingInfo, scores);
 
             switch (input_type) {
                 case armnn::DataType::Float32:
                     benchmark.reset(new ArmNNBenchmark<float, InNormalize, OutCopy>(&settings,
                                                                                     (float*)input,
                                                                                     (float*)boxes,
-                                                                                    (float*)classes,
-                                                                                    (float*)scores,
-                                                                                    (float*)detections_count)
+                                                                                    (float*)scores)
                                    );
                     break;
 
@@ -173,9 +134,7 @@ int main(int argc, char *argv[]) {
                     benchmark.reset(new ArmNNBenchmark<uint8_t, InCopy, OutDequantize>(&settings,
                                                                                        (uint8_t*)input,
                                                                                        (uint8_t*)boxes,
-                                                                                       (uint8_t*)classes,
-                                                                                       (uint8_t*)scores,
-                                                                                       (uint8_t*)detections_count)
+                                                                                       (uint8_t*)scores)
                                    );
                     break;
 

@@ -6,15 +6,16 @@
  * See CK LICENSE.txt for licensing details.
  */
 
+#ifndef BENCHMARK_HEADER_FILE
+#define BENCHMARK_HEADER_FILE
+
 #pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <chrono>
-#include <dirent.h>
-#include <fstream>
-#include <iostream>
+
 #include <iomanip>
 #include <memory>
 #include <string.h>
@@ -23,10 +24,9 @@
 
 #include <xopenme.h>
 
-#include "coco.hpp"
+#include "settings.h"
+#include "non_max_suppression.h"
 
-#define TFLITE_MAX_DETECTIONS 10
-#define OUT_BUFFER_SIZE 11
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
@@ -86,229 +86,12 @@ namespace CK {
         int _count = 0;
     };
 
-//----------------------------------------------------------------------
-    struct FileInfo {
-        std::string name;
-        int width;
-        int height;
-    };
-
-    struct DetectionBox {
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float score;
-        int class_id;
-    };
-
-    template<char delimiter>
-    class WordDelimitedBy : public std::string {
-    };
-
-    template<char delimiter>
-    std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
-        std::getline(is, output, delimiter);
-        return is;
-    }
-
-    inline float max(float a, float b) { return a > b ? a : b; }
-
-    inline float min(float a, float b) { return a > b ? b : a; }
-
-    // Check if `box` intersects (x1, y1, x2, y2) greater than `treshold` of area
-    bool is_box_hidden_by_other(DetectionBox box,
-                                float x1,
-                                float y1,
-                                float x2,
-                                float y2,
-                                float threshold) {
-        float n1 = max(box.x1, x1);
-        float n2 = min(box.x2, x2);
-        float m1 = max(box.y1, y1);
-        float m2 = min(box.y2, y2);
-        if (n1 > n2 || m1 > m2) return false;
-
-        float intersection_area = (n2 - n1) * (m2 - m1);
-        float box_area = (x2 - x1) * (y2 - y1);
-        float main_box_area = (box.x2 - box.x1) * (box.y2 - box.y1);
-    	float iou = intersection_area / (box_area + main_box_area - intersection_area);
-	    if (iou < threshold) return false;
-
-        return true;
-    }
-
-    // Analog of tf.image.non_max_suppression
-    void add_element_to_box(
-            std::vector<DetectionBox> &detection_boxes,
-            float x1,
-            float y1,
-            float x2,
-            float y2,
-            float score,
-            int class_id,
-            int width,
-            int height) {
-        if (y2 < 0.0f || x2 < 0.0f || y1 > height || x1 > width) return;
-        if (y1 < 0.0f) y1 = 0.0f;
-        if (x1 < 0.0f) x1 = 0.0f;
-        if (y2 > height) y2 = height;
-        if (x2 > width) x2 = width;
-        for (int i = 0; i < detection_boxes.size(); i++) {
-            if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, 0.5)) return;
-        }
-        detection_boxes.push_back({x1, y1, x2, y2, score, class_id});
-    }
-
-//----------------------------------------------------------------------
-
-    class BenchmarkSettings {
-    public:
-        BenchmarkSettings() {
-            //Load settings
-            std::ifstream settings_file("env.ini");
-            if (!settings_file)
-                throw "Unable to open 'env.ini' file";
-            std::map<std::string, std::string> settings_from_file;
-            for (std::string s; !getline(settings_file, s).fail();) {
-                std::cout << s << std::endl;
-                std::istringstream iss(s);
-                std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<'='>>(iss)),
-                                             std::istream_iterator<WordDelimitedBy<'='>>());
-                if (row.size() == 1)
-                    settings_from_file.emplace(row[0], "");
-                else
-                    settings_from_file.emplace(row[0], row[1]);
-            }
-            std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
-            if (model_dataset_type == "coco") {
-                _model_classes = COCO_CLASSES;
-            } else {
-                throw ("Unsupported model dataset type: " + model_dataset_type);
-            }
-            _graph_file = settings_from_file["MODEL_TFLITE_GRAPH"];
-            _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
-            _images_file = settings_from_file["PREPROCESSED_FILES"];
-            _number_of_threads = std::stoi(settings_from_file["NUMBER_OF_PROCESSORS"]);
-            _batch_count = std::stoi(settings_from_file["IMAGE_COUNT"]);
-            _batch_size = std::stoi(settings_from_file["BATCH_SIZE"]);
-            _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
-            _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
-            _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
-            _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
-            _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
-            _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
-            _full_report = settings_from_file["FULL_REPORT"] == "True";
-            _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
-            _use_neon = settings_from_file["USE_NEON"] == "True";
-            _use_opencl = settings_from_file["USE_OPENCL"] == "True";
-            _verbose = settings_from_file["VERBOSE"] == "True";
-            // Print settings
-            if (_verbose || _full_report) {
-                std::cout << "Graph file: " << _graph_file << std::endl;
-                std::cout << "Image dir: " << _images_dir << std::endl;
-                std::cout << "Image list: " << _images_file << std::endl;
-                std::cout << "Image size: " << _image_size_width << "*" << _image_size_height << std::endl;
-                std::cout << "Image channels: " << _num_channels << std::endl;
-                std::cout << "Result dir: " << _detections_out_dir << std::endl;
-                std::cout << "Batch count: " << _batch_count << std::endl;
-                std::cout << "Batch size: " << _batch_size << std::endl;
-                std::cout << "Normalize: " << _normalize_img << std::endl;
-                std::cout << "Subtract mean: " << _subtract_mean << std::endl;
-                std::cout << "Use NEON: " << _use_neon << std::endl;
-                std::cout << "Use OPENCL: " << _use_opencl << std::endl;
-            }
-
-            // Create results dir if none
-            auto dir = opendir(_detections_out_dir.c_str());
-            if (dir)
-                closedir(dir);
-            else
-                system(("mkdir " + _detections_out_dir).c_str());
-
-            // Load list of images to be processed
-            std::ifstream file(_images_file);
-            if (!file)
-                throw "Unable to open image list file " + _images_file;
-            for (std::string s; !getline(file, s).fail();) {
-                std::istringstream iss(s);
-                std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<';'>>(iss)),
-                                             std::istream_iterator<WordDelimitedBy<';'>>());
-                FileInfo fileInfo = {row[0], std::stoi(row[1]), std::stoi(row[2])};
-                _image_list.emplace_back(fileInfo);
-            }
-
-            if (_verbose || _full_report) {
-                std::cout << "Image count in file: " << _image_list.size() << std::endl;
-            }
-        }
-
-        const std::vector<FileInfo> &image_list() const { return _image_list; }
-
-        const std::vector<std::string> &model_classes() const { return _model_classes; }
-
-        int batch_count() { return _batch_count; }
-
-        int batch_size() { return _batch_size; }
-
-        int image_size_height() { return _image_size_height; }
-
-        int image_size_width() { return _image_size_width; }
-
-        int num_channels() { return _num_channels; }
-
-        int number_of_threads() { return _number_of_threads; }
-
-        bool correct_background() { return _correct_background; }
-
-        bool full_report() { return _full_report; }
-
-        bool normalize_img() { return _normalize_img; }
-
-        bool subtract_mean() { return _subtract_mean; }
-
-        bool use_neon() { return _use_neon; }
-
-        bool use_opencl() { return _use_opencl; }
-
-        bool verbose() { return _verbose; };
-
-        std::string graph_file() { return _graph_file; }
-
-        std::string images_dir() { return _images_dir; }
-
-        std::string detections_out_dir() { return _detections_out_dir; }
-
-    private:
-        std::string _detections_out_dir;
-        std::string _graph_file;
-        std::string _images_dir;
-        std::string _images_file;
-
-        std::vector<FileInfo> _image_list;
-        std::vector<std::string> _model_classes;
-
-        int _batch_count;
-        int _batch_size;
-        int _image_size_height;
-        int _image_size_width;
-        int _num_channels;
-        int _number_of_threads;
-
-        bool _correct_background;
-        bool _full_report;
-        bool _normalize_img;
-        bool _subtract_mean;
-        bool _use_neon;
-        bool _use_opencl;
-        bool _verbose;
-    };
 
 //----------------------------------------------------------------------
 
     class BenchmarkSession {
     public:
-        BenchmarkSession(BenchmarkSettings *settings) {
+        BenchmarkSession(Settings *settings) {
             _settings = settings;
         }
 
@@ -392,7 +175,7 @@ namespace CK {
         Accumulator _loading_time;
         Accumulator _prediction_time;
         Accumulator _non_max_suppression_time;
-        BenchmarkSettings *_settings;
+        Settings *_settings;
         float _total_prediction_time = 0;
         std::vector<FileInfo> _batch_files;
         std::chrono::time_point<std::chrono::high_resolution_clock> _start_time;
@@ -467,7 +250,7 @@ namespace CK {
 
     class ImageData : public StaticBuffer<uint8_t> {
     public:
-        ImageData(BenchmarkSettings *s) : StaticBuffer(
+        ImageData(Settings *s) : StaticBuffer(
                 s->image_size_height() * s->image_size_width() * s->num_channels(), s->images_dir()) {}
 
         void load(const std::string &filename) {
@@ -482,7 +265,7 @@ namespace CK {
 
     class ResultData {
     public:
-        ResultData(BenchmarkSettings *s) : _size(OUT_BUFFER_SIZE) {
+        ResultData(Settings *s) : _size(s->detections_buffer_size()) {
             _buffer = new std::string[_size];
         }
 
@@ -524,18 +307,14 @@ namespace CK {
     template<typename TData, typename TInConverter, typename TOutConverter>
     class Benchmark : public IBenchmark {
     public:
-        Benchmark(BenchmarkSettings *settings,
+        Benchmark(Settings *settings,
                   TData *in_ptr,
                   TData *boxes_ptr,
-                  TData *classes_ptr,
-                  TData *scores_ptr,
-                  TData *num_ptr) {
+                  TData *scores_ptr) {
             _settings = settings;
             _in_ptr = in_ptr;
             _boxes_ptr = boxes_ptr;
-            _classes_ptr = classes_ptr;
             _scores_ptr = scores_ptr;
-            _num_ptr = num_ptr;
             _in_data.reset(new ImageData(settings));
             _out_data.reset(new ResultData(settings));
             _in_converter.reset(new TInConverter(settings));
@@ -553,18 +332,13 @@ namespace CK {
         }
 
         void non_max_suppression(const std::vector<FileInfo> &batch_images) override {
-            int offset = 0;
-            int size = _out_data->size();
             for (auto image_file : batch_images) {
-                _out_converter->convert(_boxes_ptr + offset * size * 4,
-                                        _classes_ptr + offset * size,
-                                        _scores_ptr + offset * size,
-                                        _num_ptr + offset,
+                _out_converter->convert(_boxes_ptr,
+                                        _scores_ptr,
                                         _out_data.get(),
                                         image_file,
                                         _settings->model_classes(),
                                         _settings->correct_background());
-                offset += 1;
             }
         }
 
@@ -581,21 +355,19 @@ namespace CK {
     private:
         TData *_in_ptr;
         TData *_boxes_ptr;
-        TData *_classes_ptr;
         TData *_scores_ptr;
-        TData *_num_ptr;
         std::unique_ptr<ImageData> _in_data;
         std::unique_ptr<ResultData> _out_data;
         std::unique_ptr<TInConverter> _in_converter;
         std::unique_ptr<TOutConverter> _out_converter;
-        BenchmarkSettings *_settings;
+        Settings *_settings;
     };
 
 //----------------------------------------------------------------------
 
     class InCopy {
     public:
-        InCopy(BenchmarkSettings *s) {}
+        InCopy(Settings *s) {}
 
         void convert(const ImageData *source, uint8_t *target) const {
             std::copy(source->data(), source->data() + source->size(), target);
@@ -606,7 +378,7 @@ namespace CK {
 
     class InNormalize {
     public:
-        InNormalize(BenchmarkSettings *s) :
+        InNormalize(Settings *s) :
                 _normalize_img(s->normalize_img()), _subtract_mean(s->subtract_mean()) {
         }
 
@@ -654,71 +426,70 @@ namespace CK {
                          << class_name;
             buffer[i] = stringStream.str();
         }
-        for (int i = detection_boxes.size(); i < OUT_BUFFER_SIZE-1; i++) buffer[i] = "";
     }
 
     class OutCopy {
     public:
-        OutCopy(const BenchmarkSettings *s) {}
+        OutCopy(Settings *s): _settings(s) {}
 
         void convert(const float *boxes,
-                     const float *classes,
                      const float *scores,
-                     const float *num,
                      ResultData *target,
                      FileInfo src,
                      std::vector<std::string> model_classes,
                      bool correct_background) const {
             std::string *buffer = target->data();
             buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
-            if (*num == 0) return;
 
             std::vector<DetectionBox> detection_boxes = {};
 
-            for (int i = 0; i < *num; i++) {
-                float y1 = boxes[i * sizeof(float)] * src.height;
-                float x1 = boxes[i * sizeof(float) + 1] * src.width;
-                float y2 = boxes[i * sizeof(float) + 2] * src.height;
-                float x2 = boxes[i * sizeof(float) + 3] * src.width;
-                float score = scores[i];
-                int detected_class = int(classes[i]);
-                add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
-            }
+            postprocess_detections(_settings, detection_boxes, boxes, scores, src.width, src.height, correct_background);
+
             boxes_info_to_output(detection_boxes, buffer + 1, model_classes, correct_background);
+
+            for (int i = detection_boxes.size() + 1; i < _settings->detections_buffer_size(); i++) buffer[i] = "";
         }
+    private:
+        Settings *_settings;
     };
 
 //----------------------------------------------------------------------
 
     class OutDequantize {
     public:
-        OutDequantize(const BenchmarkSettings *s) {}
+        OutDequantize(Settings *s) {}
 
         void convert(const uint8_t *boxes,
-                     const uint8_t *classes,
                      const uint8_t *scores,
-                     const uint8_t *num,
                      ResultData *target,
                      FileInfo src,
                      std::vector<std::string> model_classes,
                      bool correct_background) const {
+            float *fscores = _settings->get_scores_buf();
+            float *fboxes = _settings->get_boxes_buf();
+
             std::string *buffer = target->data();
             buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
-            if (*num == 0) return;
 
             std::vector<DetectionBox> detection_boxes = {};
 
-            for (int i = 0; i < *num; i++) {
-                float y1 = boxes[i * sizeof(float)] * src.height / 255.0f;
-                float x1 = boxes[i * sizeof(float) + 1] * src.width / 255.0f;
-                float y2 = boxes[i * sizeof(float) + 2] * src.height / 255.0f;
-                float x2 = boxes[i * sizeof(float) + 3] * src.width / 255.0f;
-                float score = scores[i] / 255.0f;
-                int detected_class = int(classes[i]);
-                add_element_to_box(detection_boxes, x1, y1, x2, y2, score, detected_class, src.width, src.height);
+            for (int i = 0; i < _settings->get_anchors_count() * _settings->get_num_classes(); i++) {
+                fscores[i] = scores[i] / 255.0f;
             }
+            for (int i = 0; i < _settings->get_anchors_count() * 4; i++) {
+                fboxes[i] = boxes[i] / 255.0f;
+            }
+
+            postprocess_detections(_settings, detection_boxes, fboxes, fscores, src.width, src.height, correct_background);
+
             boxes_info_to_output(detection_boxes, buffer + 1, model_classes, correct_background);
+
+            for (int i = detection_boxes.size() + 1; i < _settings->detections_buffer_size(); i++) buffer[i] = "";
         }
+    private:
+        Settings *_settings;
     };
 
 } // namespace CK
+
+#endif
