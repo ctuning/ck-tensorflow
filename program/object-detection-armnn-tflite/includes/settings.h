@@ -5,12 +5,13 @@
 #ifndef UNTITLED_SETTINGS_H
 #define UNTITLED_SETTINGS_H
 
-#include <stdio.h>
-#include <fstream>
-#include <dirent.h>
 #include <iostream>
-
-#include "coco.hpp"
+#include <stdlib.h>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <dirent.h>
 
 
 template<char delimiter>
@@ -44,6 +45,37 @@ struct FileInfo {
     int height;
 };
 
+std::vector<std::string> *readClassesFile(std::string filename) {
+    std::vector<std::string> *lines = new std::vector<std::string>;
+    lines->clear();
+    std::ifstream file(filename);
+    std::string s;
+    while (getline(file, s))
+        lines->push_back(s);
+
+    return lines;
+}
+
+float *readAnchorsFile(std::string filename, int& size) {
+    std::vector<std::string> lines;
+    lines.clear();
+    std::ifstream file(filename);
+    std::string s;
+    while (getline(file, s))
+        lines.push_back(s);
+
+    size = lines.size();
+    float *result = new float[size * 4]();
+    for (int i = 0; i < size; i++) {
+        int index = i * 4;
+        std::stringstream(lines[i]) >> result[index]
+                                    >> result[index + 1]
+                                    >> result[index + 2]
+                                    >> result[index + 3];
+    }
+    return result;
+}
+
 class Settings {
 public:
     Settings() {
@@ -63,15 +95,20 @@ public:
                 settings_from_file.emplace(row[0], row[1]);
         }
         std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
-        if (model_dataset_type == "coco") {
-            _model_classes = COCO_CLASSES;
-        } else {
+        if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
 
         _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" + getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_POSTPROCESSING");
 
-        //_graph_file = settings_from_file["MODEL_TFLITE_GRAPH"];
+        std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
+                                   getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
+        _model_classes = *readClassesFile(classes_file);
+
+        std::string anchors_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
+                                   getenv("CK_ENV_TENSORFLOW_MODEL_ANCHORS");
+        _m_anchors = readAnchorsFile(anchors_file, _m_anchors_count);
+
         _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
         _images_file = settings_from_file["PREPROCESSED_FILES"];
         _number_of_threads = std::stoi(settings_from_file["NUMBER_OF_PROCESSORS"]);
@@ -227,6 +264,7 @@ public:
     float get_y_scale() { return _m_y_scale; };
     void set_y_scale(float i) { _m_y_scale = i;}
 
+    float* get_anchors() { return _m_anchors; };
     float* get_boxes_buf() { return _d_boxes; };
     float* get_scores_buf() { return _d_scores; };
     float* get_scores_sorting_buf() { return _d_scores_sort_buf; };
@@ -268,6 +306,7 @@ private:
     float *_d_boxes;
     float *_d_scores;
     float *_d_scores_sort_buf;
+    float *_m_anchors;
 
     float _m_nms_score_threshold;
     float _m_nms_iou_threshold;
