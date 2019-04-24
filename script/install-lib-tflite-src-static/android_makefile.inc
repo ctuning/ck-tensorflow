@@ -90,23 +90,24 @@ ifeq ($(TARGET),ANDROID)
 		CC  := $(CLANG_PREFIX)clang
 	endif
 	# TODO: error if $(COMPILER_TOOLCHAIN_NAME) is neither gcc nor clang.
-$(info CC = $(CC))
-$(info CXX = $(CXX))
 
 	CCFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
+$(COMPILER_FLAGS_OBLIGATORY) \
 -Wno-narrowing \
 -fomit-frame-pointer \
 $(MARCH_OPTION) \
 -fPIE \
 -fPIC
 	CXXFLAGS +=\
---sysroot $(NDK_ROOT)/platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH) \
+$(COMPILER_FLAGS_OBLIGATORY) \
 -Wno-narrowing \
 -fomit-frame-pointer \
 $(MARCH_OPTION) \
 -fPIE \
 -fPIC
+
+$(info CC = $(CC))
+$(info CXX = $(CXX))
 
         SYS_ROOT := platforms/android-$(ANDROID_API)/arch-$(SYSROOT_ARCH)
 	INCLUDES = \

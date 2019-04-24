@@ -1,0 +1,21 @@
+{
+  "backup_data_uid": "574064cfe9237bd6",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "author": "Grigori Fursin",
+    "author_email": "Grigori.Fursin@cTuning.org",
+    "author_webpage": "http://fursin.net",
+    "copyright": "See CK COPYRIGHT.txt for copyright details",
+    "engine": "CK",
+    "iso_datetime": "2019-04-22T13:04:52.417234",
+    "license": "See CK LICENSE.txt for licensing details",
+    "version": [
+      "1",
+      "9",
+      "7",
+      "1"
+    ]
+  },
+  "data_name": "lib-tensorflow-1.12.2-src-cpu"
+}

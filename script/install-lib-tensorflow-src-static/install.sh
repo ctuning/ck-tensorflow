@@ -12,6 +12,8 @@
 # `${CK-TOOLS}/lib-tensorflow-*-src-static/src/tensorflow/contrib/makefile/` directory.
 #
 
+export JOB_COUNT="${CK_HOST_CPU_NUMBER_OF_PROCESSORS}"
+
 function stage() {
   echo; echo "--------------------------------"; echo $1; echo
 }
@@ -62,7 +64,7 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   TENSORFLOW_LIB_DIR=lib/android_${TARGET_ARCH}
   PROTOBUF_LIB_DIR=protobuf_android/${TARGET_ARCH}
   NSYNC_LIB_DIR=arm64-v8a.android.c++11 # TODO how to select correct subdir?
-  
+
   export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
   ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/build_all_android.sh -a ${TARGET_ARCH}
 else
