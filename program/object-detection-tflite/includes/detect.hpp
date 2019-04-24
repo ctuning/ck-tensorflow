@@ -15,6 +15,7 @@
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
+#include "settings.h"
 #include "benchmark.h"
 #include "detection_postprocess.hpp"
 
@@ -26,7 +27,7 @@ using namespace CK;
 template<typename TData, typename TInConverter, typename TOutConverter>
 class TFLiteBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
 public:
-    TFLiteBenchmark(BenchmarkSettings *settings, Interpreter *interpreter, int input_index)
+    TFLiteBenchmark(Settings *settings, Interpreter *interpreter, int input_index)
             : Benchmark<TData, TInConverter, TOutConverter>(
             settings, interpreter->typed_tensor<TData>(input_index),
             interpreter->typed_output_tensor<TData>(0),
@@ -37,7 +38,7 @@ public:
 };
 
 
-BenchmarkSettings settings;
+Settings settings;
 BenchmarkSession session(&settings);
 
 void* Init(TfLiteContext* context, const char* buffer, size_t length) {
