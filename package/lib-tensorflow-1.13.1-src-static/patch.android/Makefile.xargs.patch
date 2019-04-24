@@ -1,0 +1,20 @@
+diff --git a/tensorflow/contrib/makefile/Makefile b/tensorflow/contrib/makefile/Makefile
+index 7ea6e34..750ee18 100644
+--- a/tensorflow/contrib/makefile/Makefile
++++ b/tensorflow/contrib/makefile/Makefile
+@@ -812,10 +812,14 @@ all: $(LIB_PATH) $(BENCHMARK_NAME)
+ tensorflow/core/util/version_info.cc: .phony_version_info
+ 	tensorflow/tools/git/gen_git_source.sh $@
+ 
++LIB_OBJS_TMP_FILE=/tmp/install-lib-tensorflow-src-static.lib-objs
++
+ # Gathers together all the objects we've compiled into a single '.a' archive.
+ $(LIB_PATH): $(LIB_OBJS)
+ 	@mkdir -p $(dir $@)
+-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS)
++	$(file >$(LIB_OBJS_TMP_FILE),$(LIB_OBJS))
++	ls -la $(LIB_OBJS_TMP_FILE)
++	xargs $(AR) $(ARFLAGS) $(LIB_PATH) < $(LIB_OBJS_TMP_FILE)
+ 
+ $(BENCHMARK_NAME): $(BENCHMARK_OBJS) $(LIB_PATH) $(CUDA_LIB_DEPS)
+ 	@mkdir -p $(dir $@)

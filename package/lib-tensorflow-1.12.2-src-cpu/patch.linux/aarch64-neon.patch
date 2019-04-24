@@ -1,0 +1,28 @@
+diff --git a/tensorflow/contrib/lite/kernels/internal/BUILD b/tensorflow/contrib/lite/kernels/internal/BUILD
+index 3a855fe..8551bde 100644
+--- a/tensorflow/contrib/lite/kernels/internal/BUILD
++++ b/tensorflow/contrib/lite/kernels/internal/BUILD
+@@ -19,6 +19,9 @@ HARD_FP_FLAGS_IF_APPLICABLE = select({
+ })
+ 
+ NEON_FLAGS_IF_APPLICABLE = select({
++    ":aarch64": [
++        "-O3",
++    ],
+     ":arm": [
+         "-O3",
+         "-mfpu=neon",
+@@ -53,6 +56,13 @@ config_setting(
+ )
+ 
+ config_setting(
++    name = "aarch64",
++    values = {
++        "cpu": "aarch64",
++    },
++)
++
++config_setting(
+     name = "arm64-v8a",
+     values = {
+         "cpu": "arm64-v8a",
