@@ -1,6 +1,11 @@
-//
-// Created by ivan on 4/10/19.
-//
+/*
+ * Copyright (c) 2018 cTuning foundation.
+ * See CK COPYRIGHT.txt for copyright details.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause.
+ * See CK LICENSE.txt for licensing details.
+ */
+
 
 #ifndef NMS_NON_MAX_SUPPRESSION_H
 #define NMS_NON_MAX_SUPPRESSION_H
@@ -83,11 +88,11 @@ void postprocess_detections(Settings *s,
     int *boxes = s->get_boxes_sorting_buf();
     int *classes_ids = s->get_classes_ids_sorting_buf();
 
-    float *new_scores = scores + s->get_max_detections();
-    int *new_classes = classes + s->get_max_detections();
-    int *new_boxes = boxes + s->get_max_detections();
+    float *new_scores = scores + s->get_max_total_detections();
+    int *new_classes = classes + s->get_max_total_detections();
+    int *new_boxes = boxes + s->get_max_total_detections();
 
-    for (int i = 0; i< s->get_max_detections(); i++) {
+    for (int i = 0; i< s->get_max_total_detections(); i++) {
         scores[i] = 0.0f;
     }
 
@@ -123,9 +128,9 @@ void postprocess_detections(Settings *s,
             }
         }
 
-        for (int i = 0; i < s->get_max_detections() + s->get_max_classes_per_detection() - 1; i++) {
+        for (int i = 0; i < s->get_max_total_detections() + s->get_max_classes_per_detection() - 1; i++) {
             float max_score = scores[i];
-            for (int j = i + 1; j < s->get_max_detections() + s->get_max_classes_per_detection(); j++) {
+            for (int j = i + 1; j < s->get_max_total_detections() + s->get_max_classes_per_detection(); j++) {
                 if (max_score < scores[j]) {
                     swap_float(scores[i], scores[j]);
                     swap_int(classes[i], classes[j]);
@@ -141,7 +146,7 @@ void postprocess_detections(Settings *s,
     int add_class_id = correct_background ? -1 : 0;
     float *anchors = s->get_anchors();
 
-    for (int i = 0; i < s->get_max_detections(); i++) {
+    for (int i = 0; i < s->get_max_total_detections(); i++) {
         if (scores[i] < s->get_nms_score_threshold()) break;
 
         int index = boxes[i] * 4;
@@ -182,6 +187,8 @@ void postprocess_detections(Settings *s,
                                 scores[i],
                                 classes[i] + add_class_id,
                                 s->get_nms_iou_threshold());
+
+        if (detection_boxes.size() == s->get_max_total_detections()) break;
     }
 }
 
