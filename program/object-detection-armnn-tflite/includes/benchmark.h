@@ -25,7 +25,6 @@
 #include <xopenme.h>
 
 #include "settings.h"
-#include "non_max_suppression.h"
 
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 

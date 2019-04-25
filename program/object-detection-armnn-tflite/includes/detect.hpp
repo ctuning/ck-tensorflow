@@ -20,6 +20,7 @@
 #include "armnnTfLiteParser/ITfLiteParser.hpp"
 
 #include "settings.h"
+#include "non_max_suppression.h"
 #include "benchmark.h"
 
 using namespace std;
