@@ -6,23 +6,10 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#include <iomanip>
-#include <vector>
-#include <iterator>
-
-#include "armnn/ArmNN.hpp"
-#include "armnn/Exceptions.hpp"
-#include "armnn/Tensor.hpp"
-#include "armnn/INetwork.hpp"
-#include "armnnTfLiteParser/ITfLiteParser.hpp"
-
-#include "includes/settings.h"
 #include "includes/detect.hpp"
 
 using namespace std;
 using namespace CK;
-
-int mMaxDetections = 100;
 
 Settings settings;
 BenchmarkSession session(&settings);
@@ -55,7 +42,6 @@ int main(int argc, char *argv[]) {
         armnn::OutputTensors outTensors;
 
         // Optimize the network for a specific runtime compute device, e.g. CpuAcc, GpuAcc
-        //std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuAcc, armnn::Compute::GpuAcc};
         std::vector<armnn::BackendId> optOptions = {armnn::Compute::CpuRef};
         if( settings.use_neon() && settings.use_opencl()) {
             if (settings.verbose()) {
@@ -77,7 +63,7 @@ int main(int argc, char *argv[]) {
         cout << endl << "Loading graph..." << endl;
         measure_setup([&] {
             armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile(settings.graph_file().c_str());
-            //armnn::INetworkPtr network = parser->CreateNetworkFromBinaryFile("detect_cut.tflite");
+
             if (!network)
                 throw "Failed to load graph from file " + settings.graph_file();
             if (settings.verbose()) {
@@ -99,12 +85,12 @@ int main(int argc, char *argv[]) {
 
 
             armnn::IOptimizedNetworkPtr optNet = armnn::Optimize(*network, optOptions, runtime->GetDeviceSpec());
-	    if (optNet == nullptr) {
-		cerr << endl << "\033[1;31mERROR:\033[0m" << endl
-		     << "Fail to create a neural network from model with selected parameters..." << endl
-		     << "(Probably NEON or OPENCL acceleration is not supported?)" << endl;
-		exit(-1);
-	    }
+            if (optNet == nullptr) {
+                cerr << endl << "\033[1;31mERROR:\033[0m" << endl
+                     << "Fail to create a neural network from model with selected parameters..." << endl
+                     << "(Probably NEON or OPENCL acceleration is not supported?)" << endl;
+                exit(-1);
+            }
 
             runtime->LoadNetwork(networkIdentifier, std::move(optNet));
 

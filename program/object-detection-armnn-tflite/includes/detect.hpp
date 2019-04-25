@@ -9,6 +9,17 @@
 #ifndef DETECT_HEADER_FILE
 #define DETECT_HEADER_FILE
 
+#include <iomanip>
+#include <vector>
+#include <iterator>
+
+#include "armnn/ArmNN.hpp"
+#include "armnn/Exceptions.hpp"
+#include "armnn/Tensor.hpp"
+#include "armnn/INetwork.hpp"
+#include "armnnTfLiteParser/ITfLiteParser.hpp"
+
+#include "settings.h"
 #include "benchmark.h"
 
 using namespace std;

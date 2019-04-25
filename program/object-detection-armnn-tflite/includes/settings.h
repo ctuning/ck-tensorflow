@@ -1,9 +1,13 @@
-//
-// Created by ivan on 4/23/19.
-//
+/*
+ * Copyright (c) 2018 cTuning foundation.
+ * See CK COPYRIGHT.txt for copyright details.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause.
+ * See CK LICENSE.txt for licensing details.
+ */
 
-#ifndef UNTITLED_SETTINGS_H
-#define UNTITLED_SETTINGS_H
+#ifndef DETECT_SETTINGS_H
+#define DETECT_SETTINGS_H
 
 #include <iostream>
 #include <stdlib.h>
@@ -23,58 +27,20 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
     std::getline(is, output, delimiter);
     return is;
 }
-
-inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
-inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
-
-bool get_yes_no(std::string answer) {
-    std::locale loc;
-    for (std::string::size_type i=0; i<answer.length(); ++i)
-        answer[i] = std::tolower(answer[i],loc);
-    if (answer == "1" || answer == "yes") return true;
-    return false;
-}
-bool get_yes_no(char *answer) {
-    if (answer == nullptr) return false;
-    return get_yes_no(std::string(answer));
-}
-
 struct FileInfo {
     std::string name;
     int width;
     int height;
 };
 
-std::vector<std::string> *readClassesFile(std::string filename) {
-    std::vector<std::string> *lines = new std::vector<std::string>;
-    lines->clear();
-    std::ifstream file(filename);
-    std::string s;
-    while (getline(file, s))
-        lines->push_back(s);
+bool get_yes_no(std::string) ;
+bool get_yes_no(char *);
+std::vector<std::string> *readClassesFile(std::string);
+float *readAnchorsFile(std::string, int&);
 
-    return lines;
-}
+inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
+inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
 
-float *readAnchorsFile(std::string filename, int& size) {
-    std::vector<std::string> lines;
-    lines.clear();
-    std::ifstream file(filename);
-    std::string s;
-    while (getline(file, s))
-        lines.push_back(s);
-
-    size = lines.size();
-    float *result = new float[size * 4]();
-    for (int i = 0; i < size; i++) {
-        int index = i * 4;
-        std::stringstream(lines[i]) >> result[index]
-                                    >> result[index + 1]
-                                    >> result[index + 2]
-                                    >> result[index + 3];
-    }
-    return result;
-}
 
 class Settings {
 public:
@@ -132,24 +98,24 @@ public:
         _full_report = get_yes_no(getenv("FULL_REPORT"));
         _verbose = get_yes_no(getenv("VERBOSE"));
 
-        _m_anchors_count = 1917;
-        _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "100"));
-        _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), "100"));
+        _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+        _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
+        _m_max_total_detections = std::max(100, _m_max_detections);
         _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
-        _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), "91"));
-        _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), "0.3"));
-        _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), "0.6"));
-        _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), "5.0"));
-        _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), "5.0"));
-        _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), "10.0"));
-        _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), "10.0"));
+        _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")));
+        _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
+        _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
+        _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE")));
+        _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE")));
+        _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE")));
+        _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE")));
 
         _d_boxes = new float [_m_anchors_count * 4]();
         _d_scores = new float [_m_anchors_count * _m_num_classes];
 
-        _d_scores_sort_buf = new float[_m_max_detections + _m_max_classes_per_detection];
-        _d_classes_sort_buf = new int[_m_max_detections + _m_max_classes_per_detection];
-        _d_boxes_sort_buf = new int[_m_max_detections + _m_max_classes_per_detection];
+        _d_scores_sort_buf = new float[_m_max_total_detections + _m_max_classes_per_detection];
+        _d_classes_sort_buf = new int[_m_max_total_detections + _m_max_classes_per_detection];
+        _d_boxes_sort_buf = new int[_m_max_total_detections + _m_max_classes_per_detection];
         _d_classes_ids_sort_buf = new int[_m_num_classes];
 
         // Print settings
@@ -237,6 +203,8 @@ public:
     int get_max_detections() { return _m_max_detections; };
     void set_max_detections(int i) { _m_max_detections = i;}
 
+    int get_max_total_detections() { return _m_max_total_detections; };
+
     int get_max_classes_per_detection() { return _m_max_classes_per_detection; };
     void set_max_classes_per_detection(int i) { _m_max_classes_per_detection = i;}
 
@@ -299,6 +267,7 @@ private:
     int _number_of_threads;
     int _m_max_classes_per_detection;
     int _m_max_detections;
+    int _m_max_total_detections;
     int _m_detections_per_class;
     int _m_num_classes;
     int _m_anchors_count;
@@ -324,4 +293,48 @@ private:
     bool _verbose;
 };
 
-#endif //UNTITLED_SETTINGS_H
+float *readAnchorsFile(std::string filename, int& size) {
+    std::vector<std::string> lines;
+    lines.clear();
+    std::ifstream file(filename);
+    std::string s;
+    while (getline(file, s))
+        lines.push_back(s);
+
+    size = lines.size();
+    float *result = new float[size * 4]();
+    for (int i = 0; i < size; i++) {
+        int index = i * 4;
+        std::stringstream(lines[i]) >> result[index]
+                                    >> result[index + 1]
+                                    >> result[index + 2]
+                                    >> result[index + 3];
+    }
+    return result;
+}
+
+std::vector<std::string> *readClassesFile(std::string filename) {
+    std::vector<std::string> *lines = new std::vector<std::string>;
+    lines->clear();
+    std::ifstream file(filename);
+    std::string s;
+    while (getline(file, s))
+        lines->push_back(s);
+
+    return lines;
+}
+
+bool get_yes_no(std::string answer) {
+    std::locale loc;
+    for (std::string::size_type i=0; i<answer.length(); ++i)
+        answer[i] = std::tolower(answer[i],loc);
+    if (answer == "1" || answer == "yes") return true;
+    return false;
+}
+
+bool get_yes_no(char *answer) {
+    if (answer == nullptr) return false;
+    return get_yes_no(std::string(answer));
+}
+
+#endif //DETECT_SETTINGS_H

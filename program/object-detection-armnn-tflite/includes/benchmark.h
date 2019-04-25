@@ -457,7 +457,7 @@ namespace CK {
 
     class OutDequantize {
     public:
-        OutDequantize(Settings *s) {}
+        OutDequantize(Settings *s): _settings(s) {}
 
         void convert(const uint8_t *boxes,
                      const uint8_t *scores,
