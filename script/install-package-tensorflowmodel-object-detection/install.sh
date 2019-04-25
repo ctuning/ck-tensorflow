@@ -13,6 +13,7 @@ echo "Unpack weights file ${PACKAGE_NAME} ..."
 tar -zxvf ${PACKAGE_NAME}
 mv ${PACKAGE_NAME1}/${FROZEN_GRAPH} ..
 mv ${PACKAGE_NAME1}/${WEIGHTS_FILE}* ..
+mv ${PACKAGE_NAME1}/pipeline.config ..
 
 ########################################################################
 echo
@@ -22,10 +23,10 @@ rm -rf tmp
 
 #####################################################################
 echo ""
-echo "Copy label-map file"
+echo "Copy label-map file ..."
 cp -f ${CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR}/data/${LABELMAP_FILE} .
 
 #####################################################################
 echo ""
-echo "Successfully installed '${MODEL_NAME}' tensorflow model ..."
+echo "Successfully installed '${MODEL_NAME}' TensorFlow model ..."
 exit 0
