@@ -209,8 +209,12 @@ def run_benchmark(openme):
     pool5, parameters = inference(images)
 
     # Build an initialization operation.
-    init = tf.global_variables_initializer()
-
+    tf_major_ver = int(tf.__version__.split(".")[0])
+    tf_minor_ver = int(tf.__version__.split(".")[1])
+    if(tf_major_ver == 0 and tf_minor_ver < 12): # For tf version <0.12.0
+      init = tf.initialize_all_variables()
+    else: # For tf version >= 0.12.0
+      init = tf.global_variables_initializer()
     # Start running operations on the Graph.
     config = tf.ConfigProto()
     config.gpu_options.allocator_type = 'BFC'
