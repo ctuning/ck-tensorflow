@@ -35,6 +35,8 @@ struct FileInfo {
 
 bool get_yes_no(std::string) ;
 bool get_yes_no(char *);
+std::string str_to_lower(std::string);
+std::string str_to_lower(char *);
 std::vector<std::string> *readClassesFile(std::string);
 float *readAnchorsFile(std::string, int&);
 
@@ -65,7 +67,14 @@ public:
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
 
-        _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" + getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_POSTPROCESSING");
+        std::string nms_type = alter_str(getenv("USE_NMS"), "no");
+        if (str_to_lower(nms_type) == "no") {
+            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS"));
+        } else {
+            std::cout << std::endl << "ERROR: Unsupported USE_NMS type - " << nms_type << std::endl;
+            exit(-1);
+        }
+        _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" + _graph_file;
 
         std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
                                    getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
@@ -105,10 +114,10 @@ public:
         _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"))) + _correct_background;
         _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
         _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
-        _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE")));
-        _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE")));
-        _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE")));
-        _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE")));
+        _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
+        _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
+        _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
+        _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
 
         _d_boxes = new float [_m_anchors_count * 4]();
         _d_scores = new float [_m_anchors_count * _m_num_classes];
@@ -335,6 +344,17 @@ bool get_yes_no(std::string answer) {
 bool get_yes_no(char *answer) {
     if (answer == nullptr) return false;
     return get_yes_no(std::string(answer));
+}
+
+std::string str_to_lower(std::string answer) {
+    std::locale loc;
+    for (std::string::size_type i=0; i<answer.length(); ++i)
+        answer[i] = std::tolower(answer[i],loc);
+    return answer;
+}
+
+std::string str_to_lower(char *answer) {
+    return str_to_lower(std::string(answer));
 }
 
 #endif //DETECT_SETTINGS_H
