@@ -36,6 +36,8 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
+std::string str_to_lower(std::string);
+std::string str_to_lower(char *);
 bool get_yes_no(std::string);
 bool get_yes_no(char *);
 std::vector<std::string> *readClassesFile(std::string);
@@ -62,7 +64,14 @@ public:
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
-        _graph_file = getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH");
+
+        std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
+        if (str_to_lower(nms_type) == "regular") {
+            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS"));
+        } else {
+            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS"));
+        }
+        _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" + _graph_file;
 
         std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
                                    getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
@@ -94,10 +103,10 @@ public:
             _m_num_classes = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"));
             _m_nms_score_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD"));
             _m_nms_iou_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD"));
-            _m_h_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE"));
-            _m_w_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE"));
-            _m_x_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE"));
-            _m_y_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE"));
+            _m_h_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H"));
+            _m_w_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W"));
+            _m_x_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X"));
+            _m_y_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y"));
         } else {
             _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
             _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
@@ -105,10 +114,10 @@ public:
             _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")));
             _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
             _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
-            _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE")));
-            _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE")));
-            _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE")));
-            _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE")));
+            _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
+            _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
+            _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
+            _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
         }
 
 
@@ -281,6 +290,17 @@ bool get_yes_no(std::string answer) {
 bool get_yes_no(char *answer) {
     if (answer == nullptr) return false;
     return get_yes_no(std::string(answer));
+}
+
+std::string str_to_lower(std::string answer) {
+    std::locale loc;
+    for (std::string::size_type i=0; i<answer.length(); ++i)
+        answer[i] = std::tolower(answer[i],loc);
+    return answer;
+}
+
+std::string str_to_lower(char *answer) {
+    return str_to_lower(std::string(answer));
 }
 
 #endif //UNTITLED_SETTINGS_H
