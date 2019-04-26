@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
             }
 
             ops::builtin::BuiltinOpResolver resolver;
-            resolver.AddCustom("TFLite_Detection_PostProcess", Register_Postprocess_with_NMS());
+            if (!settings.default_model_settings()) resolver.AddCustom("TFLite_Detection_PostProcess", Register_Postprocess_with_NMS());
 
             InterpreterBuilder(*model, resolver)(&interpreter);
             if (!interpreter)
@@ -141,9 +141,7 @@ int main(int argc, char *argv[]) {
                     throw "Failed to invoke tflite";
                 session.measure_end_prediction();
 
-                session.measure_begin();
-                benchmark->non_max_suppression(session.batch_files());
-                session.measure_end_non_max_suppression();
+                benchmark->export_results(session.batch_files());
 
                 benchmark->save_results(session.batch_files());
             }

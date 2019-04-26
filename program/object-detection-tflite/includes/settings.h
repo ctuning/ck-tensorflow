@@ -36,30 +36,9 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
-
-bool get_yes_no(std::string answer) {
-    std::locale loc;
-    for (std::string::size_type i=0; i<answer.length(); ++i)
-        answer[i] = std::tolower(answer[i],loc);
-    if (answer == "1" || answer == "yes") return true;
-    return false;
-}
-bool get_yes_no(char *answer) {
-    if (answer == nullptr) return false;
-    return get_yes_no(std::string(answer));
-}
-
-std::vector<std::string> *readClassesFile(std::string filename)
-{
-    std::vector<std::string> *lines = new std::vector<std::string>;
-    lines->clear();
-    std::ifstream file(filename);
-    std::string s;
-    while (getline(file, s))
-        lines->push_back(s);
-
-    return lines;
-}
+bool get_yes_no(std::string);
+bool get_yes_no(char *);
+std::vector<std::string> *readClassesFile(std::string);
 
 class Settings {
 public:
@@ -97,8 +76,8 @@ public:
         _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
         _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
         _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
-        _use_neon = settings_from_file["USE_NEON"] == "True";
-        _use_opencl = settings_from_file["USE_OPENCL"] == "True";
+        _use_neon = false; //settings_from_file["USE_NEON"] == "True";
+        _use_opencl = false; // settings_from_file["USE_OPENCL"] == "True";
 
         _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), "1"));
         _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
@@ -108,18 +87,30 @@ public:
 
         _default_model_settings=!get_yes_no(getenv("CUSTOM_MODEL_SETTINGS"));
 
-        if (!_default_model_settings) {
-            _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "-1"));
-            _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), "-1"));
-            _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "-1"));
-            _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), "-1"));
-            _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), "-1.0"));
-            _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), "-1.0"));
-            _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), "-1.0"));
-            _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), "-1.0"));
-            _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), "-1.0"));
-            _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), "-1.0"));
+        if (_default_model_settings) {
+            _m_max_classes_per_detection = 1;
+            _m_max_detections = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS"));
+            _m_detections_per_class = 100;
+            _m_num_classes = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"));
+            _m_nms_score_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD"));
+            _m_nms_iou_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD"));
+            _m_h_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE"));
+            _m_w_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE"));
+            _m_x_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE"));
+            _m_y_scale = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE"));
+        } else {
+            _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+            _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
+            _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
+            _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")));
+            _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
+            _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
+            _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_H_SCALE")));
+            _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_W_SCALE")));
+            _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_X_SCALE")));
+            _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_Y_SCALE")));
         }
+
 
         // Print settings
         if (_verbose || _full_report) {
@@ -268,6 +259,28 @@ private:
     bool _verbose;
 };
 
+std::vector<std::string> *readClassesFile(std::string filename)
+{
+    std::vector<std::string> *lines = new std::vector<std::string>;
+    lines->clear();
+    std::ifstream file(filename);
+    std::string s;
+    while (getline(file, s))
+        lines->push_back(s);
 
+    return lines;
+}
+
+bool get_yes_no(std::string answer) {
+    std::locale loc;
+    for (std::string::size_type i=0; i<answer.length(); ++i)
+        answer[i] = std::tolower(answer[i],loc);
+    if (answer == "1" || answer == "yes") return true;
+    return false;
+}
+bool get_yes_no(char *answer) {
+    if (answer == nullptr) return false;
+    return get_yes_no(std::string(answer));
+}
 
 #endif //UNTITLED_SETTINGS_H

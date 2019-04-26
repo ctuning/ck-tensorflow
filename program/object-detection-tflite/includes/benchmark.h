@@ -80,7 +80,7 @@ namespace CK {
 
         float total() const { return _total; }
 
-        float avg() const { return _total / static_cast<float>(_count); }
+        float avg() const { return _count > 0 ? _total / static_cast<float>(_count): 0.0f; }
 
     private:
         float _total = 0;
@@ -300,7 +300,7 @@ namespace CK {
 
         virtual void save_results(const std::vector<FileInfo> &batch_images) = 0;
 
-        virtual void non_max_suppression(const std::vector<FileInfo> &batch_images) = 0;
+        virtual void export_results(const std::vector<FileInfo> &batch_images) = 0;
     };
 
 
@@ -334,7 +334,7 @@ namespace CK {
             }
         }
 
-        void non_max_suppression(const std::vector<FileInfo> &batch_images) override {
+        void export_results(const std::vector<FileInfo> &batch_images) override {
             int offset = 0;
             int size = _out_data->size();
             for (auto image_file : batch_images) {
