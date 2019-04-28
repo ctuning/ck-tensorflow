@@ -1,0 +1,41 @@
+diff --git a/tensorflow/contrib/makefile/build_all_android.sh b/tensorflow/contrib/makefile/build_all_android.sh
+index fb9e77ae1b..20cdf8122f 100755
+--- a/tensorflow/contrib/makefile/build_all_android.sh
++++ b/tensorflow/contrib/makefile/build_all_android.sh
+@@ -45,6 +45,9 @@ fi
+ 
+ ARCH=armeabi-v7a
+ 
++# Use system Make by default.
++MAKE=/usr/bin/make
++
+ while getopts "Es:t:Tx:a:" opt_name; do
+   case "$opt_name" in
+     E) ENABLE_EXPERIMENTAL_HEXNN_OPS="true";;
+@@ -88,7 +91,7 @@ JOB_COUNT="${JOB_COUNT:-$(get_job_count)}"
+ HEXAGON_DOWNLOAD_PATH="tensorflow/contrib/makefile/downloads/hexagon"
+ 
+ # Remove any old files first.
+-make -f tensorflow/contrib/makefile/Makefile cleantarget
++${MAKE} -f tensorflow/contrib/makefile/Makefile cleantarget
+ 
+ if [[ "${ONLY_MAKE_TENSORFLOW}" != "true" ]]; then
+   rm -rf tensorflow/contrib/makefile/downloads
+@@ -129,7 +132,7 @@ if [[ "${ENABLE_EXPERIMENTAL_HEXNN_OPS}" == "true" ]]; then
+ fi
+ 
+ if [[ -z "${BUILD_TARGET}" ]]; then
+-    make -j"${JOB_COUNT}" -f tensorflow/contrib/makefile/Makefile \
++    ${MAKE} -j"${JOB_COUNT}" -f tensorflow/contrib/makefile/Makefile \
+          TARGET=ANDROID NDK_ROOT="${NDK_ROOT}" ANDROID_ARCH="${ARCH}" \
+          CC_PREFIX="${CC_PREFIX}" \
+          HOST_NSYNC_LIB="$HOST_NSYNC_LIB" TARGET_NSYNC_LIB="$TARGET_NSYNC_LIB" \
+@@ -138,7 +141,7 @@ SUB_MAKEFILES="${SUB_MAKEFILES}" ${EXTRA_MAKE_ARGS[@]}
+ else
+     # BUILD_TARGET explicitly uncommented to allow multiple targets to be
+     # passed to make in a single build_all_android.sh invocation.
+-    make -j"${JOB_COUNT}" -f tensorflow/contrib/makefile/Makefile \
++    ${MAKE} -j"${JOB_COUNT}" -f tensorflow/contrib/makefile/Makefile \
+          TARGET=ANDROID NDK_ROOT="${NDK_ROOT}" ANDROID_ARCH="${ARCH}" \
+          CC_PREFIX="${CC_PREFIX}" \
+          HOST_NSYNC_LIB="$HOST_NSYNC_LIB" TARGET_NSYNC_LIB="$TARGET_NSYNC_LIB" \

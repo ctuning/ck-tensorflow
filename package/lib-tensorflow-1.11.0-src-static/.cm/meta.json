@@ -5,6 +5,7 @@
     "install_env": {
       "PACKAGE_GIT": "YES",
       "PACKAGE_GIT_CHECKOUT": "v1.11.0",
+      "PACKAGE_PATCH": "YES",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     },
