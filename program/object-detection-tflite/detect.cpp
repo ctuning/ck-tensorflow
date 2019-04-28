@@ -6,39 +6,11 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#include <iomanip>
-
-
-#include "tensorflow/lite/kernels/register.h"
-#include "tensorflow/lite/model.h"
-#include "tensorflow/lite/optional_debug_tools.h"
-
-
-#include "benchmark.h"
-
-using namespace std;
-using namespace CK;
-
-
-template<typename TData, typename TInConverter, typename TOutConverter>
-class TFLiteBenchmark : public Benchmark<TData, TInConverter, TOutConverter> {
-public:
-    TFLiteBenchmark(BenchmarkSettings *settings, tflite::Interpreter *interpreter, int input_index)
-            : Benchmark<TData, TInConverter, TOutConverter>(
-            settings, interpreter->typed_tensor<TData>(input_index),
-            interpreter->typed_output_tensor<TData>(0),
-            interpreter->typed_output_tensor<TData>(1),
-            interpreter->typed_output_tensor<TData>(2),
-            interpreter->typed_output_tensor<TData>(3)) {
-    }
-};
-
+#include "includes/detect.hpp"
 
 int main(int argc, char *argv[]) {
     try {
         init_benchmark();
-
-        BenchmarkSettings settings;
 
         if (!settings.graph_file().c_str()) {
             throw string("Model file name is empty");
@@ -47,15 +19,13 @@ int main(int argc, char *argv[]) {
         if (settings.batch_size() != 1)
             throw string("Only BATCH_SIZE=1 is currently supported");
 
-        BenchmarkSession session(&settings);
-
         unique_ptr<IBenchmark> benchmark;
-        unique_ptr<tflite::FlatBufferModel> model;
-        unique_ptr<tflite::Interpreter> interpreter;
+        unique_ptr<FlatBufferModel> model;
+        unique_ptr<Interpreter> interpreter;
 
         cout << endl << "Loading graph..." << endl;
         measure_setup([&] {
-            model = tflite::FlatBufferModel::BuildFromFile(settings.graph_file().c_str());
+            model = FlatBufferModel::BuildFromFile(settings.graph_file().c_str());
             if (!model)
                 throw "Failed to load graph from file " + settings.graph_file();
             if (settings.verbose()) {
@@ -64,8 +34,10 @@ int main(int argc, char *argv[]) {
                 cout << "resolved reporter" << endl;
             }
 
-            tflite::ops::builtin::BuiltinOpResolver resolver;
-            tflite::InterpreterBuilder(*model, resolver)(&interpreter);
+            ops::builtin::BuiltinOpResolver resolver;
+            if (!settings.default_model_settings()) resolver.AddCustom("TFLite_Detection_PostProcess", Register_Postprocess_with_NMS());
+
+            InterpreterBuilder(*model, resolver)(&interpreter);
             if (!interpreter)
                 throw string("Failed to construct interpreter");
             if (interpreter->AllocateTensors() != kTfLiteOk)
@@ -169,9 +141,7 @@ int main(int argc, char *argv[]) {
                     throw "Failed to invoke tflite";
                 session.measure_end_prediction();
 
-                session.measure_begin();
-                benchmark->non_max_suppression(session.batch_files());
-                session.measure_end_non_max_suppression();
+                benchmark->export_results(session.batch_files());
 
                 benchmark->save_results(session.batch_files());
             }
