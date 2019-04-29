@@ -13,7 +13,7 @@ echo "Unpack weights file ${PACKAGE_NAME} ..."
 tar -zxvf ${PACKAGE_NAME}
 mv ${PACKAGE_NAME1}/${FROZEN_GRAPH} ..
 mv ${PACKAGE_NAME1}/${WEIGHTS_FILE}* ..
-mv ${PACKAGE_NAME1}/pipeline.config ..
+mv ${PACKAGE_NAME1}/${PIPELINE_CONFIG} ..
 
 ########################################################################
 echo

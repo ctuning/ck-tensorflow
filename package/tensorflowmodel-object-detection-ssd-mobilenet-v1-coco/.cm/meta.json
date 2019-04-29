@@ -10,6 +10,7 @@
       "PACKAGE_NAME": "ssd_mobilenet_v1_coco_2018_01_28.tar.gz",
       "PACKAGE_NAME1": "ssd_mobilenet_v1_coco_2018_01_28",
       "PACKAGE_URL": "http://download.tensorflow.org/models/object_detection",
+      "PIPELINE_CONFIG": "pipeline.config", 
       "WEIGHTS_FILE": "model.ckpt"
     },
     "model_id": "mobilenet_v1",

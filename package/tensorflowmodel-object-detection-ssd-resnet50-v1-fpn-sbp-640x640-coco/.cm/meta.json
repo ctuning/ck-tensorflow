@@ -10,6 +10,7 @@
       "PACKAGE_NAME": "ssd_resnet50_v1_fpn_shared_box_predictor_640x640_coco14_sync_2018_07_03.tar.gz",
       "PACKAGE_NAME1": "ssd_resnet50_v1_fpn_shared_box_predictor_640x640_coco14_sync_2018_07_03",
       "PACKAGE_URL": "http://download.tensorflow.org/models/object_detection",
+      "PIPELINE_CONFIG": "pipeline.config", 
       "WEIGHTS_FILE": "model.ckpt"
     },
     "model_id": "resnetnet50_v1",
