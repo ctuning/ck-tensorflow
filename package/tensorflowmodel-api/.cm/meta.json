@@ -14,8 +14,8 @@
   "deps": {
     "protobuf": {
       "local": "yes",
-      "name": "ProtoBuf host library 3.0.x (Linux) or 3.x.y (MacOS)",
-      "tags": "lib,protobuf-host,v3",
+      "name": "ProtoBuf host library 3.0.x (Linux)",
+      "tags": "lib,protobuf-host",
       "update_tags_by_target_os_uoa": {
         "linux-32": "v3.0",
         "linux-64": "v3.0"
