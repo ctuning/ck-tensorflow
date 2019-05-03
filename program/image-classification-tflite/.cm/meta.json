@@ -87,24 +87,28 @@
       "tags": "model,tflite,image-classification"
     },
     "python": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python interpreter",
       "sort": 40,
       "tags": "compiler,python"
     },
     "lib-python-numpy": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python NumPy library",
       "sort": 50,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python Pillow library",
       "sort": 70,
       "tags": "lib,python-package,pillow"
     },
     "lib-python-scipy": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python SciPy library",
       "sort": 60,
