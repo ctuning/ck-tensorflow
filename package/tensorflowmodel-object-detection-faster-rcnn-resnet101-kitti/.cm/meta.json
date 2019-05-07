@@ -10,6 +10,7 @@
       "PACKAGE_NAME": "faster_rcnn_resnet101_kitti_2018_01_28.tar.gz",
       "PACKAGE_NAME1": "faster_rcnn_resnet101_kitti_2018_01_28",
       "PACKAGE_URL": "http://download.tensorflow.org/models/object_detection",
+      "PIPELINE_CONFIG": "pipeline.config", 
       "WEIGHTS_FILE": "model.ckpt"
     },
     "model_id": "resnet101",

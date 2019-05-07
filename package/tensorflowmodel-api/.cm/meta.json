@@ -14,8 +14,12 @@
   "deps": {
     "protobuf": {
       "local": "yes",
-      "name": "ProtoBuf host library 3.0.x",
-      "tags": "lib,protobuf-host,v3,v3.0"
+      "name": "ProtoBuf host library 3.0.x (Linux)",
+      "tags": "lib,protobuf-host",
+      "update_tags_by_target_os_uoa": {
+        "linux-32": "v3.0",
+        "linux-64": "v3.0"
+      }
     }
   },
   "end_full_path": {

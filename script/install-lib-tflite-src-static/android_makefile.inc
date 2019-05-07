@@ -12,11 +12,17 @@ ifeq ($(TARGET),ANDROID)
 	ifeq ($(HOST_OS),LINUX)
 		ANDROID_HOST_OS_ARCH=linux
 	endif
+	ifeq ($(HOST_OS),osx)
+		ANDROID_HOST_OS_ARCH=darwin
+	endif
 	ifeq ($(HOST_OS),OSX)
 		ANDROID_HOST_OS_ARCH=darwin
 	endif
-	ifeq ($(HOST_OS),WINDOWS)
+	ifeq ($(HOST_OS),windows)
 		$(error "windows is not supported.")
+	endif
+	ifeq ($(HOST_OS),WINDOWS)
+		$(error "WINDOWS is not supported.")
 	endif
 
 	ifeq ($(ARCH),x86_32)
