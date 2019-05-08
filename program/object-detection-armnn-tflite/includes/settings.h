@@ -10,6 +10,7 @@
 #define DETECT_SETTINGS_H
 
 #include <iostream>
+#include <thread>
 #include <stdlib.h>
 #include <vector>
 #include <fstream>
