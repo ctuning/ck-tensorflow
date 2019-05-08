@@ -57,6 +57,7 @@
     "android"
   ],
   "process_in_tmp": "yes",
+  "need_cpu_info": "yes",
   "program": "yes",
   "run_cmds": {
     "default": {

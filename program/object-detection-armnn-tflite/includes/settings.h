@@ -97,11 +97,13 @@ public:
         _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
         _full_report = settings_from_file["FULL_REPORT"] == "True";
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
-        _use_neon = settings_from_file["USE_NEON"] == "True";
-        _use_opencl = settings_from_file["USE_OPENCL"] == "True";
-        _verbose = settings_from_file["VERBOSE"] == "True";
 
-        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), "1"));
+
+        _use_neon = get_yes_no(getenv("USE_NEON"));
+        _use_opencl = get_yes_no(getenv("USE_OPENCL"));
+        _number_of_threads = std::thread::hardware_concurrency();
+        _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
+        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
         _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
         _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
         _full_report = get_yes_no(getenv("FULL_REPORT"));
