@@ -16,6 +16,7 @@
 #include <map>
 #include <list>
 #include <dirent.h>
+#include <thread>
 
 
 struct FileInfo {
@@ -88,7 +89,9 @@ public:
         _use_neon = false; //settings_from_file["USE_NEON"] == "True";
         _use_opencl = false; // settings_from_file["USE_OPENCL"] == "True";
 
-        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), "1"));
+        _number_of_threads = std::thread::hardware_concurrency();
+        _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
+        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
         _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
         _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
         _full_report = get_yes_no(getenv("FULL_REPORT"));
