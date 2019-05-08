@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
                 cout << "Loaded model " << settings.graph_file() << endl;
                 model->error_reporter();
                 cout << "resolved reporter" << endl;
+                cout << endl << "Number of threads: " << settings.number_of_threads() << endl;
             }
 
             ops::builtin::BuiltinOpResolver resolver;
