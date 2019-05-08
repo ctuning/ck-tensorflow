@@ -87,8 +87,8 @@ public:
         _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
         _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
 
-        _use_neon = false;
-        _use_opencl = false;
+        _use_neon = get_yes_no(getenv("USE_NEON"));
+        _use_opencl = get_yes_no(getenv("USE_OPENCL"));
         _number_of_threads = std::thread::hardware_concurrency();
         _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
         _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
