@@ -141,7 +141,9 @@
   "run_vars": {
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
-    "CK_SKIP_IMAGES": 0
+    "CK_SKIP_IMAGES": 0,
+    "USE_NEON": "NO",
+    "USE_OPENCL": "NO"
   },
   "skip_bin_ext": "yes",
   "source_files": [
