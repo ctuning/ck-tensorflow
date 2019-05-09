@@ -48,13 +48,16 @@ inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: 
 class Settings {
 public:
     Settings() {
-        //Load settings
+
+        // Load settings
         std::ifstream settings_file("env.ini");
         if (!settings_file)
             throw "Unable to open 'env.ini' file";
+        _verbose = get_yes_no(getenv("VERBOSE"));
+        if (_verbose) std::cout << "Settings from 'env.ini' file:" << std::endl;
         std::map<std::string, std::string> settings_from_file;
         for (std::string s; !getline(settings_file, s).fail();) {
-            std::cout << s << std::endl;
+            if (_verbose) std::cout << '\t' << s << std::endl;
             std::istringstream iss(s);
             std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<'='>>(iss)),
                                          std::istream_iterator<WordDelimitedBy<'='>>());
@@ -63,6 +66,7 @@ public:
             else
                 settings_from_file.emplace(row[0], row[1]);
         }
+
         std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
@@ -99,7 +103,6 @@ public:
         _full_report = settings_from_file["FULL_REPORT"] == "True";
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
 
-
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
         _number_of_threads = std::thread::hardware_concurrency();
@@ -108,7 +111,6 @@ public:
         _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
         _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
         _full_report = get_yes_no(getenv("FULL_REPORT"));
-        _verbose = get_yes_no(getenv("VERBOSE"));
 
         _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
         _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
@@ -142,8 +144,8 @@ public:
             std::cout << "Batch size: " << _batch_size << std::endl;
             std::cout << "Normalize: " << _normalize_img << std::endl;
             std::cout << "Subtract mean: " << _subtract_mean << std::endl;
-            std::cout << "Use NEON: " << _use_neon << std::endl;
-            std::cout << "Use OPENCL: " << _use_opencl << std::endl;
+            std::cout << "Use Neon: " << _use_neon << std::endl;
+            std::cout << "Use OpenCL: " << _use_opencl << std::endl;
         }
 
         // Create results dir if none
