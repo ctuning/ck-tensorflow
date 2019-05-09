@@ -52,6 +52,7 @@
     "linux",
     "android"
   ],
+  "need_cpu_info": "yes",
   "process_in_tmp": "yes",
   "program": "yes",
   "run_cmds": {

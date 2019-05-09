@@ -102,18 +102,18 @@ private:
 
 class BenchmarkSettings {
 public:
-  const std::string graph_file = getenv_s("RUN_OPT_GRAPH_FILE");
-  const std::string images_dir = getenv_s("RUN_OPT_IMAGE_DIR");
-  const std::string images_file = getenv_s("RUN_OPT_IMAGE_LIST");
-  const std::string result_dir = getenv_s("RUN_OPT_RESULT_DIR");
-  const int batch_count = getenv_i("RUN_OPT_BATCH_COUNT");
-  const int batch_size = getenv_i("RUN_OPT_BATCH_SIZE");
-  const int image_size = getenv_i("RUN_OPT_IMAGE_SIZE");
+  const std::string graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH");
+  const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
+  const std::string images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
+  const std::string result_dir = getenv_s("CK_RESULTS_DIR");
+  const int batch_count = getenv_i("CK_BATCH_COUNT");
+  const int batch_size = getenv_i("CK_BATCH_SIZE");
+  const int image_size = getenv_i("CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE");
   const int num_channels = 3;
   const int num_classes = 1000;
-  const bool normalize_img = getenv_i("RUN_OPT_NORMALIZE_DATA") != 0;
-  const bool subtract_mean = getenv_i("RUN_OPT_SUBTRACT_MEAN") != 0;
-  const bool full_report = getenv_i("RUN_OPT_SILENT_MODE") == 0;
+  const bool normalize_img = getenv_s("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA") == "YES";
+  const bool subtract_mean = getenv_s("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN") == "YES";
+  const bool full_report = getenv_i("CK_SILENT_MODE") == 0;
 
   BenchmarkSettings() {
     // Print settings
@@ -137,9 +137,10 @@ public:
       system(("mkdir " + result_dir).c_str());
 
     // Load list of images to be processed
-    std::ifstream file(images_file);
+    auto images_fof_path = images_dir + '/' + images_file;
+    std::ifstream file(images_fof_path);
     if (!file)
-      throw "Unable to open image list file " + images_file;
+      throw "Unable to open image list file " + images_fof_path;
     for (std::string s; !getline(file, s).fail();)
       _image_list.emplace_back(s);
     std::cout << "Image count in file: " << _image_list.size() << std::endl;
