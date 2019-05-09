@@ -322,6 +322,7 @@ class IBenchmark {
 public:
   bool has_background_class = false;
 
+  virtual ~IBenchmark() {}
   virtual void load_images(const std::vector<std::string>& batch_images) = 0;
   virtual void save_results(const std::vector<std::string>& batch_images) = 0;
 };
