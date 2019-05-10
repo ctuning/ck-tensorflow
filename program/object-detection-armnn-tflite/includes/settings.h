@@ -342,7 +342,7 @@ bool get_yes_no(std::string answer) {
     std::locale loc;
     for (std::string::size_type i=0; i<answer.length(); ++i)
         answer[i] = std::tolower(answer[i],loc);
-    if (answer == "1" || answer == "yes" || answer == "true") return true;
+    if (answer == "1" || answer == "yes" || answer == "on" || answer == "true") return true;
     return false;
 }
 
