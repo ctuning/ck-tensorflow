@@ -137,10 +137,9 @@ public:
       system(("mkdir " + result_dir).c_str());
 
     // Load list of images to be processed
-    auto images_fof_path = images_dir + '/' + images_file;
-    std::ifstream file(images_fof_path);
+    std::ifstream file(images_file);
     if (!file)
-      throw "Unable to open image list file " + images_fof_path;
+      throw "Unable to open image list file " + images_file;
     for (std::string s; !getline(file, s).fail();)
       _image_list.emplace_back(s);
     std::cout << "Image count in file: " << _image_list.size() << std::endl;
