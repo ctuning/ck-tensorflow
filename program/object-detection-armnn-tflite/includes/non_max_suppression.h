@@ -7,8 +7,8 @@
  */
 
 
-#ifndef NMS_NON_MAX_SUPPRESSION_H
-#define NMS_NON_MAX_SUPPRESSION_H
+#ifndef NON_MAX_SUPRESSION_H
+#define NON_MAX_SUPRESSION_H
 
 #include <math.h>
 #include <vector>
@@ -35,7 +35,7 @@ inline void swap_int(int &a, int &b) { int c = a; a = b; b = c;}
 inline void swap_int(int *a, int *b) { int c = *a; *a = *b; *b = c;}
 
 
-// Check if `box` intersects (x1, y1, x2, y2) greater than `treshold` of area
+// Check if `box` intersects (x1, y1, x2, y2) greater than `threshold` of area
 bool is_box_hidden_by_other(DetectionBox box,
                             float x1,
                             float y1,
@@ -80,9 +80,6 @@ void postprocess_detections(Settings *s,
                             int src_width,
                             int src_height,
                             bool correct_background) {
-
-
-
     float *scores = s->get_scores_sorting_buf();
     int *classes = s->get_classes_sorting_buf();
     int *boxes = s->get_boxes_sorting_buf();
@@ -192,4 +189,4 @@ void postprocess_detections(Settings *s,
     }
 }
 
-#endif //NMS_NON_MAX_SUPPRESSION_H
+#endif //NON_MAX_SUPRESSION_H

@@ -7,13 +7,13 @@
       "sort": 0,
       "tags": "compiler,lang-cpp"
     },
-    "flatbuffers": {
+    "lib-flatbuffers": {
       "local": "yes",
-      "name": "flatbuffers library",
+      "name": "FlatBuffers library",
       "sort": 90,
       "tags": "lib,flatbuffers"
     },
-    "library": {
+    "lib-tflite": {
       "local": "yes",
       "name": "TensorFlow Lite C++ API",
       "sort": 20,
@@ -25,11 +25,11 @@
       "sort": 40,
       "tags": "lib,armnn,tflite,rel.19.02",
       "update_tags_if_env" : {
-        "neon":         [ { "USE_NEON":   ["on", "ON", "yes", "YES", "1"] } ],
-        "opencl":       [ { "USE_OPENCL": ["on", "ON", "yes", "YES", "1"] } ]
+        "neon":         [ { "USE_NEON":   ["on", "ON", "yes", "YES", "1", "true", "TRUE"] } ],
+        "opencl":       [ { "USE_OPENCL": ["on", "ON", "yes", "YES", "1", "true", "TRUE"] } ]
       }
     },
-    "xopenme": {
+    "lib-xopenme": {
       "local": "yes",
       "name": "xOpenME library",
       "sort": 100,
@@ -84,13 +84,13 @@
   "run_deps": {
     "dataset": {
       "local": "yes",
-      "name": "Object detection dataset",
+      "name": "Object Detection dataset",
       "sort": 20,
       "tags": "dataset,object-detection"
     },
-    "flatbuffers": {
+    "lib-flatbuffers": {
       "local": "yes",
-      "name": "flatbuffers library",
+      "name": "FlatBuffers library",
       "sort": 70,
       "tags": "lib,flatbuffers"
     },
@@ -131,7 +131,7 @@
       "sort": 60,
       "tags": "model,tflite,model,object-detection,ssd"
     },
-    "xopenme": {
+    "lib-xopenme": {
       "local": "yes",
       "name": "xOpenME library",
       "sort": 100,
@@ -150,7 +150,8 @@
     "detect.cpp"
   ],
   "tags": [
-    "tensorflow-lite-detection",
+    "tensorflow-lite",
+    "object-detection",
     "armnn",
     "tflite",
     "lang-cpp"

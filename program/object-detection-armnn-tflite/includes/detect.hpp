@@ -6,8 +6,8 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#ifndef DETECT_HEADER_FILE
-#define DETECT_HEADER_FILE
+#ifndef DETECT_H
+#define DETECT_H
 
 #include <iomanip>
 #include <vector>
@@ -55,4 +55,4 @@ void AddTensorToOutput(armnn::OutputTensors &v, const std::pair<armnn::LayerBind
     v.push_back({output.first, armnn::Tensor(output.second, outputTensorData) });
 }
 
-#endif
+#endif //DETECT_H
