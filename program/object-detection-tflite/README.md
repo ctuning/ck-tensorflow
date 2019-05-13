@@ -137,7 +137,7 @@ or:
 $ ck run ck-tensorflow:program:object-detection-tflite --env.VERBOSE=yes
 ```
 
-#### `CUSTOM_MODEL_SETTINGS`
+#### `USE_CUSTOM_NMS_SETTINGS`
 
 Enable tuning model settings (just for custom operator use).
 
@@ -164,7 +164,7 @@ Usage example:
 $ ck run ck-tensorflow:program:object-detection-tflite \
     --env.CK_BATCH_COUNT=10 \
     --env.FULL_REPORT=yes \
-    --env.CUSTOM_MODEL_SETTINGS=yes \
+    --env.USE_CUSTOM_NMS_SETTINGS=yes \
     --env.MAX_DETECTIONS=100 \
     --env.NMS_SCORE_THRESHOLD=0.25 \
     --env.NMS_IOU_THRESHOLD=0.7

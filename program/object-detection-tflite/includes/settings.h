@@ -97,7 +97,7 @@ public:
         _full_report = get_yes_no(getenv("FULL_REPORT"));
         _verbose = get_yes_no(getenv("VERBOSE"));
 
-        _default_model_settings=!get_yes_no(getenv("CUSTOM_MODEL_SETTINGS"));
+        _default_model_settings=!get_yes_no(getenv("USE_CUSTOM_NMS_SETTINGS"));
 
         if (_default_model_settings) {
             _m_max_classes_per_detection = 1;
