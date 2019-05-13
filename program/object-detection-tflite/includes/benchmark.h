@@ -6,8 +6,8 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#ifndef BENCHMARK_HEADER_FILE
-#define BENCHMARK_HEADER_FILE
+#ifndef BENCHMARK_H
+#define BENCHMARK_H
 
 #pragma once
 
@@ -439,7 +439,6 @@ namespace CK {
                      << score << " " << detected_class + class_id_add << " "
                      << class_name;
         buffer = stringStream.str();
-
     }
 
     class OutCopy {

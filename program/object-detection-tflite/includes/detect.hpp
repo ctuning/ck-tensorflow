@@ -6,8 +6,8 @@
  * See CK LICENSE.txt for licensing details.
  */
 
-#ifndef DETECT_HEADER_FILE
-#define DETECT_HEADER_FILE
+#ifndef DETECT_H
+#define DETECT_H
 
 #include <iomanip>
 
@@ -36,7 +36,6 @@ public:
             interpreter->typed_output_tensor<TData>(3)) {
     }
 };
-
 
 Settings settings;
 BenchmarkSession session(&settings);
@@ -88,28 +87,28 @@ void* Init(TfLiteContext* context, const char* buffer, size_t length) {
             result->intersection_over_union_threshold = settings.get_nms_iou_threshold();
         }
 
-        if (settings.get_y_scale() < 0) {
-            settings.set_y_scale(result->scale_values.y);
+        if (settings.get_scale_y() < 0) {
+            settings.set_scale_y(result->scale_values.y);
         } else {
-            result->scale_values.y = settings.get_y_scale();
+            result->scale_values.y = settings.get_scale_y();
         }
 
-        if (settings.get_x_scale() < 0) {
-            settings.set_x_scale(result->scale_values.x);
+        if (settings.get_scale_x() < 0) {
+            settings.set_scale_x(result->scale_values.x);
         } else {
-            result->scale_values.x = settings.get_x_scale();
+            result->scale_values.x = settings.get_scale_x();
         }
 
-        if (settings.get_h_scale() < 0) {
-            settings.set_h_scale(result->scale_values.h);
+        if (settings.get_scale_h() < 0) {
+            settings.set_scale_h(result->scale_values.h);
         } else {
-            result->scale_values.h = settings.get_h_scale();
+            result->scale_values.h = settings.get_scale_h();
         }
 
-        if (settings.get_w_scale() < 0) {
-            settings.set_w_scale(result->scale_values.w);
+        if (settings.get_scale_w() < 0) {
+            settings.set_scale_w(result->scale_values.w);
         } else {
-            result->scale_values.w = settings.get_w_scale();
+            result->scale_values.w = settings.get_scale_w();
         }
 
         context->AddTensors(context, 1, &result->decoded_boxes_index);
@@ -124,10 +123,10 @@ void* Init(TfLiteContext* context, const char* buffer, size_t length) {
         settings.set_num_classes(result->num_classes);
         settings.set_nms_score_threshold(result->non_max_suppression_score_threshold);
         settings.set_nms_iou_threshold(result->intersection_over_union_threshold);
-        settings.set_y_scale(result->scale_values.y);
-        settings.set_x_scale(result->scale_values.x);
-        settings.set_h_scale(result->scale_values.h);
-        settings.set_w_scale(result->scale_values.w);
+        settings.set_scale_y(result->scale_values.y);
+        settings.set_scale_x(result->scale_values.x);
+        settings.set_scale_h(result->scale_values.h);
+        settings.set_scale_w(result->scale_values.w);
     }
 
     if (settings.full_report()) {

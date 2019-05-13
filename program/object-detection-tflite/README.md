@@ -153,10 +153,10 @@ DETECTIONS_PER_CLASS (integer, >0)
 
 NMS_SCORE_THRESHOLD (float, >=0.0)
 NMS_IOU_THRESHOLD (float, >=0.0)
-H_SCALE (float, >0.0)
-W_SCALE (float, >0.0)
-X_SCALE (float, >0.0)
-Y_SCALE (float, >0.0)
+SCALE_H (float, >0.0)
+SCALE_W (float, >0.0)
+SCALE_X (float, >0.0)
+SCALE_Y (float, >0.0)
 ```
 
 Usage example:
