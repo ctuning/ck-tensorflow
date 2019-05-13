@@ -304,6 +304,8 @@ namespace CK {
 
     class IBenchmark {
     public:
+        virtual ~IBenchmark() {}
+
         virtual void load_images(const std::vector<FileInfo> &batch_images) = 0;
 
         virtual void save_results(const std::vector<FileInfo> &batch_images) = 0;
