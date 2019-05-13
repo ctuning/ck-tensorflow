@@ -128,9 +128,14 @@ namespace CK {
         }
 
         /// Begin measuring of new benchmark stage.
-        /// Only one stage can be measured at a time.
-        void measure_begin() {
-            _start_time = std::chrono::high_resolution_clock::now();
+        /// Only one stage can be measured at a time, unless an alternative timer is provided.
+        void measure_begin(std::chrono::time_point<std::chrono::high_resolution_clock> *start_time=NULL) {
+            auto now = std::chrono::high_resolution_clock::now();
+            if (start_time == NULL) {
+                _start_time = now;
+            } else {
+                *start_time = now;
+            }
         }
 
         /// Finish measuring of batch loading stage
@@ -155,14 +160,12 @@ namespace CK {
         }
 
         /// Finish measuring of non_max_suppression stage
-        float measure_end_non_max_suppression() {
-            float duration = measure_end();
+        float measure_end_non_max_suppression(std::chrono::time_point<std::chrono::high_resolution_clock> *start_time=NULL) {
+            float duration = measure_end(start_time);
             _total_prediction_time += duration;
             if (_settings->verbose())
                 std::cout << "non_max_suppression completed in " << duration << " s" << std::endl;
-            // Skip first batch in order to account warming-up the system
-            if (_batch_index > 0 || _settings->batch_count() == 1)
-                _non_max_suppression_time.add(duration);
+            _non_max_suppression_time.add(duration);
             return duration;
         }
 
@@ -180,9 +183,14 @@ namespace CK {
         std::vector<FileInfo> _batch_files;
         std::chrono::time_point<std::chrono::high_resolution_clock> _start_time;
 
-        float measure_end() const {
-            auto finish_time = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> elapsed = finish_time - _start_time;
+        float measure_end(std::chrono::time_point<std::chrono::high_resolution_clock> *start_time=NULL) const {
+            auto now = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed;
+            if (start_time == NULL) {
+                elapsed = now - _start_time;
+            } else {
+                elapsed = now - *start_time;
+            }
             return static_cast<float>(elapsed.count());
         }
     };
@@ -296,6 +304,8 @@ namespace CK {
 
     class IBenchmark {
     public:
+        virtual ~IBenchmark() {}
+
         virtual void load_images(const std::vector<FileInfo> &batch_images) = 0;
 
         virtual void save_results(const std::vector<FileInfo> &batch_images) = 0;

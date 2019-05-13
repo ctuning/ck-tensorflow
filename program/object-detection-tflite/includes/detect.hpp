@@ -151,9 +151,10 @@ void* Init(TfLiteContext* context, const char* buffer, size_t length) {
 }
 
 TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
-    session.measure_begin();
+    std::chrono::time_point<std::chrono::high_resolution_clock> nms_time;
+    session.measure_begin(&nms_time);
     ops::custom::detection_postprocess::Eval(context,node);
-    session.measure_end_non_max_suppression();
+    session.measure_end_non_max_suppression(&nms_time);
     return kTfLiteOk;
 }
 
