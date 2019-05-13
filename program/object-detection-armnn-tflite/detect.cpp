@@ -133,6 +133,8 @@ int main(int argc, char *argv[]) {
 
         cout << "\nProcessing batches..." << endl;
        measure_prediction([&] {
+           std::chrono::time_point<std::chrono::high_resolution_clock> nms_time;
+
            while (session.get_next_batch()) {
                session.measure_begin();
                benchmark->load_images(session.batch_files());
@@ -141,12 +143,13 @@ int main(int argc, char *argv[]) {
                session.measure_begin();
                if (runtime->EnqueueWorkload(networkIdentifier, inTensors, outTensors) != armnn::Status::Success)
                    throw "Failed to invoke the classifier";
-               session.measure_end_prediction();
 
-               session.measure_begin();
+               session.measure_begin(&nms_time);
                benchmark->non_max_suppression(session.batch_files());
-               session.measure_end_non_max_suppression();
+               session.measure_end_non_max_suppression(&nms_time);
 
+               session.measure_end_prediction();
+               
                benchmark->save_results(session.batch_files());
            }
            finish_benchmark(session);
