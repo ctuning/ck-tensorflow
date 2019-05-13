@@ -128,10 +128,14 @@ namespace CK {
         }
 
         /// Begin measuring of new benchmark stage.
-        /// Only one stage can be measured at a time.
+        /// Only one stage can be measured at a time, unless an alternative timer is provided.
         void measure_begin(std::chrono::time_point<std::chrono::high_resolution_clock> *start_time=NULL) {
-            if (start_time == NULL) _start_time = std::chrono::high_resolution_clock::now();
-            else *start_time = std::chrono::high_resolution_clock::now();
+            auto now = std::chrono::high_resolution_clock::now();
+            if (start_time == NULL) {
+                _start_time = now;
+            } else {
+                *start_time = now;
+            }
         }
 
         /// Finish measuring of batch loading stage
@@ -180,12 +184,12 @@ namespace CK {
         std::chrono::time_point<std::chrono::high_resolution_clock> _start_time;
 
         float measure_end(std::chrono::time_point<std::chrono::high_resolution_clock> *start_time=NULL) const {
-            auto finish_time = std::chrono::high_resolution_clock::now();
+            auto now = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed;
             if (start_time == NULL) {
-                elapsed = finish_time - _start_time;
+                elapsed = now - _start_time;
             } else {
-                elapsed = finish_time - *start_time;
+                elapsed = now - *start_time;
             }
             return static_cast<float>(elapsed.count());
         }
