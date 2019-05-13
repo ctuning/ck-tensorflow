@@ -158,10 +158,10 @@ void postprocess_detections(Settings *s,
         float th = in_boxes[index + 2];
         float tw = in_boxes[index + 3];
 
-        float x = (tx / s->get_x_scale()) * aw  + ax;
-        float y = (ty / s->get_y_scale()) * ah  + ay;
-        float w = expf(tw / s->get_w_scale()) * aw;
-        float h = expf(th / s->get_h_scale()) * ah;
+        float x = (tx / s->get_scale_x()) * aw  + ax;
+        float y = (ty / s->get_scale_y()) * ah  + ay;
+        float w = expf(tw / s->get_scale_w()) * aw;
+        float h = expf(th / s->get_scale_h()) * ah;
 
         float x1 = x - w * 0.5f;
         float x2 = x + w * 0.5f;

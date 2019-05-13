@@ -16,7 +16,11 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#include <dirent.h>
+#if __cplusplus < 201703L // If the version of C++ is less than 17
+    #include <experimental/filesystem>
+#else
+    #include <filesystem>
+#endif
 
 
 template<char delimiter>
@@ -36,10 +40,12 @@ struct FileInfo {
 
 bool get_yes_no(std::string) ;
 bool get_yes_no(char *);
+std::string join_paths(std::string, std::string);
 std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
 std::vector<std::string> *readClassesFile(std::string);
 float *readAnchorsFile(std::string, int&);
+void make_dir(std::string);
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
@@ -79,7 +85,7 @@ public:
             std::cout << std::endl << "ERROR: Unsupported USE_NMS type - " << nms_type << std::endl;
             exit(-1);
         }
-        _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" + _graph_file;
+        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
 
         std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
                                    getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
@@ -119,10 +125,10 @@ public:
         _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"))) + _correct_background;
         _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
         _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
-        _m_h_scale = std::stof(alter_str(getenv("H_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
-        _m_w_scale = std::stof(alter_str(getenv("W_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
-        _m_x_scale = std::stof(alter_str(getenv("X_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
-        _m_y_scale = std::stof(alter_str(getenv("Y_SCALE"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
+        _m_scale_h = std::stof(alter_str(getenv("SCALE_H"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
+        _m_scale_w = std::stof(alter_str(getenv("SCALE_W"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
+        _m_scale_x = std::stof(alter_str(getenv("SCALE_X"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
+        _m_scale_y = std::stof(alter_str(getenv("SCALE_Y"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
 
         _d_boxes = new float [_m_anchors_count * 4]();
         _d_scores = new float [_m_anchors_count * _m_num_classes];
@@ -149,11 +155,7 @@ public:
         }
 
         // Create results dir if none
-        auto dir = opendir(_detections_out_dir.c_str());
-        if (dir)
-            closedir(dir);
-        else
-            system(("mkdir " + _detections_out_dir).c_str());
+        make_dir(_detections_out_dir);
 
         // Load list of images to be processed
         std::ifstream file(_images_file);
@@ -234,17 +236,17 @@ public:
     float get_nms_iou_threshold() { return _m_nms_iou_threshold; };
     void set_nms_iou_threshold(float i) { _m_nms_iou_threshold = i;}
 
-    float get_h_scale() { return _m_h_scale; };
-    void set_h_scale(float i) { _m_h_scale = i;}
+    float get_scale_h() { return _m_scale_h; };
+    void set_scale_h(float i) { _m_scale_h = i;}
 
-    float get_w_scale() { return _m_w_scale; };
-    void set_w_scale(float i) { _m_w_scale = i;}
+    float get_scale_w() { return _m_scale_w; };
+    void set_scale_w(float i) { _m_scale_w = i;}
 
-    float get_x_scale() { return _m_x_scale; };
-    void set_x_scale(float i) { _m_x_scale = i;}
+    float get_scale_x() { return _m_scale_x; };
+    void set_scale_x(float i) { _m_scale_x = i;}
 
-    float get_y_scale() { return _m_y_scale; };
-    void set_y_scale(float i) { _m_y_scale = i;}
+    float get_scale_y() { return _m_scale_y; };
+    void set_scale_y(float i) { _m_scale_y = i;}
 
     float* get_anchors() { return _m_anchors; };
     float* get_boxes_buf() { return _d_boxes; };
@@ -293,10 +295,10 @@ private:
 
     float _m_nms_score_threshold;
     float _m_nms_iou_threshold;
-    float _m_h_scale;
-    float _m_w_scale;
-    float _m_x_scale;
-    float _m_y_scale;
+    float _m_scale_h;
+    float _m_scale_w;
+    float _m_scale_x;
+    float _m_scale_y;
 
     bool _correct_background;
     bool _full_report;
@@ -360,6 +362,28 @@ std::string str_to_lower(std::string answer) {
 
 std::string str_to_lower(char *answer) {
     return str_to_lower(std::string(answer));
+}
+
+std::string join_paths(std::string path_name, std::string file_name) {
+#ifdef _WIN32
+    std::string delimiter = "\\";
+#else
+    std::string delimiter = "/";
+#endif
+    if (path_name.back()=='\\' || path_name.back()=='/') {
+        return path_name + file_name;
+    }
+    return path_name + delimiter + file_name;
+}
+
+void make_dir(std::string path) {
+#if __cplusplus < 201703L // If the version of C++ is less than 17
+    // It was still in the experimental:: namespace
+    namespace fs = std::experimental::filesystem;
+#else
+    namespace fs = std::filesystem;
+#endif
+    fs::create_directory(path);
 }
 
 #endif //DETECT_SETTINGS_H
