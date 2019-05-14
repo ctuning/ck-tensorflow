@@ -8,7 +8,7 @@
       "sort": 0,
       "tags": "compiler,lang-cpp"
     },
-    "library": {
+    "lib-tflite": {
       "local": "yes",
       "name": "TensorFlow Lite library",
       "sort": 20,
@@ -19,13 +19,13 @@
         1
       ]
     },
-    "flatbuffers": {
+    "lib-flatbuffers": {
       "local": "yes",
       "name": "FlatBuffers library",
       "sort": 90,
       "tags": "lib,flatbuffers"
     },
-    "xopenme": {
+    "lib-xopenme": {
       "local": "yes",
       "name": "xOpenME library",
       "sort": 100,
@@ -42,7 +42,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "object-detection-tflite",
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_ENV_LIB_FLATBUFFERS_LFLAG>>$",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_ENV_LIB_FLATBUFFERS_LFLAG>>$ -lstdc++fs",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -140,6 +140,7 @@
     "detect.cpp"
   ],
   "tags": [
+    "tensorflow-lite",
     "object-detection",
     "tflite",
     "lang-cpp"
