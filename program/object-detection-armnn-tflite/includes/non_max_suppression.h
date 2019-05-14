@@ -66,8 +66,10 @@ void add_detection_to_vector(
         float y2,
         float score,
         int class_id,
-        float threshold) {
+        float threshold,
+        bool fast_nms) {
     for (int i = 0; i < detection_boxes.size(); i++) {
+        if (class_id != detection_boxes[i].class_id && !fast_nms) continue;
         if (is_box_hidden_by_other(detection_boxes[i], x1, y1, x2, y2, threshold)) return;
     }
     detection_boxes.push_back({x1, y1, x2, y2, score, class_id});
@@ -92,9 +94,12 @@ void postprocess_detections(Settings *s,
     for (int i = 0; i< s->get_max_total_detections(); i++) {
         scores[i] = 0.0f;
     }
+    bool fast_nms = s->fast_nms();
+
+    int max_classes_per_detection = fast_nms ? 1 : std::min(s->get_max_classes_per_detection(), s->get_max_detections());
 
     for (int num_box = 0; num_box < s->get_anchors_count(); num_box++) {
-        for (int i = 0; i < s->get_max_classes_per_detection(); i++) {
+        for (int i = 0; i < max_classes_per_detection; i++) {
             new_scores[i] = 0.0f;
             new_classes[i] = 0;
             new_boxes[i] = num_box;
@@ -103,7 +108,7 @@ void postprocess_detections(Settings *s,
             classes_ids[i] = i;
         }
 
-        for (int counter = 0; counter < s->get_max_classes_per_detection(); counter++)
+        for (int counter = 0; counter < max_classes_per_detection; counter++)
         {
             float max_score = in_scores[num_box * s->get_num_classes() + counter + 1];
             int max_class_id = classes_ids[counter + 1];
@@ -125,9 +130,9 @@ void postprocess_detections(Settings *s,
             }
         }
 
-        for (int i = 0; i < s->get_max_total_detections() + s->get_max_classes_per_detection() - 1; i++) {
+        for (int i = 0; i < s->get_max_total_detections() + max_classes_per_detection - 1; i++) {
             float max_score = scores[i];
-            for (int j = i + 1; j < s->get_max_total_detections() + s->get_max_classes_per_detection(); j++) {
+            for (int j = i + 1; j < s->get_max_total_detections() + max_classes_per_detection; j++) {
                 if (max_score < scores[j]) {
                     swap_float(scores[i], scores[j]);
                     swap_int(classes[i], classes[j]);
@@ -183,7 +188,8 @@ void postprocess_detections(Settings *s,
                                 y2 * src_height,
                                 scores[i],
                                 classes[i] + add_class_id,
-                                s->get_nms_iou_threshold());
+                                s->get_nms_iou_threshold(),
+                                fast_nms);
 
         if (detection_boxes.size() == s->get_max_total_detections()) break;
     }

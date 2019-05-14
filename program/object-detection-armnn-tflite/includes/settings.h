@@ -78,14 +78,10 @@ public:
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
 
-        std::string nms_type = alter_str(getenv("USE_NMS"), "no");
-        if (str_to_lower(nms_type) == "no") {
-            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS"));
-        } else {
-            std::cout << std::endl << "ERROR: Unsupported USE_NMS type - " << nms_type << std::endl;
-            exit(-1);
-        }
-        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
+        std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
+        _fast_nms = str_to_lower(nms_type) == "regular" ? false : true;
+
+        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS")));
 
         std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
                                    getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
@@ -119,6 +115,11 @@ public:
         _full_report = get_yes_no(getenv("FULL_REPORT"));
 
         _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+        if (_m_max_classes_per_detection > 1 && _fast_nms) {
+            std::cout << std::endl << "You can't use USE_NMS=fast and MAX_CLASSES_PER_DETECTION>1 at the same time" << std::endl ;
+            exit(-1);
+        }
+
         _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
         _m_max_total_detections = std::max(100, _m_max_detections);
         _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
@@ -203,6 +204,8 @@ public:
     int number_of_threads() { return _number_of_threads; }
 
     bool correct_background() { return _correct_background; }
+
+    bool fast_nms() { return _fast_nms; }
 
     bool full_report() { return _full_report; }
 
@@ -301,6 +304,7 @@ private:
     float _m_scale_y;
 
     bool _correct_background;
+    bool _fast_nms;
     bool _full_report;
     bool _normalize_img;
     bool _subtract_mean;
