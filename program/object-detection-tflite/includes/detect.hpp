@@ -46,7 +46,7 @@ void* Init(TfLiteContext* context, const char* buffer, size_t length) {
     result=(ops::custom::detection_postprocess::OpData*)ops::custom::detection_postprocess::Init(context, buffer, length);
 
     if (!settings.default_model_settings()) {
-        result->use_regular_non_max_suppression = true;
+        result->use_regular_non_max_suppression = !settings.fast_nms();
 
         if (settings.get_max_detections() < 0) {
             settings.set_max_detections(result->max_detections);

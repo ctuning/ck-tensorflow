@@ -74,8 +74,10 @@ public:
         std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
         if (str_to_lower(nms_type) == "regular") {
             _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS"));
+            _fast_nms = false;
         } else {
             _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS"));
+            _fast_nms = true;
         }
         _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
 
@@ -117,6 +119,11 @@ public:
             _m_scale_y = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y"));
         } else {
             _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+            if (_m_max_classes_per_detection > 1 && _fast_nms) {
+                std::cout << std::endl << "You can't use USE_NMS=fast and MAX_CLASSES_PER_DETECTION>1 at the same time" << std::endl ;
+                exit(-1);
+            }
+
             _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
             _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
             _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")));
@@ -185,6 +192,8 @@ public:
     bool correct_background() { return _correct_background; }
 
     bool default_model_settings() { return _default_model_settings; }
+
+    bool fast_nms() { return _fast_nms; }
 
     bool full_report() { return _full_report || _verbose; }
 
@@ -263,6 +272,7 @@ private:
 
     bool _correct_background;
     bool _default_model_settings;
+    bool _fast_nms;
     bool _full_report;
     bool _normalize_img;
     bool _subtract_mean;
