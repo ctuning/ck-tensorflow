@@ -84,9 +84,9 @@ public:
         _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
         _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
         _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
-        _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
-        _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
-        _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
+        _correct_background = get_yes_no(settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"]);
+        _normalize_img = get_yes_no(settings_from_file["MODEL_NORMALIZE_DATA"]);
+        _subtract_mean = get_yes_no(settings_from_file["MODEL_SUBTRACT_MEAN"]);
 
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
@@ -288,7 +288,7 @@ bool get_yes_no(std::string answer) {
     std::locale loc;
     for (std::string::size_type i=0; i<answer.length(); ++i)
         answer[i] = std::tolower(answer[i],loc);
-    if (answer == "1" || answer == "yes") return true;
+    if (answer == "1" || answer == "yes" || answer == "on" || answer == "true") return true;
     return false;
 }
 bool get_yes_no(char *answer) {
