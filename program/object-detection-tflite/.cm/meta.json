@@ -128,6 +128,8 @@
     }
   },
   "run_vars": {
+    "CK_TIMER_FILE": "tmp-ck-timer.json",
+    "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_SKIP_IMAGES": 0

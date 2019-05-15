@@ -80,7 +80,7 @@ public:
         _model_classes = *readClassesFile(classes_file);
         _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
-        _images_file = settings_from_file["PREPROCESSED_FILES"];
+        _images_file = getenv("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
         _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
         _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
         _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
