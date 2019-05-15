@@ -40,7 +40,7 @@ struct FileInfo {
 
 bool get_yes_no(std::string) ;
 bool get_yes_no(char *);
-std::string join_paths(std::string, std::string);
+std::string abs_path(std::string, std::string);
 std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
 std::vector<std::string> *readClassesFile(std::string);
@@ -81,10 +81,10 @@ public:
         std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
         _fast_nms = str_to_lower(nms_type) == "regular" ? false : true;
 
-        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS")));
+        _graph_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS")));
 
-        std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
-                                   getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
+        std::string classes_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")),
+                                            std::string(getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES")));
         _model_classes = *readClassesFile(classes_file);
 
         std::string anchors_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
@@ -368,7 +368,7 @@ std::string str_to_lower(char *answer) {
     return str_to_lower(std::string(answer));
 }
 
-std::string join_paths(std::string path_name, std::string file_name) {
+std::string abs_path(std::string path_name, std::string file_name) {
 #ifdef _WIN32
     std::string delimiter = "\\";
 #else
