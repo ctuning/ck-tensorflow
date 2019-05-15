@@ -16,11 +16,6 @@
 #include <map>
 #include <list>
 #include <thread>
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    #include <experimental/filesystem>
-#else
-    #include <filesystem>
-#endif
 
 struct FileInfo {
     std::string name;
@@ -46,7 +41,6 @@ std::string str_to_lower(char *);
 bool get_yes_no(std::string);
 bool get_yes_no(char *);
 std::vector<std::string> *readClassesFile(std::string);
-void make_dir(std::string);
 
 class Settings {
 public:
@@ -150,9 +144,6 @@ public:
             std::cout << "Use NEON: " << _use_neon << std::endl;
             std::cout << "Use OPENCL: " << _use_opencl << std::endl;
         }
-
-        // Create results dir if none
-        make_dir(_detections_out_dir);
 
         // Load list of images to be processed
         std::ifstream file(_images_file);
@@ -326,16 +317,6 @@ std::string abs_path(std::string path_name, std::string file_name) {
         return path_name + file_name;
     }
     return path_name + delimiter + file_name;
-}
-
-void make_dir(std::string path) {
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    // It was still in the experimental:: namespace
-    namespace fs = std::experimental::filesystem;
-#else
-    namespace fs = std::filesystem;
-#endif
-    fs::create_directory(path);
 }
 
 #endif //UNTITLED_SETTINGS_H
