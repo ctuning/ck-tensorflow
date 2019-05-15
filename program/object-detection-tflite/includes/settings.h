@@ -60,7 +60,7 @@ public:
             else
                 settings_from_file.emplace(row[0], row[1]);
         }
-        std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
+        std::string model_dataset_type = getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
@@ -81,12 +81,12 @@ public:
         _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
         _images_file = getenv("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
-        _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
-        _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
-        _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
-        _correct_background = get_yes_no(settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"]);
-        _normalize_img = get_yes_no(settings_from_file["MODEL_NORMALIZE_DATA"]);
-        _subtract_mean = get_yes_no(settings_from_file["MODEL_SUBTRACT_MEAN"]);
+        _image_size_height = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT"));
+        _image_size_width = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH"));
+        _num_channels = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS"));
+        _correct_background = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION"));
+        _normalize_img = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"));
+        _subtract_mean = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"));
 
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
