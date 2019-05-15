@@ -66,7 +66,7 @@ def main(_):
   print('Image size: {}'.format(IMAGE_SIZE))
   print('Batch size: {}'.format(BATCH_SIZE))
   print('Batch count: {}'.format(BATCH_COUNT))
-  print('Result dir: ' + RESULT_DIR);
+  print('Result dir: ' + RESULT_DIR)
   print('Normalize: {}'.format(MODEL_NORMALIZE_DATA))
   print('Subtract mean: {}'.format(SUBTRACT_MEAN))
   print('Use model mean: {}'.format(USE_MODEL_MEAN))
@@ -131,6 +131,7 @@ def main(_):
     image_index = 0
     load_total_time = 0
     class_total_time = 0
+    first_classification_time = 0
     images_loaded = 0
     images_processed = 0
     for batch_index in range(BATCH_COUNT):
@@ -158,6 +159,8 @@ def main(_):
       if batch_index > 0 or BATCH_COUNT == 1:
         class_total_time += class_time
         images_processed += BATCH_SIZE
+      else:
+        first_classification_time = class_time
 
       # Process results
       for index_in_batch in range(BATCH_SIZE):
@@ -171,6 +174,9 @@ def main(_):
   test_time = time.time() - test_time_begin
   class_avg_time = class_total_time / images_processed
   load_avg_time = load_total_time / images_loaded
+
+  if BATCH_COUNT > 1:
+    class_total_time += first_classification_time
 
   # Store benchmark results
   openme = {}
