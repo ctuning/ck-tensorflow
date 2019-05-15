@@ -46,6 +46,8 @@ namespace CK {
         X_VAR_TIME_CLASSIFY_AVG,
         X_VAR_TIME_NON_MAX_SUPPRESSION_TOTAL,
         X_VAR_TIME_NON_MAX_SUPPRESSION_AVG,
+        X_VAR_TIME_GRAPH_AVG,
+        X_VAR_TIME_GRAPH_TOTAL,
 
         X_VAR_COUNT
     };
@@ -204,12 +206,14 @@ namespace CK {
         // Store metrics
         store_value_f(X_VAR_TIME_SETUP, "setup_time_s", xopenme_get_timer(X_TIMER_SETUP));
         store_value_f(X_VAR_TIME_TEST, "test_time_s", xopenme_get_timer(X_TIMER_TEST));
-        store_value_f(X_VAR_TIME_IMG_LOAD_TOTAL, "images_load_time_s", s.total_load_images_time());
-        store_value_f(X_VAR_TIME_IMG_LOAD_AVG, "images_load_time_avg_s", s.avg_load_images_time());
+        store_value_f(X_VAR_TIME_IMG_LOAD_TOTAL, "load_images_time_total_s", s.total_load_images_time());
+        store_value_f(X_VAR_TIME_IMG_LOAD_AVG, "load_images_time_avg_s", s.avg_load_images_time());
         store_value_f(X_VAR_TIME_CLASSIFY_TOTAL, "prediction_time_total_s", s.total_prediction_time());
         store_value_f(X_VAR_TIME_CLASSIFY_AVG, "prediction_time_avg_s", s.avg_prediction_time());
         store_value_f(X_VAR_TIME_NON_MAX_SUPPRESSION_TOTAL, "non_max_suppression_time_total_s", s.total_non_max_suppression_time());
-        store_value_f(X_VAR_TIME_NON_MAX_SUPPRESSION_AVG, "non_max_suppression_avg_s", s.avg_non_max_suppression_time());
+        store_value_f(X_VAR_TIME_NON_MAX_SUPPRESSION_AVG, "non_max_suppression_time_avg_s", s.avg_non_max_suppression_time());
+        store_value_f(X_VAR_TIME_GRAPH_AVG, "graph_avg_s", s.avg_prediction_time() - s.avg_non_max_suppression_time());
+        store_value_f(X_VAR_TIME_GRAPH_TOTAL, "graph_total_s", s.total_prediction_time() - s.total_non_max_suppression_time());
 
         // Finish xopenmp
         xopenme_dump_state();

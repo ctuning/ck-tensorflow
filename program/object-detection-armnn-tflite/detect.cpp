@@ -152,8 +152,9 @@ int main(int argc, char *argv[]) {
                
                benchmark->save_results(session.batch_files());
            }
-           finish_benchmark(session);
         });
+        
+        finish_benchmark(session);
     }
     catch (const string &error_message) {
         cerr << "ERROR: " << error_message << endl;
