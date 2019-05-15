@@ -40,7 +40,7 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
-std::string join_paths(std::string, std::string);
+std::string abs_path(std::string, std::string);
 std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
 bool get_yes_no(std::string);
@@ -79,10 +79,10 @@ public:
             _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS"));
             _fast_nms = true;
         }
-        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
+        _graph_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
 
-        std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
-                                   getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
+        std::string classes_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")),
+                                            std::string(getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES")));
         _model_classes = *readClassesFile(classes_file);
         _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
@@ -316,7 +316,7 @@ std::string str_to_lower(char *answer) {
     return str_to_lower(std::string(answer));
 }
 
-std::string join_paths(std::string path_name, std::string file_name) {
+std::string abs_path(std::string path_name, std::string file_name) {
 #ifdef _WIN32
     std::string delimiter = "\\";
 #else
