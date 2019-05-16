@@ -133,7 +133,7 @@ def main(_):
     class_total_time = 0
     first_classification_time = 0
     images_loaded = 0
-    images_processed = 0
+
     for batch_index in range(BATCH_COUNT):
       batch_number = batch_index+1
       if FULL_REPORT or (batch_number % 10 == 0):
@@ -155,11 +155,9 @@ def main(_):
       if FULL_REPORT:
         print("Batch classified in %fs" % (class_time))
       
-      # Exclude first batch from averaging
-      if batch_index > 0 or BATCH_COUNT == 1:
-        class_total_time += class_time
-        images_processed += BATCH_SIZE
-      else:
+      class_total_time += class_time
+      # Remember first batch prediction time
+      if batch_index == 0:
         first_classification_time = class_time
 
       # Process results
@@ -172,11 +170,13 @@ def main(_):
             f.write('{}\n'.format(prob))
             
   test_time = time.time() - test_time_begin
-  class_avg_time = class_total_time / images_processed
-  load_avg_time = load_total_time / images_loaded
 
   if BATCH_COUNT > 1:
-    class_total_time += first_classification_time
+    class_avg_time = (class_total_time - first_classification_time) / (images_loaded - BATCH_SIZE)
+  else:
+    class_avg_time = class_total_time / images_loaded
+
+  load_avg_time = load_total_time / images_loaded
 
   # Store benchmark results
   openme = {}
