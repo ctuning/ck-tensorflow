@@ -18,12 +18,6 @@
         1
       ]
     },
-    "lib-flatbuffers": {
-      "local": "yes",
-      "name": "FlatBuffers library",
-      "sort": 90,
-      "tags": "lib,flatbuffers"
-    },
     "lib-xopenme": {
       "local": "yes",
       "name": "xOpenME library",
@@ -41,7 +35,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "object-detection-tflite",
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_ENV_LIB_FLATBUFFERS_LFLAG>>$",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_EXTRA_LIB_LOG>>$",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -78,6 +72,7 @@
   },
   "run_deps": {
     "dataset": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Object Detection dataset",
       "sort": 10,
@@ -91,36 +86,42 @@
       "tags": "model,tflite,object-detection"
     },
     "python": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python interpreter",
       "sort": 30,
       "tags": "compiler,lang-python"
     },
     "lib-python-numpy": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python NumPy library",
       "sort": 40,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python Pillow library",
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
     "lib-python-matplotlib": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python Matplotlib library",
       "sort": 60,
       "tags": "lib,python-package,matplotlib"
     },
     "tensorflowmodel-api": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "TensorFlow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
     },
     "tool-coco": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python API for COCO",
       "sort": 90,
