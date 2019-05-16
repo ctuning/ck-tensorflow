@@ -17,6 +17,15 @@
 #include <list>
 #include <thread>
 
+/// Load mandatory string value from the environment.
+inline std::string getenv_s(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value) {
+    std::cout << "Required environment variable " << name << " is not set" <<std::endl;
+    throw "Required environment variable " + name + " is not set";
+  }
+  return std::string(value);
+}
 
 /// Load mandatory integer value from the environment.
 inline int getenv_i(const std::string& name) {
@@ -77,33 +86,33 @@ std::vector<std::string> *readClassesFile(std::string);
 class Settings {
 public:
     Settings() {
-        std::string model_dataset_type = getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
+        std::string model_dataset_type = getenv_s("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
 
         std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
         if (str_to_lower(nms_type) == "regular") {
-            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS"));
+            _graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS");
             _fast_nms = false;
         } else {
-            _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS"));
+            _graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS");
             _fast_nms = true;
         }
-        _graph_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
+        _graph_file = abs_path(getenv_s("CK_ENV_TENSORFLOW_MODEL_ROOT"), _graph_file);
 
-        std::string classes_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")),
-                                            std::string(getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES")));
+        std::string classes_file = abs_path(getenv_s("CK_ENV_TENSORFLOW_MODEL_ROOT"),
+                                            getenv_s("CK_ENV_TENSORFLOW_MODEL_CLASSES"));
         _model_classes = *readClassesFile(classes_file);
-        _images_dir = getenv("CK_PREPROCESSED_OUT_DIR");
-        _detections_out_dir = getenv("CK_DETECTIONS_OUT_DIR");
-        _images_file = getenv("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
+        _images_dir = getenv_s("CK_PREPROCESSED_OUT_DIR");
+        _detections_out_dir = getenv_s("CK_DETECTIONS_OUT_DIR");
+        _images_file = getenv_s("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
         _image_size_height = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT");
         _image_size_width = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
         _num_channels = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS");
         _correct_background = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION"));
-        _normalize_img = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"));
-        _subtract_mean = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"));
+        _normalize_img = get_yes_no(getenv_s("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"));
+        _subtract_mean = get_yes_no(getenv_s("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"));
 
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
