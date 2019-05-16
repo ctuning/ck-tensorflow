@@ -66,7 +66,7 @@ def main(_):
   print('Image size: {}'.format(IMAGE_SIZE))
   print('Batch size: {}'.format(BATCH_SIZE))
   print('Batch count: {}'.format(BATCH_COUNT))
-  print('Result dir: ' + RESULT_DIR);
+  print('Result dir: ' + RESULT_DIR)
   print('Normalize: {}'.format(MODEL_NORMALIZE_DATA))
   print('Subtract mean: {}'.format(SUBTRACT_MEAN))
   print('Use model mean: {}'.format(USE_MODEL_MEAN))
@@ -129,10 +129,11 @@ def main(_):
     # Run batched mode
     test_time_begin = time.time()
     image_index = 0
-    load_total_time = 0
-    class_total_time = 0
+    total_load_time = 0
+    total_classification_time = 0
+    first_classification_time = 0
     images_loaded = 0
-    images_processed = 0
+
     for batch_index in range(BATCH_COUNT):
       batch_number = batch_index+1
       if FULL_REPORT or (batch_number % 10 == 0):
@@ -141,7 +142,7 @@ def main(_):
       begin_time = time.time()
       batch_data, image_index = load_batch(image_list, image_index)
       load_time = time.time() - begin_time
-      load_total_time += load_time
+      total_load_time += load_time
       images_loaded += BATCH_SIZE
       if FULL_REPORT:
         print("Batch loaded in %fs" % (load_time))
@@ -150,14 +151,14 @@ def main(_):
       begin_time = time.time()
       feed = { input_node: batch_data }
       batch_results = output_node.eval(feed_dict=feed)
-      class_time = time.time() - begin_time
+      classification_time = time.time() - begin_time
       if FULL_REPORT:
-        print("Batch classified in %fs" % (class_time))
+        print("Batch classified in %fs" % (classification_time))
       
-      # Exclude first batch from averaging
-      if batch_index > 0 or BATCH_COUNT == 1:
-        class_total_time += class_time
-        images_processed += BATCH_SIZE
+      total_classification_time += classification_time
+      # Remember first batch prediction time
+      if batch_index == 0:
+        first_classification_time = classification_time
 
       # Process results
       for index_in_batch in range(BATCH_SIZE):
@@ -169,8 +170,13 @@ def main(_):
             f.write('{}\n'.format(prob))
             
   test_time = time.time() - test_time_begin
-  class_avg_time = class_total_time / images_processed
-  load_avg_time = load_total_time / images_loaded
+
+  if BATCH_COUNT > 1:
+    avg_classification_time = (total_classification_time - first_classification_time) / (images_loaded - BATCH_SIZE)
+  else:
+    avg_classification_time = total_classification_time / images_loaded
+
+  avg_load_time = total_load_time / images_loaded
 
   # Store benchmark results
   openme = {}
@@ -178,14 +184,14 @@ def main(_):
   openme['test_time_s'] = test_time
   openme['net_create_time_s'] = net_create_time
   openme['weights_load_time_s'] = weights_load_time
-  openme['images_load_time_total_s'] = load_total_time
-  openme['images_load_time_avg_s'] = load_avg_time
-  openme['prediction_time_total_s'] = class_total_time
-  openme['prediction_time_avg_s'] = class_avg_time
+  openme['images_load_time_total_s'] = total_load_time
+  openme['images_load_time_avg_s'] = avg_load_time
+  openme['prediction_time_total_s'] = total_classification_time
+  openme['prediction_time_avg_s'] = avg_classification_time
   
-  openme['avg_time_ms'] = class_avg_time * 1000
-  openme['avg_fps'] = 1.0 / class_avg_time
-  openme['batch_time_ms'] = class_avg_time * 1000 * BATCH_SIZE
+  openme['avg_time_ms'] = avg_classification_time * 1000
+  openme['avg_fps'] = 1.0 / avg_classification_time
+  openme['batch_time_ms'] = avg_classification_time * 1000 * BATCH_SIZE
   openme['batch_size'] = BATCH_SIZE
   
   with open('tmp-ck-timer.json', 'w') as o:
