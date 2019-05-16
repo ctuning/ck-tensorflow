@@ -190,7 +190,7 @@ def main():
     output_dict = {
         'setup_time_s': setup_time,
         'test_time_s': test_time,
-        'images_load_time_s': load_total_time,
+        'images_load_time_total_s': load_total_time,
         'images_load_time_avg_s': load_avg_time,
         'prediction_time_total_s': classification_total_time,
         'prediction_time_avg_s': classification_avg_time,

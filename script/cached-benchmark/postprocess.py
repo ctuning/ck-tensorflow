@@ -180,7 +180,7 @@ def ck_postprocess(i):
 
   setup_time = openme.get('setup_time_s', 0.0)
   test_time = openme.get('test_time_s', 0.0)
-  total_load_images_time = openme.get('images_load_time_s', 0.0)
+  total_load_images_time = openme.get('images_load_time_total_s', 0.0)
   total_prediction_time = openme.get('prediction_time_total_s', 0.0)
   avg_prediction_time = openme.get('prediction_time_avg_s', 0.0)
 

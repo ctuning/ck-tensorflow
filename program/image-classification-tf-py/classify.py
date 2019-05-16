@@ -178,7 +178,7 @@ def main(_):
   openme['test_time_s'] = test_time
   openme['net_create_time_s'] = net_create_time
   openme['weights_load_time_s'] = weights_load_time
-  openme['images_load_time_s'] = load_total_time
+  openme['images_load_time_total_s'] = load_total_time
   openme['images_load_time_avg_s'] = load_avg_time
   openme['prediction_time_total_s'] = class_total_time
   openme['prediction_time_avg_s'] = class_avg_time

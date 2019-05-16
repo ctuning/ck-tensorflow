@@ -16,11 +16,6 @@
 #include <map>
 #include <list>
 #include <thread>
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    #include <experimental/filesystem>
-#else
-    #include <filesystem>
-#endif
 
 struct FileInfo {
     std::string name;
@@ -40,13 +35,12 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
-std::string join_paths(std::string, std::string);
+std::string abs_path(std::string, std::string);
 std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
 bool get_yes_no(std::string);
 bool get_yes_no(char *);
 std::vector<std::string> *readClassesFile(std::string);
-void make_dir(std::string);
 
 class Settings {
 public:
@@ -79,10 +73,10 @@ public:
             _graph_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS"));
             _fast_nms = true;
         }
-        _graph_file = join_paths(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
+        _graph_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), _graph_file);
 
-        std::string classes_file = std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")) + "/" +
-                                   getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES");
+        std::string classes_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")),
+                                            std::string(getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES")));
         _model_classes = *readClassesFile(classes_file);
         _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
         _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
@@ -90,9 +84,9 @@ public:
         _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
         _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
         _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
-        _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
-        _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
-        _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
+        _correct_background = get_yes_no(settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"]);
+        _normalize_img = get_yes_no(settings_from_file["MODEL_NORMALIZE_DATA"]);
+        _subtract_mean = get_yes_no(settings_from_file["MODEL_SUBTRACT_MEAN"]);
 
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
@@ -150,9 +144,6 @@ public:
             std::cout << "Use NEON: " << _use_neon << std::endl;
             std::cout << "Use OPENCL: " << _use_opencl << std::endl;
         }
-
-        // Create results dir if none
-        make_dir(_detections_out_dir);
 
         // Load list of images to be processed
         std::ifstream file(_images_file);
@@ -316,7 +307,7 @@ std::string str_to_lower(char *answer) {
     return str_to_lower(std::string(answer));
 }
 
-std::string join_paths(std::string path_name, std::string file_name) {
+std::string abs_path(std::string path_name, std::string file_name) {
 #ifdef _WIN32
     std::string delimiter = "\\";
 #else
@@ -326,16 +317,6 @@ std::string join_paths(std::string path_name, std::string file_name) {
         return path_name + file_name;
     }
     return path_name + delimiter + file_name;
-}
-
-void make_dir(std::string path) {
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    // It was still in the experimental:: namespace
-    namespace fs = std::experimental::filesystem;
-#else
-    namespace fs = std::filesystem;
-#endif
-    fs::create_directory(path);
 }
 
 #endif //UNTITLED_SETTINGS_H
