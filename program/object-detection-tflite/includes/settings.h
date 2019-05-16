@@ -34,7 +34,7 @@ inline float getenv_f(const std::string& name) {
   return std::atof(value);
 }
 
-/*
+
 template <typename T>
 std::string to_string(T value)
 {
@@ -42,15 +42,7 @@ std::string to_string(T value)
     os << value ;
     return os.str() ;
 }
-*/
 
-/*
-template <typename T>
-std::string to_string(T value)
-{
-    return std::to_string(value);
-}
-*/
 
 struct FileInfo {
     std::string name;
