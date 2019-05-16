@@ -52,6 +52,17 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
+        "copy_env_to_remote": [
+          "CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS",
+          "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
+          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS"
+        ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
@@ -64,6 +75,11 @@
           "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite"
+        ],
         "run_output_files": [
           "tmp-ck-timer.json"
         ]
