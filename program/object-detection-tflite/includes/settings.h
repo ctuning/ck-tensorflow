@@ -45,21 +45,6 @@ std::vector<std::string> *readClassesFile(std::string);
 class Settings {
 public:
     Settings() {
-        //Load settings
-        std::ifstream settings_file("env.ini");
-        if (!settings_file)
-            throw "Unable to open 'env.ini' file";
-        std::map<std::string, std::string> settings_from_file;
-        for (std::string s; !getline(settings_file, s).fail();) {
-            std::cout << s << std::endl;
-            std::istringstream iss(s);
-            std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<'='>>(iss)),
-                                         std::istream_iterator<WordDelimitedBy<'='>>());
-            if (row.size() == 1)
-                settings_from_file.emplace(row[0], "");
-            else
-                settings_from_file.emplace(row[0], row[1]);
-        }
         std::string model_dataset_type = getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
@@ -78,8 +63,8 @@ public:
         std::string classes_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")),
                                             std::string(getenv("CK_ENV_TENSORFLOW_MODEL_CLASSES")));
         _model_classes = *readClassesFile(classes_file);
-        _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
-        _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
+        _images_dir = getenv("CK_PREPROCESSED_OUT_DIR");
+        _detections_out_dir = getenv("CK_DETECTIONS_OUT_DIR");
         _images_file = getenv("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
         _image_size_height = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT"));
         _image_size_width = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH"));
@@ -95,7 +80,7 @@ public:
         _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
         _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
         _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
-        _full_report = get_yes_no(getenv("FULL_REPORT"));
+        _full_report = !get_yes_no(getenv("CK_SILENT_MODE"));
         _verbose = get_yes_no(getenv("VERBOSE"));
 
         _default_model_settings=!get_yes_no(getenv("USE_CUSTOM_NMS_SETTINGS"));

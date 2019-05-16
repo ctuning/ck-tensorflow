@@ -130,9 +130,14 @@
   "run_vars": {
     "CK_TIMER_FILE": "tmp-ck-timer.json",
     "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
+    "CK_PREPROCESSED_OUT_DIR": "preprocessed",
+    "CK_DETECTIONS_OUT_DIR": "detections",
+    "CK_RESULTS_OUT_DIR": "results",
+    "CK_ANNOTATIONS_OUT_DIR": "annotations",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
-    "CK_SKIP_IMAGES": 0
+    "CK_SKIP_IMAGES": 0,
+    "CK_SILENT_MODE": 0
   },
   "skip_bin_ext": "yes",
   "source_files": [
