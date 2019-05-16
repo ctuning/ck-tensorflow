@@ -107,7 +107,7 @@ def ck_postprocess(i):
   print('\nSummary:')
   print('-------------------------------')
   print('Graph loaded in {:.6f}s'.format(OPENME.get('graph_load_time_s', 0)))
-  print('All images loaded in {:.6f}s'.format(OPENME.get('images_load_time_s', 0)))
+  print('All images loaded in {:.6f}s'.format(OPENME.get('images_load_time_total_s', 0)))
   print('All images detected in {:.6f}s'.format(OPENME.get('detection_time_total_s', 0)))
   print('Average detection time: {:.6f}s'.format(OPENME.get('detection_time_avg_s', 0)))
   print('mAP: {}'.format(OPENME['mAP']))

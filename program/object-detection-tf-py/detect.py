@@ -226,7 +226,7 @@ def detect(category_index):
   OPENME['setup_time_s'] = setup_time
   OPENME['test_time_s'] = test_time
   OPENME['graph_load_time_s'] = graph_load_time
-  OPENME['images_load_time_s'] = load_time_total
+  OPENME['images_load_time_total_s'] = load_time_total
   OPENME['images_load_time_avg_s'] = load_avg_time
   OPENME['detection_time_total_s'] = detect_time_total
   OPENME['detection_time_avg_s'] = detect_avg_time
