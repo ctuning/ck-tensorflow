@@ -17,6 +17,41 @@
 #include <list>
 #include <thread>
 
+
+/// Load mandatory integer value from the environment.
+inline int getenv_i(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value)
+    throw "Required environment variable " + name + " is not set";
+  return std::atoi(value);
+}
+
+/// Load mandatory float value from the environment.
+inline float getenv_f(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value)
+    throw "Required environment variable " + name + " is not set";
+  return std::atof(value);
+}
+
+/*
+template <typename T>
+std::string to_string(T value)
+{
+    std::ostringstream os ;
+    os << value ;
+    return os.str() ;
+}
+*/
+
+/*
+template <typename T>
+std::string to_string(T value)
+{
+    return std::to_string(value);
+}
+*/
+
 struct FileInfo {
     std::string name;
     int width;
@@ -35,6 +70,11 @@ std::istream &operator>>(std::istream &is, WordDelimitedBy<delimiter> &output) {
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
+inline int alter_str_i(char *a, int b) { return a != nullptr ? std::atoi(a): b; };
+inline int alter_str_i(std::string a, std::string b) { return std::atoi(a != "" ? a.c_str(): b.c_str()); };
+inline float alter_str_f(std::string a, std::string b) { return std::atof(a != "" ? a.c_str(): b.c_str()); };
+
+
 std::string abs_path(std::string, std::string);
 std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
@@ -66,9 +106,9 @@ public:
         _images_dir = getenv("CK_PREPROCESSED_OUT_DIR");
         _detections_out_dir = getenv("CK_DETECTIONS_OUT_DIR");
         _images_file = getenv("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
-        _image_size_height = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT"));
-        _image_size_width = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH"));
-        _num_channels = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS"));
+        _image_size_height = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT");
+        _image_size_width = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
+        _num_channels = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS");
         _correct_background = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION"));
         _normalize_img = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"));
         _subtract_mean = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"));
@@ -77,41 +117,41 @@ public:
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
         _number_of_threads = std::thread::hardware_concurrency();
         _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
-        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
-        _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
-        _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
+        _number_of_threads = alter_str_i(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), _number_of_threads);
+
+        _batch_count = alter_str_i(getenv("CK_BATCH_COUNT"), 1);
+        _batch_size = alter_str_i(getenv("CK_BATCH_SIZE"), 1);
         _full_report = !get_yes_no(getenv("CK_SILENT_MODE"));
         _verbose = get_yes_no(getenv("VERBOSE"));
-
         _default_model_settings=!get_yes_no(getenv("USE_CUSTOM_NMS_SETTINGS"));
 
         if (_default_model_settings) {
             _m_max_classes_per_detection = 1;
-            _m_max_detections = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS"));
+            _m_max_detections = getenv_i("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS");
             _m_detections_per_class = 100;
-            _m_num_classes = std::stoi(getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"));
-            _m_nms_score_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD"));
-            _m_nms_iou_threshold = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD"));
-            _m_scale_h = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H"));
-            _m_scale_w = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W"));
-            _m_scale_x = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X"));
-            _m_scale_y = std::stof(getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y"));
+            _m_num_classes = getenv_i("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES");
+            _m_nms_score_threshold = getenv_f("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD");
+            _m_nms_iou_threshold = getenv_f("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD");
+            _m_scale_h = getenv_f("CK_ENV_TENSORFLOW_MODEL_SCALE_H");
+            _m_scale_w = getenv_f("CK_ENV_TENSORFLOW_MODEL_SCALE_W");
+            _m_scale_x = getenv_f("CK_ENV_TENSORFLOW_MODEL_SCALE_X");
+            _m_scale_y = getenv_f("CK_ENV_TENSORFLOW_MODEL_SCALE_Y");
         } else {
-            _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+            _m_max_classes_per_detection = alter_str_i(getenv("MAX_CLASSES_PER_DETECTION"), 1);
             if (_m_max_classes_per_detection > 1 && _fast_nms) {
                 std::cout << std::endl << "You can't use USE_NMS=fast and MAX_CLASSES_PER_DETECTION>1 at the same time" << std::endl ;
                 exit(-1);
             }
 
-            _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
-            _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
-            _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")));
-            _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
-            _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
-            _m_scale_h = std::stof(alter_str(getenv("SCALE_H"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
-            _m_scale_w = std::stof(alter_str(getenv("SCALE_W"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
-            _m_scale_x = std::stof(alter_str(getenv("SCALE_X"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
-            _m_scale_y = std::stof(alter_str(getenv("SCALE_Y"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
+            _m_max_detections = alter_str_i(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS"));
+            _m_detections_per_class = alter_str_i(getenv("DETECTIONS_PER_CLASS"), 100);
+            _m_num_classes = alter_str_i(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"));
+            _m_nms_score_threshold = alter_str_f(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD"));
+            _m_nms_iou_threshold = alter_str_f(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD"));
+            _m_scale_h = alter_str_f(getenv("SCALE_H"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H"));
+            _m_scale_w = alter_str_f(getenv("SCALE_W"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W"));
+            _m_scale_x = alter_str_f(getenv("SCALE_X"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X"));
+            _m_scale_y = alter_str_f(getenv("SCALE_Y"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y"));
         }
 
         // Print settings
@@ -138,7 +178,7 @@ public:
             std::istringstream iss(s);
             std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<';'>>(iss)),
                                          std::istream_iterator<WordDelimitedBy<';'>>());
-            FileInfo fileInfo = {row[0], std::stoi(row[1]), std::stoi(row[2])};
+            FileInfo fileInfo = {row[0], std::atoi(row[1].c_str()), std::atoi(row[2].c_str())};
             _image_list.emplace_back(fileInfo);
         }
 

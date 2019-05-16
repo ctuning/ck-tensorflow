@@ -54,6 +54,7 @@ namespace CK {
         X_VAR_COUNT
     };
 
+
 /// Store named value into xopenme variable.
     inline void store_value_f(int index, const char *name, float value) {
         char *json_name = new char[strlen(name) + 6];
