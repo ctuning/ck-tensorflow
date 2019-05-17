@@ -192,7 +192,12 @@ public:
         exit(1);
       } catch(const char* msg) {
         std::cout << "Exception message during parameter setup: " << msg << std::endl;
+        exit(1);
+      } catch(const std::string& s) {
+        std::cout << "Exception message during parameter setup: " << s << std::endl;
+        exit(1);
       }
+
     }
 
     const std::vector<FileInfo> &image_list() const { return _image_list; }
