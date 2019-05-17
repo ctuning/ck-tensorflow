@@ -17,6 +17,7 @@
 #include <iostream>
 #include <memory>
 #include <string.h>
+#include <thread>
 #include <vector>
 
 #include <xopenme.h>
@@ -116,6 +117,12 @@ public:
   const bool full_report = getenv_i("CK_SILENT_MODE") == 0;
 
   BenchmarkSettings() {
+    _number_of_threads = std::thread::hardware_concurrency();
+    _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
+    _number_of_threads = !getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS")
+                         ? _number_of_threads
+                         : getenv_i("CK_HOST_CPU_NUMBER_OF_PROCESSORS");
+
     // Print settings
     std::cout << "Graph file: " << graph_file << std::endl;
     std::cout << "Image dir: " << images_dir << std::endl;
@@ -148,6 +155,10 @@ public:
   const std::vector<std::string>& image_list() const { return _image_list; }
 
   std::vector<std::string> _image_list;
+
+  int number_of_threads() { return _number_of_threads; }
+private:
+  int _number_of_threads;
 };
 
 //----------------------------------------------------------------------
