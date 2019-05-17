@@ -89,11 +89,13 @@
           "$<<>>$tmp-ck-timer.json",
           "$<<>>$preprocessed",
           "$<<>>$preprocessed_images_list.txt",
-          "$<<>>$detections",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt"
+        ],
+        "run_make_directories": [
+          "detections"
         ],
         "run_output_files": [
           "detections",
