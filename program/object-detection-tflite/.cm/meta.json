@@ -85,11 +85,17 @@
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
+          "$<<>>$tmp-ck-timer.json",
+          "$<<>>$preprocessed",
+          "$<<>>$preprocessed_images_list.txt",
+          "$<<>>$detections",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
-          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite"
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt"
         ],
         "run_output_files": [
+          "detections",
           "tmp-ck-timer.json"
         ]
       }
