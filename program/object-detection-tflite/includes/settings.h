@@ -21,8 +21,7 @@
 inline std::string getenv_s(const std::string& name) {
   const char *value = getenv(name.c_str());
   if (!value) {
-    std::cout << "Required environment variable " << name << " is not set" <<std::endl;
-    throw "Required environment variable " + name + " is not set";
+    throw std::runtime_error("Required environment variable " + name + " is not set");
   }
   return std::string(value);
 }
@@ -31,7 +30,7 @@ inline std::string getenv_s(const std::string& name) {
 inline int getenv_i(const std::string& name) {
   const char *value = getenv(name.c_str());
   if (!value)
-    throw "Required environment variable " + name + " is not set";
+    throw std::runtime_error("Required environment variable " + name + " is not set");
   return std::atoi(value);
 }
 
@@ -39,7 +38,7 @@ inline int getenv_i(const std::string& name) {
 inline float getenv_f(const std::string& name) {
   const char *value = getenv(name.c_str());
   if (!value)
-    throw "Required environment variable " + name + " is not set";
+    throw std::runtime_error("Required environment variable " + name + " is not set");
   return std::atof(value);
 }
 
@@ -86,6 +85,7 @@ std::vector<std::string> *readClassesFile(std::string);
 class Settings {
 public:
     Settings() {
+      try {
         std::string model_dataset_type = getenv_s("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
@@ -186,6 +186,13 @@ public:
         if (_verbose || _full_report) {
             std::cout << "Image count in file: " << _image_list.size() << std::endl;
         }
+
+      } catch(const std::runtime_error& e) {
+        std::cout << "Exception during parameter setup: " << e.what() << std::endl;
+        exit(1);
+      } catch(const char* msg) {
+        std::cout << "Exception message during parameter setup: " << msg << std::endl;
+      }
     }
 
     const std::vector<FileInfo> &image_list() const { return _image_list; }
