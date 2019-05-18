@@ -59,7 +59,9 @@ int main(int argc, char* argv[]) {
         throw string("Failed to construct interpreter");
       if (interpreter->AllocateTensors() != kTfLiteOk)
         throw string("Failed to allocate tensors");
-        
+
+      interpreter->SetNumThreads(settings.number_of_threads());
+
       int input_index = interpreter->inputs()[0];
       int output_index = interpreter->outputs()[0];
       auto input_type = interpreter->tensor(input_index)->type;

@@ -17,6 +17,7 @@
 #include <iostream>
 #include <memory>
 #include <string.h>
+#include <thread>
 #include <vector>
 
 #include <xopenme.h>
@@ -116,6 +117,12 @@ public:
   const bool full_report = getenv_i("CK_SILENT_MODE") == 0;
 
   BenchmarkSettings() {
+    _number_of_threads = std::thread::hardware_concurrency();
+    _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
+    _number_of_threads = !getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS")
+                         ? _number_of_threads
+                         : getenv_i("CK_HOST_CPU_NUMBER_OF_PROCESSORS");
+
     // Print settings
     std::cout << "Graph file: " << graph_file << std::endl;
     std::cout << "Image dir: " << images_dir << std::endl;
@@ -148,6 +155,10 @@ public:
   const std::vector<std::string>& image_list() const { return _image_list; }
 
   std::vector<std::string> _image_list;
+
+  int number_of_threads() { return _number_of_threads; }
+private:
+  int _number_of_threads;
 };
 
 //----------------------------------------------------------------------
@@ -238,7 +249,7 @@ inline void finish_benchmark(const BenchmarkSession& s) {
   // Store metrics
   store_value_f(X_VAR_TIME_SETUP, "setup_time_s", xopenme_get_timer(X_TIMER_SETUP));
   store_value_f(X_VAR_TIME_TEST, "test_time_s", xopenme_get_timer(X_TIMER_TEST));
-  store_value_f(X_VAR_TIME_IMG_LOAD_TOTAL, "images_load_time_s", s.total_load_images_time());
+  store_value_f(X_VAR_TIME_IMG_LOAD_TOTAL, "images_load_time_total_s", s.total_load_images_time());
   store_value_f(X_VAR_TIME_IMG_LOAD_AVG, "images_load_time_avg_s", s.avg_load_images_time());
   store_value_f(X_VAR_TIME_CLASSIFY_TOTAL, "prediction_time_total_s", s.total_prediction_time());
   store_value_f(X_VAR_TIME_CLASSIFY_AVG, "prediction_time_avg_s", s.avg_prediction_time());
