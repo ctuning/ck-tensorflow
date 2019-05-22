@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
   try {
     init_benchmark();
     
-    BenchmarkSettings settings;
+    BenchmarkSettings settings(MODEL_TYPE::TF_FROZEN);
     BenchmarkSession session(&settings);
     ImageData input_data(&settings);
     ResultData result_data(&settings);
@@ -29,8 +29,7 @@ int main(int argc, char* argv[]) {
     unique_ptr<Session> tf_session;
     GraphDef graph_def;
 
-    const string input_layer_name = getenv_s("RUN_OPT_INPUT_LAYER_NAME");
-    const string output_layer_name = getenv_s("RUN_OPT_OUTPUT_LAYER_NAME");
+
     // TODO: this option is for TF mobilenets, but generally should be evaluated
     // from weights package somehow (supported number or classes in meta?)
     // TODO: this problem is related to the absence of a knowledge about
@@ -40,7 +39,7 @@ int main(int argc, char* argv[]) {
 
     cout << "\nLoading graph..." << endl;
     measure_setup([&]{
-      Status status = ReadBinaryProto(Env::Default(), settings.graph_file, &graph_def);
+      Status status = ReadBinaryProto(Env::Default(), settings.graph_file(), &graph_def);
       if (!status.ok())
         throw "Failed to load graph: " + status.ToString();
 
@@ -74,7 +73,7 @@ int main(int argc, char* argv[]) {
         // Classify current batch
         session.measure_begin();
         Status status = tf_session->Run(
-          {{input_layer_name, input}}, {output_layer_name}, {}, &outputs);
+          {{settings.input_layer_name, input}}, {settings.output_layer_name}, {}, &outputs);
         if (!status.ok())
           throw "Running model failed: " + status.ToString();
         session.measure_end_prediction();
