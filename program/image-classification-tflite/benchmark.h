@@ -44,6 +44,11 @@ enum _VARS {
   X_VAR_COUNT
 };
 
+enum MODEL_TYPE {
+  LITE,
+  TF_FROZEN
+};
+
 /// Store named value into xopenme variable.
 inline void store_value_f(int index, const char* name, float value) {
   char* json_name = new char[strlen(name) + 6];
@@ -86,6 +91,18 @@ inline std::string format(const char* str, Args ...args) {
   return std::string(buf);
 }
 
+std::string abs_path(std::string path_name, std::string file_name) {
+#ifdef _WIN32
+    std::string delimiter = "\\";
+#else
+    std::string delimiter = "/";
+#endif
+    if (path_name.back()=='\\' || path_name.back()=='/') {
+        return path_name + file_name;
+    }
+    return path_name + delimiter + file_name;
+}
+
 //----------------------------------------------------------------------
 
 class Accumulator {
@@ -103,9 +120,8 @@ private:
 
 class BenchmarkSettings {
 public:
-  const std::string graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH");
   const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
-  const std::string images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
+  const std::string images_file = abs_path(images_dir, getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF"));
   const std::string result_dir = getenv_s("CK_RESULTS_DIR");
   const int batch_count = getenv_i("CK_BATCH_COUNT");
   const int batch_size = getenv_i("CK_BATCH_SIZE");
@@ -116,7 +132,23 @@ public:
   const bool subtract_mean = getenv_s("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN") == "YES";
   const bool full_report = getenv_i("CK_SILENT_MODE") == 0;
 
-  BenchmarkSettings() {
+  BenchmarkSettings(enum MODEL_TYPE mode = MODEL_TYPE::LITE) {
+
+    switch (mode)
+    {
+    case MODEL_TYPE::LITE:
+      _graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH");
+      break;
+    
+    case MODEL_TYPE::TF_FROZEN:
+      _graph_file = getenv_s("CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH");
+      break;
+    
+    default:
+      std::cout << "Unsupported MODEL_TYPE" << std::endl;
+      exit(-1);
+      break;
+    };
     _number_of_threads = std::thread::hardware_concurrency();
     _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
     _number_of_threads = !getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS")
@@ -124,7 +156,7 @@ public:
                          : getenv_i("CK_HOST_CPU_NUMBER_OF_PROCESSORS");
 
     // Print settings
-    std::cout << "Graph file: " << graph_file << std::endl;
+    std::cout << "Graph file: " << _graph_file << std::endl;
     std::cout << "Image dir: " << images_dir << std::endl;
     std::cout << "Image list: " << images_file << std::endl;
     std::cout << "Image size: " << image_size << std::endl;
@@ -157,8 +189,11 @@ public:
   std::vector<std::string> _image_list;
 
   int number_of_threads() { return _number_of_threads; }
+
+  std::string graph_file() { return _graph_file; }
 private:
   int _number_of_threads;
+  std::string _graph_file;
 };
 
 //----------------------------------------------------------------------
