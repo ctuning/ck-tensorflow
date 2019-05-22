@@ -29,8 +29,7 @@ int main(int argc, char* argv[]) {
     unique_ptr<Session> tf_session;
     GraphDef graph_def;
 
-    const string input_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME");
-    const string output_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME");
+
     // TODO: this option is for TF mobilenets, but generally should be evaluated
     // from weights package somehow (supported number or classes in meta?)
     // TODO: this problem is related to the absence of a knowledge about
@@ -74,7 +73,7 @@ int main(int argc, char* argv[]) {
         // Classify current batch
         session.measure_begin();
         Status status = tf_session->Run(
-          {{input_layer_name, input}}, {output_layer_name}, {}, &outputs);
+          {{settings.input_layer_name, input}}, {settings.output_layer_name}, {}, &outputs);
         if (!status.ok())
           throw "Running model failed: " + status.ToString();
         session.measure_end_prediction();

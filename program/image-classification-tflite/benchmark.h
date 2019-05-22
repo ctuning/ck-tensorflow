@@ -123,6 +123,8 @@ public:
   const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
   const std::string images_file = abs_path(images_dir, getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF"));
   const std::string result_dir = getenv_s("CK_RESULTS_DIR");
+  const std::string input_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME");
+  const std::string output_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME");
   const int batch_count = getenv_i("CK_BATCH_COUNT");
   const int batch_size = getenv_i("CK_BATCH_SIZE");
   const int image_size = getenv_i("CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE");
