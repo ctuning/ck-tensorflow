@@ -19,12 +19,6 @@
         1
       ]
     },
-    "lib-flatbuffers": {
-      "local": "yes",
-      "name": "FlatBuffers library",
-      "sort": 90,
-      "tags": "lib,flatbuffers"
-    },
     "lib-xopenme": {
       "local": "yes",
       "name": "xOpenME library",
@@ -42,7 +36,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "object-detection-tflite",
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_ENV_LIB_FLATBUFFERS_LFLAG>>$",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_EXTRA_LIB_LOG>>$",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -59,6 +53,27 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
+        "copy_env_to_remote": [
+          "CK_ENV_TENSORFLOW_MODEL_CLASSES",
+          "CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS",
+          "CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS",
+          "CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION",
+          "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
+          "CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES",
+          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD",
+          "CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_H",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_W",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_X",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y"
+        ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
@@ -71,7 +86,20 @@
           "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<>>$tmp-ck-timer.json",
+          "$<<>>$preprocessed",
+          "$<<>>$preprocessed_images_list.txt",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt"
+        ],
+        "run_make_directories": [
+          "detections"
+        ],
         "run_output_files": [
+          "detections",
           "tmp-ck-timer.json"
         ]
       }
@@ -79,6 +107,7 @@
   },
   "run_deps": {
     "dataset": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Object Detection dataset",
       "sort": 10,
@@ -92,36 +121,42 @@
       "tags": "model,tflite,object-detection"
     },
     "python": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python interpreter",
       "sort": 30,
       "tags": "compiler,lang-python"
     },
     "lib-python-numpy": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python NumPy library",
       "sort": 40,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python Pillow library",
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
     "lib-python-matplotlib": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python Matplotlib library",
       "sort": 60,
       "tags": "lib,python-package,matplotlib"
     },
     "tensorflowmodel-api": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "TensorFlow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
     },
     "tool-coco": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python API for COCO",
       "sort": 90,
@@ -129,9 +164,16 @@
     }
   },
   "run_vars": {
+    "CK_TIMER_FILE": "tmp-ck-timer.json",
+    "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
+    "CK_PREPROCESSED_OUT_DIR": "preprocessed",
+    "CK_DETECTIONS_OUT_DIR": "detections",
+    "CK_RESULTS_OUT_DIR": "results",
+    "CK_ANNOTATIONS_OUT_DIR": "annotations",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_SKIP_IMAGES": 0,
+    "CK_SILENT_MODE": 0,
     "USE_NEON": "NO",
     "USE_OPENCL": "NO"
   },

@@ -12,7 +12,7 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "pre_process_via_ck": {
+        "_pre_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
           "module_uoa":     "script",
           "script_name":    "preprocess"
@@ -43,12 +43,12 @@
       "sort": 10,
       "tags": "dataset,imagenet,aux"
     },
-    "imagenet-val": {
+    "images": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "ImageNet dataset (val)",
+      "name": "ImageNet dataset (preprocessed subset)",
       "sort": 20,
-      "tags": "dataset,imagenet,raw,val"
+      "tags": "dataset,imagenet,preprocessed"
     },
     "weights": {
       "local": "yes",
@@ -82,6 +82,8 @@
     "CK_CROP_PERCENT": 87.5,
     "CK_IMAGE_FILE": "",
     "CK_RECREATE_CACHE": "NO",
+    "CK_RESULTS_DIR": "predictions",
+    "CK_SILENT_MODE": 0,
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
     "CK_TMP_IMAGE_SIZE": 0

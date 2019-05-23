@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
   try {
     init_benchmark();
     
-    BenchmarkSettings settings;
+    BenchmarkSettings settings(MODEL_TYPE::LITE);
 
     // TODO: learn how to process batches via tflite.
     // currently interpreter->tensor(input_index)->dims[0] = 1
@@ -49,9 +49,9 @@ int main(int argc, char* argv[]) {
 
     cout << "\nLoading graph..." << endl;
     measure_setup([&]{
-      model = tflite::FlatBufferModel::BuildFromFile(settings.graph_file.c_str());
+      model = tflite::FlatBufferModel::BuildFromFile(settings.graph_file().c_str());
       if (!model)
-        throw "Failed to load graph from file " + settings.graph_file;
+        throw "Failed to load graph from file " + settings.graph_file();
 
       tflite::ops::builtin::BuiltinOpResolver resolver;
       tflite::InterpreterBuilder(*model, resolver)(&interpreter);
@@ -59,7 +59,9 @@ int main(int argc, char* argv[]) {
         throw string("Failed to construct interpreter");
       if (interpreter->AllocateTensors() != kTfLiteOk)
         throw string("Failed to allocate tensors");
-        
+
+      interpreter->SetNumThreads(settings.number_of_threads());
+
       int input_index = interpreter->inputs()[0];
       int output_index = interpreter->outputs()[0];
       auto input_type = interpreter->tensor(input_index)->type;

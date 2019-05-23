@@ -54,6 +54,7 @@ namespace CK {
         X_VAR_COUNT
     };
 
+
 /// Store named value into xopenme variable.
     inline void store_value_f(int index, const char *name, float value) {
         char *json_name = new char[strlen(name) + 6];
@@ -468,7 +469,7 @@ namespace CK {
                      std::vector<std::string> model_classes,
                      bool correct_background) const {
             std::string *buffer = target->data();
-            buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
+            buffer[0] = to_string(src.width) + " " + to_string(src.height);
 
             for (int i = 0; i < *num; i++) {
                 float y1 = boxes[i * 4] * src.height;
@@ -502,7 +503,7 @@ namespace CK {
                      std::vector<std::string> model_classes,
                      bool correct_background) const {
             std::string *buffer = target->data();
-            buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
+            buffer[0] = to_string(src.width) + " " + to_string(src.height);
             if (*num == 0) return;
 
             for (int i = 0; i < *num; i++) {

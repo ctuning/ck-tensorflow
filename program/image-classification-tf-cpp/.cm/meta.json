@@ -51,11 +51,17 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
+        "copy_env_to_remote": [
+          "CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF",
+          "CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE",
+          "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
+          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"
+        ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
           "module_uoa":     "script",
-          "script_name":    "preprocess"
+          "script_name":    "schindler"
         },
         "post_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
@@ -63,8 +69,12 @@
           "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH>>$"
+        ],
         "run_output_files": [
-          "tmp-ck-timer.json"
+          "tmp-ck-timer.json",
+          "predictions"
         ]
       }
     }
@@ -77,12 +87,12 @@
       "sort": 30,
       "tags": "dataset,imagenet,aux"
     },
-    "imagenet-val": {
+    "images": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "ImageNet dataset (val)",
+      "name": "ImageNet dataset (preprocessed subset)",
       "sort": 20,
-      "tags": "dataset,imagenet,raw,val"
+      "tags": "dataset,imagenet,preprocessed"
     },
     "weights": {
       "force_target_as_host": "yes",
@@ -94,11 +104,14 @@
     }
   },
   "run_vars": {
+    "IMAGE_FILENAME": "ILSVRC2012_val_00000290.JPEG",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_CROP_PERCENT": 87.5,
     "CK_IMAGE_FILE": "",
     "CK_RECREATE_CACHE": "NO",
+    "CK_RESULTS_DIR": "predictions",
+    "CK_SILENT_MODE": 0,
     "CK_SKIP_IMAGES": 0,
     "CK_SUBTRACT_MEAN": "YES",
     "CK_TMP_IMAGE_SIZE": 0
@@ -110,6 +123,7 @@
   "tags": [
     "image-classification",
     "tf",
+    "tensorflow",
     "lang-cpp"
   ],
   "target_file": "classification",
