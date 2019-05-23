@@ -1,4 +1,5 @@
 {
+  "pass_env_to_resolve": "yes",
   "backup_data_uid": "0019a4e0d2314d99",
   "compile_deps": {
     "compiler": {
@@ -46,7 +47,7 @@
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP14>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",
   "data_name": "object-detection-armnn-tflite",
-  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ -L$<<CK_ENV_LIB_ARMNN_LIB>>$ -larmnn -lpthread -larmnnTfLiteParser -lstdc++fs",
+  "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ -L$<<CK_ENV_LIB_ARMNN_LIB>>$ -larmnn -lpthread -larmnnTfLiteParser",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
     "CK_ENV_LIB_STDCPP_STATIC"
@@ -63,6 +64,27 @@
     "default": {
       "ignore_return_code": "no",
       "run_time": {
+        "copy_env_to_remote": [
+          "CK_ENV_TENSORFLOW_MODEL_CLASSES",
+          "CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH",
+          "CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS",
+          "CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS",
+          "CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION",
+          "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
+          "CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES",
+          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_REGULAR_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_FAST_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS",
+          "CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD",
+          "CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_H",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_W",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_X",
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y"
+        ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "post_process_via_ck": {
           "data_uoa": "24c98b0cee248d93",
@@ -75,7 +97,21 @@
           "script_name": "preprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
+        "run_input_files": [
+          "$<<>>$tmp-ck-timer.json",
+          "$<<>>$preprocessed",
+          "$<<>>$preprocessed_images_list.txt",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt",
+          "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatanchors.txt"
+        ],
+        "run_make_directories": [
+          "detections"
+        ],
         "run_output_files": [
+          "detections",
           "tmp-ck-timer.json"
         ]
       }
@@ -139,9 +175,16 @@
     }
   },
   "run_vars": {
+    "CK_TIMER_FILE": "tmp-ck-timer.json",
+    "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
+    "CK_PREPROCESSED_OUT_DIR": "preprocessed",
+    "CK_DETECTIONS_OUT_DIR": "detections",
+    "CK_RESULTS_OUT_DIR": "results",
+    "CK_ANNOTATIONS_OUT_DIR": "annotations",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_SKIP_IMAGES": 0,
+    "CK_SILENT_MODE": 0,
     "USE_NEON": "NO",
     "USE_OPENCL": "NO"
   },

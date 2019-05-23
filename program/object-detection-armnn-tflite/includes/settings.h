@@ -22,6 +22,30 @@
     #include <filesystem>
 #endif
 
+/// Load mandatory string value from the environment.
+inline std::string getenv_s(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value) {
+    throw std::runtime_error("Required environment variable " + name + " is not set");
+  }
+  return std::string(value);
+}
+
+/// Load mandatory integer value from the environment.
+inline int getenv_i(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value)
+    throw std::runtime_error("Required environment variable " + name + " is not set");
+  return std::atoi(value);
+}
+
+/// Load mandatory float value from the environment.
+inline float getenv_f(const std::string& name) {
+  const char *value = getenv(name.c_str());
+  if (!value)
+    throw std::runtime_error("Required environment variable " + name + " is not set");
+  return std::atof(value);
+}
 
 template<char delimiter>
 class WordDelimitedBy : public std::string {
@@ -45,40 +69,27 @@ std::string str_to_lower(std::string);
 std::string str_to_lower(char *);
 std::vector<std::string> *readClassesFile(std::string);
 float *readAnchorsFile(std::string, int&);
-void make_dir(std::string);
 
 inline std::string alter_str(std::string a, std::string b) { return a != "" ? a: b; };
 inline std::string alter_str(char *a, std::string b) { return a != nullptr ? a: b; };
+inline std::string alter_str(char *a, char *b) { return a != nullptr ? a: b; };
+inline int alter_str_i(char *a, int b) { return a != nullptr ? std::atoi(a): b; };
+inline int alter_str_i(char *a, char *b) { return std::atoi(a != nullptr ? a: b); };
+inline int alter_str_i(std::string a, std::string b) { return std::atoi(a != "" ? a.c_str(): b.c_str()); };
+inline float alter_str_f(std::string a, std::string b) { return std::atof(a != "" ? a.c_str(): b.c_str()); };
+inline float alter_str_f(char *a, char *b) { return std::atof(a != nullptr ? a: b); };
 
 
 class Settings {
 public:
     Settings() {
-
-        // Load settings
-        std::ifstream settings_file("env.ini");
-        if (!settings_file)
-            throw "Unable to open 'env.ini' file";
-        _verbose = get_yes_no(getenv("VERBOSE"));
-        if (_verbose) std::cout << "Settings from 'env.ini' file:" << std::endl;
-        std::map<std::string, std::string> settings_from_file;
-        for (std::string s; !getline(settings_file, s).fail();) {
-            if (_verbose) std::cout << '\t' << s << std::endl;
-            std::istringstream iss(s);
-            std::vector<std::string> row((std::istream_iterator<WordDelimitedBy<'='>>(iss)),
-                                         std::istream_iterator<WordDelimitedBy<'='>>());
-            if (row.size() == 1)
-                settings_from_file.emplace(row[0], "");
-            else
-                settings_from_file.emplace(row[0], row[1]);
-        }
-
-        std::string model_dataset_type = settings_from_file["MODEL_DATASET_TYPE"];
+      try {
+        std::string model_dataset_type = getenv_s("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE");
         if (model_dataset_type != "coco") {
             throw ("Unsupported model dataset type: " + model_dataset_type);
         }
 
-        std::string nms_type = alter_str(getenv("USE_NMS"), "regular");
+        std::string nms_type = alter_str(getenv("USE_NMS"), std::string("regular"));
         _fast_nms = str_to_lower(nms_type) == "regular" ? false : true;
 
         _graph_file = abs_path(std::string(getenv("CK_ENV_TENSORFLOW_MODEL_ROOT")), std::string(getenv("CK_ENV_TENSORFLOW_MODEL_TFLITE_GRAPH_NO_NMS")));
@@ -91,45 +102,45 @@ public:
                                    getenv("CK_ENV_TENSORFLOW_MODEL_ANCHORS");
         _m_anchors = readAnchorsFile(anchors_file, _m_anchors_count);
 
-        _images_dir = settings_from_file["PREPROCESS_OUT_DIR"];
-        _images_file = settings_from_file["PREPROCESSED_FILES"];
-        _number_of_threads = std::stoi(settings_from_file["NUMBER_OF_PROCESSORS"]);
-        _batch_count = std::stoi(settings_from_file["IMAGE_COUNT"]);
-        _batch_size = std::stoi(settings_from_file["BATCH_SIZE"]);
-        _image_size_height = std::stoi(settings_from_file["MODEL_IMAGE_HEIGHT"]);
-        _image_size_width = std::stoi(settings_from_file["MODEL_IMAGE_WIDTH"]);
-        _num_channels = std::stoi(settings_from_file["MODEL_IMAGE_CHANNELS"]);
-        _correct_background = settings_from_file["MODEL_NEED_BACKGROUND_CORRECTION"] == "True";
-        _normalize_img = settings_from_file["MODEL_NORMALIZE_DATA"] == "True";
-        _subtract_mean = settings_from_file["MODEL_SUBTRACT_MEAN"] == "True";
-        _full_report = settings_from_file["FULL_REPORT"] == "True";
-        _detections_out_dir = settings_from_file["DETECTIONS_OUT_DIR"];
+        _images_dir = getenv_s("CK_PREPROCESSED_OUT_DIR");
+        _detections_out_dir = getenv_s("CK_DETECTIONS_OUT_DIR");
+        _images_file = getenv_s("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
+        _image_size_height = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT");
+        _image_size_width = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
+        _num_channels = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS");
+        _correct_background = get_yes_no(getenv("CK_ENV_TENSORFLOW_MODEL_NEED_BACKGROUND_CORRECTION"));
+        _normalize_img = get_yes_no(getenv_s("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA"));
+        _subtract_mean = get_yes_no(getenv_s("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"));
 
         _use_neon = get_yes_no(getenv("USE_NEON"));
         _use_opencl = get_yes_no(getenv("USE_OPENCL"));
         _number_of_threads = std::thread::hardware_concurrency();
         _number_of_threads = _number_of_threads < 1 ? 1 : _number_of_threads;
-        _number_of_threads = std::stoi(alter_str(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), std::to_string(_number_of_threads)));
-        _batch_count = std::stoi(alter_str(getenv("CK_BATCH_COUNT"), "1"));
-        _batch_size = std::stoi(alter_str(getenv("CK_BATCH_SIZE"), "1"));
-        _full_report = get_yes_no(getenv("FULL_REPORT"));
+        _number_of_threads = alter_str_i(getenv("CK_HOST_CPU_NUMBER_OF_PROCESSORS"), _number_of_threads);
 
-        _m_max_classes_per_detection = std::stoi(alter_str(getenv("MAX_CLASSES_PER_DETECTION"), "1"));
+        _batch_count = alter_str_i(getenv("CK_BATCH_COUNT"), 1);
+        _batch_size = alter_str_i(getenv("CK_BATCH_SIZE"), 1);
+        _full_report = !get_yes_no(getenv("CK_SILENT_MODE"));
+        _verbose = get_yes_no(getenv("VERBOSE"));
+
+        _m_max_classes_per_detection = alter_str_i(getenv("MAX_CLASSES_PER_DETECTION"), 1);
         if (_m_max_classes_per_detection > 1 && _fast_nms) {
             std::cout << std::endl << "You can't use USE_NMS=fast and MAX_CLASSES_PER_DETECTION>1 at the same time" << std::endl ;
             exit(-1);
         }
 
-        _m_max_detections = std::stoi(alter_str(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS")));
+        _m_max_detections = alter_str_i(getenv("MAX_DETECTIONS"), getenv("CK_ENV_TENSORFLOW_MODEL_MAX_DETECTIONS"));
         _m_max_total_detections = std::max(100, _m_max_detections);
-        _m_detections_per_class = std::stoi(alter_str(getenv("DETECTIONS_PER_CLASS"), "100"));
-        _m_num_classes = std::stoi(alter_str(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES"))) + _correct_background;
-        _m_nms_score_threshold = std::stof(alter_str(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD")));
-        _m_nms_iou_threshold = std::stof(alter_str(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD")));
-        _m_scale_h = std::stof(alter_str(getenv("SCALE_H"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H")));
-        _m_scale_w = std::stof(alter_str(getenv("SCALE_W"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W")));
-        _m_scale_x = std::stof(alter_str(getenv("SCALE_X"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X")));
-        _m_scale_y = std::stof(alter_str(getenv("SCALE_Y"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y")));
+        _m_detections_per_class = alter_str_i(getenv("DETECTIONS_PER_CLASS"), 100);
+
+        _m_num_classes = alter_str_i(getenv("NUM_CLASSES"), getenv("CK_ENV_TENSORFLOW_MODEL_NUM_CLASSES")) + _correct_background;
+        _m_nms_score_threshold = alter_str_f(getenv("NMS_SCORE_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_SCORE_THRESHOLD"));
+        _m_nms_iou_threshold = alter_str_f(getenv("NMS_IOU_THRESHOLD"), getenv("CK_ENV_TENSORFLOW_MODEL_NMS_IOU_THRESHOLD"));
+
+        _m_scale_h = alter_str_f(getenv("SCALE_H"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_H"));
+        _m_scale_w = alter_str_f(getenv("SCALE_W"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_W"));
+        _m_scale_x = alter_str_f(getenv("SCALE_X"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_X"));
+        _m_scale_y = alter_str_f(getenv("SCALE_Y"), getenv("CK_ENV_TENSORFLOW_MODEL_SCALE_Y"));
 
         _d_boxes = new float [_m_anchors_count * 4]();
         _d_scores = new float [_m_anchors_count * _m_num_classes];
@@ -155,9 +166,6 @@ public:
             std::cout << "Use OpenCL: " << _use_opencl << std::endl;
         }
 
-        // Create results dir if none
-        make_dir(_detections_out_dir);
-
         // Load list of images to be processed
         std::ifstream file(_images_file);
         if (!file)
@@ -173,6 +181,16 @@ public:
         if (_verbose || _full_report) {
             std::cout << "Image count in file: " << _image_list.size() << std::endl;
         }
+      } catch(const std::runtime_error& e) {
+        std::cout << "Exception during parameter setup: " << e.what() << std::endl;
+        exit(1);
+      } catch(const char* msg) {
+        std::cout << "Exception message during parameter setup: " << msg << std::endl;
+        exit(1);
+      } catch(const std::string& s) {
+        std::cout << "Exception message during parameter setup: " << s << std::endl;
+        exit(1);
+      }
     }
 
     ~Settings() {
@@ -378,16 +396,6 @@ std::string abs_path(std::string path_name, std::string file_name) {
         return path_name + file_name;
     }
     return path_name + delimiter + file_name;
-}
-
-void make_dir(std::string path) {
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    // It was still in the experimental:: namespace
-    namespace fs = std::experimental::filesystem;
-#else
-    namespace fs = std::filesystem;
-#endif
-    fs::create_directory(path);
 }
 
 #endif //DETECT_SETTINGS_H
