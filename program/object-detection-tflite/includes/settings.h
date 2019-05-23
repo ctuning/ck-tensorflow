@@ -104,9 +104,9 @@ public:
         std::string classes_file = abs_path(getenv_s("CK_ENV_TENSORFLOW_MODEL_ROOT"),
                                             getenv_s("CK_ENV_TENSORFLOW_MODEL_CLASSES"));
         _model_classes = *readClassesFile(classes_file);
-        _images_dir = getenv_s("CK_PREPROCESSED_OUT_DIR");
+        _images_dir = getenv_s("CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_DIR");
         _detections_out_dir = getenv_s("CK_DETECTIONS_OUT_DIR");
-        _images_file = getenv_s("CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS");
+        _images_file = getenv_s("CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF");
         _image_size_height = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_HEIGHT");
         _image_size_width = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_WIDTH");
         _num_channels = getenv_i("CK_ENV_TENSORFLOW_MODEL_IMAGE_CHANNELS");

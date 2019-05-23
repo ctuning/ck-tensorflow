@@ -11,7 +11,7 @@
       "local": "yes",
       "name": "TensorFlow Lite library",
       "sort": 20,
-      "tags": "lib,tensorflow-lite,tflite,vstatic",
+      "tags": "lib,tflite,vstatic",
       "version_from": [
         1,
         13,
@@ -71,13 +71,14 @@
           "CK_ENV_TENSORFLOW_MODEL_SCALE_H",
           "CK_ENV_TENSORFLOW_MODEL_SCALE_W",
           "CK_ENV_TENSORFLOW_MODEL_SCALE_X",
-          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y"
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y",
+          "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF"
         ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
           "module_uoa":     "script",
-          "script_name":    "preprocess"
+          "script_name":    "schindler"
         },
         "post_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
@@ -86,16 +87,14 @@
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
-          "$<<>>$tmp-ck-timer.json",
-          "$<<>>$preprocessed",
-          "$<<>>$preprocessed_images_list.txt",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt"
         ],
         "run_make_directories": [
-          "detections"
+          "detections",
+          "results"
         ],
         "run_output_files": [
           "detections",
@@ -108,9 +107,9 @@
     "dataset": {
       "force_target_as_host": "yes",
       "local": "yes",
-      "name": "Object Detection dataset",
-      "sort": 10,
-      "tags": "dataset,object-detection"
+      "name": "Preprocessed images",
+      "sort": 20,
+      "tags": "dataset,object-detection,preprocessed"
     },
     "weights": {
       "force_target_as_host": "yes",
@@ -164,7 +163,6 @@
   },
   "run_vars": {
     "CK_TIMER_FILE": "tmp-ck-timer.json",
-    "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
     "CK_PREPROCESSED_OUT_DIR": "preprocessed",
     "CK_DETECTIONS_OUT_DIR": "detections",
     "CK_RESULTS_OUT_DIR": "results",
