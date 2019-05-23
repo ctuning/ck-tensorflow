@@ -62,6 +62,7 @@ def setup(i):
     tosd=i['target_os_dict']
 
     winh=hosd.get('windows_base','')
+    macos=hosd.get('macos','')
 
     env=i['env']
     ep=cus['env_prefix']
@@ -73,7 +74,11 @@ def setup(i):
     target_os_dict = i.get('target_os_dict', {})
     target_os_name = target_os_dict.get('ck_name2', '')
 
-    env[ep+'_LINK_OPTIONS'] = '-Wl,--allow-multiple-definition -Wl,--whole-archive'
+    if macos:   # NB! assuming running under Apple's LLVM!
+        env[ep+'_LINK_OPTIONS'] = '-force_load '+lib_dir+'/libtensorflow-core.a'
+    else:
+        env[ep+'_LINK_OPTIONS'] = '-Wl,--allow-multiple-definition -Wl,--whole-archive'
+
     env[ep+'_LIBS_DIRS'] = '-L' + lib_dir
     if target_os_name == 'android':
       env[ep+'_LIBS'] = '-ltensorflow-core -lprotobuf -lprotobuf-lite -llog -lnsync -lz'
