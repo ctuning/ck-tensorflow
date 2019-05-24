@@ -16,11 +16,6 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#if __cplusplus < 201703L // If the version of C++ is less than 17
-    #include <experimental/filesystem>
-#else
-    #include <filesystem>
-#endif
 
 /// Load mandatory string value from the environment.
 inline std::string getenv_s(const std::string& name) {
