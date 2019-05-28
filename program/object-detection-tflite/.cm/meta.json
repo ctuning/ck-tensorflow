@@ -83,7 +83,7 @@
         "post_process_via_ck": {
           "data_uoa":       "24c98b0cee248d93",
           "module_uoa":     "script",
-          "script_name":    "postprocess"
+          "script_name":    "iniless_postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
