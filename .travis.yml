@@ -80,6 +80,7 @@ install:
     - ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools  # make sure pip is also up to date no matter what
     - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
     - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
+    - ck pull repo:ck-mlperf                                                    # a cyclic dependency that we don't want to create at this point
     - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
     -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
     -       ck install package:imagenet-2012-aux                                # one part of ImageNet
