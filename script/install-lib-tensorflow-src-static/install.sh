@@ -67,6 +67,16 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
 
   export NDK_ROOT=${CK_ANDROID_NDK_ROOT_DIR}
   ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/build_all_android.sh -a ${TARGET_ARCH}
+elif [ "$CK_DLL_EXT" == ".dylib" ]
+then
+  echo
+  echo "Building Macos package..."
+
+  TENSORFLOW_LIB_DIR=lib
+  PROTOBUF_LIB_DIR=protobuf
+  NSYNC_LIB_DIR=default.macos.c++11
+
+  ${INSTALL_DIR}/${PACKAGE_SUB_DIR}/tensorflow/contrib/makefile/build_all_linux.sh
 else
   echo
   echo "Building Linux package..."

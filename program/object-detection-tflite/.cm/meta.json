@@ -111,7 +111,7 @@
       "local": "yes",
       "name": "Object Detection dataset",
       "sort": 10,
-      "tags": "dataset,object-detection"
+      "tags": "dataset,object-detection,original"
     },
     "weights": {
       "force_target_as_host": "yes",
