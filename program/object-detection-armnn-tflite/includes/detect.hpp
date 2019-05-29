@@ -19,6 +19,7 @@
 #include "armnn/INetwork.hpp"
 #include "armnnTfLiteParser/ITfLiteParser.hpp"
 
+#define OBJECT_DETECTION_ARMNN_TFLITE
 #include "settings.h"
 #include "non_max_suppression.h"
 #include "benchmark.h"

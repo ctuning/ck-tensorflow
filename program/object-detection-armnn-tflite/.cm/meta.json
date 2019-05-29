@@ -18,7 +18,12 @@
       "local": "yes",
       "name": "TensorFlow Lite C++ API",
       "sort": 20,
-      "tags": "lib,tensorflow-lite,tflite,vstatic"
+      "tags": "lib,tensorflow-lite,tflite,vstatic",
+      "version_from": [
+        1,
+        13,
+        1
+      ]
     },
     "lib-armnn": {
       "local": "yes",
@@ -83,18 +88,19 @@
           "CK_ENV_TENSORFLOW_MODEL_SCALE_H",
           "CK_ENV_TENSORFLOW_MODEL_SCALE_W",
           "CK_ENV_TENSORFLOW_MODEL_SCALE_X",
-          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y"
+          "CK_ENV_TENSORFLOW_MODEL_SCALE_Y",
+          "CK_ENV_DATASET_OBJ_DETECTION_PREPROCESSED_SUBSET_FOF"
         ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "post_process_via_ck": {
-          "data_uoa": "24c98b0cee248d93",
-          "module_uoa": "script",
-          "script_name": "postprocess"
-        },
         "pre_process_via_ck": {
-          "data_uoa": "24c98b0cee248d93",
-          "module_uoa": "script",
-          "script_name": "preprocess"
+          "data_uoa":       "24c98b0cee248d93",
+          "module_uoa":     "script",
+          "script_name":    "schindler"
+        },
+        "post_process_via_ck": {
+          "data_uoa":       "24c98b0cee248d93",
+          "module_uoa":     "script",
+          "script_name":    "iniless_postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
@@ -119,10 +125,11 @@
   },
   "run_deps": {
     "dataset": {
+      "force_target_as_host": "yes",
       "local": "yes",
-      "name": "Object Detection dataset",
+      "name": "Preprocessed images",
       "sort": 20,
-      "tags": "dataset,object-detection"
+      "tags": "dataset,object-detection,preprocessed"
     },
     "lib-flatbuffers": {
       "local": "yes",
@@ -131,30 +138,35 @@
       "tags": "lib,flatbuffers"
     },
     "lib-python-matplotlib": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "MatPlotLib python library",
       "sort": 45,
       "tags": "lib,python-package,matplotlib"
     },
     "lib-python-numpy": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "NumPy python library",
       "sort": 30,
       "tags": "lib,python-package,numpy"
     },
     "lib-python-pillow": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Pillow python library",
       "sort": 40,
       "tags": "lib,python-package,pillow"
     },
     "tensorflowmodel-api": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Tensorflow model API",
       "sort": 80,
       "tags": "tensorflowmodel,api"
     },
     "tool-coco": {
+      "force_target_as_host": "yes",
       "local": "yes",
       "name": "Python API for COCO",
       "sort": 50,
@@ -176,7 +188,6 @@
   },
   "run_vars": {
     "CK_TIMER_FILE": "tmp-ck-timer.json",
-    "CK_PREPROCESSED_FOF_WITH_ORIGINAL_DIMENSIONS": "preprocessed_images_list.txt",
     "CK_PREPROCESSED_OUT_DIR": "preprocessed",
     "CK_DETECTIONS_OUT_DIR": "detections",
     "CK_RESULTS_OUT_DIR": "results",
