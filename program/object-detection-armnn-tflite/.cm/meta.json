@@ -114,7 +114,8 @@
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatanchors.txt"
         ],
         "run_make_directories": [
-          "detections"
+          "detections",
+          "results"
         ],
         "run_output_files": [
           "detections",
