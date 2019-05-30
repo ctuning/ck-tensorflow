@@ -452,7 +452,7 @@ namespace CK {
                      std::vector<std::string> model_classes,
                      bool correct_background) const {
             std::string *buffer = target->data();
-            buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
+            buffer[0] = to_string(src.width) + " " + to_string(src.height);
 
             std::vector<DetectionBox> detection_boxes = {};
 
@@ -482,7 +482,7 @@ namespace CK {
             float *fboxes = _settings->get_boxes_buf();
 
             std::string *buffer = target->data();
-            buffer[0] = std::to_string(src.width) + " " + std::to_string(src.height);
+            buffer[0] = to_string(src.width) + " " + to_string(src.height);
 
             std::vector<DetectionBox> detection_boxes = {};
 
