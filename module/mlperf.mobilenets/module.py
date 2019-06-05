@@ -150,7 +150,6 @@ def get_raw_data(i):
             with open(pipeline_file_path) as pipeline_file:
                 pipeline_data_raw = json.load(pipeline_file)
             weights_env = pipeline_data_raw['dependencies']['weights']['dict']['env']
-            dataset_env = pipeline_data_raw['dependencies']['imagenet-val']['dict']['env']
 
             # For each point.
             for point in r['points']:
@@ -199,16 +198,16 @@ def get_raw_data(i):
                 version = np.int64(version_from_env)
                 multiplier = np.float64(multiplier_from_env)
                 resolution = np.int64(resolution_from_env)
-                model = 'v%d-%.2f-%d' % (version, multiplier, resolution)
+                model = weights_env.get('CK_ENV_TENSORFLOW_MODEL_TFLITE_FILENAME', 'v%d-%.2f-%d' % (version, multiplier, resolution))
 
                 # Dataset.
-                dataset_raw = dataset_env.get('CK_ENV_DATASET_IMAGENET_VAL', '')
+                dataset_imagenet_val = pipeline_data_raw['dependencies'].get('imagenet-val',{}).get('dict',{}).get('env',{}).get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
-                if 'val-min-resized' in dataset_raw:
+                if 'val-min-resized' in dataset_imagenet_val:
                     dataset = 'val-min-resized'
-                elif 'val-min' in dataset_raw:
+                elif 'val-min' in dataset_imagenet_val:
                     dataset = 'val-min'
-                elif 'val' in dataset_raw:
+                else:
                     dataset = 'val'
 
                 # Target names for CPU and OS.
