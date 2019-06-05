@@ -147,13 +147,6 @@
       "sort": 60,
       "tags": "lib,python-package,matplotlib"
     },
-    "tensorflowmodel-api": {
-      "force_target_as_host": "yes",
-      "local": "yes",
-      "name": "TensorFlow model API",
-      "sort": 80,
-      "tags": "tensorflowmodel,api"
-    },
     "tool-coco": {
       "force_target_as_host": "yes",
       "local": "yes",
