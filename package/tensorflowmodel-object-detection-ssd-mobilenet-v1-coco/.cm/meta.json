@@ -39,6 +39,8 @@
   "soft_uoa": "3fc0c4b9ba63de2f",
   "suggested_path": "tensorflowmodel-object-detection-ssd_mobilenet_v1_coco",
   "tags": [
+    "model",
+    "tf",
     "tensorflowmodel",
     "object-detection",
     "ssd",

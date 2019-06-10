@@ -60,6 +60,7 @@ def setup(i):
     env[ep+'_MODEL_NAME'] = install_env['MODEL_NAME']
     env[ep+'_DATASET_TYPE'] = install_env['DATASET_TYPE']
     env[ep+'_FROZEN_GRAPH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])
+    env[ep+'_TF_FROZEN_FILEPATH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])  # the same (for compatibility)
     env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
     env[ep+'_LABELMAP_FILE'] = os.path.join(install_dir, install_env['LABELMAP_FILE'])
 
