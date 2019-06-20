@@ -99,6 +99,7 @@
         ],
         "run_output_files": [
           "detections",
+          "results",
           "tmp-ck-timer.json"
         ]
       }
