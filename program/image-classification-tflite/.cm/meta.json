@@ -46,6 +46,8 @@
       "ignore_return_code": "no",
       "run_time": {
         "copy_env_to_remote": [
+          "CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME",
+          "CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME",
           "CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF",
           "CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE",
           "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
