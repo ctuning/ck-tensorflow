@@ -95,12 +95,10 @@
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/flatlabels.txt"
         ],
         "run_make_directories": [
-          "detections",
-          "results"
+          "detections"
         ],
         "run_output_files": [
           "detections",
-          "results",
           "tmp-ck-timer.json"
         ]
       }
