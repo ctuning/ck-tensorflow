@@ -39,7 +39,7 @@
   "extra_ld_vars": "$<<CK_ENV_LIB_TF_LINK_OPTIONS>>$ $<<CK_ENV_LIB_TF_LIBS_DIRS>>$ $<<CK_ENV_LIB_TF_LIBS>>$ $<<CK_EXTRA_LIB_LOG>>$",
   "linker_add_lib_as_env": [
     "CK_CXX_EXTRA",
-    "CK_ENV_LIB_STDCPP_STATIC"
+    "CK_ENV_LIB_STDCPP_DYNAMIC"
   ],
   "main_language": "cpp",
   "only_for_target_os_tags": [
@@ -88,6 +88,7 @@
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
+          "$<<CK_ENV_LIB_STDCPP_DYNAMIC>>$",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_fast_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_no_nms.tflite",
           "$<<CK_ENV_TENSORFLOW_MODEL_ROOT>>$/detect_regular_nms.tflite",
@@ -99,6 +100,7 @@
         ],
         "run_output_files": [
           "detections",
+          "results",
           "tmp-ck-timer.json"
         ]
       }
