@@ -25,7 +25,8 @@
       "local": "yes",
       "name": "Object Detection dataset",
       "sort": 20,
-      "tags": "dataset,object-detection"
+      "tags": "dataset,object-detection",
+      "no_tags": "preprocessed"
     },
     "lib-tensorflow": {
       "local": "yes",
