@@ -51,12 +51,14 @@ def setup(i):
     ep = cus['env_prefix']
 
     full_path = cus.get('full_path','')
-    object_detection_dir = os.path.dirname(full_path)
-    research_models_dir = os.path.dirname(object_detection_dir)
-    slim_models_dir = os.path.join(research_models_dir, 'slim')
+    object_detection_dir    = os.path.dirname(full_path)
+    research_models_dir     = os.path.dirname(object_detection_dir)
+    slim_models_dir         = os.path.join(research_models_dir, 'slim')
 
     env[ep] = research_models_dir
-    env[ep+'_OBJ_DET_DIR'] = object_detection_dir
+    env[ep + '_RESEARCH']       = research_models_dir
+    env[ep + '_SLIM']           = slim_models_dir
+    env[ep + '_OBJ_DET_DIR']    = object_detection_dir
 
     env['PYTHONPATH'] = slim_models_dir + os.pathsep + \
                         research_models_dir + os.pathsep + \
