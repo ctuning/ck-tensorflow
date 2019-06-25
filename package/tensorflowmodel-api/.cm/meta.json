@@ -5,11 +5,11 @@
       "PACKAGE_GIT": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_SUB_DIR": "models",
-      "PACKAGE_URL": "https://github.com/tensorflow/models.git"
+      "PACKAGE_URL": "https://github.com/tensorflow/models.git",
+      "PACKAGE_VERSION": "master"
     },
     "no_os_in_suggested_path": "yes",
-    "no_ver_in_suggested_path": "no",
-    "version": "master"
+    "no_ver_in_suggested_path": "no"
   },
   "deps": {
     "protobuf": {
@@ -41,6 +41,14 @@
     "api",
     "channel-stable"
   ],
+  "variations": {
+    "r1.12.0": {
+      "extra_env": {
+        "PACKAGE_VERSION": "1.12.0",
+        "PACKAGE_GIT_CHECKOUT": "r1.12.0"
+      }
+    }
+  },
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18",
     "module_uoa": "script"
