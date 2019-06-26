@@ -28,7 +28,7 @@ SUBTRACT_MEAN           = os.getenv("CK_SUBTRACT_MEAN") in ('YES', 'yes', 'ON', 
 USE_MODEL_MEAN          = os.getenv("CK_USE_MODEL_MEAN") in ('YES', 'yes', 'ON', 'on', '1')
 IMAGE_SIZE              = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE'))
 FULL_REPORT             = os.getenv('CK_SILENT_MODE', '0') in ('NO', 'no', 'OFF', 'off', '0')
-SUBSET_VOLUME           = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_VOLUME','0')) or BATCHED_VOLUME
+SUBSET_VOLUME           = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_VOLUME') or '0') or BATCHED_VOLUME
 
 if BATCHED_VOLUME > SUBSET_VOLUME:
     print('*'*30)
