@@ -2,27 +2,27 @@
 
 https://www.tensorflow.org/install/install_sources
 
-```
-$ sudo apt-get install python-numpy python-dev python-pip python-wheel
+### Install Python 2 or Python 3 (recommended)
+```bash
 $ sudo apt-get install libcupti-dev
-$ pip install keras_applications==1.0.4 --no-deps
-$ pip install keras_preprocessing==1.0.2 --no-deps
+$ sudo apt-get install python-dev python-pip python-wheel
 ```
 
-## Install Python libraries on aarch64-architecture
-```
-$ pip install gast
-$ pip install astor
-$ pip install termcolor
+### Install Python packages (in user-space)
+```bash
+$ python -m pip install numpy --user
+$ python -m pip install gast --user
+$ python -m pip install astor --user
+$ python -m pip install termcolor --user
+$ python -m pip install tensorflow-estimator==1.14.0 --user
+$ python -m pip install keras_applications==1.0.6 --no-deps --user
+$ python -m pip install keras_preprocessing==1.0.5 --no-deps --user
 ```
 
 ## Prevent running out of memory
 
 To prevent running out of memory during a build, restrict the build to use
 e.g. 1 processor:
-
+```bash
+$ ck install package:lib-tensorflow-1.14.0-src-cuda --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
 ```
-$ ck install package:lib-tensorflow-1.11.0-src-cuda --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
-```
-
-**NB:** gcc 5.4 is required on Ubuntu 16.04, see [CUDA System requirements](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements). Even using of gcc 5.5 issues with errors similar to described [here](https://github.com/tensorflow/tensorflow/issues/10220) or [here](https://github.com/tensorflow/tensorflow/issues/18522).
