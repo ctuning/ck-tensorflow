@@ -44,18 +44,20 @@ def load_preprocessed_batch(image_list, image_index):
         img_file = os.path.join(IMAGE_DIR, image_list[image_index])
         img = np.fromfile(img_file, IMAGE_DATA_TYPE)
         img = img.reshape((IMAGE_SIZE, IMAGE_SIZE, 3))
-        img = img.astype(np.float32)
 
-        # Normalize
-        if MODEL_NORMALIZE_DATA:
-            img = img/127.5 - 1.0
+        if IMAGE_DATA_TYPE != 'float32':
+            img = img.astype(np.float32)
 
-        # Subtract mean value
-        if SUBTRACT_MEAN:
-            if USE_MODEL_MEAN:
-                img = img - MODEL_MEAN_VALUE
-            else:
-                img = img - np.mean(img)
+            # Normalize
+            if MODEL_NORMALIZE_DATA:
+                img = img/127.5 - 1.0
+
+            # Subtract mean value
+            if SUBTRACT_MEAN:
+                if USE_MODEL_MEAN:
+                    img = img - MODEL_MEAN_VALUE
+                else:
+                    img = img - np.mean(img)
 
         # Add img to batch
         batch_data.append( [img] )
