@@ -195,7 +195,6 @@ def main():
             # Process results
             for index_in_batch in range(BATCH_SIZE):
                 softmax_vector = batch_results[index_in_batch][bg_class_offset:]    # skipping the background class on the left (if present)
-#                softmax_vector = batch_results[index_in_batch][:num_labels]
                 global_index = batch_index * BATCH_SIZE + index_in_batch
                 res_file = os.path.join(RESULT_DIR, image_list[global_index])
                 with open(res_file + '.txt', 'w') as f:
