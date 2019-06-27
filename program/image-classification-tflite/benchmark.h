@@ -110,6 +110,9 @@ class BenchmarkSettings {
 public:
   const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
   const std::string images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
+  const bool skip_internal_preprocessing = getenv("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE")
+                        && ( getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE") == "float32" );
+
   const std::string result_dir = getenv_s("CK_RESULTS_DIR");
   const std::string input_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME");
   const std::string output_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME");
@@ -325,7 +328,8 @@ protected:
 class ImageData : public StaticBuffer<uint8_t> {
 public:
   ImageData(const BenchmarkSettings* s): StaticBuffer(
-    s->image_size * s->image_size * s->num_channels, s->images_dir) {}
+    s->image_size * s->image_size * s->num_channels * (s->skip_internal_preprocessing ? sizeof(float) : sizeof(uint8_t)),
+    s->images_dir) {}
   
   void load(const std::string& filename) {
     auto path = _dir + '/' + filename;
@@ -409,8 +413,8 @@ class InCopy {
 public:
   InCopy(const BenchmarkSettings* s) {}
   
-  void convert(const ImageData* source, uint8_t* target) const {
-    std::copy(source->data(), source->data() + source->size(), target);
+  void convert(const ImageData* source, void* target) const {
+    std::copy(source->data(), source->data() + source->size(), reinterpret_cast<uint8_t*>(target));
   }
 };
 

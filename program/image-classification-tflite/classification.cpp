@@ -71,18 +71,21 @@ int main(int argc, char* argv[]) {
                      int(input_type), int(output_type));
 
       switch (input_type) {
-      case kTfLiteFloat32:
-        benchmark.reset(new TFLiteBenchmark<float, InNormalize, OutCopy>(&settings, interpreter.get(), input_index));
-        break;
+        case kTfLiteFloat32:
+          if (settings.skip_internal_preprocessing)
+            benchmark.reset(new TFLiteBenchmark<float, InCopy, OutCopy>(&settings, interpreter.get(), input_index));
+          else
+            benchmark.reset(new TFLiteBenchmark<float, InNormalize, OutCopy>(&settings, interpreter.get(), input_index));
+          break;
 
-      case kTfLiteUInt8:
-        benchmark.reset(new TFLiteBenchmark<uint8_t, InCopy, OutDequantize>(&settings, interpreter.get(), input_index));
-        break;
+        case kTfLiteUInt8:
+          benchmark.reset(new TFLiteBenchmark<uint8_t, InCopy, OutDequantize>(&settings, interpreter.get(), input_index));
+          break;
 
-      default:
-        throw format("Unsupported type of graph's input: %d. "
-                     "Supported types are: Float32 (%d), UInt8 (%d)",
-                     int(input_type), int(kTfLiteFloat32), int(kTfLiteUInt8));
+        default:
+          throw format("Unsupported type of graph's input: %d. "
+                       "Supported types are: Float32 (%d), UInt8 (%d)",
+                       int(input_type), int(kTfLiteFloat32), int(kTfLiteUInt8));
       }
 
       TfLiteIntArray* in_dims = interpreter->tensor(input_index)->dims;
