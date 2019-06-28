@@ -36,7 +36,11 @@ DATASET_TYPE = os.getenv("CK_ENV_DATASET_TYPE")
 ANNOTATIONS_PATH = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
 
 # Program parameters
-IMAGE_COUNT = int(os.getenv('CK_BATCH_COUNT', 1))
+BATCH_COUNT = int(os.getenv('CK_BATCH_COUNT', 1))
+BATCH_SIZE = int(os.getenv('CK_BATCH_SIZE', 1))
+ENABLE_BATCH = int(os.getenv('CK_ENV_ENABLE_BATCH', 0))
+RESIZE_WIDTH_SIZE = int(os.getenv('CK_ENV_IMAGE_WIDTH', 300))
+RESIZE_HEIGHT_SIZE = int(os.getenv('CK_ENV_IMAGE_HEIGHT', 300))
 SKIP_IMAGES = int(os.getenv('CK_SKIP_IMAGES', 0))
 SAVE_IMAGES = os.getenv("CK_SAVE_IMAGES") == "YES"
 METRIC_TYPE = (os.getenv("CK_METRIC_TYPE") or DATASET_TYPE).lower()
@@ -64,6 +68,29 @@ def make_tf_config():
     config.device_count["CPU"] = num_processors
   return config
 
+
+def load_pil_images_into_numpy_batch_array(image_list,batch_id,images_ids):
+  batch_data = []
+  batch_sizes = []
+  for img in range(BATCH_SIZE):
+    image = PIL.Image.open(os.path.join(IMAGES_DIR, image_list[batch_id*BATCH_SIZE+img]))
+    batch_sizes.append(image.size)
+    #image_dim = PIL.Image.new('RGB',(700,700), (0,0,0)) #PIL.Image.BILINEAR)
+
+    image = image.resize((RESIZE_WIDTH_SIZE,RESIZE_HEIGHT_SIZE),PIL.Image.LANCZOS)
+    image_id = ck_utils.filename_to_id(image_list[batch_id*BATCH_SIZE+img], DATASET_TYPE)
+    images_ids.append(image_id)
+
+    # Check if not RGB and convert to RGB
+    if image.mode != 'RGB':
+      image = image.convert('RGB')
+    # Conver to NumPy array
+#    image_dim.paste(image,image.getbbox())
+    img_data = np.array(image.getdata())
+    img_data = img_data.astype(np.uint8)
+    img_data = img_data.reshape((RESIZE_HEIGHT_SIZE,RESIZE_WIDTH_SIZE,3))
+    batch_data.append(img_data)
+  return batch_data,images_ids,batch_sizes
 
 def load_pil_image_into_numpy_array(image):
   # Check if not RGB and convert to RGB
@@ -144,7 +171,7 @@ def detect(category_index):
   ck_utils.prepare_dir(DETECTIONS_OUT_DIR)
 
   # Load processing image filenames
-  image_files = ck_utils.load_image_list(IMAGES_DIR, IMAGE_COUNT, SKIP_IMAGES)
+  image_files = ck_utils.load_image_list(IMAGES_DIR, BATCH_COUNT*BATCH_SIZE, SKIP_IMAGES)
 
   with tf.Graph().as_default(), tf.Session(config=tf_config) as sess:
     setup_time_begin = time.time()
@@ -173,46 +200,80 @@ def detect(category_index):
     detect_time_total = 0
     images_processed = 0
     processed_image_ids = []
-    for file_counter, image_file in enumerate(image_files):
-      if FULL_REPORT or (file_counter+1) % 10 == 0:
-        print('\nDetect image: {} ({} of {})'.format(image_file, file_counter+1, len(image_files)))
-
-      # Load image
-      load_time_begin = time.time()
-      image = PIL.Image.open(os.path.join(IMAGES_DIR, image_file))
-      image_id = ck_utils.filename_to_id(image_file, DATASET_TYPE)
-      processed_image_ids.append(image_id)
-
-      # The array based representation of the image will be used later 
-      # in order to prepare the result image with boxes and labels on it.
-      image_data = load_pil_image_into_numpy_array(image)
-      load_time = time.time() - load_time_begin
-      load_time_total += load_time
-      
-      # Detect image
-      detect_time_begin = time.time()
-      feed_dict = {input_tensor: image_data}
-      output_dict = sess.run(tensor_dict, feed_dict)
-      detect_time = time.time() - detect_time_begin
-
-      # Exclude first image from averaging
-      if file_counter > 0 or IMAGE_COUNT == 1:
-        detect_time_total += detect_time
-        images_processed += 1
-
-      # Process results
-      # All outputs are float32 numpy arrays, so convert types as appropriate
-      # TODO: implement batched mode (0 here is the image index in the batch)
-      output_dict['num_detections'] = int(output_dict['num_detections'][0])
-      output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
-      output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
-      output_dict['detection_scores'] = output_dict['detection_scores'][0]
-
-      save_detection_txt(image_file, image.size, output_dict, category_index)
-      save_detection_img(image_file, image_data[0], output_dict, category_index)
-
-      if FULL_REPORT:
-        print('Detected in {:.4f}s'.format(detect_time))
+    if ENABLE_BATCH==0:
+      for file_counter, image_file in enumerate(image_files):
+        if FULL_REPORT or (file_counter+1) % 10 == 0:
+          print('\nDetect image: {} ({} of {})'.format(image_file, file_counter+1, len(image_files)))
+ 
+        # Load image
+        load_time_begin = time.time()
+        image = PIL.Image.open(os.path.join(IMAGES_DIR, image_file))
+        image_id = ck_utils.filename_to_id(image_file, DATASET_TYPE)
+        processed_image_ids.append(image_id)
+ 
+        # The array based representation of the image will be used later 
+        # in order to prepare the result image with boxes and labels on it.
+        image_data = load_pil_image_into_numpy_array(image)
+        load_time = time.time() - load_time_begin
+        load_time_total += load_time
+        
+        # Detect image
+        detect_time_begin = time.time()
+        feed_dict = {input_tensor: image_data}
+        output_dict = sess.run(tensor_dict, feed_dict)
+        detect_time = time.time() - detect_time_begin
+ 
+        # Exclude first image from averaging
+        if file_counter > 0 or BATCH_COUNT == 1:
+          detect_time_total += detect_time
+          images_processed += 1
+ 
+        # Process results
+        # All outputs are float32 numpy arrays, so convert types as appropriate
+        # TODO: implement batched mode (0 here is the image index in the batch)
+        output_dict['num_detections'] = int(output_dict['num_detections'][0])
+        output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
+        output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
+        output_dict['detection_scores'] = output_dict['detection_scores'][0]
+ 
+        save_detection_txt(image_file, image.size, output_dict, category_index)
+        save_detection_img(image_file, image_data[0], output_dict, category_index)
+ 
+        if FULL_REPORT:
+          print('Detected in {:.4f}s'.format(detect_time))
+    else:
+      #batched process, includes resizing, introduces quality loss.
+      for batch_num in range(BATCH_COUNT):
+        # Load image
+        load_time_begin = time.time()
+        # The array based representation of the image will be used later 
+        # in order to prepare the result image with boxes and labels on it.
+        image_data, processed_image_ids,image_sizes = load_pil_images_into_numpy_batch_array(image_files,batch_num,processed_image_ids)
+        load_time = time.time() - load_time_begin
+        load_time_total += load_time
+        # Detect image
+        detect_time_begin = time.time()
+        feed_dict = {input_tensor : image_data}
+        output_dict = sess.run(tensor_dict, feed_dict)
+        detect_time = time.time() - detect_time_begin
+     
+        # Exclude first image from averaging
+        if batch_num > 0 or BATCH_COUNT == 1:
+          detect_time_total += detect_time
+          images_processed += 1
+        # Process results
+        for img in range(BATCH_SIZE):
+          tmp_output_dict={}
+          tmp_output_dict['num_detections'] = int(output_dict['num_detections'][img])
+          tmp_output_dict['detection_classes'] = output_dict['detection_classes'][img].astype(np.uint8)
+          tmp_output_dict['detection_boxes'] = output_dict['detection_boxes'][img]
+          tmp_output_dict['detection_scores'] = output_dict['detection_scores'][img]
+         
+          save_detection_txt(image_files[batch_num*BATCH_SIZE+img], image_sizes[img], tmp_output_dict, category_index)
+          save_detection_img(image_files[batch_num*BATCH_SIZE+img], image_data[img], tmp_output_dict, category_index)
+     
+        if FULL_REPORT:
+          print('Detected in {:.4f}s'.format(detect_time))
 
   # Save processed images ids list to be able to run
   # evaluation without repeating detections (CK_SKIP_DETECTION=YES)
@@ -248,7 +309,7 @@ def main(_):
   print("Dataset annotations: " + ANNOTATIONS_PATH)
   print("Dataset type: " + DATASET_TYPE)
 
-  print('Image count: {}'.format(IMAGE_COUNT))
+  print('Image count: {}'.format(BATCH_COUNT*BATCH_SIZE))
   print("Metric type: " + METRIC_TYPE)
   print('Results directory: {}'.format(RESULTS_OUT_DIR))
   print("Temporary annotations directory: " + ANNOTATIONS_OUT_DIR)
