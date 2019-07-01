@@ -75,17 +75,14 @@ def load_pil_images_into_numpy_batch_array(image_list,batch_id,images_ids):
   for img in range(BATCH_SIZE):
     image = PIL.Image.open(os.path.join(IMAGES_DIR, image_list[batch_id*BATCH_SIZE+img]))
     batch_sizes.append(image.size)
-    #image_dim = PIL.Image.new('RGB',(700,700), (0,0,0)) #PIL.Image.BILINEAR)
-
-    image = image.resize((RESIZE_WIDTH_SIZE,RESIZE_HEIGHT_SIZE),PIL.Image.LANCZOS)
+    image = image.resize((RESIZE_WIDTH_SIZE,RESIZE_HEIGHT_SIZE),PIL.Image.BILINEAR)
     image_id = ck_utils.filename_to_id(image_list[batch_id*BATCH_SIZE+img], DATASET_TYPE)
     images_ids.append(image_id)
 
     # Check if not RGB and convert to RGB
     if image.mode != 'RGB':
       image = image.convert('RGB')
-    # Conver to NumPy array
-#    image_dim.paste(image,image.getbbox())
+    # Convert to NumPy array
     img_data = np.array(image.getdata())
     img_data = img_data.astype(np.uint8)
     img_data = img_data.reshape((RESIZE_HEIGHT_SIZE,RESIZE_WIDTH_SIZE,3))
@@ -97,7 +94,7 @@ def load_pil_image_into_numpy_array(image):
   if image.mode != 'RGB':
     image = image.convert('RGB')
 
-  # Conver to NumPy array
+  # Convert to NumPy array
   img_data = np.array(image.getdata())
   img_data = img_data.astype(np.uint8)
 
