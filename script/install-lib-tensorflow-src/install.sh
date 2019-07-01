@@ -66,6 +66,8 @@ export TF_NEED_MKL=0
 export TF_DOWNLOAD_MKL=0
 export TF_NEED_MPI=0
 export TF_CUDA_CLANG=0
+export TF_NEED_OPENCL_SYCL=0
+export TF_NEED_ROCM=0
 export PYTHON_BIN_PATH=${CK_ENV_COMPILER_PYTHON_FILE}
 export PYTHON_LIB_PATH="$($PYTHON_BIN_PATH -c 'import site; print(site.getsitepackages()[0])')"
 
@@ -74,6 +76,14 @@ if [ "$CK_TF_NEED_CUDA" == "YES" ] ; then
   echo "CUDA enabled"
 else
   export TF_NEED_CUDA=0
+  echo "CUDA disabled"
+fi  
+
+if [ "$CK_TF_NEED_TENSORRT" == "YES" ] ; then  
+  export TF_NEED_TENSORRT=1
+  echo "CUDA enabled"
+else
+  export TF_NEED_TENSORRT=0
   echo "CUDA disabled"
 fi  
 
@@ -103,6 +113,10 @@ stage "Run configuration script"
 cd ${INSTALL_DIR}/src
 ./configure
 exit_if_error
+
+#hack to support tf14 build. not really elegant, however removes nvlink errors in nccl  : entry function '' with max regcount of 80 calls function '' with regcount of 96
+sed -i 's/maxrregcount=96/maxrregcount=80/g' src/third_party/nccl/build_defs.bzl.tpl
+
 
 stage "Build with bazel"
 
