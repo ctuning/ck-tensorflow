@@ -24,11 +24,15 @@ int main(int argc, char* argv[]) {
     BenchmarkSession session(&settings);
     ImageData input_data(&settings);
     ResultData result_data(&settings);
-    InNormalize input_converter(&settings);
+    unique_ptr<IinputConverter> input_converter;
     OutCopy result_converter(&settings);
     unique_ptr<Session> tf_session;
     GraphDef graph_def;
 
+    if (settings.skip_internal_preprocessing)
+      input_converter.reset(new InCopy(&settings));
+    else
+      input_converter.reset(new InNormalize(&settings));
 
     // TODO: this option is for TF mobilenets, but generally should be evaluated
     // from weights package somehow (supported number or classes in meta?)
@@ -65,7 +69,7 @@ int main(int argc, char* argv[]) {
         int image_offset = 0;
         for (auto image_file : session.batch_files()) {
           input_data.load(image_file);
-          input_converter.convert(&input_data, input_ptr + image_offset);
+          input_converter->convert(&input_data, input_ptr + image_offset);
           image_offset += input_data.size();
         }
         session.measure_end_load_images();

@@ -110,6 +110,9 @@ class BenchmarkSettings {
 public:
   const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
   const std::string images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
+  const bool skip_internal_preprocessing = getenv("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE")
+                        && ( getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE") == "float32" );
+
   const std::string result_dir = getenv_s("CK_RESULTS_DIR");
   const std::string input_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME");
   const std::string output_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME");
@@ -325,7 +328,8 @@ protected:
 class ImageData : public StaticBuffer<uint8_t> {
 public:
   ImageData(const BenchmarkSettings* s): StaticBuffer(
-    s->image_size * s->image_size * s->num_channels, s->images_dir) {}
+    s->image_size * s->image_size * s->num_channels * (s->skip_internal_preprocessing ? sizeof(float) : sizeof(uint8_t)),
+    s->images_dir) {}
   
   void load(const std::string& filename) {
     auto path = _dir + '/' + filename;
@@ -405,38 +409,48 @@ private:
 
 //----------------------------------------------------------------------
 
-class InCopy {
+class IinputConverter {
+public:
+  virtual ~IinputConverter() {}
+  virtual void convert(const ImageData* source, void* target) = 0;
+};
+
+//----------------------------------------------------------------------
+
+class InCopy : public IinputConverter {
 public:
   InCopy(const BenchmarkSettings* s) {}
   
-  void convert(const ImageData* source, uint8_t* target) const {
-    std::copy(source->data(), source->data() + source->size(), target);
+  void convert(const ImageData* source, void* target) {
+    uint8_t *uint8_target = static_cast<uint8_t *>(target);
+    std::copy(source->data(), source->data() + source->size(), uint8_target);
   }
 };
 
 //----------------------------------------------------------------------
 
-class InNormalize {
+class InNormalize : public IinputConverter {
 public:
   InNormalize(const BenchmarkSettings* s):
     _normalize_img(s->normalize_img), _subtract_mean(s->subtract_mean) {
   }
   
-  void convert(const ImageData* source, float* target) const {
+  void convert(const ImageData* source, void* target) {
     // Copy image data to target
+    float *float_target = static_cast<float *>(target);
     float sum = 0;
     for (int i = 0; i < source->size(); i++) {
       float px = source->data()[i];
       if (_normalize_img)
         px = (px / 255.0 - 0.5) * 2.0;
       sum += px;
-      target[i] = px;
+      float_target[i] = px;
     }
     // Subtract mean value if required
     if (_subtract_mean) {
       float mean = sum / static_cast<float>(source->size());
       for (int i = 0; i < source->size(); i++)
-        target[i] -= mean;
+        float_target[i] -= mean;
     }
   }
 
