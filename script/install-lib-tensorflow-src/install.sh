@@ -115,7 +115,7 @@ cd ${INSTALL_DIR}/src
 exit_if_error
 
 #hack to support tf14 build. not really elegant, however removes nvlink errors in nccl  : entry function '' with max regcount of 80 calls function '' with regcount of 96
-sed -i 's/maxrregcount=96/maxrregcount=80/g' src/third_party/nccl/build_defs.bzl.tpl
+sed -i 's/maxrregcount=96/maxrregcount=80/g' third_party/nccl/build_defs.bzl.tpl
 
 
 stage "Build with bazel"
