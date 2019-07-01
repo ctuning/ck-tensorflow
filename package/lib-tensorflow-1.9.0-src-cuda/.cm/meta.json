@@ -86,7 +86,7 @@
     "lib",
     "bazel",
     "tensorflow",
-    "tensorflow-cpu",
+    "tensorflow-cuda",
     "vsrc",
     "vcuda",
     "v1.9.0",
