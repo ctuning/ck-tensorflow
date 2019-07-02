@@ -1,9 +1,17 @@
 diff --git a/tensorflow/lite/tools/make/Makefile b/tensorflow/lite/tools/make/Makefile
-index 994f660..daf5d64 100644
+index 994f660dba..d9929766ce 100644
 --- a/tensorflow/lite/tools/make/Makefile
 +++ b/tensorflow/lite/tools/make/Makefile
-@@ -147,7 +147,7 @@ ALL_SRCS := \
-        $(BENCHMARK_SRCS)
+@@ -45,6 +45,7 @@ INCLUDES += -I/usr/local/include
+ LIBS := \
+ -lstdc++ \
+ -lpthread \
++-latomic \
+ -lm \
+ -lz
+ 
+@@ -147,7 +148,7 @@ ALL_SRCS := \
+ 	$(BENCHMARK_SRCS)
  
  # Where compiled objects are stored.
 -GENDIR := $(MAKEFILE_DIR)/gen/$(TARGET)_$(TARGET_ARCH)/
@@ -11,4 +19,3 @@ index 994f660..daf5d64 100644
  OBJDIR := $(GENDIR)obj/
  BINDIR := $(GENDIR)bin/
  LIBDIR := $(GENDIR)lib/
-
