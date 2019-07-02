@@ -1,0 +1,59 @@
+{
+  "customize": {
+    "extra_dir": "", 
+    "git_src_dir": "src", 
+    "install_env": {
+      "PACKAGE_GIT": "YES", 
+      "PACKAGE_GIT_CHECKOUT": "v1.14.0", 
+      "PACKAGE_PATCH": "YES", 
+      "PACKAGE_SUB_DIR": "src", 
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
+    }, 
+    "version": "1.14.0"
+  }, 
+  "deps": {
+    "compiler": {
+      "local": "yes", 
+      "name": "C++ compiler", 
+      "sort": 0, 
+      "tags": "compiler,lang-cpp"
+    }
+  }, 
+  "end_full_path": {
+    "android": "lib/libtensorflow-lite.a", 
+    "linux": "lib/libtensorflow-lite.a"
+  }, 
+  "need_cpu_info": "yes", 
+  "only_for_host_os_tags": [
+    "linux", 
+    "android"
+  ], 
+  "only_for_target_os_tags": [
+    "linux", 
+    "android"
+  ], 
+  "package_extra_name": " (from sources, static)", 
+  "process_script": "install", 
+  "soft_uoa": "44398cb5ffa18a26", 
+  "suggested_path": "lib-tflite-src-static", 
+  "tags": [
+    "lib", 
+    "tensorflow", 
+    "lite", 
+    "tflite", 
+    "tensorflow-lite", 
+    "tensorflow-static", 
+    "vsrc", 
+    "vstatic", 
+    "v1.14.0", 
+    "v1.14", 
+    "v1", 
+    "channel-stable"
+  ], 
+  "template": "yes", 
+  "template_type": "TFLite ML framework (static)", 
+  "use_scripts_from_another_entry": {
+    "data_uoa": "08154997bac8ed55", 
+    "module_uoa": "script"
+  }
+}
