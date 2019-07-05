@@ -35,6 +35,12 @@
       "sort": 70,
       "tags": "lib,tensorflow"
     },
+    "tensorflow-model-api": {
+      "local": "yes",
+      "name": "Tensorflow models api",
+      "sort": 80,
+      "tags": "tensorflow,model,api"
+    },
     "weights": {
       "local": "yes",
       "name": "TensorFlow Object Detection model",
