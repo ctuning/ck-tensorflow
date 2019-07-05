@@ -52,16 +52,21 @@ def setup(i):
     env = i['env']
     ep = cus['env_prefix']
 
-    install_dir = os.path.dirname(cus.get('full_path',''))
+    full_path = cus.get('full_path','')
+    install_dir, model_filename = os.path.split(full_path)
 
     install_env = cus.get('install_env', {})
 
-    # Init common variables, they are set for all models
+    # Init common variables, they are expected to be set for all models
     env[ep+'_MODEL_NAME'] = install_env['MODEL_NAME']
     env[ep+'_DATASET_TYPE'] = install_env['DATASET_TYPE']
-    env[ep+'_FROZEN_GRAPH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])
-    env[ep+'_TF_FROZEN_FILEPATH'] = os.path.join(install_dir, install_env['FROZEN_GRAPH'])  # the same (for compatibility)
-    env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
     env[ep+'_LABELMAP_FILE'] = os.path.join(install_dir, install_env['LABELMAP_FILE'])
+
+    frozen_graph_name = os.path.join(install_dir, install_env['FROZEN_GRAPH']) if 'FROZEN_GRAPH' in install_env else full_path
+    env[ep+'_FROZEN_GRAPH'] = frozen_graph_name
+    env[ep+'_TF_FROZEN_FILEPATH'] = frozen_graph_name  # the same (for compatibility)
+
+    if 'WEIGHTS_FILE' in install_dir:   # optional
+      env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
 
     return {'return': 0, 'bat': ''}
