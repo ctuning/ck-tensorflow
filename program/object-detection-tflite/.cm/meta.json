@@ -148,6 +148,7 @@
       "tags": "lib,python-package,matplotlib"
     },
     "tensorflow-model-api": {
+      "comment": "may be needed by iniless_postprocess",
       "local": "yes",
       "name": "Tensorflow models api",
       "sort": 80,
