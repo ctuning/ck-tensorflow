@@ -77,6 +77,7 @@ def setup(i):
     if target_os_name == 'android':
       env[ep+'_LIBS'] = '-ltensorflow-lite'
     elif target_os_name == 'linux':
+      # NB: -latomic required on RPi4; -lrt required for TFLite v1.14.
       env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl -latomic -lrt'
     else:
       return {'return': -1, 'error': 'Unsupported target OS'}
