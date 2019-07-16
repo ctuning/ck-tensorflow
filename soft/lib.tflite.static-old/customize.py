@@ -75,7 +75,7 @@ def setup(i):
 
     env[ep+'_LIBS_DIRS'] = '-L' + lib_dir
     if target_os_name == 'android':
-      env[ep+'_LIBS'] = '-ltensorflow-lite'
+      env[ep+'_LIBS'] = '-ltensorflow-lite -llog'
     elif target_os_name == 'linux':
       env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl -latomic -lrt'
     else:
