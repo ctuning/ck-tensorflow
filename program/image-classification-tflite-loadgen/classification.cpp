@@ -190,9 +190,9 @@ class QuerySampleLibrarySingleStream : public mlperf::QuerySampleLibrary {
 
   const std::string& Name() const override { return name_; }
 
-  const size_t TotalSampleCount() override { return prg->batch_count() * prg->batch_size(); }
+  size_t TotalSampleCount() override { return prg->batch_count() * prg->batch_size(); }
 
-  const size_t PerformanceSampleCount() override { return prg->batch_size(); }
+  size_t PerformanceSampleCount() override { return prg->batch_size(); }
 
   void LoadSamplesToRam( const std::vector<mlperf::QuerySampleIndex>& samples) override {
     
