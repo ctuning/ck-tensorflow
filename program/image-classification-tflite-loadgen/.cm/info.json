@@ -16,5 +16,5 @@
       "3"
     ]
   },
-  "data_name": "loadgen-image-classification-tflite"
+  "data_name": "image-classification-tflite-loadgen"
 }
