@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <chrono>
 #include <dirent.h>
 #include <fstream>
 #include <iostream>
@@ -25,24 +24,6 @@
 #define DEBUG(msg) std::cout << "DEBUG: " << msg << std::endl;
 
 namespace CK {
-
-enum _TIMERS {
-  X_TIMER_SETUP,
-  X_TIMER_TEST,
-
-  X_TIMER_COUNT
-};
-
-enum _VARS {
-  X_VAR_TIME_SETUP,
-  X_VAR_TIME_TEST,
-  X_VAR_TIME_IMG_LOAD_TOTAL,
-  X_VAR_TIME_IMG_LOAD_AVG,
-  X_VAR_TIME_CLASSIFY_TOTAL,
-  X_VAR_TIME_CLASSIFY_AVG,
-
-  X_VAR_COUNT
-};
 
 enum MODEL_TYPE {
   LITE,
@@ -198,11 +179,6 @@ public:
 
   virtual ~BenchmarkSession() {}
 
-  float total_load_images_time() const { return _loading_time.total(); }
-  float total_prediction_time() const { return _total_prediction_time; }
-  float avg_load_images_time() const { return _loading_time.avg(); }
-  float avg_prediction_time() const { return _prediction_time.avg(); }
-
   bool get_next_batch() {
     if (_batch_index+1 == _settings->batch_count)
       return false;
@@ -221,85 +197,15 @@ public:
     return true;
   }
 
-  /// Begin measuring of new benchmark stage.
-  /// Only one stage can be measured at a time.
-  void measure_begin() {
-    _start_time = std::chrono::high_resolution_clock::now();
-  }
-
-  /// Finish measuring of batch loading stage
-  float measure_end_load_images() {
-    float duration = measure_end();
-    if (_settings->full_report)
-      std::cout << "Batch loaded in " << duration << " s" << std::endl;
-    _loading_time.add(duration);
-    return duration;
-  }
-
-  /// Finish measuring of batch prediction stage
-  float measure_end_prediction() {
-    float duration = measure_end();
-    _total_prediction_time += duration;
-    if (_settings->full_report)
-      std::cout << "Batch classified in " << duration << " s" << std::endl;
-    // Skip first batch in order to account warming-up the system
-    if (_batch_index > 0 || _settings->batch_count == 1)
-      _prediction_time.add(duration);
-    return duration;
-  }
-
   int batch_index() const { return _batch_index; }
   const std::vector<std::string>& batch_files() const { return _batch_files; }
 
 private:
   int _batch_index = -1;
-  Accumulator _loading_time;
-  Accumulator _prediction_time;
+
   const BenchmarkSettings* _settings;
-  float _total_prediction_time = 0;
   std::vector<std::string> _batch_files;
-  std::chrono::time_point<std::chrono::high_resolution_clock> _start_time;
-
-  float measure_end() const {
-    auto finish_time = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = finish_time - _start_time;
-    return static_cast<float>(elapsed.count());
-  }
 };
-
-//----------------------------------------------------------------------
-
-inline void init_benchmark() {
-  xopenme_init(X_TIMER_COUNT, X_VAR_COUNT);
-}
-
-inline void finish_benchmark(const BenchmarkSession& s) {
-  // Store metrics
-  store_value_f(X_VAR_TIME_SETUP, "setup_time_s", xopenme_get_timer(X_TIMER_SETUP));
-  store_value_f(X_VAR_TIME_TEST, "test_time_s", xopenme_get_timer(X_TIMER_TEST));
-  store_value_f(X_VAR_TIME_IMG_LOAD_TOTAL, "images_load_time_total_s", s.total_load_images_time());
-  store_value_f(X_VAR_TIME_IMG_LOAD_AVG, "images_load_time_avg_s", s.avg_load_images_time());
-  store_value_f(X_VAR_TIME_CLASSIFY_TOTAL, "prediction_time_total_s", s.total_prediction_time());
-  store_value_f(X_VAR_TIME_CLASSIFY_AVG, "prediction_time_avg_s", s.avg_prediction_time());
-
-  // Finish xopenmp
-  xopenme_dump_state();
-  xopenme_finish();
-}
-
-template <typename L>
-void measure_setup(L &&lambda_function) {
-  xopenme_clock_start(X_TIMER_SETUP);
-  lambda_function();
-  xopenme_clock_end(X_TIMER_SETUP);
-}
-
-template <typename L>
-void measure_prediction(L &&lambda_function) {
-  xopenme_clock_start(X_TIMER_TEST);
-  lambda_function();
-  xopenme_clock_end(X_TIMER_TEST);
-}
 
 //----------------------------------------------------------------------
 
