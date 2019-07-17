@@ -75,9 +75,10 @@ def setup(i):
 
     env[ep+'_LIBS_DIRS'] = '-L' + lib_dir
     if target_os_name == 'android':
-      env[ep+'_LIBS'] = '-ltensorflow-lite'
+      env[ep+'_LIBS'] = '-ltensorflow-lite -llog'
     elif target_os_name == 'linux':
-      env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl'
+      # NB: -latomic required on RPi4; -lrt required for TFLite v1.14.
+      env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl -latomic -lrt'
     else:
       return {'return': -1, 'error': 'Unsupported target OS'}
 
@@ -85,6 +86,7 @@ def setup(i):
     env[ep+'_LIB'] = lib_dir
     env[ep+'_INCLUDE0'] = src_dir
     env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'flatbuffers', 'include')
+    # TODO: Customize for TFLite v1.14+.
     env['CK_ENV_LIB_TF_DEF'] = '-DTF_LITE_1_13'
 
     return {'return': 0, 'bat': s}
