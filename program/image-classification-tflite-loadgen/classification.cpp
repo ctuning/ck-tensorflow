@@ -7,6 +7,8 @@
  */
 
 #include <future>
+#include <algorithm> 
+#include <numeric> 
 
 #include "loadgen.h"
 #include "query_sample_library.h"
@@ -166,7 +168,26 @@ public:
 
   void FlushQueries() override {}
   void ReportLatencyResults(
-      const std::vector<mlperf::QuerySampleLatency>& latencies_ns) override {}
+      const std::vector<mlperf::QuerySampleLatency>& latencies_ns) override {
+
+    int size = latencies_ns.size();
+    std::vector<mlperf::QuerySampleLatency>  v(size);  
+    std::copy (latencies_ns.begin(), latencies_ns.end(), v.begin() );
+
+    cout<< endl << "LATENCIES REPORT:";
+
+    sort(v.begin(), v.end());
+    long avg = long(accumulate(v.begin(), v.end(), 0L))/size;
+    int p50 = size * 0.5;
+    int p90 = size * 0.9;
+    auto percentile50 = v[p50];
+    auto percentile90 = v[p90];
+    cout<< endl << "Min: " << v[0];
+    cout<< endl << "Max: " << v[size-1];
+    cout<< endl << "Average: " << avg;
+    cout<< endl << "Mediana: " << percentile50;
+    cout<< endl << "Percentile 90: " << percentile90;
+  }
 
 private:
   std::string name_{"SingleStreamSUT"};
