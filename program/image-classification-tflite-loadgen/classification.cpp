@@ -174,7 +174,9 @@ public:
     std::vector<mlperf::QuerySampleLatency>  v(size);  
     std::copy (latencies_ns.begin(), latencies_ns.end(), v.begin() );
 
-    cout<< endl << "LATENCIES REPORT:";
+    cout<< endl << "----------------------------------------";
+    cout<< endl << "|      LATENCIES REPORT(nanosecs)      |";
+    cout<< endl << "----------------------------------------";
 
     sort(v.begin(), v.end());
     long avg = long(accumulate(v.begin(), v.end(), 0L))/size;
@@ -182,11 +184,12 @@ public:
     int p90 = size * 0.9;
     auto percentile50 = v[p50];
     auto percentile90 = v[p90];
-    cout<< endl << "Min: " << v[0];
-    cout<< endl << "Max: " << v[size-1];
-    cout<< endl << "Average: " << avg;
-    cout<< endl << "Mediana: " << percentile50;
-    cout<< endl << "Percentile 90: " << percentile90;
+    cout<< endl << "Min latency: " << v[0];
+    cout<< endl << "Max latency: " << v[size-1];
+    cout<< endl << "Average latency: " << avg;
+    cout<< endl << "Median latency: " << percentile50;
+    cout<< endl << "90 percentile latency: " << percentile90;
+    cout<< endl << "----------------------------------------" << endl;
   }
 
 private:
@@ -206,7 +209,7 @@ public:
 
   size_t TotalSampleCount() override { return prg->batch_count() * prg->batch_size(); }
 
-  size_t PerformanceSampleCount() override { return prg->batch_size(); }
+  size_t PerformanceSampleCount() override { return prg->batch_count() * prg->batch_size(); }
 
   void LoadSamplesToRam( const std::vector<mlperf::QuerySampleIndex>& samples) override {
     
@@ -235,6 +238,11 @@ void TestSingleStream(Program *prg) {
   log_settings.log_output.prefix_with_datetime = true;
 
   mlperf::TestSettings ts;
+  ts.mode = mlperf::TestMode::PerformanceOnly;
+  ts.min_query_count = 10;
+  //ts.max_query_count = 20;
+  ts.min_duration_ms = 10000;
+  //ts.max_duration_ms = 20000;
 
   mlperf::StartTest(&sut, &qsl, ts, log_settings);
 }
