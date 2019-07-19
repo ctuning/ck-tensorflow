@@ -65,6 +65,9 @@
           "module_uoa": "script",
           "script_name": "schindler"
         },
+        "post_process_via_ck": {
+          "script_name":    "postprocess_loadgen"
+        },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
           "$<<CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH>>$"
