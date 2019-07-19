@@ -179,30 +179,14 @@ public:
 
   virtual ~BenchmarkSession() {}
 
-  bool get_next_batch() {
-    if (_batch_index+1 == _settings->batch_count)
-      return false;
-    _batch_index++;
-    int batch_number = _batch_index+1;
-    if (_settings->full_report || batch_number%10 == 0)
-      std::cout << "\nBatch " << batch_number << " of " << _settings->batch_count << std::endl;
-    int begin = _batch_index * _settings->batch_size;
-    int end = (_batch_index + 1) * _settings->batch_size;
-    int images_count = _settings->image_list().size();
-    if (begin >= images_count || end > images_count)
-      throw format("Not enough images to populate batch %d", _batch_index);
-    _batch_files.clear();
-    for (int i = begin; i < end; i++)
+  void get_batch(std::vector<unsigned long> ids) {
+    for (int i = 0; i < ids.size(); i++)
       _batch_files.emplace_back(_settings->image_list()[i]);
-    return true;
   }
 
-  int batch_index() const { return _batch_index; }
   const std::vector<std::string>& batch_files() const { return _batch_files; }
 
 private:
-  int _batch_index = -1;
-
   const BenchmarkSettings* _settings;
   std::vector<std::string> _batch_files;
 };
@@ -270,13 +254,15 @@ public:
   virtual ~IBenchmark() {}
   virtual void load_images(const std::vector<std::string>& batch_images) = 0;
   virtual void save_results(const std::vector<std::string>& batch_images) = 0;
+  virtual void get_next_image() = 0;
+  virtual void get_next_result() = 0;
 };
 
 
 template <typename TData, typename TInConverter, typename TOutConverter>
 class Benchmark : public IBenchmark {
 public:
-  Benchmark(const BenchmarkSettings* settings, TData *in_ptr, TData *out_ptr) {
+  Benchmark(const BenchmarkSettings* settings, TData *in_ptr, TData *out_ptr): _settings(settings) {
     _in_ptr = in_ptr;
     _out_ptr = out_ptr;
     _in_data.reset(new ImageData(settings));
@@ -286,27 +272,51 @@ public:
   }
 
   void load_images(const std::vector<std::string>& batch_images) override {
-    int image_offset = 0;
+    int length = batch_images.size();
+    _image_rotator_max = length;
+    _result_rotator_max = length;
+    _in_batch = new std::unique_ptr<ImageData>[length];
+    _out_batch = new std::unique_ptr<ResultData>[length];
+    int i = 0;
     for (auto image_file : batch_images) {
-      _in_data->load(image_file);
-      _in_converter->convert(_in_data.get(), _in_ptr + image_offset);
-      image_offset += _in_data->size();
+      _in_batch[i].reset(new ImageData(_settings));
+      _out_batch[i].reset(new ResultData(_settings));
+      _in_batch[i]->load(image_file);
+      i++;
     }
+  }
+
+  void get_next_image() {
+    _in_converter->convert(_in_batch[_image_rotator].get(), _in_ptr);
+    _image_rotator++;
+    _image_rotator %= _image_rotator_max;
   }
 
   void save_results(const std::vector<std::string>& batch_images) override {
-    int image_offset = 0;
-    int probe_offset = has_background_class ? 1 : 0;
+    int i = 0;
     for (auto image_file : batch_images) {
-      _out_converter->convert(_out_ptr + image_offset + probe_offset, _out_data.get());
-      _out_data->save(image_file);
-      image_offset += _out_data->size() + probe_offset;
+      _out_batch[i]->save(image_file);
+      i++;
     }
   }
 
+  void get_next_result() {
+    int probe_offset = has_background_class ? 1 : 0;
+    _out_converter->convert(_out_ptr + probe_offset, _out_batch[_result_rotator].get());
+    _result_rotator++;
+    _result_rotator %= _result_rotator_max;
+  }
+
 private:
+const BenchmarkSettings* _settings;
+  int _image_rotator = 0;
+  int _image_rotator_max = 0;
+  int _result_rotator = 0;
+  int _result_rotator_max = 0;
   TData* _in_ptr;
   TData* _out_ptr;
+  std::unique_ptr<ImageData>  *_in_batch;
+  std::unique_ptr<ResultData>  *_out_batch;
   std::unique_ptr<ImageData> _in_data;
   std::unique_ptr<ResultData> _out_data;
   std::unique_ptr<TInConverter> _in_converter;

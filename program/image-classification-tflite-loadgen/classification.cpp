@@ -112,25 +112,26 @@ public:
       throw format("Unsupported number of classes in graph's output tensor. Supported numbers are %d and %d",
                     settings->num_classes, settings->num_classes+1);
     benchmark->has_background_class = out_classes == settings->num_classes+1;
-
   }
 
   ~Program() {
   }
 
-  bool is_available_batch() {return session? session->get_next_batch(): false; }
+  //bool is_available_batch() {return session? session->get_next_batch(): false; }
 
-  void LoadNextBatch() {
-    session->get_next_batch();
+  void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex>& samples) {
+    session->get_batch(samples);
     benchmark->load_images(session->batch_files());
   }
 
   void InferenceBatch() {
+    benchmark->get_next_image();
     if (interpreter->Invoke() != kTfLiteOk)
       throw "Failed to invoke tflite";
+    benchmark->get_next_result();
   }
 
-  void UnloadBatch() {
+  void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& samples) {
     benchmark->save_results(session->batch_files());
   }
 
@@ -212,16 +213,12 @@ public:
   size_t PerformanceSampleCount() override { return prg->batch_count() * prg->batch_size(); }
 
   void LoadSamplesToRam( const std::vector<mlperf::QuerySampleIndex>& samples) override {
-    
-    prg->LoadNextBatch();
-    
+    prg->LoadNextBatch(samples);
     return;
   }
 
   void UnloadSamplesFromRam( const std::vector<mlperf::QuerySampleIndex>& samples) override {
-    
-    prg->UnloadBatch();
-
+    prg->UnloadBatch(samples);
     return;
   }
 
