@@ -9,7 +9,7 @@
     },
     "lib-mlperf_loadgen": {
       "local": "yes",
-      "name": "MLPerf loadgen library",
+      "name": "MLPerf Inference LoadGen library",
       "sort": 60,
       "tags": "lib,mlperf,loadgen,static"
     },
