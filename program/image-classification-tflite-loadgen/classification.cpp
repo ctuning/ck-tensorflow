@@ -135,8 +135,8 @@ public:
     benchmark->save_results(session->batch_files());
   }
 
-  const int batch_size() {return settings->batch_size; }
-  const int batch_count() {return settings->batch_count; }
+  const int batch_size()  { return settings->batch_size;  }
+  const int batch_count() { return settings->batch_count; }
 
 private:
   BenchmarkSettings *settings;
@@ -175,9 +175,9 @@ public:
     std::vector<mlperf::QuerySampleLatency>  v(size);  
     std::copy (latencies_ns.begin(), latencies_ns.end(), v.begin() );
 
-    cout<< endl << "----------------------------------------";
-    cout<< endl << "|      LATENCIES REPORT(nanosecs)      |";
-    cout<< endl << "----------------------------------------";
+    cout << endl << "--------------------------------";
+    cout << endl << "|  LATENCIES (in nanoseconds)  |";
+    cout << endl << "--------------------------------";
 
     sort(v.begin(), v.end());
     long avg = long(accumulate(v.begin(), v.end(), 0L))/size;
@@ -185,12 +185,12 @@ public:
     int p90 = size * 0.9;
     auto percentile50 = v[p50];
     auto percentile90 = v[p90];
-    cout<< endl << "Min latency: " << v[0];
-    cout<< endl << "Max latency: " << v[size-1];
-    cout<< endl << "Average latency: " << avg;
-    cout<< endl << "Median latency: " << percentile50;
-    cout<< endl << "90 percentile latency: " << percentile90;
-    cout<< endl << "----------------------------------------" << endl;
+    cout << endl << "Min latency: " << v[0];
+    cout << endl << "Max latency: " << v[size-1];
+    cout << endl << "Average latency: " << avg;
+    cout << endl << "Median latency: " << percentile50;
+    cout << endl << "90 percentile latency: " << percentile90;
+    cout << endl << "--------------------------------" << endl;
   }
 
 private:
@@ -236,9 +236,9 @@ void TestSingleStream(Program *prg) {
 
   mlperf::TestSettings ts;
   ts.mode = mlperf::TestMode::PerformanceOnly;
-  ts.min_query_count = 10;
+  ts.min_query_count = prg->batch_count();
   //ts.max_query_count = 20;
-  ts.min_duration_ms = 10000;
+  ts.min_duration_ms = 0;
   //ts.max_duration_ms = 20000;
 
   mlperf::StartTest(&sut, &qsl, ts, log_settings);
