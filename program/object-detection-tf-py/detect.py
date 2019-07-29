@@ -237,7 +237,6 @@ def detect(category_index, func_defs):
     
     # Make TF graph def from frozen graph file
     begin_time = time.time()
-    
     # FIRST HOOK: load graph
     func_defs["load_graph"](params)
     graph_load_time = time.time() - begin_time
@@ -245,7 +244,6 @@ def detect(category_index, func_defs):
 #    print('custom model is: ',CUSTOM_MODEL)
     #SECOND HOOK: get tensors
     tensor_dict, input_tensor = func_defs["get_tensor"]()
-    
     setup_time = time.time() - setup_time_begin
     print ("setup time is",setup_time)
     ###### END SETUP PHASE
@@ -337,9 +335,9 @@ def init(params):
          import tensorRT_hooks
          func_defs["postprocess"] = postprocess_image
          func_defs["preprocess"]  = load_image
-         func_defs["get_tensor"]  = tensorRT_hooks.load_graph_tensorrt
-         func_defs["load_graph"]  = tensorRT_hooks.convert_from_tensorrt
-         func_defs["out_conv"]    = tensorRT_hooks.get_handles_to_tensorsRT
+         func_defs["get_tensor"]  = tensorRT_hooks.get_handles_to_tensorsRT
+         func_defs["load_graph"]  = tensorRT_hooks.load_graph_tensorrt
+         func_defs["out_conv"]    = tensorRT_hooks.convert_from_tensorrt
     else:
       ##custom
       import custom_hooks
