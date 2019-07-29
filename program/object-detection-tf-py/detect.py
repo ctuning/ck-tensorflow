@@ -349,11 +349,12 @@ def init(params):
          func_defs["load_graph"]  = load_graph_traditional
          func_defs["out_conv"]    = no_conv
       else:
+         import custom_tensorRT
          func_defs["postprocess"] = custom_hooks.ck_custom_postprocess
          func_defs["preprocess"]  = custom_hooks.ck_custom_preprocess
-         func_defs["get_tensor"]  = custom_hooks.ck_custom_get_tensors
-         func_defs["load_graph"]  = load_graph_tensorrt
-         func_defs["out_conv"]    = convert_from_tensorrt
+         func_defs["get_tensor"]  = custom_tensorRT.get_handles_to_tensorsRT
+         func_defs["load_graph"]  = custom_tensorRT.load_graph_tensorrt_custom
+         func_defs["out_conv"]    = custom_tensorRT.convert_from_tensorrt
 
   else:
     ##  batch mode
@@ -383,11 +384,12 @@ def init(params):
          func_defs["load_graph"]  = load_graph_traditional
          func_defs["out_conv"]    = no_conv
       else:
+         import custom_tensorRT
          func_defs["postprocess"] = custom_hooks.ck_custom_postprocess_batch
          func_defs["preprocess"]  = custom_hooks.ck_custom_preprocess_batch
-         func_defs["get_tensor"]  = get_handles_to_tensorsRT
-         func_defs["load_graph"]  = load_graph_tensorrt
-         func_defs["out_conv"]    = convert_from_tensorrt
+         func_defs["get_tensor"]  = custom_tensorRT.get_handles_to_tensorsRT
+         func_defs["load_graph"]  = custom_tensorRT.load_graph_tensorrt_custom
+         func_defs["out_conv"]    = custom_tensorRT.convert_from_tensorrt
   return func_defs
 
 
