@@ -263,7 +263,6 @@ def detect(category_index, func_defs):
       
       load_time = time.time() - load_time_begin
       load_time_total += load_time
-      
       # Detect image: common
       detect_time_begin = time.time()
       feed_dict = {input_tensor: image_data}
@@ -379,9 +378,9 @@ def init(params):
          #non tensorRT
          func_defs["postprocess"] = custom_hooks.ck_custom_postprocess_batch
          func_defs["preprocess"]  = custom_hooks.ck_custom_preprocess_batch
-         func_defs["get_tensor"]  = get_handles_to_tensors
+         func_defs["get_tensor"]  = custom_hooks.ck_custom_get_tensors
          func_defs["load_graph"]  = load_graph_traditional
-         func_defs["out_conv"]    = no_conv
+         func_defs["out_conv"]    = no_conv               
       else:
          func_defs["postprocess"] = custom_hooks.ck_custom_postprocess_batch
          func_defs["preprocess"]  = custom_hooks.ck_custom_preprocess_batch
