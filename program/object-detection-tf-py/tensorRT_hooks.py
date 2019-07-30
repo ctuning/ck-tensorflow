@@ -13,7 +13,7 @@ def load_graph_tensorrt(params):
         outputs=['detection_boxes:0','detection_scores:0','detection_classes:0','num_detections:0'],
         max_batch_size=params["BATCH_SIZE"],
         max_workspace_size_bytes=4000000000,
-        precision_mode='FP32')
+        precision_mode=params["TENSORRT_PRECISION"])
   tf.import_graph_def(
         trt_graph,
         return_elements=['detection_boxes:0','detection_scores:0','detection_classes:0','num_detections:0'])
