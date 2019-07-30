@@ -16,7 +16,7 @@ def setup(i):
               self_cfg         - meta of module soft
               ck_kernel        - import CK kernel module (to reuse functions)
 
-              host_os_uoa      - host OS UOApatch code
+              host_os_uoa      - host OS UOA
               host_os_uid      - host OS UID
               host_os_dict     - host OS meta
 
@@ -54,7 +54,8 @@ def setup(i):
 
     full_path = cus.get('full_path','')
     install_dir, model_filename = os.path.split(full_path)
-
+    
+    
     install_env = cus.get('install_env', {})
 
     # Init common variables, they are expected to be set for all models
@@ -68,5 +69,9 @@ def setup(i):
 
     if 'WEIGHTS_FILE' in install_dir:   # optional
       env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
+
+    hosd=i['host_os_dict']
+    winh=hosd.get('windows_base','')
+    env['PYTHONPATH'] = install_dir + ( ';%PYTHONPATH%' if winh=='yes' else ':${PYTHONPATH}')
 
     return {'return': 0, 'bat': ''}

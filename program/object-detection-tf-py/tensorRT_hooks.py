@@ -29,7 +29,7 @@ def convert_from_tensorrt(tmp_output_dict ):
 
 
 
-def get_handles_to_tensorsRT():
+def get_handles_to_tensors_RT():
 
   graph = tf.get_default_graph()
   ops = graph.get_operations()

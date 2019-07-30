@@ -65,6 +65,12 @@
       "sort": 50,
       "tags": "lib,python-package,pillow"
     },
+    "lib-python-opencv": {
+      "local": "yes",
+      "name": "Python opencv library",
+      "sort": 50,
+      "tags": "lib,python-package,cv2"
+    },
     "tool-coco": {
       "local": "yes",
       "name": "Python API for COCO",
