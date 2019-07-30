@@ -286,7 +286,7 @@ public:
     }
   }
 
-  void get_next_image() {
+  void get_next_image() override {
     _in_converter->convert(_in_batch[_image_rotator].get(), _in_ptr);
     _image_rotator++;
     _image_rotator %= _image_rotator_max;
@@ -300,7 +300,7 @@ public:
     }
   }
 
-  void get_next_result() {
+  void get_next_result() override {
     int probe_offset = has_background_class ? 1 : 0;
     _out_converter->convert(_out_ptr + probe_offset, _out_batch[_result_rotator].get());
     _result_rotator++;
