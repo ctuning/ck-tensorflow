@@ -39,7 +39,8 @@ params["ANNOTATIONS_PATH"] = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
 # Program Parameters 
 params["CUSTOM_MODEL"] = int(os.getenv('CK_CUSTOM_MODEL', 0))
 params["WITH_TENSORRT"] = int(os.getenv('CK_ENABLE_TENSORRT', 0))
-params["TENSORRT_PRECISION"] = int(os.getenv('CK_TENSORRT_PRECISION', 'FP32'))
+params["TENSORRT_PRECISION"] = os.getenv('CK_TENSORRT_PRECISION', 'FP32')
+params["TENSORRT_DYNAMIC"] = int(os.getenv('CK_TENSORRT_DYNAMIC', 0))
 params["BATCH_COUNT"] = int(os.getenv('CK_BATCH_COUNT', 1))
 params["BATCH_SIZE"] = int(os.getenv('CK_BATCH_SIZE', 1))
 params["ENABLE_BATCH"] = int(os.getenv('CK_ENABLE_BATCH', 0))
@@ -280,8 +281,8 @@ def detect(category_index, func_defs):
       # FIFTH hook: process results
       func_defs["postprocess"](image_files,iter_num, image_size,original_image,image_data,output_dict, category_index, params)
 
-  if params["FULL_REPORT"]:
-    print('Detected in {:.4f}s'.format(detect_time))
+      if params["FULL_REPORT"]:
+        print('Detected in {:.4f}s'.format(detect_time))
 
   # Save processed images ids list to be able to run
   # evaluation without repeating detections (CK_SKIP_DETECTION=YES)
