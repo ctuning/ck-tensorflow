@@ -1,4 +1,8 @@
+'''
+hooks for using tensorRT with the object detection program.
+names and parameters are defined as required by the detect.py infrastructure.
 
+'''
 
 import tensorflow as tf
 import tensorflow.contrib.tensorrt as trt

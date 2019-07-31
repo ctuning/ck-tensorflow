@@ -58,20 +58,6 @@ params["IMAGE_LIST_FILE"] = 'processed_images_id.json'
 params["TIMER_JSON"] = 'tmp-ck-timer.json'
 params["ENV_JSON"] = 'env.json'
 
-##i dont like this.
-'''this variable is the key that will be used to select the function to call in all the hooks.
- up to now 8 possible configuration have been found:
- 0: classical, with no batch and with model coming from tensorflow zoo
- 1: batched, with model from tensorflow zoo
- 2: custom model, without batch
- 3: custom model, with batch
- 4: classical model, no batch, tensorRT
- 5: classical model, batch, tensorRT
- 6: custom model, no batch, tensorRT
- 7: custom model, batch, tensorRT
-if more will be found, it will be possible to continue the list adding the "boolean" parameter multiplied for an increasing weight.
-a function pointer MUST be provided to the dictionary hooks. some functions can be reused.
-'''
 
 def make_tf_config():
   mem_percent = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 33))
@@ -255,7 +241,7 @@ def detect(category_index, func_defs):
     detect_time_total = 0
     images_processed = 0
     processed_image_ids = []
-    loop_limit = len(image_files) if (params["ENABLE_BATCH"]) == 0 else params["BATCH_COUNT"]  # use odd/even configuration number to know if processing in batch mode or not.
+    loop_limit = len(image_files) if (params["ENABLE_BATCH"]) == 0 else params["BATCH_COUNT"]  #defines loop boundary, that is different if batch or non batch processing are involved. the structure of the loop is however the same.
     for iter_num in range (loop_limit):
  
       load_time_begin = time.time()
@@ -280,8 +266,8 @@ def detect(category_index, func_defs):
       # FIFTH hook: process results
       func_defs["postprocess"](image_files,iter_num, image_size,original_image,image_data,output_dict, category_index, params)
 
-  if params["FULL_REPORT"]:
-    print('Detected in {:.4f}s'.format(detect_time))
+      if params["FULL_REPORT"]:
+        print('Detected in {:.4f}s'.format(detect_time))
 
   # Save processed images ids list to be able to run
   # evaluation without repeating detections (CK_SKIP_DETECTION=YES)
@@ -315,8 +301,77 @@ def no_conv(output_dict):
   return output_dict
 
 
-#### Dictionary hooks: These are the function pointers.
-#Init function. the dictionary approach doesn't work since it wants all the function defined. 
+'''#Init function. the dictionary approach doesn't work since it wants all the function defined. 
+inside the function, all the hooks are actually assigned to the right functions. some functions can be shared between configurations.
+This model supports 8 possible configuration, up to now:
+ 0: classical, with no batch and with model coming from tensorflow zoo
+ 1: batched, with model from tensorflow zoo
+ 2: custom model, without batch
+ 3: custom model, with batch
+ 4: classical model, no batch, tensorRT
+ 5: classical model, batch, tensorRT
+ 6: custom model, no batch, tensorRT
+ 7: custom model, batch, tensorRT
+IMPORTANT: for custom model, is up to the developer to provide implementations of the hook functions, that must be divided into 2 python files.
+the first files must contain the preprocess, postprocess and get_handles_to_tensor functions, and will work without tensorRT
+the second file must provide the tensorRT support, so the get_handles_to_tensor_RT, the convert_from_tensorrt and the load_grap_tensorrt_custom functions must be provided.
+
+Function descriptions and parameters:
+
+-preprocess:
+in charge or preparing the image for the detection. must produce the input tensor and some other helper data.
+	in:
+		image_files          -> list with all the filenames of the image to process, with full path
+		iter_num             -> integer with the loop iteration value
+		processed_image_ids  -> list with the ids of all the processed images, it's an in-out parameter (the function must append to this)
+		params               -> dictionary with the application parameters
+	out:
+		image_data           -> numpy array to be fed to the detection graph (input tensor)
+		processed_image_ids  -> see input parameters
+		image_size           -> [list of] tuple with the sizes. depends if batch is used or not, if not is a single tuple
+		original_image       -> [list of] list containing the original images as read before the modification done in preprocessing. may be useless
+
+-postprocess:
+in charge of producing the output of the detection. must read output tensors and produce the txt file with the detections, and if required the images with the boxes.
+	in:
+		image_files	     -> list with all the filenames of the image to process, with full path
+		iter_num             -> integer with the loop iteration value
+		image_size	     -> [list of] tuple with the sizes. depends if batch is used or not, if not is a single tuple
+		original_image       -> [list of] list containing the original images as read before the modification done in preprocessing. may be useless
+		image_data           -> numpy array to be fed to the detection graph (input tensor)
+		output_dict          -> output tensors. dictionary containing the tensors as "name : value" couples.
+		category_index       -> dictionary to identify label and categories
+		params               -> dictionary with the application parameters
+	out:
+		------
+
+-get_tensors
+in charge of getting the input and output tensors from the model graph.
+	in: 
+		------
+	out:
+		tensor_dict          -> dictionary with the output tensors
+		input_tensor         -> input tensor
+
+
+-out_conv
+in charge of converting the dictionary if tensorRT is used, since output in tensorRT is a list and not a dict
+	in:
+		output_dict          -> output tensors. if tensorRT, is a list containing the output tensors 
+
+	out:
+		output_dict          -> output tensors. dictionary containing the tensors as "name : value" couples.
+
+
+-load_graph:
+in charge of loading the graph from a frozen model.
+	in:
+		params               -> dictionary with the application parameters
+	
+	out:
+		------
+
+'''
 def init(params):
   func_defs = {}
   if params["ENABLE_BATCH"] == 0:
