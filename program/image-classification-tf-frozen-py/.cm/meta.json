@@ -85,7 +85,6 @@
     "CK_RESULTS_DIR": "predictions",
     "CK_SILENT_MODE": 0,
     "CK_SKIP_IMAGES": 0,
-    "CK_SUBTRACT_MEAN": "YES",
     "CK_TMP_IMAGE_SIZE": 0
   },
   "tags": [
