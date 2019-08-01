@@ -1,0 +1,27 @@
+diff --git a/tensorflow/contrib/makefile/Makefile b/tensorflow/contrib/makefile/Makefile
+index 7ea6e34cf5..be903e7ec6 100644
+--- a/tensorflow/contrib/makefile/Makefile
++++ b/tensorflow/contrib/makefile/Makefile
+@@ -812,10 +812,21 @@ all: $(LIB_PATH) $(BENCHMARK_NAME)
+ tensorflow/core/util/version_info.cc: .phony_version_info
+ 	tensorflow/tools/git/gen_git_source.sh $@
+ 
++# The list of objects is too long to pass via command line,
++# so need to pass them to 'ar' with 'xargs' via a file.
++# See https://github.com/ctuning/ck-tensorflow/issues/113
++LIB_OBJS_FILE=/tmp/lib_objs
++
+ # Gathers together all the objects we've compiled into a single '.a' archive.
+ $(LIB_PATH): $(LIB_OBJS)
+ 	@mkdir -p $(dir $@)
+-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS)
++	# Write the list of objects to a file to be passed to 'ar'.
++	# NB: The file function only works with Make v4 (in /usr/bin/),
++	# not with Make v3 (in NDK paths).
++	$(file >$(LIB_OBJS_FILE), $(LIB_OBJS))
++	# NB: Some files in different folders have the same name,
++	# so archiving with the full path option (P).
++	xargs $(AR) $(ARFLAGS)P $(LIB_PATH) < $(LIB_OBJS_FILE)
+ 
+ $(BENCHMARK_NAME): $(BENCHMARK_OBJS) $(LIB_PATH) $(CUDA_LIB_DEPS)
+ 	@mkdir -p $(dir $@)
