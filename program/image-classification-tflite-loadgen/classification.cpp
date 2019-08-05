@@ -134,6 +134,7 @@ public:
   void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& samples) {
     benchmark->save_results(session->batch_files());
     session->empty_batch();
+    std::cout << '.' << std::flush;
   }
 
   const int batch_size()  { return settings->batch_size;  }
