@@ -200,8 +200,9 @@ public:
   }
 
   void get_batch(std::vector<unsigned long> ids) {
-    for (int i = 0; i < ids.size(); i++)
-      _batch_files.emplace_back(_settings->image_list()[i]);
+    for (auto id : ids) {
+      _batch_files.emplace_back(_settings->image_list()[id]);
+    }
   }
 
   const std::vector<std::string>& batch_files() const { return _batch_files; }
