@@ -60,6 +60,7 @@
           "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
           "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"
         ],
+        "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
           "data_uoa": "b98ee24399ef4c3a",
           "module_uoa": "script",
