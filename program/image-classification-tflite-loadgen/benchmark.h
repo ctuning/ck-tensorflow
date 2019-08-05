@@ -195,6 +195,10 @@ public:
 
   virtual ~BenchmarkSession() {}
 
+  void empty_batch() {
+    _batch_files.clear();
+  }
+
   void get_batch(std::vector<unsigned long> ids) {
     for (int i = 0; i < ids.size(); i++)
       _batch_files.emplace_back(_settings->image_list()[i]);
