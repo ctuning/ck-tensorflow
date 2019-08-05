@@ -100,6 +100,7 @@ public:
   const std::string output_layer_name = getenv_s("CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME");
   const int batch_count = getenv_i("CK_BATCH_COUNT");
   const int batch_size = getenv_i("CK_BATCH_SIZE");
+  const int images_in_memory_max = getenv_i("CK_IMAGES_IN_MEMORY_MAX");
   const int image_size = getenv_i("CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE");
   const int num_channels = 3;
   const int num_classes = 1000;
@@ -149,6 +150,7 @@ public:
     std::cout << "Result dir: " << result_dir << std::endl;
     std::cout << "Batch count: " << batch_count << std::endl;
     std::cout << "Batch size: " << batch_size << std::endl;
+    std::cout << "Images in memory max: " << images_in_memory_max << std::endl;
     std::cout << "Normalize: " << normalize_img << std::endl;
     std::cout << "Subtract mean: " << subtract_mean << std::endl;
     if(subtract_mean && given_channel_means_str)

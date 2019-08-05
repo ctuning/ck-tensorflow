@@ -138,6 +138,7 @@ public:
 
   const int batch_size()  { return settings->batch_size;  }
   const int batch_count() { return settings->batch_count; }
+  const int images_in_memory_max() { return settings->images_in_memory_max; }
 
 private:
   BenchmarkSettings *settings;
@@ -211,7 +212,7 @@ public:
 
   size_t TotalSampleCount() override { return prg->batch_count() * prg->batch_size(); }
 
-  size_t PerformanceSampleCount() override { return prg->batch_count() * prg->batch_size(); }
+  size_t PerformanceSampleCount() override { return prg->images_in_memory_max(); }
 
   void LoadSamplesToRam( const std::vector<mlperf::QuerySampleIndex>& samples) override {
     prg->LoadNextBatch(samples);
@@ -236,8 +237,9 @@ void TestSingleStream(Program *prg) {
   log_settings.log_output.prefix_with_datetime = true;
 
   mlperf::TestSettings ts;
-  ts.mode = mlperf::TestMode::PerformanceOnly;
-  ts.min_query_count = prg->batch_count();
+  //ts.mode = mlperf::TestMode::PerformanceOnly;
+  ts.mode = mlperf::TestMode::AccuracyOnly;
+  ts.min_query_count = std::min( prg->batch_count(), prg->images_in_memory_max() );
   //ts.max_query_count = 20;
   ts.min_duration_ms = 0;
   //ts.max_duration_ms = 20000;
