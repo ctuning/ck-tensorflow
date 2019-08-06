@@ -119,21 +119,24 @@ public:
 
   //bool is_available_batch() {return session? session->get_next_batch(): false; }
 
-  void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex>& samples) {
-    session->get_batch(samples);
-    benchmark->load_images(session->batch_files());
+  void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex>& indices) {
+    std::cout << "LoadNextBatch([";
+    for( auto idx : indices) {
+      std::cout << idx << ' ';
+    }
+    std::cout << "])" << std::endl;
+    benchmark->load_images( session->load_filenames(indices) );
   }
 
-  void InferenceBatch() {
+  void InferenceOnce() {
     benchmark->get_next_image();
     if (interpreter->Invoke() != kTfLiteOk)
       throw "Failed to invoke tflite";
     benchmark->get_next_result();
   }
 
-  void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& samples) {
-    benchmark->save_results(session->batch_files());
-    session->empty_batch();
+  void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& indices) {
+    benchmark->save_results( session->current_filenames() );
     std::cout << '.' << std::flush;
   }
 
@@ -161,12 +164,20 @@ public:
   const std::string& Name() const override { return name_; }
 
   void IssueQuery(const std::vector<mlperf::QuerySample>& samples) override {
+
+    std::cout << "IssueQuery([" << samples.size() << "]," << samples[0].id << "," << samples[0].index << ")" << std::endl;
+
+    // Calling the inference engine with our only example
+    prg->InferenceOnce();
+
+    // This is currently a completely fake response, only to satisfy the interface
     std::vector<mlperf::QuerySampleResponse> responses;
     responses.reserve(samples.size());
     for (auto s : samples) {
+//      char foo[] = "1234567890"; // <-- this string will get HEX-encoded and ends up in mlperf_log_{date}_accuracy.json
+//      responses.push_back({s.id, uintptr_t(foo), sizeof(foo)});
       responses.push_back({s.id, 0, 0});
     }
-    prg->InferenceBatch();
     mlperf::QuerySamplesComplete(responses.data(), responses.size());
   }
 
@@ -238,6 +249,10 @@ void TestSingleStream(Program *prg) {
   log_settings.log_output.prefix_with_datetime = true;
 
   mlperf::TestSettings ts;
+  //ts.scenario = mlperf::TestScenario::Offline;
+  ts.scenario = mlperf::TestScenario::SingleStream;
+  //ts.scenario = mlperf::TestScenario::MultiStream;
+
   //ts.mode = mlperf::TestMode::PerformanceOnly;
   ts.mode = mlperf::TestMode::AccuracyOnly;
   ts.min_query_count = std::min( prg->batch_count(), prg->images_in_memory_max() );

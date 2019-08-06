@@ -197,21 +197,23 @@ public:
 
   virtual ~BenchmarkSession() {}
 
-  void empty_batch() {
-    _batch_files.clear();
-  }
+  const std::vector<std::string>& load_filenames(std::vector<unsigned long> indices) {
 
-  void get_batch(std::vector<unsigned long> ids) {
-    for (auto id : ids) {
-      _batch_files.emplace_back(_settings->image_list()[id]);
+    _filenames_buffer.clear();
+    _filenames_buffer.reserve( indices.size() );
+    auto image_list = _settings->image_list();
+    for (auto idx : indices) {
+      _filenames_buffer.emplace_back(image_list[idx]);
     }
+
+    return _filenames_buffer;
   }
 
-  const std::vector<std::string>& batch_files() const { return _batch_files; }
+  const std::vector<std::string>& current_filenames() const { return _filenames_buffer; }
 
 private:
   const BenchmarkSettings* _settings;
-  std::vector<std::string> _batch_files;
+  std::vector<std::string> _filenames_buffer;
 };
 
 //----------------------------------------------------------------------
