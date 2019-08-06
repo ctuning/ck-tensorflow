@@ -27,6 +27,8 @@ params["CUR_DIR"] = os.getcwd()
 
 # Model parameters
 params["FROZEN_GRAPH"] = os.getenv("CK_ENV_TENSORFLOW_MODEL_FROZEN_GRAPH")
+params["DEFAULT_WIDTH"] = int(os.getenv("CK_ENV_TENSORFLOW_MODEL_DEFAULT_WIDTH"))
+params["DEFAULT_HEIGHT"] = int(os.getenv("CK_ENV_TENSORFLOW_MODEL_DEFAULT_HEIGHT"))
 params["LABELMAP_FILE"] = os.getenv("CK_ENV_TENSORFLOW_MODEL_LABELMAP_FILE")
 params["MODEL_DATASET_TYPE"] = os.getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE")
 
@@ -44,8 +46,8 @@ params["TENSORRT_DYNAMIC"] = int(os.getenv('CK_TENSORRT_DYNAMIC', 0))
 params["BATCH_COUNT"] = int(os.getenv('CK_BATCH_COUNT', 1))
 params["BATCH_SIZE"] = int(os.getenv('CK_BATCH_SIZE', 1))
 params["ENABLE_BATCH"] = int(os.getenv('CK_ENABLE_BATCH', 0))
-params["RESIZE_WIDTH_SIZE"] = int(os.getenv('CK_ENV_IMAGE_WIDTH', 416))
-params["RESIZE_HEIGHT_SIZE"] = int(os.getenv('CK_ENV_IMAGE_HEIGHT', 416))
+params["RESIZE_WIDTH_SIZE"] = int(os.getenv('CK_ENV_IMAGE_WIDTH', params["DEFAULT_WIDTH"]))
+params["RESIZE_HEIGHT_SIZE"] = int(os.getenv('CK_ENV_IMAGE_HEIGHT', params["DEFAULT_HEIGHT"]))
 params["SKIP_IMAGES"] = int(os.getenv('CK_SKIP_IMAGES', 0))
 params["SAVE_IMAGES"] = os.getenv("CK_SAVE_IMAGES") == "YES"
 params["METRIC_TYPE"] = (os.getenv("CK_METRIC_TYPE") or params["DATASET_TYPE"]).lower()
@@ -77,6 +79,7 @@ def make_tf_config():
 def load_graph_traditional(params):
 
   graph_def = tf.compat.v1.GraphDef()
+  print ("graph is in: ",params["FROZEN_GRAPH"]) 
   with tf.compat.v1.gfile.GFile(params["FROZEN_GRAPH"], 'rb') as f:
     graph_def.ParseFromString(f.read())
     tf.compat.v1.import_graph_def(graph_def, name='')
@@ -177,6 +180,7 @@ def load_images_batch(image_list,iter_num,processed_image_ids,params):
   for img in range(params["BATCH_SIZE"]):
     image = PIL.Image.open(os.path.join(params["IMAGES_DIR"], image_list[iter_num*params["BATCH_SIZE"]+img]))
     batch_sizes.append(image.size)
+    print ("resizing image to: ", params["RESIZE_WIDTH_SIZE"],params["RESIZE_HEIGHT_SIZE"])
     image = image.resize((params["RESIZE_WIDTH_SIZE"],params["RESIZE_HEIGHT_SIZE"]),PIL.Image.BILINEAR)
     image_id = ck_utils.filename_to_id(image_list[iter_num*params["BATCH_SIZE"]+img], params["DATASET_TYPE"])
     processed_image_ids.append(image_id)

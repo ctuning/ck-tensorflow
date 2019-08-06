@@ -60,6 +60,8 @@ def setup(i):
 
     # Init common variables, they are expected to be set for all models
     env[ep+'_MODEL_NAME'] = install_env['MODEL_NAME']
+    env[ep+'_DEFAULT_HEIGHT'] = install_env['DEFAULT_HEIGHT']
+    env[ep+'_DEFAULT_WIDTH'] = install_env['DEFAULT_WIDTH']
     env[ep+'_DATASET_TYPE'] = install_env['DATASET_TYPE']
     env[ep+'_LABELMAP_FILE'] = os.path.join(install_dir, install_env['LABELMAP_FILE'])
 

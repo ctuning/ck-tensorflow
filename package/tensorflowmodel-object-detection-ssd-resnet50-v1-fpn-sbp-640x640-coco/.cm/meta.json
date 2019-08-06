@@ -3,6 +3,8 @@
   "customize": {
     "extra_dir": "",
     "install_env": {
+      "DEFAULT_WIDTH": "640",
+      "DEFAULT_HEIGHT": "640",
       "DATASET_TYPE": "coco",
       "FROZEN_GRAPH": "frozen_inference_graph.pb",
       "LABELMAP_FILE": "mscoco_label_map.pbtxt",
@@ -40,6 +42,8 @@
   "suggested_path": "tensorflowmodel-object-detection-ssd-resnet50-v1-fpn-sbp-640x640-coco",
   "tags": [
     "tensorflowmodel",
+    "tensorflow",
+    "model",
     "object-detection",
     "ssd",
     "resnet",
