@@ -288,8 +288,6 @@ public:
   Benchmark(const BenchmarkSettings* settings, TData *in_ptr, TData *out_ptr): _settings(settings) {
     _in_ptr = in_ptr;
     _out_ptr = out_ptr;
-    _in_data.reset(new ImageData(settings));
-    _out_data.reset(new ResultData(settings));
     _in_converter.reset(new TInConverter(settings));
     _out_converter.reset(new TOutConverter(settings));
   }
@@ -311,23 +309,20 @@ public:
 
   void get_next_image() override {
     _in_converter->convert(_in_batch[_image_rotator].get(), _in_ptr);
-    _image_rotator++;
-    _image_rotator %= _image_rotator_max;
-  }
-
-  void save_results(const std::vector<std::string>& batch_images) override {
-    int i = 0;
-    for (auto image_file : batch_images) {
-      _out_batch[i]->save(image_file);
-      i++;
-    }
+    _image_rotator = (_image_rotator + 1) % _image_rotator_max;
   }
 
   void get_next_result() override {
     int probe_offset = has_background_class ? 1 : 0;
     _out_converter->convert(_out_ptr + probe_offset, _out_batch[_result_rotator].get());
-    _result_rotator++;
-    _result_rotator %= _result_rotator_max;
+    _result_rotator = (_result_rotator + 1) % _result_rotator_max;
+  }
+
+  void save_results(const std::vector<std::string>& batch_images) override {
+    int i = 0;
+    for (auto image_file : batch_images) {
+      _out_batch[i++]->save(image_file);
+    }
   }
 
 private:
@@ -340,8 +335,6 @@ const BenchmarkSettings* _settings;
   TData* _out_ptr;
   std::unique_ptr<ImageData>  *_in_batch;
   std::unique_ptr<ResultData>  *_out_batch;
-  std::unique_ptr<ImageData> _in_data;
-  std::unique_ptr<ResultData> _out_data;
   std::unique_ptr<TInConverter> _in_converter;
   std::unique_ptr<TOutConverter> _out_converter;
 };
