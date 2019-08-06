@@ -62,12 +62,14 @@
         ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
-          "data_uoa": "b98ee24399ef4c3a",
-          "module_uoa": "script",
-          "script_name": "schindler"
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "schindler"
         },
         "post_process_via_ck": {
-          "script_name":    "postprocess_loadgen"
+          "data_uoa":       "b98ee24399ef4c3a",
+          "module_uoa":     "script",
+          "script_name":    "postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
@@ -105,6 +107,7 @@
     }
   },
   "run_vars": {
+    "CK_LOADGEN_MODE": "YES",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_IMAGES_IN_MEMORY_MAX": 10,
