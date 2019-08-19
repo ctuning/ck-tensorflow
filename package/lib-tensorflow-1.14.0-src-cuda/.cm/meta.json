@@ -5,6 +5,7 @@
     "install_env": {
       "CK_TF_ENABLE_XLA": "NO", 
       "CK_TF_NEED_CUDA": "YES", 
+      "CK_TF_NEED_TENSORRT": "NO", 
       "PACKAGE_GIT": "YES", 
       "PACKAGE_GIT_CHECKOUT": "v1.14.0", 
       "PACKAGE_PATCH": "YES", 

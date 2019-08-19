@@ -28,5 +28,27 @@ cp -f ${CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR}/data/${LABELMAP_FILE} .
 
 #####################################################################
 echo ""
+echo "Copy custom model function hooks implementations ..."
+echo "${ORIGINAL_PACKAGE_DIR}"
+echo "to"
+echo "$PWD"
+
+FILE=${ORIGINAL_PACKAGE_DIR}/custom_hooks.py
+if [ -f "$FILE" ]; then
+    cp -f "$FILE" .
+fi
+
+
+FILE=${ORIGINAL_PACKAGE_DIR}/custom_tensorRT.py
+if [ -f "$FILE" ]; then
+    cp -f "$FILE" .
+fi
+
+#cp -f ${ORIGINAL_PACKAGE_DIR}/custom_hooks.py .
+#cp -f ${ORIGINAL_PACKAGE_DIR}/custom_tensorRT.py .
+
+
+#####################################################################
+echo ""
 echo "Successfully installed '${MODEL_NAME}' TensorFlow model ..."
 exit 0

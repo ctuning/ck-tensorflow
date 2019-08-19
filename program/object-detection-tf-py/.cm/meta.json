@@ -45,7 +45,7 @@
       "local": "yes",
       "name": "TensorFlow Object Detection model",
       "sort": 30,
-      "tags": "model,tf,object-detection,ssd"
+      "tags": "model,tf,object-detection"
     },
     "python": {
       "local": "yes",
@@ -70,6 +70,12 @@
       "name": "Python Pillow library",
       "sort": 50,
       "tags": "lib,python-package,pillow"
+    },
+    "lib-python-opencv": {
+      "local": "yes",
+      "name": "Python opencv library",
+      "sort": 50,
+      "tags": "lib,python-package,cv2"
     },
     "tool-coco": {
       "local": "yes",
