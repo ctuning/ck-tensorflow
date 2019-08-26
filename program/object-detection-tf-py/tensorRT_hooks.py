@@ -25,26 +25,22 @@ def load_graph_tensorrt(params):
         return_elements=['detection_boxes:0','detection_scores:0','detection_classes:0','num_detections:0'])
 
 
+##no more needed
 def convert_from_tensorrt(tmp_output_dict ):
-  output_dict = {}
-  output_dict['num_detections'] = tmp_output_dict[3]
-  output_dict['detection_classes']= tmp_output_dict[2]
-  output_dict['detection_boxes'] = tmp_output_dict[0]
-  output_dict['detection_scores'] = tmp_output_dict[1]
-  return output_dict
+  return tmp_output_dict
 
 
-
+### names of tensors are different from normal TF names, but can be retrieved and a dict with the same shape of the original one can be formed, thus avoiding the conversion after the postprocessing.
+# note that for the tf session, the names are enough and there is no real need to get the tensors.
 def get_handles_to_tensors_RT():
 
   graph = tf.get_default_graph()
-  ops = graph.get_operations()
-  all_tensor_names = {output.name for op in ops for output in op.outputs}
-  return_elements=['import/detection_boxes:0','import/detection_scores:0','import/detection_classes:0','import/num_detections:0']
-  tensor_dict = []
-  for key in return_elements:
-    if key in all_tensor_names:
-      tensor_dict.append(graph.get_tensor_by_name(key))
+  tensor_dict = {}
+  tensor_dict['num_detections'] = graph.get_tensor_by_name('import/num_detections:0')
+  tensor_dict['detection_classes']=graph.get_tensor_by_name( 'import/detection_classes:0')
+  tensor_dict['detection_boxes'] = graph.get_tensor_by_name('import/detection_boxes:0')
+  tensor_dict['detection_scores'] = graph.get_tensor_by_name('import/detection_scores:0')
+
   image_tensor =graph.get_tensor_by_name('import/image_tensor:0')
   return tensor_dict, image_tensor
 
