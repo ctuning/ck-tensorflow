@@ -8,27 +8,41 @@ import numpy as np
 import tensorflow as tf
 
 
+## Model properties:
+#
 MODEL_PATH              = os.environ['CK_ENV_TENSORFLOW_MODEL_TF_FROZEN_FILEPATH']
 INPUT_LAYER_NAME        = os.environ['CK_ENV_TENSORFLOW_MODEL_INPUT_LAYER_NAME']
 OUTPUT_LAYER_NAME       = os.environ['CK_ENV_TENSORFLOW_MODEL_OUTPUT_LAYER_NAME']
-LABELS_PATH             = os.environ['CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
 MODEL_DATA_LAYOUT       = os.environ['ML_MODEL_DATA_LAYOUT']
+IMAGE_SIZE              = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE'))
+LABELS_PATH             = os.environ['CK_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
 
+## Image normalization:
+#
 MODEL_NORMALIZE_DATA    = os.getenv("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA") in ('YES', 'yes', 'ON', 'on', '1')
-MODEL_MEAN_VALUE        = np.array([0, 0, 0], dtype=np.float32) # to be populated
-BATCH_COUNT             = int(os.getenv('CK_BATCH_COUNT', 1))
-BATCH_SIZE              = int(os.getenv('CK_BATCH_SIZE', 1))
-BATCHED_VOLUME          = BATCH_COUNT * BATCH_SIZE
+SUBTRACT_MEAN           = os.getenv("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN") in ('YES', 'yes', 'ON', 'on', '1')
+GIVEN_CHANNEL_MEANS     = os.getenv("ML_MODEL_GIVEN_CHANNEL_MEANS", '')
+if GIVEN_CHANNEL_MEANS:
+    GIVEN_CHANNEL_MEANS = np.array(GIVEN_CHANNEL_MEANS.split(' '), dtype=np.float32)
 
+## Input image properties:
+#
 IMAGE_DIR               = os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR')
 IMAGE_LIST              = os.path.join(IMAGE_DIR, os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF'))
 IMAGE_DATA_TYPE         = np.dtype( os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE', 'uint8') )
+
+## Writing the results out:
+#
 RESULT_DIR              = os.getenv('CK_RESULTS_DIR')
-SUBTRACT_MEAN           = os.getenv("CK_SUBTRACT_MEAN") in ('YES', 'yes', 'ON', 'on', '1')
-USE_MODEL_MEAN          = os.getenv("CK_USE_MODEL_MEAN") in ('YES', 'yes', 'ON', 'on', '1')
-IMAGE_SIZE              = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE'))
 FULL_REPORT             = os.getenv('CK_SILENT_MODE', '0') in ('NO', 'no', 'OFF', 'off', '0')
+
+## Processing in batches:
+#
+BATCH_COUNT             = int(os.getenv('CK_BATCH_COUNT', 1))
+BATCH_SIZE              = int(os.getenv('CK_BATCH_SIZE', 1))
+BATCHED_VOLUME          = BATCH_COUNT * BATCH_SIZE
 SUBSET_VOLUME           = int(os.getenv('CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_VOLUME') or '0') or BATCHED_VOLUME
+
 
 if BATCHED_VOLUME > SUBSET_VOLUME:
     print('*'*30)
@@ -54,10 +68,10 @@ def load_preprocessed_batch(image_list, image_index):
 
             # Subtract mean value
             if SUBTRACT_MEAN:
-                if USE_MODEL_MEAN:
-                    img = img - MODEL_MEAN_VALUE
+                if len(GIVEN_CHANNEL_MEANS):
+                    img -= GIVEN_CHANNEL_MEANS
                 else:
-                    img = img - np.mean(img)
+                    img -= np.mean(img)
 
         # Add img to batch
         batch_data.append( [img] )
@@ -106,7 +120,7 @@ def main():
     print('Result dir: ' + RESULT_DIR);
     print('Normalize: {}'.format(MODEL_NORMALIZE_DATA))
     print('Subtract mean: {}'.format(SUBTRACT_MEAN))
-    print('Use model mean: {}'.format(USE_MODEL_MEAN))
+    print('Per-channel means to subtract: {}'.format(GIVEN_CHANNEL_MEANS))
 
     labels = load_labels(LABELS_PATH)
     num_labels = len(labels)

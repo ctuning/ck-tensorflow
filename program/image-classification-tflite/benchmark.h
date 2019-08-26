@@ -15,6 +15,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include <string.h>
 #include <thread>
@@ -123,9 +124,18 @@ public:
   const int num_classes = 1000;
   const bool normalize_img = getenv_s("CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA") == "YES";
   const bool subtract_mean = getenv_s("CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN") == "YES";
+  const char *given_channel_means_str = getenv("ML_MODEL_GIVEN_CHANNEL_MEANS");
+
   const bool full_report = getenv_i("CK_SILENT_MODE") == 0;
 
   BenchmarkSettings(enum MODEL_TYPE mode = MODEL_TYPE::LITE) {
+
+    if(given_channel_means_str) {
+        std::stringstream ss(given_channel_means_str);
+        for(int i=0;i<3;i++){
+            ss >> given_channel_means[i];
+        }
+    }
 
     switch (mode)
     {
@@ -160,6 +170,10 @@ public:
     std::cout << "Batch size: " << batch_size << std::endl;
     std::cout << "Normalize: " << normalize_img << std::endl;
     std::cout << "Subtract mean: " << subtract_mean << std::endl;
+    if(subtract_mean && given_channel_means_str)
+        std::cout << "Per-channel means to subtract: " << given_channel_means[0]
+            << ", " << given_channel_means[1]
+            << ", " << given_channel_means[2] << std::endl;
 
     // Create results dir if none
     auto dir = opendir(result_dir.c_str());
@@ -184,6 +198,8 @@ public:
   int number_of_threads() { return _number_of_threads; }
 
   std::string graph_file() { return _graph_file; }
+
+  float given_channel_means[3];
 private:
   int _number_of_threads;
   std::string _graph_file;
@@ -432,7 +448,10 @@ public:
 class InNormalize : public IinputConverter {
 public:
   InNormalize(const BenchmarkSettings* s):
-    _normalize_img(s->normalize_img), _subtract_mean(s->subtract_mean) {
+    _normalize_img(s->normalize_img),
+    _subtract_mean(s->subtract_mean),
+    _given_channel_means(s->given_channel_means),
+    _num_channels(s->num_channels) {
   }
   
   void convert(const ImageData* source, void* target) {
@@ -448,15 +467,22 @@ public:
     }
     // Subtract mean value if required
     if (_subtract_mean) {
-      float mean = sum / static_cast<float>(source->size());
-      for (int i = 0; i < source->size(); i++)
-        float_target[i] -= mean;
+        if(_given_channel_means) {
+            for (int i = 0; i < source->size(); i++)
+                float_target[i] -= _given_channel_means[i % _num_channels];    // assuming NHWC order!
+        } else {
+            float mean = sum / static_cast<float>(source->size());
+            for (int i = 0; i < source->size(); i++)
+                float_target[i] -= mean;
+        }
     }
   }
 
 private:
   const bool _normalize_img;
   const bool _subtract_mean;
+  const float *_given_channel_means;
+  const int _num_channels;
 };
 
 //----------------------------------------------------------------------

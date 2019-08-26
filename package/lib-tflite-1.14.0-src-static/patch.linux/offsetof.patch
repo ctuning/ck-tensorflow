@@ -1,14 +1,8 @@
 diff --git a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
-index 5b570eed18..4fc381d56f 100644
+index 5b570eed18..5ec283464e 100644
 --- a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
 +++ b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
-@@ -1,4 +1,5 @@
- /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
-+ *
- 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
-@@ -80,6 +81,7 @@ namespace depthwise_conv {
+@@ -80,6 +80,7 @@ namespace depthwise_conv {
  #define OFFSET_OUTPUT_WIDTH 84
  #define OFFSET_OUTPUT_HEIGHT 88
  
@@ -16,7 +10,7 @@ index 5b570eed18..4fc381d56f 100644
  static_assert(offsetof(DepthwiseConvParams, input_depth) == OFFSET_INPUT_DEPTH,
                "");
  static_assert(offsetof(DepthwiseConvParams, input_row_size) ==
-@@ -132,6 +134,7 @@ static_assert(offsetof(DepthwiseConvParams, output_width) ==
+@@ -132,6 +133,7 @@ static_assert(offsetof(DepthwiseConvParams, output_width) ==
  static_assert(offsetof(DepthwiseConvParams, output_height) ==
                    OFFSET_OUTPUT_HEIGHT,
                "");
@@ -24,7 +18,7 @@ index 5b570eed18..4fc381d56f 100644
  #endif  // __aarch64__
  #endif  // ARM NEON
  
-@@ -186,6 +189,7 @@ static_assert(offsetof(DepthwiseConvParams, output_height) ==
+@@ -186,6 +188,7 @@ static_assert(offsetof(DepthwiseConvParams, output_height) ==
  //
  #define DP_OFFSET_FOUR_OVER_STRIDE DP_OFFSET_WORKSPACE_HEIGHT_STRIDE + 4
  
@@ -32,7 +26,7 @@ index 5b570eed18..4fc381d56f 100644
  static_assert(offsetof(DepthwiseConvDotProdParams, input_depth) ==
                    DP_OFFSET_INPUT_DEPTH,
                "");
-@@ -285,6 +289,7 @@ static_assert(offsetof(DepthwiseConvDotProdParams, workspace_height_stride) ==
+@@ -285,6 +288,7 @@ static_assert(offsetof(DepthwiseConvDotProdParams, workspace_height_stride) ==
  static_assert(offsetof(DepthwiseConvDotProdParams, four_over_stride) ==
                    DP_OFFSET_FOUR_OVER_STRIDE,
                "");
