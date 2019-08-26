@@ -56,7 +56,8 @@ def load_image_list(images_dir, images_count, skip_images):
   assert os.path.isdir(images_dir), 'Input dir does not exit'
   files = [f for f in os.listdir(images_dir) if os.path.isfile(os.path.join(images_dir, f))]
   files = [f for f in files if re.search(r'\.jpg$', f, re.IGNORECASE)
-                            or re.search(r'\.jpeg$', f, re.IGNORECASE)]
+                            or re.search(r'\.jpeg$', f, re.IGNORECASE)
+                            or re.search(r'\.png$', f, re.IGNORECASE)]
   assert len(files) > 0, 'Input dir does not contain image files'
   files = sorted(files)[skip_images:]
   assert len(files) > 0, 'Input dir does not contain more files'
