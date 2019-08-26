@@ -6,9 +6,9 @@
     "install_env": {
       "IMAGE_DIR": "training/image_2",
       "KITTI_IMAGES_ARCHIVE": "data_object_image_2.zip",
-      "KITTI_IMAGES_URL": "http://kitti.is.tue.mpg.de/kitti/data_object_image_2.zip",
+      "KITTI_IMAGES_URL": "https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip",
       "KITTI_LABELS_ARCHIVE": "data_object_label_2.zip",
-      "KITTI_LABELS_URL": "http://kitti.is.tue.mpg.de/kitti/data_object_label_2.zip",
+      "KITTI_LABELS_URL": "https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip",
       "LABELS_DIR": "training/label_2"
     },
     "no_os_in_suggested_path": "yes",
