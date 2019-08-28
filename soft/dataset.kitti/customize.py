@@ -74,10 +74,11 @@ def setup(i):
     tbits=tosd.get('bits','')
 
     env=i['env']
-
     pi=os.path.dirname(fp)
     p1=os.path.dirname(pi)
     p2=os.path.dirname(p1)
+    p3=os.path.dirname(p2)
+    dirname=os.path.basename(p2)
 
     ep=cus.get('env_prefix','')
 
@@ -85,7 +86,8 @@ def setup(i):
 
     if cus.get('params',{}).get('min','')=='yes':
       full_path = p1
-
+    elif dirname == 'data_object_image_2':
+      full_path = p3
     image_dir =  cus.get('install_env', '').get('IMAGE_DIR', '')
     labels_dir =  cus.get('install_env', '').get('LABELS_DIR', '')
 
