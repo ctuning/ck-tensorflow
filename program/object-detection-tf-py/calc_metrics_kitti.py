@@ -23,9 +23,9 @@ def load_groundtruth(file_path, class_name_to_id_map):
   with open(file_path, 'r') as f:
     for line in f:
       gt = ck_utils.Groundtruth(line)
-      if gt.class_name in class_name_to_id_map.keys():
+      if gt.class_name.lower() in class_name_to_id_map.keys():
         boxes.append([gt.x1, gt.y1, gt.x2, gt.y2])
-        classes.append(class_name_to_id_map[gt.class_name])
+        classes.append(class_name_to_id_map[gt.class_name.lower()])
   if boxes:
     return {
       gt_field.groundtruth_boxes: np.array(boxes),
@@ -64,7 +64,7 @@ def evaluate(results_dir, annotations_dir,labelmap,processed_img_ids):
   cat_names = {}
   for cat in category_index:
     cat_list.append(category_index[cat])
-    cat_names[category_index[cat]['name']] = category_index[cat]['id']
+    cat_names[category_index[cat]['name'].lower()] = category_index[cat]['id']
 
   total_dets_count = 0
   total_gts_count = 0
@@ -72,17 +72,27 @@ def evaluate(results_dir, annotations_dir,labelmap,processed_img_ids):
 
 
   valu = evaluator(cat_list)
-#### build groundtruth dict
-  
+### use annotation dir to check if is drive or not
+  is_drive = False
+  if 'drive' in annotations_dir:
+    print ("DRIVE DATASET")
+    is_drive = True
+
+ #### build groundtruth dict
   for img in processed_img_ids:
-    filepath = os.path.join(annotations_dir ,"{:010d}.txt".format(int(img)))
-    #print (filepath)
+    if is_drive:
+      filepath = os.path.join(annotations_dir ,"{:010d}.txt".format(int(img)))
+    else:
+      filepath = os.path.join(annotations_dir ,"{:06d}.txt".format(int(img)))
     gts = load_groundtruth(filepath, cat_names)
     if not gts:
       not_found_gts.append(img)
       continue 
     #print (gts[gt_field.groundtruth_boxes], gts[gt_field.groundtruth_classes])          
-    det_file = os.path.join(results_dir,"{:010d}.txt".format(int(img)))
+    if is_drive:
+      det_file = os.path.join(results_dir ,"{:010d}.txt".format(int(img)))
+    else:
+      det_file = os.path.join(results_dir ,"{:06d}.txt".format(int(img)))
     #print(det_file)
     dets = load_detections(det_file)
 
