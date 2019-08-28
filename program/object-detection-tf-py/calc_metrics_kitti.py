@@ -123,4 +123,3 @@ def evaluate(results_dir, annotations_dir,labelmap,processed_img_ids):
   recall = 'N/A' 
   return mAP, recall, all_metrics
 
-  raise Exception('KITTI evaluation is not implemented yet (TBD)')

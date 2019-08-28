@@ -36,7 +36,7 @@ params["MODEL_DATASET_TYPE"] = os.getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE")
 params["IMAGES_DIR"] = os.getenv("CK_ENV_DATASET_IMAGE_DIR")
 params["DATASET_TYPE"] = os.getenv("CK_ENV_DATASET_TYPE")
 # Annotations can be a directory or a single file, depending on dataset type
-params["ANNOTATIONS_PATH"] = os.getenv("CK_ENV_DATASET_ANNOTATIONS",'N/A')
+params["ANNOTATIONS_PATH"] = os.getenv("CK_ENV_DATASET_ANNOTATIONS",'')
 
 # Program Parameters 
 params["CUSTOM_MODEL"] = int(os.getenv('CK_CUSTOM_MODEL', 0))
