@@ -5,7 +5,8 @@
     "force_ask_path": "yes",
     "install_env": {
       "IMAGE_DIR": "image_02/data",
-      "LABELS_DIR": "label_02/resnet101",
+      "LABELS_DIR_COMMENT": "A placeholder dir for annotations synthesized by a high-quality network.",
+      "LABELS_DIR": "label_02/annotations",
       "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
       "PACKAGE_SKIP_CLEAN_OBJ": "YES",
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
