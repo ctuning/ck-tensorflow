@@ -36,7 +36,7 @@ params["MODEL_DATASET_TYPE"] = os.getenv("CK_ENV_TENSORFLOW_MODEL_DATASET_TYPE")
 params["IMAGES_DIR"] = os.getenv("CK_ENV_DATASET_IMAGE_DIR")
 params["DATASET_TYPE"] = os.getenv("CK_ENV_DATASET_TYPE")
 # Annotations can be a directory or a single file, depending on dataset type
-params["ANNOTATIONS_PATH"] = os.getenv("CK_ENV_DATASET_ANNOTATIONS")
+params["ANNOTATIONS_PATH"] = os.getenv("CK_ENV_DATASET_ANNOTATIONS",'N/A')
 
 # Program Parameters 
 params["CUSTOM_MODEL"] = int(os.getenv('CK_CUSTOM_MODEL', 0))
@@ -222,6 +222,7 @@ def detect(category_index, func_defs):
   ck_utils.prepare_dir(params["DETECTIONS_OUT_DIR"])
 
   # Load processing image filenames
+
   image_files = ck_utils.load_image_list(params["IMAGES_DIR"], params["BATCH_COUNT"]*params["BATCH_SIZE"], params["SKIP_IMAGES"])
 
   with tf.compat.v1.Graph().as_default(), tf.compat.v1.Session(config=tf_config) as sess:
