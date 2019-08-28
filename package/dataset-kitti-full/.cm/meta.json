@@ -17,7 +17,7 @@
   },
   "deps": {},
   "end_full_path": {
-    "linux": "training/image_2/000000.png",
+    "linux": "data_object_image_2/training/image_2/000000.png",
     "win": "training/image_2/000000.png"
   },
   "need_cpu_info": "no",

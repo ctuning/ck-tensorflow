@@ -54,6 +54,12 @@ if [ "${?}" != "0" ] ; then
 fi
 rm ${KITTI_LABELS_ARCHIVE}
 
+mkdir data_object_image_2
+mkdir data_object_image_2/training
+cd data_object_image_2/training
+ln -s ../../training/image_2 image_2  
+## training/image_2/ data_object_image_2/training/image_2
+
 #####################################################################
 echo ""
 echo "Successfully installed ${KITTI_NAME} ..."
