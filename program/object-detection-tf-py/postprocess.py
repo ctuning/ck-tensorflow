@@ -16,14 +16,10 @@ with open(ENV_JSON, 'r') as f:
   ENV = json.load(f)
 for path in ENV['PYTHONPATH'].split(':'):
   sys.path.insert(0, path)
-print (__file__)
 sys.path.append(os.path.dirname(__file__))
-#CUR_DIR = os.getcwd()
-#sys.path.append(os.path.dirname(CUR_DIR))
 
 # Silence a warning (https://github.com/tensorflow/models/issues/3786)
 import matplotlib; matplotlib.use('Agg')
-print ("before imports")
 import ck_utils
 import converter_results
 import converter_annotations
@@ -31,7 +27,6 @@ import calc_metrics_kitti
 import calc_metrics_coco
 import calc_metrics_oid
 from object_detection.utils import label_map_util
-print ("after imports")
 
 LABELMAP_FILE = ENV['LABELMAP_FILE']
 MODEL_DATASET_TYPE = ENV['MODEL_DATASET_TYPE']
@@ -47,7 +42,6 @@ IMAGE_LIST_FILE = ENV['IMAGE_LIST_FILE']
 TIMER_JSON = ENV['TIMER_JSON']
 
 def ck_postprocess(i):
-  print ("entry point")
   def evaluate(processed_image_ids, categories_list):
     # Convert annotations from original format of the dataset
     # to a format specific for a tool that will calculate metrics
