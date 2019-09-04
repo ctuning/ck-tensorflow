@@ -1,0 +1,16 @@
+{
+  "backup_data_uid": "a5f546bface09bd8",
+  "backup_module_uid": "1dc07ee0f4742028",
+  "backup_module_uoa": "package",
+  "control": {
+    "engine": "CK",
+    "iso_datetime": "2019-08-28T11:44:46.886149",
+    "version": [
+      "1",
+      "9",
+      "8",
+      "1"
+    ]
+  },
+  "data_name": "dataset-kitti-drive-0019"
+}

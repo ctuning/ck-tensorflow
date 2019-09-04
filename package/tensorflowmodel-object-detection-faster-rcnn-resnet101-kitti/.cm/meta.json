@@ -4,6 +4,8 @@
     "extra_dir": "",
     "install_env": {
       "DATASET_TYPE": "kitti",
+      "DEFAULT_WIDTH": "1987",
+      "DEFAULT_HEIGHT": "600",
       "FROZEN_GRAPH": "frozen_inference_graph.pb",
       "LABELMAP_FILE": "kitti_label_map.pbtxt",
       "MODEL_NAME": "Faster-RCNN-ResNet101 for KITTI",
@@ -45,7 +47,9 @@
     "resnet",
     "resnet101",
     "vkitti",
-    "channel-stable"
+    "channel-stable",
+    "model",
+    "tensorflow"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "c412930408fb8271",

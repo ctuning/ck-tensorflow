@@ -16,12 +16,10 @@ with open(ENV_JSON, 'r') as f:
   ENV = json.load(f)
 for path in ENV['PYTHONPATH'].split(':'):
   sys.path.insert(0, path)
-CUR_DIR = os.getcwd()
-sys.path.append(os.path.dirname(CUR_DIR))
+sys.path.append(os.path.dirname(__file__))
 
 # Silence a warning (https://github.com/tensorflow/models/issues/3786)
 import matplotlib; matplotlib.use('Agg')
-
 import ck_utils
 import converter_results
 import converter_annotations
@@ -44,7 +42,6 @@ IMAGE_LIST_FILE = ENV['IMAGE_LIST_FILE']
 TIMER_JSON = ENV['TIMER_JSON']
 
 def ck_postprocess(i):
-
   def evaluate(processed_image_ids, categories_list):
     # Convert annotations from original format of the dataset
     # to a format specific for a tool that will calculate metrics
@@ -67,12 +64,17 @@ def ck_postprocess(i):
 
     # Run evaluation tool
     print('\nEvaluate metrics as {} ...'.format(METRIC_TYPE))
+
+    print(processed_image_ids, results, annotations)
     if METRIC_TYPE == ck_utils.COCO:
       mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_pycocotools(processed_image_ids, results, annotations)
     elif METRIC_TYPE == ck_utils.COCO_TF:
       mAP, recall, all_metrics = calc_metrics_coco.evaluate_via_tf(categories_list, results, annotations, FULL_REPORT)
     elif METRIC_TYPE == ck_utils.OID:
       mAP, _, all_metrics = calc_metrics_oid.evaluate(results, annotations, LABELMAP_FILE, FULL_REPORT)
+      recall = 'N/A'
+    elif METRIC_TYPE == ck_utils.KITTI:
+      mAP, _, all_metrics = calc_metrics_kitti.evaluate(DETECTIONS_OUT_DIR, annotations, LABELMAP_FILE, processed_image_ids)
       recall = 'N/A'
 
     else:

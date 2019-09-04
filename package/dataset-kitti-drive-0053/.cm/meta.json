@@ -6,23 +6,23 @@
     "install_env": {
       "IMAGE_DIR": "image_02/data",
       "LABELS_DIR_COMMENT": "A placeholder dir for annotations synthesized by a high-quality network.",
-      "LABELS_DIR": "label_02/annotations",
-      "PACKAGE_NAME": "2011_09_26_drive_0009_sync.zip",
+      "LABELS_DIR": "label_02/annotations",    
+      "PACKAGE_NAME": "2011_09_28_drive_0053_sync.zip",
       "PACKAGE_SKIP_CLEAN_OBJ": "YES",
       "PACKAGE_SKIP_CLEAN_SRC_DIR": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_UNZIP": "YES",
-      "PACKAGE_URL": "http://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0009",
+      "PACKAGE_URL": "http://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_28_drive_0053",
       "PACKAGE_WGET": "YES"
     },
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "no",
-    "version": "drive-0009"
+    "version": "drive-0053"
   },
   "deps": {},
   "end_full_path": {
-    "linux": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png",
-    "win": "2011_09_26/2011_09_26_drive_0009_sync/image_00/data/0000000000.png"
+    "linux": "2011_09_28/2011_09_28_drive_0053_sync/image_00/data/0000000000.png",
+    "win": "2011_09_28/2011_09_28_drive_0053_sync/image_00/data/0000000000.png"
   },
   "need_cpu_info": "no",
   "process_script": "install",
@@ -33,14 +33,14 @@
     "val",
     "kitti",
     "drive",
-    "drive-0009",
+    "drive-0053",
     "continuous",
     "kitti-drive",
-    "kitti-drive-0009",
+    "kitti-drive-0053",
     "kitti-continuous",
     "KITTI",
     "KITTI-drive",
-    "KITTI-drive-0009",
+    "KITTI-drive-0053",
     "KITTI-continuous",
     "channel-stable"
   ],

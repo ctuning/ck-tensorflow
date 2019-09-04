@@ -81,10 +81,10 @@ fi
 
 if [ "$CK_TF_NEED_TENSORRT" == "YES" ] ; then  
   export TF_NEED_TENSORRT=1
-  echo "CUDA enabled"
+  echo "TENSORRT enabled"
 else
   export TF_NEED_TENSORRT=0
-  echo "CUDA disabled"
+  echo "TENSORRT disabled"
 fi  
 
 if [ "$CK_TF_ENABLE_XLA" == "YES" ] ; then
