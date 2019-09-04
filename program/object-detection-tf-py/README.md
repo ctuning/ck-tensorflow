@@ -185,7 +185,7 @@ However, we want to be more flexible, and we provide a mechanism, through the `C
 Indeed, the kernel of the detection is structured to have some function calls (defined in the `func_defs` dictionary). These function to call are selected in the `init` function, according to the setup of the application. In particular this function uses three parameters, `CK_ENABLE_BATCH`, `CK_CUSTOM_MODEL` and `CK_ENABLE_TENSORRT` to associate the function call with the implementation of that call.
 
 If someone wish to add a model that has a different structure from the tensorflow zoo, it is possible to do so by writing the appropriate functions.
-These function MUST be included in the ck package that is created to support the model, in two files with names `custom_hooks.py` and `custom_tensorRT.py`. the names and parameters have to be coherent with the names and parameters in the program. An example of these function is provided in the `yolo` package.
+These function MUST be included in the ck package that is created to support the model, in two files with names `custom_hooks.py` and `custom_tensorRT.py`. the names and parameters have to be coherent with the names and parameters in the program. An example of these function is provided in the [`yolo`](https://github.com/ctuning/ck-object-detection/tree/master/package/yolo-v3) package.
 
 
 
