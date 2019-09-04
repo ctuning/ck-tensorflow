@@ -47,7 +47,8 @@
     "resnet",
     "resnet101",
     "vkitti",
-    "channel-stable"
+    "channel-stable",
+    "model"
   ],
   "use_scripts_from_another_entry": {
     "data_uoa": "c412930408fb8271",
