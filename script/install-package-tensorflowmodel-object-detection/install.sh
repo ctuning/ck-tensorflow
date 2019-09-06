@@ -24,7 +24,9 @@ rm -rf tmp
 #####################################################################
 echo ""
 echo "Copy label-map file ..."
-cp -f ${CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR}/data/${LABELMAP_FILE} .
+
+cp -f ${CK_ENV_LABELMAP_FILE} .
+
 
 #####################################################################
 echo ""
