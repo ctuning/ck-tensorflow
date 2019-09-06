@@ -116,7 +116,7 @@ def load_image(image_files,iter_num,processed_image_ids,params):
   # Make batch from single image
   im_height, im_width, _ = image.shape
   batch_shape = (1, im_height, im_width, 3)
-  batch_data = image.reshape(batch_shape) ##TODO check
+  batch_data = image.reshape(batch_shape) 
   return batch_data,processed_image_ids,(im_width, im_height),orig_image
 
 
@@ -155,7 +155,6 @@ def save_detection_img(image_file, image_np, output_dict, category_index,params)
 
 def postprocess_image(image_files, iter_num, image_size,dummy, image_data,output_dict, category_index,params):
   # All outputs are float32 numpy arrays, so convert types as appropriate
-  # TODO: implement batched mode (0 here is the image index in the batch)
   output_dict['num_detections'] = int(output_dict['num_detections'][0])
   output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
   output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
@@ -183,7 +182,7 @@ def load_images_batch(image_list,iter_num,processed_image_ids,params):
     batch_data.append(img_data)
   return batch_data,processed_image_ids,batch_sizes,image_id #last value is not needed actually.
 
-
+#TODO make the save_detection_img able to resize to the original dimensions
 def postprocess_batch(image_files, iter_num, image_size,dummy, image_data,output_dict, category_index,params):
 
   for img in range(params["BATCH_SIZE"]):
