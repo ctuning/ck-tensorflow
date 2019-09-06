@@ -12,8 +12,7 @@ import json
 import numpy as np
 import shutil
 import time
-import PIL
-
+import cv2
 import ck_utils
 
 import tensorflow as tf
@@ -110,20 +109,15 @@ def load_image(image_files,iter_num,processed_image_ids,params):
   image_id = ck_utils.filename_to_id(image_file, params["DATASET_TYPE"])
   processed_image_ids.append(image_id)
   image_path = os.path.join(params["IMAGES_DIR"], image_file)
-  image = PIL.Image.open(image_path)
-  # Check if not RGB and convert to RGB
-  if image.mode != 'RGB':
-    image = image.convert('RGB')
-
-  # Convert to NumPy array
-  img_data = np.array(image.getdata())
-  img_data = img_data.astype(np.uint8)
-
+  img = cv2.imread(image_path)
+  orig_image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+  # Load to numpy array, separately from original image
+  image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.uint8)
   # Make batch from single image
-  (im_width, im_height) = image.size
+  im_height, im_width, _ = image.shape
   batch_shape = (1, im_height, im_width, 3)
-  batch_data = img_data.reshape(batch_shape)
-  return batch_data,processed_image_ids,image.size,image
+  batch_data = image.reshape(batch_shape) ##TODO check
+  return batch_data,processed_image_ids,(im_width, im_height),orig_image
 
 
 def save_detection_txt(image_file, image_size, output_dict, category_index, params):
@@ -155,8 +149,7 @@ def save_detection_img(image_file, image_np, output_dict, category_index,params)
       category_index,
       use_normalized_coordinates=True,
       line_thickness=2)
-  image = PIL.Image.fromarray(image_np)
-  image.save(os.path.join(params["IMAGES_OUT_DIR"], image_file))
+  cv2.imwrite(os.path.join(params["IMAGES_OUT_DIR"],image_file),cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
 
 
 
@@ -178,22 +171,18 @@ def load_images_batch(image_list,iter_num,processed_image_ids,params):
   batch_data = []
   batch_sizes = []
   for img in range(params["BATCH_SIZE"]):
-    image = PIL.Image.open(os.path.join(params["IMAGES_DIR"], image_list[iter_num*params["BATCH_SIZE"]+img]))
-    batch_sizes.append(image.size)
-    print ("resizing image to: ", params["RESIZE_WIDTH_SIZE"],params["RESIZE_HEIGHT_SIZE"])
-    image = image.resize((params["RESIZE_WIDTH_SIZE"],params["RESIZE_HEIGHT_SIZE"]),PIL.Image.BILINEAR)
+    img_rd = cv2.imread(os.path.join(params["IMAGES_DIR"], image_list[iter_num*params["BATCH_SIZE"]+img]))
+    
+    image = cv2.cvtColor(img_rd, cv2.COLOR_BGR2RGB).astype(np.uint8)
+    im_height, im_width, _ = image.shape
+    batch_sizes.append((im_width, im_height))
+    image = cv2.resize(image,(params["RESIZE_WIDTH_SIZE"],params["RESIZE_HEIGHT_SIZE"]))
     image_id = ck_utils.filename_to_id(image_list[iter_num*params["BATCH_SIZE"]+img], params["DATASET_TYPE"])
     processed_image_ids.append(image_id)
-
-    # Check if not RGB and convert to RGB
-    if image.mode != 'RGB':
-      image = image.convert('RGB')
-    # Convert to NumPy array
-    img_data = np.array(image.getdata())
-    img_data = img_data.astype(np.uint8)
-    img_data = img_data.reshape((params["RESIZE_HEIGHT_SIZE"],params["RESIZE_WIDTH_SIZE"],3))
+    img_data = image.reshape((params["RESIZE_HEIGHT_SIZE"],params["RESIZE_WIDTH_SIZE"],3))
     batch_data.append(img_data)
   return batch_data,processed_image_ids,batch_sizes,image_id #last value is not needed actually.
+
 
 def postprocess_batch(image_files, iter_num, image_size,dummy, image_data,output_dict, category_index,params):
 

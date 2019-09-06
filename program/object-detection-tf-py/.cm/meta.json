@@ -65,12 +65,6 @@
       "sort": 45,
       "tags": "lib,python-package,matplotlib"
     },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Python Pillow library",
-      "sort": 50,
-      "tags": "lib,python-package,pillow"
-    },
     "lib-python-opencv": {
       "local": "yes",
       "name": "Python opencv library",
