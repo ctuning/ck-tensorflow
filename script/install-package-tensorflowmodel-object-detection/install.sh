@@ -23,12 +23,9 @@ rm -rf tmp
 
 #####################################################################
 echo ""
-#old version, based on the labelmaps from tf api folder
-#echo "Copy label-map file ..."
-#cp -f ${CK_ENV_TENSORFLOW_MODELS_OBJ_DET_DIR}/data/${LABELMAP_FILE} .
+echo "Copy label-map file ..."
 
-#new version, with labelmaps as packages
-cp -f ${CK_ENV_LABELMAP_LABELMAP_FILE} .
+cp -f ${CK_ENV_LABELMAP_FILE} .
 
 
 #####################################################################
