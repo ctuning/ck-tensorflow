@@ -73,9 +73,6 @@ Available models characteristics
 | [faster\_rcnn\_resnet101](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) | `resnet101,vkitti` | 0 | kitti |
  
  
-
-
-
 ### Datasets
 ```bash
 $ ck install package --tags=dataset,object-detection
@@ -95,7 +92,7 @@ $ ck show env --tags=dataset,coco
 ## Running
 
 ```bash
-$ ck run object-detection-tf-py
+$ ck run program:object-detection-tf-py
 ```
 
 ### Program parameters
@@ -103,16 +100,18 @@ $ ck run object-detection-tf-py
 #### `CK_CUSTOM_MODEL`
 
 Specifies if the model comes from the TensorFlow zoo or from another source.
-Model coming from other sources need to have some functions reimplemented. More on this is explained in [Support for custom models](#custom_models) section.
+A model from somewhere else needs to have some functions reimplemented, as explained [below](#custom_models).
 
 Possible values: `0,1`
 Default: `0`
+
 #### `CK_ENABLE_BATCH`
 Specifies if the image batch processing feature has to be activated or not.
 
 Possible values: `0,1`
 Default: `0`
-#### `CK_BATCH_COUNT`, `CK_BATCH_COUNT`
+
+#### `CK_BATCH_SIZE`, `CK_BATCH_COUNT`
 
 The number of images to be processed in a single batch, and the number of batches to process. The total number of images processed is the product of these two parameters.
 
@@ -121,7 +120,7 @@ Default: `1`
 
 #### `CK_ENABLE_TENSORRT`
 
-Enables the TensorRT backend (if the installed tensorflow library supports it. Up to now, only the source installation, with CUDA support, with the flag `--env.CK_TF_NEED_TENSORRT="YES"` is supporting this feature).
+Enables the TensorRT backend if the installed TensorFlow library supports it. (Currently, build TensorFlow with CUDA support from sources with the `--env.CK_TF_NEED_TENSORRT="YES"` flag.)
 
 Possible values: `0,1`
 Default: `0`
@@ -135,7 +134,7 @@ Default: `0`
 
 #### `CK_ENV_IMAGE_WIDTH`, `CK_ENV_IMAGE_HEIGHT`
 
-These parameters can be used to resize at runtime the input images to a different size than the default for the model. This usually decreases the accuracy. 
+These parameters can be used to resize at runtime the input images to a different size than the default for the model. This usually decreases the accuracy.
  
 Possible values: `any positive integer`
 Default:  `Model-specific (set by CK)`
@@ -154,13 +153,13 @@ The way to calculate metrics.
 Available values:
 
 ##### `KITTI` 
-Use the evaluation method from  [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) for Pascal VOC, adapted to the KITTI dataset.
+Use the evaluation method from the [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) for Pascal VOC, adapted to the KITTI dataset.
 
 ##### `COCO`
 Use the evaluation method from the official [MSCOCO evaluation protocol](http://cocodataset.org/#detections-eval) implemented as the CK package `ck-env:package:tool-coco`. Default for `dataset-coco-*`.
 
 ##### `COCO_TF`
-Use the evaluation method from [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) implemented as the CK package `ck-tensorflow:package:tensorflowmodel-api`.
+Use the evaluation method from the [TF models repository](https://github.com/tensorflow/models/tree/master/research/object_detection/metrics) implemented as the CK package `ck-tensorflow:package:tensorflowmodel-api`.
 
 ##### `VOC` (**TBD**)
 Default for `dataset-voc-*`
