@@ -176,17 +176,91 @@ Percentage of the GPU memory used by the program
 Possible values: `any integer between 1 and 100`
 Default: `33`
 
-<a name="custom_models"></a>
-## Support for custom models
 
-The application is structured to work with the models coming from the [tensorflow zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md). For this reason, the tensor names and shapes are fixed in a function (`get_handles_to_tensors()`) and also preprocessing and postprocessing are written in order to match the structures for these networks.
-However, we want to be more flexible, and we provide a mechanism, through the `CK_CUSTOM_MODEL` parameter, to have the common tensorflow backend working also with models that are not coming from the official TF zoo.
+<a name="add_models"></a>
+## Add new models
+
+Thanks to the standardization made by Google in the zoo and to the CK framework, it is really easy to integrate a new model from the zoo into the application. 
+If you want to add a new model from the zoo, the easiest way to do that it is to copy, using ck, a package containing a model, and to change some parameters inside the .cm/meta.json file.
+
+` ck cp ck-object-detection:package:model-tf-faster-rcnn-nas-coco #your_CK_repo_name#:package:#your_network_name# `
+
+
+Then inside the meta.json, you will need to change the references like model names, url, tags and so on. The most important changes to do are in the install\_env section and in the tags section, and are reported in the snippet as follows. You will need to replace anything between two hash (#)
+`
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "extra_dir": "",
+    "install_env": {
+      "DATASET_TYPE": "coco",
+      "DEFAULT_WIDTH": “#your model image width#",
+      "DEFAULT_HEIGHT": "#your model image height#",
+      "FROZEN_GRAPH": "frozen_inference_graph.pb", 
+      "LABELMAP_FILE": "mscoco_label_map.pbtxt",
+      "MODEL_NAME": "#your model name#",
+      "PACKAGE_NAME": "#your model tarball#.tar.gz",
+      "PACKAGE_NAME1": "#your model tarball without extension#",
+      "PACKAGE_URL": "#url of the package#",
+      "PIPELINE_CONFIG": "pipeline.config",
+      "WEIGHTS_FILE": "model.ckpt"
+    },
+    "model_id": "#model_id#",
+    "no_os_in_suggested_path": "yes",
+    "no_ver_in_suggested_path": "yes",
+    "version": "reference"
+  },
+  "deps": {
+    "labelmap": {
+      "local": "yes",
+      "name": "Labelmap for COCO dataset",
+      "tags": "labelmap,vcoco"
+    }
+  },
+  "end_full_path": {
+    "linux": "frozen_inference_graph.pb"
+  },
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " #Model Name# ",
+  "process_script": "install",
+  "soft_uoa": "3fc0c4b9ba63de2f",
+  "suggested_path": "#model-installation-path#",
+  "tags": [
+    "object-detection",
+    "model",
+    "tf",
+    "tensorflow",
+    "#model#,
+    "#related#,
+    "#tags#,
+    "vcoco"
+  ],
+  "use_scripts_from_another_entry": {
+    "data_uoa": "c412930408fb8271",
+    "module_uoa": "script"
+  }
+}
+`
+
+<a name="custom_models"></a>
+### Support for custom models
+However, if the model has been created with different input/output tensors, you will have to provide to the application some functions. 
+Indeed, the application is structured to work with the models coming from the [tensorflow zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md). For this reason, the tensor names and shapes are fixed in a function (`get_handles_to_tensors()`) and also preprocessing and postprocessing are written in order to match the structures for these networks.
+However, since we want to be more flexible, we provide a mechanism, through the `CK_CUSTOM_MODEL` parameter, to have the common tensorflow backend working also with models that are not coming from the official TF zoo.
 Indeed, the kernel of the detection is structured to have some function calls (defined in the `func_defs` dictionary). These function to call are selected in the `init` function, according to the setup of the application. In particular this function uses three parameters, `CK_ENABLE_BATCH`, `CK_CUSTOM_MODEL` and `CK_ENABLE_TENSORRT` to associate the function call with the implementation of that call.
 
 If someone wish to add a model that has a different structure from the tensorflow zoo, it is possible to do so by writing the appropriate functions.
-These function MUST be included in the ck package that is created to support the model, in two files with names `custom_hooks.py` and `custom_tensorRT.py`. the names and parameters have to be coherent with the names and parameters in the program. An example of these function is provided in the [`yolo`](https://github.com/ctuning/ck-object-detection/tree/master/package/yolo-v3) package.
+These function MUST be included in the ck package that is created to support the model, in two files with names `custom_hooks.py` and `custom_tensorRT.py`. the names and parameters have to be coherent with the names and parameters in the program.
+An example of these function is provided in the [`yolo`](https://github.com/ctuning/ck-object-detection/tree/master/package/yolo-v3) package.
+To add a new custom model, we suggest to start again from an already existing package (in this case the yolo-v3) to have the infrastructure ready.
 
+` ck cp ck-object-detection:package:model-tf-yolo-v3-coco #your_CK_repo_name#:package:#your_network_name# `
 
+After the copy, you should edit the meta.json file as reported above.
 
-
-
+Once this is done, the user can follow the README in the yolo package, to see the interface of the required functions that he will have to implement.
