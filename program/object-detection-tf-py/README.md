@@ -1,84 +1,85 @@
-# TensorFlow object-detection program
+# TensorFlow program for Object Detection
 
-## Pre-requisites
+## Installation
 
-### Repositories
+### Obtain repositories
 
 ```bash
 $ ck pull repo:ck-tensorflow
 ```
 
-### TensorFlow
+### Install TensorFlow
 
-Install from source:
+Install TensorFlow v1.14 from source (built with Bazel):
 ```bash
-$ ck install package:lib-tensorflow-1.14.0-src-{cpu,cuda}
+$ ck install package --tags=lib,tensorflow,v1.14,vsrc,vcpu
 ```
-or from a binary `x86_64` package:
+or from a binary `x86_64` package (installed via `pip`):
 ```bash
-$ ck install package:lib-tensorflow-1.14.0-{cpu,cuda}
+$ ck install package --tags=lib,tensorflow,v1.14,vprebuilt,vcpu
 ```
+Replace `vcpu` with `vcuda` to install TensorFlow with GPU support.
 
-Or you can choose from different available version of TensorFlow packages:
+Or you can choose interactively from any available version of TensorFlow:
 ```bash
 $ ck install package --tags=lib,tensorflow
 ```
 
-### TensorFlow models
+### Install TensorFlow models
 ```bash
-$ ck install ck-tensorflow:package:tensorflowmodel-api
+$ ck install package --tags=tensorflow,model,api
 ```
 
 Install one or more object detection model package:
 ```bash
-$ ck install package --tags=tensorflow,model,object-detection
+$ ck install package --tags=model,tf,object-detection --no_tags=deprecated
 
- 0) tensorflowmodel-object-detection-ssd-resnet50-v1-fpn-sbp-640x640-coco  Version 20180703  (09baac5e6f931db2)
- 1) tensorflowmodel-object-detection-faster-rcnn-resnet101-kitti  Version 20170714  (36131254c4390390)
- 2) yolo-v3  Version reference  (804598aedce689d7)
- 3) ssdlite-mobilenet-v2-kitti  Version reference  (45ed13bcc31c47b6)
- 4) ssdlite-mobilenet-v2  Version reference  (4214ad911ef4c27d)
- 5) ssd-mobilenetv1-fpn-shared-box-predictor  Version reference  (eddc13966e0464f9)
- 6) ssd-inception-v2  Version reference  (b52f64ae9aede4dd)
+More than one package or version found:
+
+ 0) model-tf-ssd-resnet50-fpn-coco  Version 20180703  (09baac5e6f931db2)
+ 1) model-tf-faster-rcnn-resnet101-kitti  Version 20170714  (36131254c4390390)
+ 2) model-tf-yolo-v3-coco  Version reference  (804598aedce689d7)
+ 3) model-tf-ssdlite-mobilenetv2-kitti  Version reference  (45ed13bcc31c47b6)
+ 4) model-tf-ssdlite-mobilenetv2-coco  Version reference  (4214ad911ef4c27d)
+ 5) model-tf-ssd-mobilenetv1-fpn-coco  Version reference  (eddc13966e0464f9)
+ 6) model-tf-ssd-inceptionv2-coco  Version reference  (b52f64ae9aede4dd)
  7) model-tf-mlperf-ssd-mobilenet-quantized-finetuned  Version finetuned  (9e5de6f4f46b0da0)
  8) model-tf-mlperf-ssd-mobilenet  Version reference  (4134959be0eb9044)
- 9) faster-rcnn_inception-resnet_v2-atrous-lowproposal  Version reference  (827991e9114dc991)
-10) faster-rcnn-resnet50-lowproposal  Version reference  (640458144a59763d)
-11) faster-rcnn-resnet101-lowproposal  Version reference  (38551054ceabf2e2)
-12) faster-rcnn-nas-lowproposal-kitti  Version reference  (b34f0bb0f9ebe5b9)
-13) faster-rcnn-nas-lowproposal  Version reference  (7bb51088c44c2b80)
-14) faster-rcnn-nas  Version reference  (ec32e4a0ead6dfad)
-15) faster-rcnn-inception-v2  Version reference  (c3513486696387c2)
-
+ 9) model-tf-faster-rcnn-resnet50-lowproposals-coco  Version reference  (640458144a59763d)
+10) model-tf-faster-rcnn-resnet101-lowproposals-coco  Version reference  (38551054ceabf2e2)
+11) model-tf-faster-rcnn-nas-lowproposals-kitti  Version reference  (b34f0bb0f9ebe5b9)
+12) model-tf-faster-rcnn-nas-lowproposals-coco  Version reference  (7bb51088c44c2b80)
+13) model-tf-faster-rcnn-nas-coco  Version reference  (ec32e4a0ead6dfad)
+14) model-tf-faster-rcnn-inceptionv2-coco  Version reference  (c3513486696387c2)
+15) model-tf-faster-rcnn-inception-resnetv2-atrous-lowproposals-coco  Version reference  (827991e9114dc991)
 ```
-Available models characteristics
 
-
-| Model | Unique CK Tags (`<tags>`) | Is Custom? | Dataset |
-| --- | --- | --- | --- |
-| [faster\_rcnn\_resnet50\_lowproposals\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)  | `rcnn,lowproposal,resnet50`  | 0 | coco |
-| [faster\_rcnn\_resnet101\_lowproposals\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) | `rcnn,lowproposal,resnet101` | 0 | coco |
-| [faster\_rcnn\_nas\_lowproposals\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)       | `rcnn,lowproposal,nas,vcoco` | 0 | coco |
-| [faster\_rcnn\_nas\_lowproposals\_kitti](TBD)       | `rcnn,lowproposal,nas,vkitti`      | 0 | kitti |
-| [faster\_rcnn\_inception\_resnet\_v2\_atrous\_lowproposals\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) | `rcnn,lowproposal,inception,resnetv2` | 0 | coco |
-| [faster\_rcnn\_inception\_v2\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)           | `rcnn,inceptionv2`           | 0 | coco |
-| [ssd\_mobilenet\_v1\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)            | `ssd-mobilenet,non-quantized,mlperf` | 0 | coco |
-| [ssd\_mobilenet\_v1\_quantized\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) | `ssd-mobilenet,quantized`            | 0 | coco |
-| [ssd\_mobilenet\_v1\_fpn\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)       | `ssd,fpn`                            | 0 | coco |
-| [ssd\_resnet\_50\_fpn\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)          | `ssd,resnet50`                       | 0 | coco |
-| [ssd\_inception\_v2\_coco ](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)           | `ssd,inceptionv2`                    | 0 | coco |
-| [ssdlite\_mobilenet\_v2\_coco](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)        | `ssdlite,vcoco`                      | 0 | coco |
-| [ssdlite\_mobilenet\_v2\_coco](TBD)        | `ssdlite,vkitti`                     | 0 | kitti |
-| [yolo\_v3\_coco](https://github.com/YunYang1994/tensorflow-yolov3)                                                                             | `yolo`                               | 1 | coco |
-| [faster\_rcnn\_resnet101](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) | `resnet101,vkitti` | 0 | kitti |
+Models with the `coco` suffix are trained on the [COCO dataset](http://cocodataset.org/). See more information on their accuracy and CK packages [here](https://github.com/ctuning/ck-object-detection/tree/master/docker/object-detection-tf-py.tensorrt.ubuntu-18.04#models). Models with the `kitti` suffix are trained or finetuned on the [KITTI dataset](http://www.cvlibs.net/datasets/kitti/).
  
  
-### Datasets
+### Install datasets
+
+#### COCO
 ```bash
-$ ck install package --tags=dataset,object-detection
+$ ck install package --tags=dataset,object-detection,coco
+
+More than one package or version found:
+
+ 0) dataset-coco-2017-val  Version 2017  (04622c746f287473)
+ 1) dataset-coco-2014-val  Version 2014  (4330ea8a9b47ac90)
 ```
 
-**NB:** If you have previously installed the `coco` or `kitti` datasets, you should probably renew them:
+#### KITTI
+```bash
+$ ck install package --tags=dataset,object-detection,kitti
+
+More than one package or version found:
+ 0) KITTI (min)  Version min  (ed443ec82e60b5b5)
+ 1) KITTI (full)  Version full  (afb43a918fa8758c)
+```
+
+**NB:** If you have installed the COCO or KITTI datasets a while ago,
+you should probably renew them:
 ```bash
 $ ck refresh env:{dataset-env-uoa}
 ```
@@ -89,8 +90,7 @@ $ ck show env --tags=dataset,coco
 ```
 
 
-## Running
-
+## Run the program
 ```bash
 $ ck run program:object-detection-tf-py
 ```
@@ -174,7 +174,7 @@ If the parameter is not set, then the tool specific for the selected dataset wil
 Percentage of the GPU memory used by the program
 
 Possible values: `any integer between 1 and 100`
-Default: `33`
+Default: `50`
 
 
 <a name="add_models"></a>
