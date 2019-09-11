@@ -11,5 +11,5 @@
       "5"
     ]
   },
-  "data_name": "tensorflowmodel-object-detection-faster-rcnn-resnet101-kitti"
+  "data_name": "model-tf-faster-rcnn-resnet101-kitti"
 }
