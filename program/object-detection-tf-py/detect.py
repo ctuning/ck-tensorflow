@@ -62,7 +62,7 @@ params["ENV_JSON"] = 'env.json'
 
 
 def make_tf_config():
-  mem_percent = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 33))
+  mem_percent = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 50))
   num_processors = int(os.getenv('CK_TF_CPU_NUM_OF_PROCESSORS', 0))
 
   config = tf.compat.v1.ConfigProto()
