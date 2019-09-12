@@ -272,7 +272,7 @@ as illustrated below (you need to update anything in angular brackets `<...>`):
 ### Adding a custom model
 
 The easiest way to add a new custom model is to create a copy of an existing custom model package
-e.g. [YOLO-v3](https://github.com/ctuning/ck-object-detection/tree/master/package/yolo-v3):
+e.g. [YOLO-v3](https://github.com/ctuning/ck-object-detection/blob/master/package/model-tf-yolo-v3-coco):
 ```
 $ ck cp ck-object-detection:package:model-tf-yolo-v3-coco <repo_name>:package:<model_name>
 ```
