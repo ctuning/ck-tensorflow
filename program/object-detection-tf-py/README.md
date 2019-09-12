@@ -1,8 +1,19 @@
 # TensorFlow program for Object Detection
 
-## Installation
+1. [Setup](#setup)
+2. [Usage](#usage)
+3. [Adding new models](#add_models)
+    - [standardized](#add_model_zoo) (from the [TF model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md))
+    - [custom](#add_model_custom)
 
-### Obtain repositories
+<a name="setup"></a>
+## Setup
+
+### Install CK
+
+Please follow the [CK installation instructions](https://github.com/ctuning/ck#installation).
+
+### Pull CK repositories
 
 ```bash
 $ ck pull repo:ck-tensorflow
@@ -89,8 +100,10 @@ $ ck show env --tags=dataset,kitti
 $ ck show env --tags=dataset,coco
 ```
 
+<a name="usage"></a>
+## Usage
 
-## Run the program
+### Run the program
 ```bash
 $ ck run program:object-detection-tf-py
 ```
@@ -99,8 +112,8 @@ $ ck run program:object-detection-tf-py
 
 #### `CK_CUSTOM_MODEL`
 
-Specifies if the model comes from the TensorFlow zoo or from another source.
-A model from somewhere else needs to have some functions reimplemented, as explained [below](#custom_models).
+Specifies if the model comes from the TF model zoo or from another source.
+A model from somewhere else needs to have some functions reimplemented, as explained [below](#add_model_custom).
 
 Possible values: `0,1`
 Default: `0`
@@ -176,36 +189,45 @@ Percentage of the GPU memory used by the program
 Possible values: `any integer between 1 and 100`
 Default: `50`
 
-
 <a name="add_models"></a>
-## Add new models
+## Adding new models
 
-Thanks to the standardization made by Google in the zoo and to the CK framework, it is really easy to integrate a new model from the zoo into the application. 
-If you want to add a new model from the zoo, the easiest way to do that it is to copy, using ck, a package containing a model, and to change some parameters inside the .cm/meta.json file.
+The program works with TF models represented as CK packages with tags `model,tf,object-detection`.
+Essentially, each package contains JSON metadata and possibly some files.
+[Adding a standardized model from the TF model zoo](#add_model_zoo) is straightforward,
+while [adding a custom model](#add_model_custom) is a bit more involved.
 
-` ck cp ck-object-detection:package:model-tf-faster-rcnn-nas-coco #your_CK_repo_name#:package:#your_network_name# `
+<a name="add_model_zoo"></a>
+### Adding standardized models from the zoo
 
+The easiest way to add a new standardized model is to create a copy of an existing package e.g.:
+```
+$ ck cp ck-object-detection:package:model-tf-faster-rcnn-nas-coco <repo_name>:package:<model_name>
+```
+and then update `.cm/meta.json` in the copy. 
 
-Then inside the meta.json, you will need to change the references like model names, url, tags and so on. The most important changes to do are in the install\_env section and in the tags section, and are reported in the snippet as follows. You will need to replace anything between two hash (#)
-`
+The most important changes to do are in the `install_env` and `tags` sections
+as illustrated below (you need to update anything in angular brackets `<...>`):
+
+```
 {
   "check_exit_status": "yes",
   "customize": {
     "extra_dir": "",
     "install_env": {
       "DATASET_TYPE": "coco",
-      "DEFAULT_WIDTH": “#your model image width#",
-      "DEFAULT_HEIGHT": "#your model image height#",
+      "DEFAULT_WIDTH": “<your model image width>",
+      "DEFAULT_HEIGHT": "<your model image height>",
       "FROZEN_GRAPH": "frozen_inference_graph.pb", 
       "LABELMAP_FILE": "mscoco_label_map.pbtxt",
-      "MODEL_NAME": "#your model name#",
-      "PACKAGE_NAME": "#your model tarball#.tar.gz",
-      "PACKAGE_NAME1": "#your model tarball without extension#",
-      "PACKAGE_URL": "#url of the package#",
+      "MODEL_NAME": "<your model name>",
+      "PACKAGE_NAME": "<your model tarball>.tar.gz",
+      "PACKAGE_NAME1": "<your model tarball without extension>",
+      "PACKAGE_URL": "<url of the package>",
       "PIPELINE_CONFIG": "pipeline.config",
       "WEIGHTS_FILE": "model.ckpt"
     },
-    "model_id": "#model_id#",
+    "model_id": "<model id>",
     "no_os_in_suggested_path": "yes",
     "no_ver_in_suggested_path": "yes",
     "version": "reference"
@@ -226,18 +248,17 @@ Then inside the meta.json, you will need to change the references like model nam
   "only_for_target_os_tags": [
     "linux"
   ],
-  "package_extra_name": " #Model Name# ",
+  "package_extra_name": " (Object Detection <your model name>)",
   "process_script": "install",
   "soft_uoa": "3fc0c4b9ba63de2f",
-  "suggested_path": "#model-installation-path#",
+  "suggested_path": "<your model installation path>",
   "tags": [
     "object-detection",
     "model",
     "tf",
     "tensorflow",
-    "#model#,
-    "#related#,
-    "#tags#,
+    "<model tags>",
+    "<other tags>,
     "vcoco"
   ],
   "use_scripts_from_another_entry": {
@@ -245,12 +266,13 @@ Then inside the meta.json, you will need to change the references like model nam
     "module_uoa": "script"
   }
 }
-`
+```
 
-<a name="custom_models"></a>
-### Support for custom models
+<a name="add_model_custom"></a>
+### Adding custom models
+
 However, if the model has been created with different input/output tensors, you will have to provide to the application some functions. 
-Indeed, the application is structured to work with the models coming from the [tensorflow zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md). For this reason, the tensor names and shapes are fixed in a function (`get_handles_to_tensors()`) and also preprocessing and postprocessing are written in order to match the structures for these networks.
+Indeed, the application is structured to work with the models coming from the [tensorflow zoo]. For this reason, the tensor names and shapes are fixed in a function (`get_handles_to_tensors()`) and also preprocessing and postprocessing are written in order to match the structures for these networks.
 However, since we want to be more flexible, we provide a mechanism, through the `CK_CUSTOM_MODEL` parameter, to have the common tensorflow backend working also with models that are not coming from the official TF zoo.
 Indeed, the kernel of the detection is structured to have some function calls (defined in the `func_defs` dictionary). These function to call are selected in the `init` function, according to the setup of the application. In particular this function uses three parameters, `CK_ENABLE_BATCH`, `CK_CUSTOM_MODEL` and `CK_ENABLE_TENSORRT` to associate the function call with the implementation of that call.
 
