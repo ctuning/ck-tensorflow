@@ -201,7 +201,7 @@ def get_raw_data(i):
                 model = weights_env.get('CK_ENV_TENSORFLOW_MODEL_TFLITE_FILENAME', 'v%d-%.2f-%d' % (version, multiplier, resolution))
 
                 # Dataset.
-                dataset_imagenet_val = pipeline_data_raw['dependencies'].get('imagenet-val',{}).get('dict',{}).get('env',{}).get('CK_ENV_DATASET_IMAGENET_VAL', '')
+                dataset_imagenet_val = pipeline_data_raw['dependencies'].get('images',{}).get('dict',{}).get('env',{}).get('CK_ENV_DATASET_IMAGENET_VAL', '')
                 dataset = ''
                 if 'val-min-resized' in dataset_imagenet_val:
                     dataset = 'val-min-resized'

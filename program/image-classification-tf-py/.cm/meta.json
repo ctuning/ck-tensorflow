@@ -35,7 +35,7 @@
       "sort": 30,
       "tags": "dataset,imagenet,aux"
     },
-    "imagenet-val": {
+    "images": {
       "force_target_as_host": "yes",
       "local": "yes",
       "name": "ImageNet dataset (val)",
