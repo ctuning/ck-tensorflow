@@ -35,7 +35,7 @@ matrix:
           osx_image: xcode9.2
           language: generic
           python:   3.6
-          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.4.0
+          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.5.0
         - os: osx
           osx_image: xcode9.2
           language: generic
