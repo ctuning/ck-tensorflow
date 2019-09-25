@@ -2,6 +2,8 @@
 #   http://lint.travis-ci.org/
 
 os:         linux
+dist:       xenial
+sudo:       false
 language:   python
 
 python:
@@ -30,13 +32,15 @@ matrix:
           python:   2.7
           env:      WANTED_PYTHON_VERSION=2.7 TF_PREBUILT_VERSION=1.8.0
         - os: osx
+          osx_image: xcode9.2
           language: generic
-          python:   3.7
-          env:      WANTED_PYTHON_VERSION=3.7 TF_PREBUILT_VERSION=1.4.0
+          python:   3.6
+          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.4.0
         - os: osx
+          osx_image: xcode9.2
           language: generic
-          python:   3.7
-          env:      WANTED_PYTHON_VERSION=3.7 TF_PREBUILT_VERSION=1.8.0
+          python:   3.6
+          env:      WANTED_PYTHON_VERSION=3.6 TF_PREBUILT_VERSION=1.8.0
         - os: linux
           language: python
           python:   2.7
@@ -49,25 +53,29 @@ matrix:
 before_install:
     - |
         if [ $TRAVIS_OS_NAME == "osx" ]; then
-            brew update                                                         # this swaps python versions and makes 3 the default one
+
+            export SUDOH="sudo"
 
             if [ "$WANTED_PYTHON_VERSION" == "2.7" ]; then
+                brew update                                                     # this swaps python versions and makes 3 the default one
                 brew reinstall python\@2 || brew link --overwrite python\@2     # install and link python2 and pip2 to /usr/local/bin
                 export PATH=/usr/local/opt/python\@2/bin:$PATH
                 export PYTHON_EXE=python
-            else
-                brew reinstall python                                           # install and link python3 and pip3 to /usr/local/bin
-                export PATH=/usr/local/opt/python/bin:$PATH
+            elif [ "$WANTED_PYTHON_VERSION" == "3.6" ]; then
+                curl https://www.python.org/ftp/python/3.6.8/python-3.6.8-macosx10.9.pkg -s -o /tmp/python.pkg
+                ${SUDOH} installer -pkg /tmp/python.pkg -target /
+                ls -l /Library/Frameworks/Python.framework/Versions/3.6/bin
+                export PATH=/Library/Frameworks/Python.framework/Versions/3.6/bin:$PATH
                 export PYTHON_EXE=python3
+            else
+                echo "Other MacOS Pythons are not supported at the moment"
             fi
 
             export CK_PLATFORM_NAME="generic-macos "                            # used later by CK
         else
-            sudo apt-get update -qq
-            sudo apt-get install python-pip
             export WANTED_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION                 # since Python is supported in Linux, get it from Travis
-            export CK_PLATFORM_NAME="generic-linux "                            # used later by CK (note the trailing space to make the choice unique)
             export PYTHON_EXE=python
+            export CK_PLATFORM_NAME="generic-linux "                            # used later by CK (note the trailing space to make the choice unique)
         fi
 
 install:
@@ -77,16 +85,17 @@ install:
     - echo "CWD=${CWD}, THIS_REPO_NAME=${THIS_REPO_NAME}, PATH=${PATH}"
     - which ${PYTHON_EXE}
     - ${PYTHON_EXE} --version
-    - ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools  # make sure pip is also up to date no matter what
-    - ${PYTHON_EXE} -m pip install -r requirements.txt                          # ck kernel itself and some essential components
-    - ck pull repo:${THIS_REPO_NAME}                                            # ...also trigger pulling dependent repositories
-    - ck pull repo:ck-mlperf                                                    # a cyclic dependency that we don't want to create at this point
-    - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init   # set the platform to generic-linux (1) or generic-macos (2)
-    -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`    # pick the one Travis has set for us in the PATH
-    -       ck install package:imagenet-2012-aux                                # one part of ImageNet
-    -       ck install package:imagenet-2012-val-min-resized                    # another part of ImageNet
-    -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py          # model for TF
-    -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu        # prebuilt TF package
+    - rm -f `which pip`                                                             # the file is removable, but not writeable
+    - ${SUDOH} ${PYTHON_EXE} -m pip install --ignore-installed --verbose pip setuptools # make sure pip is also up to date no matter what
+    - ${PYTHON_EXE} -m pip install -r requirements.txt                              # ck kernel itself and some essential components
+    - ck pull repo:${THIS_REPO_NAME}                                                # ...also trigger pulling dependent repositories
+    - ck pull repo:ck-mlperf                                                        # a cyclic dependency that we don't want to create at this point
+    - echo "$CK_PLATFORM_NAME" | ck detect platform.os --update_platform_init       # set the platform to generic-linux (1) or generic-macos (2)
+    -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`        # pick the one Travis has set for us in the PATH
+    -       ck install package:imagenet-2012-aux                                    # one part of ImageNet
+    -       ck install package:imagenet-2012-val-min-resized                        # another part of ImageNet
+    -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py              # model for TF
+    -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu            # prebuilt TF package
     -       ck install package --tags=lib,python-package,numpy                          # to prevent confusion with pre-installed version on Macs @ Travis
     -       ck install package --tags=lib,python-package,scipy --force_version=1.2.1    # to prevent confusion with pre-installed version on Macs @ Travis
     -       ck install package --tags=lib,python-package,pillow                         # to prevent confusion with pre-installed version on Macs @ Travis
