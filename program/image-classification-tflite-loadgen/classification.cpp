@@ -128,11 +128,11 @@ public:
     benchmark->load_images( session->load_filenames(indices) );
   }
 
-  void InferenceOnce() {
+  int InferenceOnce() {
     benchmark->get_next_image();
     if (interpreter->Invoke() != kTfLiteOk)
       throw "Failed to invoke tflite";
-    benchmark->get_next_result();
+    return benchmark->get_next_result();
   }
 
   void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& indices) {
@@ -168,7 +168,8 @@ public:
     std::cout << "IssueQuery([" << samples.size() << "]," << samples[0].id << "," << samples[0].index << ")" << std::endl;
 
     // Calling the inference engine with our only example
-    prg->InferenceOnce();
+    int predicted_class = prg->InferenceOnce();
+    std::cout << "Predicted class: " << predicted_class << std::endl;
 
     // This is currently a completely fake response, only to satisfy the interface
     std::vector<mlperf::QuerySampleResponse> responses;

@@ -269,6 +269,19 @@ public:
     for (int i = 0; i < _size; i++)
       file << _buffer[i] << std::endl;
   }
+
+  int argmax() {
+    int   arg_index = 0;
+    float max_value = _buffer[0];
+
+    for (int i = 1; i < _size; i++)
+      if (_buffer[i] > max_value) {
+        arg_index = i;
+        max_value = _buffer[i];
+      }
+
+    return arg_index;
+  }
 };
 
 //----------------------------------------------------------------------
@@ -281,7 +294,7 @@ public:
   virtual void load_images(const std::vector<std::string>& batch_images) = 0;
   virtual void save_results(const std::vector<std::string>& batch_images) = 0;
   virtual void get_next_image() = 0;
-  virtual void get_next_result() = 0;
+  virtual int get_next_result() = 0;
 };
 
 
@@ -314,10 +327,12 @@ public:
     _in_buffer_index %= _current_buffer_size;
   }
 
-  void get_next_result() override {
+  int get_next_result() override {
     int probe_offset = has_background_class ? 1 : 0;
-    _out_converter->convert(_out_ptr + probe_offset, _out_batch[_out_buffer_index++].get());
+    ResultData *next_result_ptr = _out_batch[_out_buffer_index++].get();
+    _out_converter->convert(_out_ptr + probe_offset, next_result_ptr);
     _out_buffer_index %= _current_buffer_size;
+    return next_result_ptr->argmax();
   }
 
   void save_results(const std::vector<std::string>& batch_images) override {
