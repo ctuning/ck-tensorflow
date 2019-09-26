@@ -251,6 +251,7 @@ public:
     std::ifstream file(path, std::ios::in | std::ios::binary);
     if (!file) throw "Failed to open image data " + path;
     file.read(reinterpret_cast<char*>(_buffer), _size);
+    std::cout << "Loaded file: " << path << std::endl;
   }
 };
 
@@ -296,8 +297,7 @@ public:
 
   void load_images(const std::vector<std::string>& batch_images) override {
     int length = batch_images.size();
-    _image_rotator_max = length;
-    _result_rotator_max = length;
+    _current_buffer_size = length;
     _in_batch = new std::unique_ptr<ImageData>[length];
     _out_batch = new std::unique_ptr<ResultData>[length];
     int i = 0;
@@ -310,14 +310,14 @@ public:
   }
 
   void get_next_image() override {
-    _in_converter->convert(_in_batch[_image_rotator].get(), _in_ptr);
-    _image_rotator = (_image_rotator + 1) % _image_rotator_max;
+    _in_converter->convert(_in_batch[_in_buffer_index++].get(), _in_ptr);
+    _in_buffer_index %= _current_buffer_size;
   }
 
   void get_next_result() override {
     int probe_offset = has_background_class ? 1 : 0;
-    _out_converter->convert(_out_ptr + probe_offset, _out_batch[_result_rotator].get());
-    _result_rotator = (_result_rotator + 1) % _result_rotator_max;
+    _out_converter->convert(_out_ptr + probe_offset, _out_batch[_out_buffer_index++].get());
+    _out_buffer_index %= _current_buffer_size;
   }
 
   void save_results(const std::vector<std::string>& batch_images) override {
@@ -329,10 +329,9 @@ public:
 
 private:
 const BenchmarkSettings* _settings;
-  int _image_rotator = 0;
-  int _image_rotator_max = 0;
-  int _result_rotator = 0;
-  int _result_rotator_max = 0;
+  int _in_buffer_index = 0;
+  int _out_buffer_index = 0;
+  int _current_buffer_size = 0;
   TData* _in_ptr;
   TData* _out_ptr;
   std::unique_ptr<ImageData>  *_in_batch;
