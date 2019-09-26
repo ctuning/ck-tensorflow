@@ -167,17 +167,24 @@ public:
 
     std::cout << "IssueQuery([" << samples.size() << "]," << samples[0].id << "," << samples[0].index << ")" << std::endl;
 
-    // Calling the inference engine with our only example
-    int predicted_class = prg->InferenceOnce();
-    std::cout << "Predicted class: " << predicted_class << std::endl;
-
     // This is currently a completely fake response, only to satisfy the interface
     std::vector<mlperf::QuerySampleResponse> responses;
     responses.reserve(samples.size());
     for (auto s : samples) {
-//      char foo[] = "1234567890"; // <-- this string will get HEX-encoded and ends up in mlperf_log_{date}_accuracy.json
-//      responses.push_back({s.id, uintptr_t(foo), sizeof(foo)});
-      responses.push_back({s.id, 0, 0});
+      int predicted_class = prg->InferenceOnce();
+      std::cout << "Predicted class: " << predicted_class << std::endl;
+
+
+      /* This would be the correct way to pass in one integer index:
+      */
+//      int single_value_buffer[] = { (int)predicted_class };
+
+      /* This conversion is subtly but terribly wrong
+         yet we use it here in order to use Guenther's parsing script:
+      */
+      float single_value_buffer[] = { (float)predicted_class };
+
+      responses.push_back({s.id, uintptr_t(single_value_buffer), sizeof(single_value_buffer)});
     }
     mlperf::QuerySamplesComplete(responses.data(), responses.size());
   }
