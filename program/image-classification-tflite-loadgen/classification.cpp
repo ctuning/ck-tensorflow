@@ -253,20 +253,47 @@ void TestSingleStream(Program *prg) {
   SystemUnderTestSingleStream sut(prg);
   QuerySampleLibrarySingleStream qsl(prg);
 
-  mlperf::LogSettings log_settings;
-  log_settings.log_output.prefix_with_datetime = true;
+  const std::string config_file_path = getenv_s("CK_ENV_MLPERF_INFERENCE_V05") + "/mlperf.conf";
+
+  std::string guenther_model_name = "anything_else";
+  if( getenv_s("CK_ENV_TENSORFLOW_MODEL_TFLITE_FILENAME") == "resnet50_v1.tflite" )
+    guenther_model_name = "resnet50";
+
+  const std::string scenario_string = getenv_s("CK_LOADGEN_SCENARIO");
+  const std::string mode_string = getenv_s("CK_LOADGEN_MODE");
+
+  std::cout << "Config path: " << config_file_path << std::endl;
+  std::cout << "Guenther Model Name: " << guenther_model_name << std::endl;
+  std::cout << "LoadGen Scenario: " << scenario_string << std::endl;
+  std::cout << "LoadGen Mode: " << mode_string << std::endl;
 
   mlperf::TestSettings ts;
-  //ts.scenario = mlperf::TestScenario::Offline;
-  ts.scenario = mlperf::TestScenario::SingleStream;
-  //ts.scenario = mlperf::TestScenario::MultiStream;
 
-  //ts.mode = mlperf::TestMode::PerformanceOnly;
-  ts.mode = mlperf::TestMode::AccuracyOnly;
+  // This should have been done automatically inside ts.FromConfig() !
+  ts.scenario = ( scenario_string == "SingleStream")    ? mlperf::TestScenario::SingleStream
+              : ( scenario_string == "MultiStream")     ? mlperf::TestScenario::MultiStream
+              : ( scenario_string == "MultiStreamFree") ? mlperf::TestScenario::MultiStreamFree
+              : ( scenario_string == "Server")          ? mlperf::TestScenario::Server
+              : ( scenario_string == "Offline")         ? mlperf::TestScenario::Offline : mlperf::TestScenario::SingleStream;
+
+  ts.mode     = ( mode_string == "SubmissionRun")       ? mlperf::TestMode::SubmissionRun
+              : ( mode_string == "AccuracyOnly")        ? mlperf::TestMode::AccuracyOnly
+              : ( mode_string == "PerformanceOnly")     ? mlperf::TestMode::PerformanceOnly
+              : ( mode_string == "FindPeakPerformance") ? mlperf::TestMode::FindPeakPerformance : mlperf::TestMode::SubmissionRun;
+
+  if (ts.FromConfig(config_file_path, guenther_model_name, scenario_string)) {
+    std::cout << "Issue with config file " << config_file_path << std::endl;
+    exit(1);
+  }
+
   ts.min_query_count = std::min( prg->batch_count(), prg->images_in_memory_max() );
   //ts.max_query_count = 20;
   ts.min_duration_ms = 0;
   //ts.max_duration_ms = 20000;
+
+
+  mlperf::LogSettings log_settings;
+  log_settings.log_output.prefix_with_datetime = false;
 
   mlperf::StartTest(&sut, &qsl, ts, log_settings);
 }

@@ -107,7 +107,9 @@
     }
   },
   "run_vars": {
-    "CK_LOADGEN_MODE": "YES",
+    "CK_LOADGEN_SUPPORT": "YES",
+    "CK_LOADGEN_SCENARIO": "SingleStream",
+    "CK_LOADGEN_MODE": "AccuracyOnly",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
     "CK_IMAGES_IN_MEMORY_MAX": 10,
