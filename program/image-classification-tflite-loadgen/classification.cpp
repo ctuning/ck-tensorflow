@@ -140,8 +140,7 @@ public:
     std::cout << '.' << std::flush;
   }
 
-  const int batch_size()  { return settings->batch_size;  }
-  const int batch_count() { return settings->batch_count; }
+  const int available_images_max() { return settings->list_of_available_imagefiles().size(); }
   const int images_in_memory_max() { return settings->images_in_memory_max; }
 
 private:
@@ -230,7 +229,7 @@ public:
 
   const std::string& Name() const override { return name_; }
 
-  size_t TotalSampleCount() override { return prg->batch_count() * prg->batch_size(); }
+  size_t TotalSampleCount() override { return prg->available_images_max(); }
 
   size_t PerformanceSampleCount() override { return prg->images_in_memory_max(); }
 
@@ -286,10 +285,10 @@ void TestSingleStream(Program *prg) {
     exit(1);
   }
 
-  ts.min_query_count = std::min( prg->batch_count(), prg->images_in_memory_max() );
+  //ts.min_query_count = std::min( prg->available_images_max(), prg->images_in_memory_max() )*2;
   //ts.max_query_count = 20;
-  ts.min_duration_ms = 0;
-  //ts.max_duration_ms = 20000;
+  //ts.min_duration_ms = 0;
+  //ts.max_duration_ms = 2000;
 
 
   mlperf::LogSettings log_settings;

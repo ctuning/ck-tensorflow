@@ -91,7 +91,7 @@ private:
 class BenchmarkSettings {
 public:
   const std::string images_dir = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DIR");
-  const std::string images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
+  const std::string available_images_file = getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF");
   const bool skip_internal_preprocessing = getenv("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE")
                         && ( getenv_s("CK_ENV_DATASET_IMAGENET_PREPROCESSED_DATA_TYPE") == "float32" );
 
@@ -143,7 +143,7 @@ public:
     // Print settings
     std::cout << "Graph file: " << _graph_file << std::endl;
     std::cout << "Image dir: " << images_dir << std::endl;
-    std::cout << "Image list: " << images_file << std::endl;
+    std::cout << "Image list: " << available_images_file << std::endl;
     std::cout << "Image size: " << image_size << std::endl;
     std::cout << "Image channels: " << num_channels << std::endl;
     std::cout << "Prediction classes: " << num_classes << std::endl;
@@ -166,17 +166,17 @@ public:
       system(("mkdir " + result_dir).c_str());
 
     // Load list of images to be processed
-    std::ifstream file(images_file);
+    std::ifstream file(available_images_file);
     if (!file)
-      throw "Unable to open image list file " + images_file;
+      throw "Unable to open the available image list file " + available_images_file;
     for (std::string s; !getline(file, s).fail();)
-      _image_list.emplace_back(s);
-    std::cout << "Image count in file: " << _image_list.size() << std::endl;
+      _available_image_list.emplace_back(s);
+    std::cout << "Image count in file: " << _available_image_list.size() << std::endl;
   }
 
-  const std::vector<std::string>& image_list() const { return _image_list; }
+  const std::vector<std::string>& list_of_available_imagefiles() const { return _available_image_list; }
 
-  std::vector<std::string> _image_list;
+  std::vector<std::string> _available_image_list;
 
   int number_of_threads() { return _number_of_threads; }
 
@@ -198,12 +198,19 @@ public:
   virtual ~BenchmarkSession() {}
 
   const std::vector<std::string>& load_filenames(std::vector<unsigned long> indices) {
-
     _filenames_buffer.clear();
     _filenames_buffer.reserve( indices.size() );
-    auto image_list = _settings->image_list();
+
+    auto list_of_available_imagefiles = _settings->list_of_available_imagefiles();
+    auto count_available_imagefiles   = list_of_available_imagefiles.size();
+
     for (auto idx : indices) {
-      _filenames_buffer.emplace_back(image_list[idx]);
+      if(idx<count_available_imagefiles)
+        _filenames_buffer.emplace_back(list_of_available_imagefiles[idx]);
+      else {
+        std::cerr << "Trying to load filename[" << idx << "] when only " << count_available_imagefiles << " images are available" << std::endl;
+        exit(1);
+      }
     }
 
     return _filenames_buffer;

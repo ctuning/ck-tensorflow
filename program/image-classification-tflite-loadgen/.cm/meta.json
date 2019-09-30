@@ -112,7 +112,7 @@
     "CK_LOADGEN_MODE": "AccuracyOnly",
     "CK_BATCH_COUNT": 1,
     "CK_BATCH_SIZE": 1,
-    "CK_IMAGES_IN_MEMORY_MAX": 10,
+    "CK_IMAGES_IN_MEMORY_MAX": 0,
     "CK_RESULTS_DIR": "predictions",
     "CK_SILENT_MODE": 0,
     "CK_SKIP_IMAGES": 0
