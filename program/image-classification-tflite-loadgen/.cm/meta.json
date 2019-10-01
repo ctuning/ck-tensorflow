@@ -69,7 +69,7 @@
         "post_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
           "module_uoa":     "script",
-          "script_name":    "postprocess"
+          "script_name":    "loadgen_postprocess"
         },
         "run_cmd_main": "$#BIN_FILE#$",
         "run_input_files": [
@@ -104,6 +104,13 @@
       "no_tags": "mobilenet-all",
       "sort": 30,
       "tags": "model,tflite,image-classification"
+    },
+    "mlperf-inference-src": {
+      "add_to_path": "no",
+      "local": "yes",
+      "name": "MLPerf Inference source",
+      "sort": 40,
+      "tags": "mlperf,inference,source"
     }
   },
   "run_vars": {
