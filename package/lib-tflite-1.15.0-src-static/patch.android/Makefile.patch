@@ -1,0 +1,99 @@
+diff --git a/tensorflow/lite/tools/make/Makefile b/tensorflow/lite/tools/make/Makefile
+index eb00c120c9..2d541a27f5 100644
+--- a/tensorflow/lite/tools/make/Makefile
++++ b/tensorflow/lite/tools/make/Makefile
+@@ -39,6 +39,8 @@ INCLUDES := \
+ -I$(MAKEFILE_DIR)/downloads/neon_2_sse \
+ -I$(MAKEFILE_DIR)/downloads/farmhash/src \
+ -I$(MAKEFILE_DIR)/downloads/flatbuffers/include \
++-I$(MAKEFILE_DIR)/downloads/googletest/googletest/include/ \
++-I$(MAKEFILE_DIR)/downloads/googletest/googlemock/include/ \
+ -I$(OBJDIR)
+ # This is at the end so any globally-installed frameworks like protobuf don't
+ # override local versions in the source tree.
+@@ -50,12 +52,14 @@ LIBS := \
+ -lstdc++ \
+ -lpthread \
+ -lm \
+--lz
++-lz \
++-lrt \
++-latomic
+ 
+ # There are no rules for compiling objects for the host system (since we don't
+ # generate things like the protobuf compiler that require that), so all of
+ # these settings are for the target compiler.
+-CXXFLAGS := -O3 -DNDEBUG -fPIC
++CXXFLAGS := -O3 -DNDEBUG -fPIC -flax-vector-conversions -fomit-frame-pointer
+ CXXFLAGS += $(EXTRA_CXXFLAGS)
+ CFLAGS := ${CXXFLAGS}
+ CXXFLAGS += --std=c++11
+@@ -125,8 +129,12 @@ $(wildcard tensorflow/lite/kernels/internal/*.c) \
+ $(wildcard tensorflow/lite/kernels/internal/optimized/*.c) \
+ $(wildcard tensorflow/lite/kernels/internal/reference/*.c) \
+ $(wildcard tensorflow/lite/tools/make/downloads/farmhash/src/farmhash.cc) \
+-$(wildcard tensorflow/lite/tools/make/downloads/fft2d/fftsg.c)
++$(wildcard tensorflow/lite/tools/make/downloads/fft2d/fftsg.c) \
++$(wildcard tensorflow/lite/tools/make/downloads/flatbuffers/src/util.cpp)
+ endif
++ifeq ($(TARGET),ANDROID)
++       CORE_CC_ALL_SRCS += $(NDK_ROOT)/sources/android/cpufeatures/cpu-features.c
++endif # ANDROID
+ # Remove any duplicates.
+ CORE_CC_ALL_SRCS := $(sort $(CORE_CC_ALL_SRCS))
+ CORE_CC_EXCLUDE_SRCS := \
+@@ -134,6 +142,7 @@ $(wildcard tensorflow/lite/*test.cc) \
+ $(wildcard tensorflow/lite/*/*test.cc) \
+ $(wildcard tensorflow/lite/*/*/*test.cc) \
+ $(wildcard tensorflow/lite/*/*/*/*test.cc) \
++$(wildcard tensorflow/lite/kernels/*test_main.cc) \
+ $(wildcard tensorflow/lite/kernels/*test_util.cc) \
+ $(MINIMAL_SRCS)
+ 
+@@ -213,7 +222,7 @@ ALL_SRCS := \
+   $(CMD_LINE_TOOLS_SRCS)
+ 
+ # Where compiled objects are stored.
+-GENDIR := $(MAKEFILE_DIR)/gen/$(TARGET)_$(TARGET_ARCH)/
++GENDIR := $(MAKEFILE_DIR)/gen/
+ OBJDIR := $(GENDIR)obj/
+ BINDIR := $(GENDIR)bin/
+ LIBDIR := $(GENDIR)lib/
+@@ -223,18 +232,18 @@ BENCHMARK_LIB := $(LIBDIR)$(BENCHMARK_LIB_NAME)
+ BENCHMARK_BINARY := $(BINDIR)$(BENCHMARK_BINARY_NAME)
+ MINIMAL_BINARY := $(BINDIR)minimal
+ 
+-CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
+-CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
+-AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
++#CXX := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}g++
++#CC := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}gcc
++#AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
+ 
+ MINIMAL_OBJS := $(addprefix $(OBJDIR), \
+ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(MINIMAL_SRCS))))
+ 
+ LIB_OBJS := $(addprefix $(OBJDIR), \
+-$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(TF_LITE_CC_SRCS))))
++$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(TF_LITE_CC_SRCS)))))
+ 
+ BENCHMARK_OBJS := $(addprefix $(OBJDIR), \
+-$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(BENCHMARK_SRCS))))
++$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS)))))
+ 
+ # For normal manually-created TensorFlow Lite C++ source files.
+ $(OBJDIR)%.o: %.cc
+@@ -244,9 +253,12 @@ $(OBJDIR)%.o: %.cc
+ $(OBJDIR)%.o: %.c
+ 	@mkdir -p $(dir $@)
+ 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
++$(OBJDIR)%.o: %.cpp
++	@mkdir -p $(dir $@)
++	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+ 
+ # The target that's compiled if there's no command-line arguments.
+-all: $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
++all: $(LIB_PATH) # $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+ 
+ # The target that's compiled for micro-controllers
+ micro: $(LIB_PATH)
