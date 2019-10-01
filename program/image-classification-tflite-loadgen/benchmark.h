@@ -19,6 +19,7 @@
 #include <string.h>
 #include <thread>
 #include <vector>
+#include <map>
 
 #include <xopenme.h>
 
@@ -171,7 +172,7 @@ public:
       throw "Unable to open the available image list file " + available_images_file;
     for (std::string s; !getline(file, s).fail();)
       _available_image_list.emplace_back(s);
-    std::cout << "Image count in file: " << _available_image_list.size() << std::endl;
+    std::cout << "Number of available imagefiles: " << _available_image_list.size() << std::endl;
   }
 
   const std::vector<std::string>& list_of_available_imagefiles() const { return _available_image_list; }
@@ -197,17 +198,20 @@ public:
 
   virtual ~BenchmarkSession() {}
 
-  const std::vector<std::string>& load_filenames(std::vector<unsigned long> indices) {
+  const std::vector<std::string>& load_filenames(std::vector<unsigned long> img_indices) {
     _filenames_buffer.clear();
-    _filenames_buffer.reserve( indices.size() );
+    _filenames_buffer.reserve( img_indices.size() );
+    idx2loc.clear();
 
     auto list_of_available_imagefiles = _settings->list_of_available_imagefiles();
     auto count_available_imagefiles   = list_of_available_imagefiles.size();
 
-    for (auto idx : indices) {
-      if(idx<count_available_imagefiles)
+    int loc=0;
+    for (auto idx : img_indices) {
+      if(idx<count_available_imagefiles) {
         _filenames_buffer.emplace_back(list_of_available_imagefiles[idx]);
-      else {
+        idx2loc[idx] = loc++;
+      } else {
         std::cerr << "Trying to load filename[" << idx << "] when only " << count_available_imagefiles << " images are available" << std::endl;
         exit(1);
       }
@@ -217,6 +221,8 @@ public:
   }
 
   const std::vector<std::string>& current_filenames() const { return _filenames_buffer; }
+
+  std::map<int,int> idx2loc;
 
 private:
   const BenchmarkSettings* _settings;
@@ -298,10 +304,11 @@ public:
   bool has_background_class = false;
 
   virtual ~IBenchmark() {}
-  virtual void load_images(const std::vector<std::string>& batch_images) = 0;
-  virtual void save_results(const std::vector<std::string>& batch_images) = 0;
+  virtual void load_images(BenchmarkSession *session) = 0;
+  virtual void save_results() = 0;
   virtual void get_next_image() = 0;
   virtual int get_next_result() = 0;
+  virtual void get_random_image(int img_idx) = 0;
 };
 
 
@@ -315,18 +322,26 @@ public:
     _out_converter.reset(new TOutConverter(settings));
   }
 
-  void load_images(const std::vector<std::string>& batch_images) override {
-    int length = batch_images.size();
+  void load_images(BenchmarkSession *_session) override {
+    session = _session;
+
+    const std::vector<std::string>& image_filenames = session->current_filenames();
+
+    int length = image_filenames.size();
     _current_buffer_size = length;
     _in_batch = new std::unique_ptr<ImageData>[length];
     _out_batch = new std::unique_ptr<ResultData>[length];
     int i = 0;
-    for (auto image_file : batch_images) {
+    for (auto image_file : image_filenames) {
       _in_batch[i].reset(new ImageData(_settings));
       _out_batch[i].reset(new ResultData(_settings));
       _in_batch[i]->load(image_file);
       i++;
     }
+  }
+
+  void get_random_image(int img_idx) override {
+    _in_converter->convert(_in_batch[ session->idx2loc[img_idx] ].get(), _in_ptr);
   }
 
   void get_next_image() override {
@@ -342,15 +357,18 @@ public:
     return next_result_ptr->argmax();
   }
 
-  void save_results(const std::vector<std::string>& batch_images) override {
+  void save_results() override {
+
+    const std::vector<std::string>& image_filenames = session->current_filenames();
     int i = 0;
-    for (auto image_file : batch_images) {
+    for (auto image_file : image_filenames) {
       _out_batch[i++]->save(image_file);
     }
   }
 
 private:
-const BenchmarkSettings* _settings;
+  const BenchmarkSettings* _settings;
+  BenchmarkSession* session;
   int _in_buffer_index = 0;
   int _out_buffer_index = 0;
   int _current_buffer_size = 0;

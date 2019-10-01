@@ -119,24 +119,26 @@ public:
 
   //bool is_available_batch() {return session? session->get_next_batch(): false; }
 
-  void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex>& indices) {
+  void LoadNextBatch(const std::vector<mlperf::QuerySampleIndex>& img_indices) {
     std::cout << "LoadNextBatch([";
-    for( auto idx : indices) {
+    for( auto idx : img_indices) {
       std::cout << idx << ' ';
     }
     std::cout << "])" << std::endl;
-    benchmark->load_images( session->load_filenames(indices) );
+    session->load_filenames(img_indices);
+    benchmark->load_images( session );
   }
 
-  int InferenceOnce() {
-    benchmark->get_next_image();
+  int InferenceOnce(int img_idx) {
+    //benchmark->get_next_image();
+    benchmark->get_random_image( img_idx );
     if (interpreter->Invoke() != kTfLiteOk)
       throw "Failed to invoke tflite";
     return benchmark->get_next_result();
   }
 
-  void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& indices) {
-    benchmark->save_results( session->current_filenames() );
+  void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& img_indices) {
+    benchmark->save_results( );
     std::cout << '.' << std::flush;
   }
 
@@ -170,8 +172,8 @@ public:
     std::vector<mlperf::QuerySampleResponse> responses;
     responses.reserve(samples.size());
     for (auto s : samples) {
-      int predicted_class = prg->InferenceOnce();
-      std::cout << "Predicted class: " << predicted_class << std::endl;
+      int predicted_class = prg->InferenceOnce(s.index);
+      std::cout << "Query image index: " << s.index << " -> Predicted class: " << predicted_class << std::endl;
 
 
       /* This would be the correct way to pass in one integer index:
