@@ -292,9 +292,9 @@ void TestSingleStream(Program *prg) {
   //ts.min_duration_ms = 0;
   //ts.max_duration_ms = 2000;
 
-
   mlperf::LogSettings log_settings;
   log_settings.log_output.prefix_with_datetime = false;
+  log_settings.enable_trace = false;
 
   mlperf::StartTest(&sut, &qsl, ts, log_settings);
 }
