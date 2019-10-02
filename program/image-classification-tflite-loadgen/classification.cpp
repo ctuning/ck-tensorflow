@@ -137,8 +137,7 @@ public:
   }
 
   void UnloadBatch(const std::vector<mlperf::QuerySampleIndex>& img_indices) {
-    benchmark->save_results( );
-    std::cout << '.' << std::flush;
+    //benchmark->save_results( );
   }
 
   const int available_images_max() { return settings->list_of_available_imagefiles().size(); }

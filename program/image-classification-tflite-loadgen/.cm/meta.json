@@ -76,8 +76,7 @@
           "$<<CK_ENV_TENSORFLOW_MODEL_TFLITE_FILEPATH>>$"
         ],
         "run_output_files": [
-          "tmp-ck-timer.json",
-          "predictions"
+          "tmp-ck-timer.json"
         ]
       }
     }
