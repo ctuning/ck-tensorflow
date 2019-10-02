@@ -130,7 +130,6 @@ public:
   }
 
   int InferenceOnce(int img_idx) {
-    //benchmark->get_next_image();
     benchmark->get_random_image( img_idx );
     if (interpreter->Invoke() != kTfLiteOk)
       throw "Failed to invoke tflite";

@@ -306,7 +306,6 @@ public:
   virtual ~IBenchmark() {}
   virtual void load_images(BenchmarkSession *session) = 0;
   virtual void save_results() = 0;
-  virtual void get_next_image() = 0;
   virtual int get_next_result() = 0;
   virtual void get_random_image(int img_idx) = 0;
 };
@@ -342,11 +341,6 @@ public:
 
   void get_random_image(int img_idx) override {
     _in_converter->convert(_in_batch[ session->idx2loc[img_idx] ].get(), _in_ptr);
-  }
-
-  void get_next_image() override {
-    _in_converter->convert(_in_batch[_in_buffer_index++].get(), _in_ptr);
-    _in_buffer_index %= _current_buffer_size;
   }
 
   int get_next_result() override {
