@@ -363,7 +363,6 @@ public:
 private:
   const BenchmarkSettings* _settings;
   BenchmarkSession* session;
-  int _in_buffer_index = 0;
   int _out_buffer_index = 0;
   int _current_buffer_size = 0;
   TData* _in_ptr;
