@@ -171,6 +171,8 @@ public:
     // This is currently a completely fake response, only to satisfy the interface
     std::vector<mlperf::QuerySampleResponse> responses;
     responses.reserve(samples.size());
+    float encoding_buffer[samples.size()];
+    int i=0;
     for (auto s : samples) {
       int predicted_class = prg->InferenceOnce(s.index);
       std::cout << "Query image index: " << s.index << " -> Predicted class: " << predicted_class << std::endl;
@@ -183,9 +185,9 @@ public:
       /* This conversion is subtly but terribly wrong
          yet we use it here in order to use Guenther's parsing script:
       */
-      float single_value_buffer[] = { (float)predicted_class };
-
-      responses.push_back({s.id, uintptr_t(single_value_buffer), sizeof(single_value_buffer)});
+      encoding_buffer[i] = (float)predicted_class;
+      responses.push_back({s.id, uintptr_t(&encoding_buffer[i]), sizeof(encoding_buffer[i])});
+      ++i;
     }
     mlperf::QuerySamplesComplete(responses.data(), responses.size());
   }
