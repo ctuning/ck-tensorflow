@@ -30,6 +30,7 @@
   "suggested_path": "dataset-kitti",
   "tags": [
     "dataset",
+    "object-detection",
     "val",
     "kitti",
     "drive",
