@@ -112,6 +112,8 @@
     "squeezedet",
     "continuous",
     "object-detection",
-    "webcam"
+    "webcam",
+    "codereef_workflow",
+    "codereef_workflow_stream"
   ]
 }
