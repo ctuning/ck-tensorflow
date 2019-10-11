@@ -94,7 +94,7 @@ install:
     -       ck detect soft:compiler.python --full_path=`which ${PYTHON_EXE}`        # pick the one Travis has set for us in the PATH
     -       ck install package:imagenet-2012-aux                                    # one part of ImageNet
     -       ck install package:imagenet-2012-val-min-resized                        # another part of ImageNet
-    -       ck install package:tensorflowmodel-mobilenet-v1-1.0-224-py              # model for TF
+    -       ck install package --tags=model,tf,mobilenet-v1,v1-1.0-224              # model for TF
     -       ck install package:lib-tensorflow-${TF_PREBUILT_VERSION}-cpu            # prebuilt TF package
     -       ck install package --tags=lib,python-package,numpy                          # to prevent confusion with pre-installed version on Macs @ Travis
     -       ck install package --tags=lib,python-package,scipy --force_version=1.2.1    # to prevent confusion with pre-installed version on Macs @ Travis
