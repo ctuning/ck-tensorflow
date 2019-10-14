@@ -51,7 +51,8 @@
           "CK_ENV_DATASET_IMAGENET_PREPROCESSED_SUBSET_FOF",
           "CK_ENV_DATASET_IMAGENET_PREPROCESSED_INPUT_SQUARE_SIDE",
           "CK_ENV_TENSORFLOW_MODEL_NORMALIZE_DATA",
-          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN"
+          "CK_ENV_TENSORFLOW_MODEL_SUBTRACT_MEAN",
+          "ML_MODEL_GIVEN_CHANNEL_MEANS"
         ],
         "fine_grain_timer_file": "tmp-ck-timer.json",
         "pre_process_via_ck": {
