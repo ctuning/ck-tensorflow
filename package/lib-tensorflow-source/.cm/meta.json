@@ -24,7 +24,7 @@
     "source"
   ],
   "variations": {
-    "rel.1.14": {
+    "rel.1.13": {
         "extra_env": {
             "PACKAGE_GIT_CHECKOUT": "r1.13",
             "PACKAGE_VERSION": "1.13"
