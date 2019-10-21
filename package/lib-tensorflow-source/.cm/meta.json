@@ -10,6 +10,7 @@
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     }, 
+    "no_os_in_suggested_path": "yes",
     "use_git_revision": "yes"
   }, 
   "end_full_path_universal": "src$#sep#$tensorflow$#sep#$tensorflow.bzl", 
@@ -21,7 +22,39 @@
     "uninstalled",
     "tensorflow", 
     "source"
-  ], 
+  ],
+  "variations": {
+    "rel.1.14": {
+        "extra_env": {
+            "PACKAGE_GIT_CHECKOUT": "r1.13",
+            "PACKAGE_VERSION": "1.13"
+        }
+    },
+    "rel.1.14": {
+        "extra_env": {
+            "PACKAGE_GIT_CHECKOUT": "r1.14",
+            "PACKAGE_VERSION": "1.14"
+        }
+    },
+    "rel.1.15": {
+        "extra_env": {
+            "PACKAGE_GIT_CHECKOUT": "r1.15",
+            "PACKAGE_VERSION": "1.15"
+        }
+    },
+    "rel.2.0": {
+        "extra_env": {
+            "PACKAGE_GIT_CHECKOUT": "r2.0",
+            "PACKAGE_VERSION": "2.0"
+        }
+    },
+    "master": {
+        "extra_env": {
+            "PACKAGE_GIT_CHECKOUT": "master",
+            "PACKAGE_VERSION": "master"
+        }
+    }
+  },
   "use_scripts_from_another_entry": {
     "data_uoa": "cd9ccc74060b3d18", 
     "module_uoa": "script"
