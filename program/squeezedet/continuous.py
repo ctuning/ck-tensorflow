@@ -250,7 +250,15 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
     global box_counter
     box_counter = 0
 
-    boxed_img = orig_im.copy()
+    if os.environ.get('CODEREEF','')=='YES':
+      try:
+        boxed_img = orig_im.copy()
+      except:
+        return
+
+    else:
+        boxed_img = orig_im.copy()
+
     im = orig_im.astype(np.float32, copy=True)
     im = cv2.resize(im, (mc.IMAGE_WIDTH, mc.IMAGE_HEIGHT))
     input_image = im - mc.BGR_MEANS
@@ -329,8 +337,10 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
     out_file_name = os.path.join(FLAGS.out_dir, file_name)
     cv2.imwrite(out_file_name, orig_im)
 
-    boxed_out_file_name = os.path.join(FLAGS.out_dir, 'boxed_' + file_name)
-    cv2.imwrite(boxed_out_file_name, boxed_img)
+#    boxed_out_file_name = os.path.join(FLAGS.out_dir, 'boxed_' + file_name)
+#    cv2.imwrite(boxed_out_file_name, boxed_img)
+
+    results={'objects':[]}
     
     print('File: {}'.format(out_file_name))
     if '' != original_file_path:
@@ -351,9 +361,30 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
         b = box.bbox
         print('Detection {}: {:.3f} {:.3f} {:.3f} {:.3f} {:.3f}'.format(box.klass, b[0], b[1], b[2], b[3], box.prob))
 
+        if os.environ.get('CODEREEF','')=='YES':
+           obj={'name':box.klass,
+                'x':int(b[0]),
+                'y':int(b[1]),
+                'w':int(b[2])-int(b[0]),
+                'h':int(b[3])-int(b[1]),
+                'probability':float(box.prob)}
+           results['objects'].append(obj)
+
     for box in expected:
         b = box.bbox
         print('Ground truth {}: {:.3f} {:.3f} {:.3f} {:.3f} 1'.format(box.klass, b[0], b[1], b[2], b[3]))
+
+    # Record JSON
+    if os.environ.get('CODEREEF','')=='YES':
+
+       if os.path.isfile(original_file_path):
+          os.remove(original_file_path)
+
+       codereef_out_file_name = os.path.join(FLAGS.out_dir, os.path.splitext(file_name)[0]+'.json')
+       if not os.path.isfile(codereef_out_file_name):
+          import json
+          with open(codereef_out_file_name, 'w') as of:
+               of.write(json.dumps(results, indent=2, sort_keys=True))
 
     expected = [b for b in expected if care(b, dontcare)]
     recognized = [b for b in recognized if care(b, dontcare)]
@@ -491,6 +522,20 @@ def detect_dir(fn, d):
         im = cv2.imread(f)
         fn(im, os.path.split(f)[1], f)
 
+def detect_dir_codereef(fn, d):
+    image_list = sorted([os.path.join(d, f) for f in os.listdir(d) if os.path.isfile(os.path.join(d, f))])
+    if '' != FLAGS.skip_files_including:
+        try:
+            i = image_list.index(FLAGS.skip_files_including)
+            image_list = image_list[i+1:]
+        except ValueError:
+            pass
+    for f in image_list:
+        if should_finish():
+            break
+        im = cv2.imread(f)
+        fn(im, os.path.split(f)[1], f)
+
 def image_demo():
   """Detect image."""
 
@@ -532,7 +577,14 @@ def image_demo():
       if 0 <= FLAGS.input_device:
         detect_webcam(fn, FLAGS.input_device)
       else:
-        detect_dir(fn, FLAGS.image_dir)
+        if os.environ.get('CODEREEF','')=='YES':
+           while True:
+              print ("Searching for images ...")
+              detect_dir_codereef(fn, FLAGS.image_dir)
+              import time
+              time.sleep(0.1)
+        else:
+           detect_dir(fn, FLAGS.image_dir)
 
 def main(argv=None):
   if not tf.gfile.Exists(FLAGS.out_dir):

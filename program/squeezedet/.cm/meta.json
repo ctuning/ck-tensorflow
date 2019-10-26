@@ -50,6 +50,22 @@
         ]
       }
     },
+    "use_codereef": {
+      "ignore_return_code": "no",
+      "run_deps": {
+        "detection-dataset": {
+          "local": "yes",
+          "name": "Detection dataset",
+          "sort": 10,
+          "tags": "dataset,object-detection"
+        }
+      },
+      "run_time": {
+        "run_cmd_main": "../codereef$#script_ext#$",
+        "run_output_files": [
+        ]
+      }
+    },
     "use_webcam": {
       "ignore_return_code": "no",
       "run_time": {
