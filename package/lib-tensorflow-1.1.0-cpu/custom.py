@@ -90,7 +90,7 @@ def setup(i):
     ft=i.get('features',{})
 
     # Check bits
-    if hbits!='64':
+    if hbits!='64' and ie.get('ALLOW_ALL_BITS','').lower()!='yes':
        return {'return':1, 'error':'only 64-bit host is supported for this package'}
 
     # Check python path and version
@@ -109,82 +109,84 @@ def setup(i):
        sver2=''
 
     # Check download path
-    p='https://storage.googleapis.com/tensorflow/'
-
-    if hname=='win':
-       p += 'windows'
-    elif macos=='yes':
-       p += 'mac'
+    if ie.get('VIA_PYPI','').lower()=='yes':
+       p='tensorflow=='+ie['TENSORFLOW_PACKAGE_VER']
+       proto=''
     else:
-       p += 'linux'
+       p='https://storage.googleapis.com/tensorflow/'
 
-    tp='cpu'
-    tp1=''
-    if ie.get('TF_CUDA','')=='YES':
-       tp='gpu'
-       tp1='_gpu'
-
-    proto=p+'/cpu/'
-
-    p+='/'+tp+'/'
-
-    p+='tensorflow'+tp1+'-'+ie['TENSORFLOW_PACKAGE_VER']
-
-    if macos=='yes':
-       if python3==1:
-          px='py3-none-any.whl'
+       if hname=='win':
+          p += 'windows'
+       elif macos=='yes':
+          p += 'mac'
        else:
-          px='py2-none-any.whl'
+          p += 'linux'
 
-    elif hname=='win':
-       if python3==1:
+       tp='cpu'
+       tp1=''
+       if ie.get('TF_CUDA','')=='YES':
+          tp='gpu'
+          tp1='_gpu'
 
-          supported_python_ver2_on_win=cus.get('supported_python_ver2_on_win',[])
+       proto=p+'/cpu/'
 
-          if len(supported_python_ver2_on_win)>0 and sver2 not in supported_python_ver2_on_win:
-             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_win)+' on Windows'}
+       p+='/'+tp+'/'
 
-          px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-win_amd64.whl'
+       p+='tensorflow'+tp1+'-'+ie['TENSORFLOW_PACKAGE_VER']
+
+       if macos=='yes':
+          if python3==1:
+             px='py3-none-any.whl'
+          else:
+             px='py2-none-any.whl'
+
+       elif hname=='win':
+          if python3==1:
+
+             supported_python_ver2_on_win=cus.get('supported_python_ver2_on_win',[])
+
+             if len(supported_python_ver2_on_win)>0 and sver2 not in supported_python_ver2_on_win:
+                return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_win)+' on Windows'}
+
+             px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-win_amd64.whl'
+          else:
+             return {'return':1, 'error':'Python 2 is not supported for this package on Windows'}
+
        else:
-          return {'return':1, 'error':'Python 2 is not supported for this package on Windows'}
+          if python3==1:
+             px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-linux_x86_64.whl'
+          else:
+             px='cp27-none-linux_x86_64.whl'
 
-    else:
-       if python3==1:
-          px='cp3'+str(sver2)+'-cp3'+str(sver2)+'m-linux_x86_64.whl'
+       p += '-' + px
+
+       ################################ Prepare protobuf ################################
+       proto += 'protobuf-3.1.0-'
+
+       if hname=='win':
+          proto='https://pypi.python.org/packages/b2/30/ab593c6ae73b45a5ef0b0af24908e8aec27f79efcda2e64a3df7af0b92a2/protobuf-3.1.0-py2.py3-none-any.whl'
+
+       elif macos=='yes':
+          if python3==1:
+
+             supported_python_ver2_on_mac=cus.get('supported_python_ver2_on_mac',[])
+             if len(supported_python_ver2_on_mac)>0 and sver2 not in supported_python_ver2_on_mac:
+                return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_mac)+' on MacOS'}
+
+             proto += 'cp3'+str(sver2)+'-none-macosx_10_11_x86_64.whl'
+          else:
+             proto += 'cp27-none-macosx_10_11_x86_64.whl'
+
        else:
-          px='cp27-none-linux_x86_64.whl'
+          if python3==1:
 
-    p += '-' + px
+             supported_python_ver2_on_linux=cus.get('supported_python_ver2_on_linux',[])
+             if len(supported_python_ver2_on_linux)>0 and sver2 not in supported_python_ver2_on_linux:
+                return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_linux)+' on Linux'}
 
-
-
-    ################################ Prepare protobuf ################################
-    proto += 'protobuf-3.1.0-'
-
-    if hname=='win':
-       proto='https://pypi.python.org/packages/b2/30/ab593c6ae73b45a5ef0b0af24908e8aec27f79efcda2e64a3df7af0b92a2/protobuf-3.1.0-py2.py3-none-any.whl'
-
-    elif macos=='yes':
-       if python3==1:
-
-          supported_python_ver2_on_mac=cus.get('supported_python_ver2_on_mac',[])
-          if len(supported_python_ver2_on_mac)>0 and sver2 not in supported_python_ver2_on_mac:
-             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_mac)+' on MacOS'}
-
-          proto += 'cp3'+str(sver2)+'-none-macosx_10_11_x86_64.whl'
-       else:
-          proto += 'cp27-none-macosx_10_11_x86_64.whl'
-
-    else:
-       if python3==1:
-
-          supported_python_ver2_on_linux=cus.get('supported_python_ver2_on_linux',[])
-          if len(supported_python_ver2_on_linux)>0 and sver2 not in supported_python_ver2_on_linux:
-             return {'return':1, 'error':'this package supports only Python 3.'+str(supported_python_ver2_on_linux)+' on Linux'}
-
-          proto += 'cp3'+str(sver2)+'-none-linux_x86_64.whl'
-       else:
-          proto += 'cp27-none-linux_x86_64.whl'
+             proto += 'cp3'+str(sver2)+'-none-linux_x86_64.whl'
+          else:
+             proto += 'cp27-none-linux_x86_64.whl'
 
     nie={'PYTHON3':             python3,
          'TF_PYTHON_URL':       p,
