@@ -2,6 +2,10 @@
 
 This package installs TensorFlow Lite from the official tagged release `1.15.0` of TensorFlow ("Heavy").
 
+**NB:** This package enables the new GEMM backend of TFLite.
+To reproduce [MLPerf Inference v0.5 results](https://github.com/mlperf/inference_results_v0.5)
+from [dividiti](http://dividiti.com), use `ck-mlperf:package:lib-tflite-1.15.0-rc2-src-static`.
+
 ```bash
 $ ck install package:lib-tflite-1.15.0-src-static --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=4
 ```

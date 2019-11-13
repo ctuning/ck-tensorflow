@@ -4,12 +4,12 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "v1.15.0-rc2",
+      "PACKAGE_GIT_CHECKOUT": "v1.15.0",
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
     }, 
-    "version": "1.15.0-rc2"
+    "version": "1.15.0"
   }, 
   "deps": {
     "compiler": {
