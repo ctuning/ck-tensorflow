@@ -10,6 +10,12 @@ from [dividiti](http://dividiti.com), use `ck-mlperf:package:lib-tflite-1.15.0-r
 $ ck install package:lib-tflite-1.15.0-src-static --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=4
 ```
 
+**NB:** To use machine-specific build options (very important on Raspberry Pi, for example!), use:
+```
+$ ck install package:lib-tflite-1.15.0-src-static \
+--env.EXTRA_CXXFLAGS="-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4"
+```
+
 ## Unresolved issues
 
 ### Cannot build for Android
