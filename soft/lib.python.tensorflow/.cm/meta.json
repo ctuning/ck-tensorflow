@@ -1,0 +1,22 @@
+{
+  "auto_detect": "yes",
+  "customize": {
+    "check_that_exists": "yes",
+    "ck_version": 10,
+    "env_prefix": "CK_ENV_LIB_TF",
+    "limit_recursion_dir_search": {
+      "linux": 5
+    },
+    "soft_file": {
+      "linux": "tensorflow/__init__.py",
+      "win": "tensorflow/__init__.py"
+    }
+  },
+  "soft_name": "TensorFlow library",
+  "tags": [
+    "lib",
+    "tensorflow"
+  ],
+  "template": "yes",
+  "template_type": "TensorFlow library (Python)"
+}

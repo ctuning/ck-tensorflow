@@ -1,0 +1,34 @@
+{
+  "check_exit_status": "yes",
+  "customize": {
+    "install_env": {
+      "PIP_INSTALL_OPTIONS": "--ignore-installed",
+      "PYTHON_PACKAGE_NAME": "tensorflow"
+    }
+  },
+  "deps": {
+    "python": {
+      "add_to_path": "yes",
+      "local": "yes",
+      "name": "Python interpreter",
+      "sort": 10,
+      "tags": "compiler,python"
+    }
+  },
+  "end_full_path_universal": "build$#sep#$tensorflow$#sep#$__init__.py",
+  "only_for_host_os_tags": [],
+  "only_for_target_os_tags": [
+    "windows",
+    "linux"
+  ],
+  "package_extra_name": " (pip)",
+  "process_script": "install",
+  "soft_uoa": "68d5481814639a2f",
+  "suggested_path": "lib-python-tensorflow",
+  "tags": [
+    "lib",
+    "python-package",
+    "tensorflow",
+    "vpip"
+  ]
+}

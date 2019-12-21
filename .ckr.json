@@ -1,9 +1,10 @@
 {
-  "data_uid": "acb7cea44acac9c9",
+  "data_alias": "ck-tensorflow",
   "data_name": "ck-tensorflow",
+  "data_uid": "acb7cea44acac9c9",
+  "data_uoa": "ck-tensorflow",
   "dict": {
-    "shared": "git",
-    "sync": "yes",
+    "desc": "Portable/customizable installation and unified access to TensorFlow AI framework with different workflows and data sets.",
     "repo_deps": [
       {
         "repo_uoa": "ck-autotuning"
@@ -15,8 +16,8 @@
         "repo_uoa": "ck-mlperf"
       }
     ],
+    "shared": "git",
+    "sync": "yes",
     "url": "https://github.com/ctuning/ck-tensorflow"
-  },
-  "data_uoa": "ck-tensorflow",
-  "data_alias": "ck-tensorflow"
+  }
 }

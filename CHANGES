@@ -1,3 +1,5 @@
+2019.12.21 - [FGG] added TensorFlow installation via PIP (for RPi4)
+
 2019.02.13 - [FGG] added TF Slim model CIFAR10 for SysML'19 reproducible papers
 
 2018.12.15 - [FGG] redirected mobilenet packages to Zenodo
