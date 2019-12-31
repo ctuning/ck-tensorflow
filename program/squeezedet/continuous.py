@@ -337,8 +337,8 @@ def detect_image(mc, sess, model, class_names, avg_precision, orig_im, file_name
     out_file_name = os.path.join(FLAGS.out_dir, file_name)
     cv2.imwrite(out_file_name, orig_im)
 
-#    boxed_out_file_name = os.path.join(FLAGS.out_dir, 'boxed_' + file_name)
-#    cv2.imwrite(boxed_out_file_name, boxed_img)
+    boxed_out_file_name = os.path.join(FLAGS.out_dir, 'boxed_' + file_name)
+    cv2.imwrite(boxed_out_file_name, boxed_img)
 
     results={'objects':[]}
     

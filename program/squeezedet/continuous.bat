@@ -1,7 +1,7 @@
 set OUT_DIR=%cd%\out
 
 if "%SKIP_FILES_INCLUDING%" == "" (
-    rm -rf %OUT_DIR%
+    del /Q /S %OUT_DIR%
 )
 
 set PYTHONPATH=%PYTHONPATH%;%CK_ENV_DEMO_SQUEEZEDET_SRC%
