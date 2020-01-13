@@ -28,7 +28,8 @@
     "windows"
   ], 
   "only_for_target_os_tags": [
-    "linux"
+    "linux",
+    "windows"
   ], 
   "package_extra_name": " (prebuilt, cpu)", 
   "process_script": "install", 
