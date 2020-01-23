@@ -12,11 +12,6 @@
       "ignore_return_code": "no",
       "run_time": {
         "fine_grain_timer_file": "tmp-ck-timer.json",
-        "_pre_process_via_ck": {
-          "data_uoa":       "b98ee24399ef4c3a",
-          "module_uoa":     "script",
-          "script_name":    "preprocess"
-        },
         "post_process_via_ck": {
           "data_uoa":       "b98ee24399ef4c3a",
           "module_uoa":     "script",
@@ -26,12 +21,6 @@
         "run_output_files": [
           "tmp-ck-timer.json"
         ]
-      }
-    },
-    "barebones": {
-      "ignore_return_code": "no",
-      "run_time": {
-        "run_cmd_main": "$<<CK_ENV_COMPILER_PYTHON_FILE>>$ ../tf_classify.py"
       }
     }
   },
@@ -62,17 +51,11 @@
       "sort": 40,
       "tags": "lib,python-package,numpy"
     },
-    "lib-python-pillow": {
-      "local": "yes",
-      "name": "Pillow python library",
-      "sort": 50,
-      "tags": "lib,python-package,pillow"
-    },
     "lib-tensorflow": {
       "local": "yes",
       "name": "TensorFlow library",
       "sort": 60,
-      "tags": "lib,tensorflow"
+      "tags": "lib,tensorflow,vprebuilt"
     }
   },
   "run_vars": {
