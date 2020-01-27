@@ -25,7 +25,7 @@ import converter_results
 import converter_annotations
 import calc_metrics_kitti
 import calc_metrics_coco
-import calc_metrics_oid
+#import calc_metrics_oid    # temporarily not supported (since tensorflowmodel-api-*/models/research/object_detection/eval_util.py is broken)
 from object_detection.utils import label_map_util
 
 LABELMAP_FILE = ENV['LABELMAP_FILE']
