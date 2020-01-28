@@ -29,6 +29,7 @@
     "lib",
     "python-package",
     "tensorflow",
+    "vprebuilt",
     "vpip"
   ]
 }
