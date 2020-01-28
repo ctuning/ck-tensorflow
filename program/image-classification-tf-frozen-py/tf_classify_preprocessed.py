@@ -90,8 +90,8 @@ def load_preprocessed_batch(image_list, image_index):
 
 def load_graph(frozen_graph_filename):
 
-    with tf.gfile.GFile(frozen_graph_filename, "rb") as f:
-        graph_def = tf.GraphDef()
+    with tf.compat.v1.gfile.GFile(frozen_graph_filename, "rb") as f:
+        graph_def = tf.compat.v1.GraphDef()
         graph_def.ParseFromString(f.read())
 
     # import the graph_def into a new Graph and return it
@@ -126,7 +126,7 @@ def main():
     num_labels = len(labels)
 
     # Prepare TF config options
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.allocator_type = 'BFC'
     config.gpu_options.per_process_gpu_memory_fraction = float(os.getenv('CK_TF_GPU_MEMORY_PERCENT', 33)) / 100.0
@@ -170,7 +170,7 @@ def main():
     print("Data normalization: {}".format(MODEL_NORMALIZE_DATA) )
     print("")
 
-    with tf.Session(graph=graph, config=config) as sess:
+    with tf.compat.v1.Session(graph=graph, config=config) as sess:
 
         setup_time = time.time() - setup_time_begin
 
