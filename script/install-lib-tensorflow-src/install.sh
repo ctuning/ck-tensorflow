@@ -68,6 +68,7 @@ export TF_NEED_MPI=0
 export TF_CUDA_CLANG=0
 export TF_NEED_OPENCL_SYCL=0
 export TF_NEED_ROCM=0
+export TF_SET_ANDROID_WORKSPACE=0
 export PYTHON_BIN_PATH=${CK_ENV_COMPILER_PYTHON_FILE}
 export PYTHON_LIB_PATH="$($PYTHON_BIN_PATH -c 'import site; print(site.getsitepackages()[0])')"
 
