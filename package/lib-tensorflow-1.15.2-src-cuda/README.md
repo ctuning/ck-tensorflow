@@ -32,3 +32,8 @@ e.g. 1 processor:
 ```bash
 $ ck install package:lib-tensorflow-1.15.2-src-cuda --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
 ```
+
+## Known problems
+### CUDA 10.2 in not supported
+
+[Downgrade to 10.1](https://github.com/tensorflow/tensorflow/issues/34429).
