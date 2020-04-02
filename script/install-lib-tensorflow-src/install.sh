@@ -154,7 +154,13 @@ done
 
 remove_dir_if_exists ${TARGET_LIB_DIR}
 mkdir ${TARGET_LIB_DIR}
-mv ${TARGET_OBJ_DIR}/tensorflow*data/purelib/* ${TARGET_LIB_DIR}
+if [ -d "${TARGET_OBJ_DIR}/tensorflow/" ] && [ -d "${TARGET_OBJ_DIR}/tensorflow_core/" ];
+then # >= v1.15
+  mv "${TARGET_OBJ_DIR}/tensorflow/"      ${TARGET_LIB_DIR}
+  mv "${TARGET_OBJ_DIR}/tensorflow_core/" ${TARGET_LIB_DIR}
+else # < v.1.15
+  mv ${TARGET_OBJ_DIR}/tensorflow*data/purelib/* ${TARGET_LIB_DIR}
+fi
 rm -rdf ${TARGET_OBJ_DIR}/tensorflow-*.data
 rm -rdf ${TARGET_OBJ_DIR}/tensorflow-*.dist-info
 
