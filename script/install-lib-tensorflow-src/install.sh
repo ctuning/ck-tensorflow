@@ -55,6 +55,7 @@ fi
 stage "Configure environment variables"
 # TF configure.py script will ask for all unset variables
 export CC_OPT_FLAGS="-march=native"
+export TF_SET_ANDROID_WORKSPACE=0
 export TF_NEED_S3=0
 export TF_NEED_GDR=0
 export TF_NEED_GCP=0
