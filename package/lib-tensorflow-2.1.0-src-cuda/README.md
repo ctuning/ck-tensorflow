@@ -14,7 +14,7 @@ $ sudo apt-get install python-dev python-pip python-wheel
 python -m pip install --user absl-py==0.8.0              # >=0.7.0
 python -m pip install --user astor==0.7.1                # >=0.6.0
 python -m pip install --user cachetools==4.0.0           # <5.0,>=2.0.0
-python -m pip install --user gast==0.2.2                 # exact
+python -m pip install --user gast==0.2.2                 # ==0.2.2 (exact)
 python -m pip install --user google-auth==1.13.1         # <2,>=1.6.3
 python -m pip install --user google-auth-oauthlib==0.4.1 # <0.5,>=0.4.1
 python -m pip install --user google-pasta==0.2.0         # >=0.1.6
@@ -32,11 +32,11 @@ python -m pip install --user pyasn1-modules==0.2.8       # >=0.2.1
 python -m pip install --user requests==2.23.0            # <3,>=2.21.0
 python -m pip install --user requests-oauthlib==1.3.0    # >=0.7.0
 python -m pip install --user rsa==4.0                    # <4.1,>=3.1.4
-python -m pip install --user scipy==1.1.1                # ==1.4.1 (exact)
+python -m pip install --user scipy==1.4.1                # ==1.4.1 (exact)
 python -m pip install --user setuptools==46.1.3          # >=41.0.0
 python -m pip install --user six==1.14.0                 # >=1.12.0
-python -m pip install --user tensorboard==2.1.1          # <2.2.0,>=2.1.0 (exact)
-python -m pip install --user tensorflow-estimator==2.1.0 # <2.2.0,>=2.1.0 (exact)
+python -m pip install --user tensorboard==2.1.1          # <2.2.0,>=2.1.0 (almost exact)
+python -m pip install --user tensorflow-estimator==2.1.0 # <2.2.0,>=2.1.0 (almost exact)
 python -m pip install --user termcolor==1.1.0            # >=1.1.0
 python -m pip install --user wheel==0.30.0               # >=0.26
 python -m pip install --user werkzeug==1.0.1             # >=0.11.15
@@ -45,7 +45,7 @@ python -m pip install --user wrapt==1.11.2               # >=1.11.1
 
 **NB:** Hint install prebuilt TensorFlow via pip to check all suitable dependencies:
 ```bash
-$ python -m pip install tensorflow==2.0.1
+$ python -m pip install tensorflow==2.1.0
 ```
 
 ## Prevent running out of memory
