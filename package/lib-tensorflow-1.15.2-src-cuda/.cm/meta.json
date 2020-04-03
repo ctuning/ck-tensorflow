@@ -29,13 +29,14 @@
       "version_to": [
         0,
         26,
-        2
+        1,
+        99
       ]
     },
     "cuda": {
       "add_to_path": "no",
       "local": "yes",
-      "name": "CUDA compiler >=9.1, <10.2",
+      "name": "CUDA compiler >=9.1, <=10.1",
       "sort": 40,
       "tags": "compiler,cuda",
       "version_from": [
@@ -44,7 +45,8 @@
       ],
       "version_to": [
         10,
-        2
+        1,
+        99
       ]
     },
     "cudnn": {

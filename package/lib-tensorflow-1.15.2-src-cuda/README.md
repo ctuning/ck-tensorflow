@@ -34,6 +34,8 @@ $ ck install package:lib-tensorflow-1.15.2-src-cuda --env.CK_HOST_CPU_NUMBER_OF_
 ```
 
 ## Known problems
+
 ### CUDA 10.2 in not supported
 
-[Downgrade to 10.1](https://github.com/tensorflow/tensorflow/issues/34429).
+Either [use 10.1](https://github.com/tensorflow/tensorflow/issues/34429) or
+[patch](https://github.com/tensorflow/tensorflow/commit/67edc16326d6328e7ef096e1b06f81dae1bfb816).
