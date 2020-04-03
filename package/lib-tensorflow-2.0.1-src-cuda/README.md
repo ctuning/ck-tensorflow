@@ -10,19 +10,34 @@ $ sudo apt-get install python-dev python-pip python-wheel
 
 ### Install Python packages (in user-space)
 ```bash
-python -m pip install google-pasta --user
-python -m pip install opt-einsum --user
-python -m pip install grpcio --user
-python -m pip install protobuf --user
-python -m pip install absl-py --user
-python -m pip install wrapt --user
-python -m pip install astor --user
-python -m pip install termcolor --user
-python -m pip install gast==0.2.2 --user
-python -m pip install tensorboard==1.15.0 --user
-python -m pip install tensorflow-estimator==1.15.1 --user
-python -m pip install keras_applications==1.0.8 --no-deps --user
-python -m pip install keras_preprocessing==1.1.0 --no-deps --user
+python -m pip install --user absl-py==0.8.0              # >=0.7.0
+python -m pip install --user astor==0.7.1                # >=0.6.0
+python -m pip install --user cachetools==4.0.0           # <5.0,>=2.0.0
+python -m pip install --user gast==0.2.2                 # exact
+python -m pip install --user google-auth==1.13.1         # <2,>=1.6.3
+python -m pip install --user google-auth-oauthlib==0.4.1 # <0.5,>=0.4.1
+python -m pip install --user google-pasta==0.2.0         # >=0.1.6
+python -m pip install --user grpcio==1.27.2              # >=1.8.6
+python -m pip install --user h5py==2.10.0                # exact?
+python -m pip install --user keras-applications==1.0.8   # >=1.0.8
+python -m pip install --user keras-preprocessing==1.1.0  # >=1.0.5
+python -m pip install --user markdown==3.2.1             # >=2.6.8
+python -m pip install --user numpy==1.17.2               # <2.0,>=1.16.0
+python -m pip install --user oauthlib==3.1.0             # ?
+python -m pip install --user opt-einsum==3.2.0           # >=2.3.2
+python -m pip install --user protobuf==3.6.1             # >=3.6.1
+python -m pip install --user pyasn1==0.4.8               # <0.5.0,>=0.4.6
+python -m pip install --user pyasn1-modules==0.2.8       # >= 0.2.1
+python -m pip install --user requests==2.23.0            # <3,>=2.21.0
+python -m pip install --user requests-oauthlib==1.3.0    # >= 0.7.0
+python -m pip install --user rsa==4.0                    # <4.1,>=3.1.4
+python -m pip install --user setuptools==46.1.3          # >=41.0.0
+python -m pip install --user tensorboard==2.0.2          # <2.1.0,>=2.0.0
+python -m pip install --user tensorflow-estimator==2.0.1 # <2.1.0,>=2.0.0
+python -m pip install --user termcolor==1.1.0            # >=1.1.0
+python -m pip install --user wheel==0.30.0               # >= 0.26
+python -m pip install --user werkzeug==1.0.1             # >=0.11.15
+python -m pip install --user wrapt==1.11.2               # >=1.11.1
 ```
 
 ## Prevent running out of memory
