@@ -9,7 +9,7 @@ import tensorflow.contrib.tensorrt as trt
 
 def load_graph_tensorrt(params):
   graph_def = tf.compat.v1.GraphDef()
-  with tf.gfile.GFile(params["FROZEN_GRAPH"], 'rb') as f:
+  with tf.compat.v1.gfile.GFile(params["FROZEN_GRAPH"], 'rb') as f:
     graph_def.ParseFromString(f.read())
     tf.import_graph_def(graph_def, name='')
   trt_graph = trt.create_inference_graph(
