@@ -4,6 +4,7 @@
     "install_env": {
       "PACKAGE_GIT": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_PATCH": "YES",
       "PACKAGE_SUB_DIR": "models",
       "PACKAGE_URL": "https://github.com/tensorflow/models.git",
       "PACKAGE_VERSION": "master"
