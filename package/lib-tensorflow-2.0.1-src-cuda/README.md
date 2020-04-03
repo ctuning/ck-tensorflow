@@ -27,15 +27,15 @@ python -m pip install --user oauthlib==3.1.0             # ?
 python -m pip install --user opt-einsum==3.2.0           # >=2.3.2
 python -m pip install --user protobuf==3.6.1             # >=3.6.1
 python -m pip install --user pyasn1==0.4.8               # <0.5.0,>=0.4.6
-python -m pip install --user pyasn1-modules==0.2.8       # >= 0.2.1
+python -m pip install --user pyasn1-modules==0.2.8       # >=0.2.1
 python -m pip install --user requests==2.23.0            # <3,>=2.21.0
-python -m pip install --user requests-oauthlib==1.3.0    # >= 0.7.0
+python -m pip install --user requests-oauthlib==1.3.0    # >=0.7.0
 python -m pip install --user rsa==4.0                    # <4.1,>=3.1.4
 python -m pip install --user setuptools==46.1.3          # >=41.0.0
-python -m pip install --user tensorboard==2.0.2          # <2.1.0,>=2.0.0
-python -m pip install --user tensorflow-estimator==2.0.1 # <2.1.0,>=2.0.0
+python -m pip install --user tensorboard==2.0.2          # <2.1.0,>=2.0.0 (almost exact)
+python -m pip install --user tensorflow-estimator==2.0.1 # <2.1.0,>=2.0.0 (almost exact)
 python -m pip install --user termcolor==1.1.0            # >=1.1.0
-python -m pip install --user wheel==0.30.0               # >= 0.26
+python -m pip install --user wheel==0.30.0               # >=0.26
 python -m pip install --user werkzeug==1.0.1             # >=0.11.15
 python -m pip install --user wrapt==1.11.2               # >=1.11.1
 ```
