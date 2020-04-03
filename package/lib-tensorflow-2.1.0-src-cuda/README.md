@@ -55,3 +55,9 @@ e.g. 1 processor:
 ```bash
 $ ck install package:lib-tensorflow-2.1.0-src-cuda --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=1
 ```
+
+## Known issues
+
+### Build fails with TensorRT 6 and 7
+
+https://github.com/tensorflow/tensorflow/issues/37076

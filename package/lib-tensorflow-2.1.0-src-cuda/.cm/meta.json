@@ -6,6 +6,7 @@
       "CK_TF_ENABLE_XLA": "NO", 
       "CK_TF_NEED_CUDA": "YES", 
       "CK_TF_NEED_TENSORRT": "NO", 
+      "OTHER_CONFIG_OPTS": "--noincompatible_do_not_split_linking_cmdline ",
       "PACKAGE_GIT": "YES", 
       "PACKAGE_GIT_CHECKOUT": "v2.1.0", 
       "PACKAGE_PATCH": "YES", 
