@@ -8,12 +8,23 @@ cd tmp
 wget ${PACKAGE_URL}/${PACKAGE_NAME}
 
 ########################################################################
+if [ ${PACKAGE_UNZIP} == "YES" ] && [ ${PACKAGE_UNTAR} == "YES" ]; then
 echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
 tar -zxvf ${PACKAGE_NAME}
 mv ${PACKAGE_NAME1}/${FROZEN_GRAPH} ..
 mv ${PACKAGE_NAME1}/${WEIGHTS_FILE}* ..
 mv ${PACKAGE_NAME1}/${PIPELINE_CONFIG} ..
+fi
+
+#####################################################################
+if [ -f ${FROZEN_GRAPH} ] && [ ${FROZEN_GRAPH} != "graph.pb" ]; then
+  mv ${FROZEN_GRAPH} ..
+  cd ..
+  rm -f graph.pb
+  ln -s ${FROZEN_GRAPH} graph.pb
+  cd tmp/
+fi
 
 ########################################################################
 echo
@@ -48,7 +59,6 @@ fi
 
 #cp -f ${ORIGINAL_PACKAGE_DIR}/custom_hooks.py .
 #cp -f ${ORIGINAL_PACKAGE_DIR}/custom_tensorRT.py .
-
 
 #####################################################################
 echo ""
