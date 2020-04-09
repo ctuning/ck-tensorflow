@@ -34,14 +34,19 @@ rm -rf tmp
 
 #####################################################################
 echo ""
-echo "Copy label-map file ..."
-
+echo "Copy label-map file from '${CK_ENV_LABELMAP_FILE}' ..."
 cp -f ${CK_ENV_LABELMAP_FILE} .
 
+#####################################################################
+if [ ! -f ${PIPELINE_CONFIG} ];  then
+  echo ""
+  echo "Copy '${PIPELINE_CONFIG}' from '${ORIGINAL_PACKAGE_DIR}' ..."
+  cp -f ${ORIGINAL_PACKAGE_DIR}/${PIPELINE_CONFIG} .
+fi
 
 #####################################################################
 echo ""
-echo "Copy custom model function hooks implementations ..."
+echo "Copy custom model hooks (if any) ..."
 echo "${ORIGINAL_PACKAGE_DIR}"
 echo "to"
 echo "$PWD"
@@ -50,7 +55,6 @@ FILE=${ORIGINAL_PACKAGE_DIR}/custom_hooks.py
 if [ -f "$FILE" ]; then
     cp -f "$FILE" .
 fi
-
 
 FILE=${ORIGINAL_PACKAGE_DIR}/custom_tensorRT.py
 if [ -f "$FILE" ]; then
