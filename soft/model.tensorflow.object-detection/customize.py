@@ -69,6 +69,21 @@ def setup(i):
     env[ep+'_FROZEN_GRAPH'] = frozen_graph_name
     env[ep+'_TF_FROZEN_FILEPATH'] = frozen_graph_name  # the same (for compatibility)
 
+    # Init model-specific variables:
+    #
+    # This other group should be started with MODEL_ prefix e.g. MODEL_MOBILENET_RESOLUTION
+    # This prefix will be cut off as it already contained in cus['env_prefix']
+    # so we'll get vars like CK_ENV_TENSORFLOW_MODEL_MOBILENET_RESOLUTION
+    for varname in install_env.keys():
+        if varname.startswith('MODEL_'):
+            env[ep+varname[len('MODEL'):]] = install_env[varname]
+
+    # Just copy those without any change in the name:
+    #
+    for varname in install_env.keys():
+        if varname.startswith('ML_MODEL_'):
+            env[varname] = install_env[varname]
+
     if 'WEIGHTS_FILE' in install_dir:   # optional
       env[ep+'_WEIGHTS_FILE'] = os.path.join(install_dir, install_env['WEIGHTS_FILE'])
 
