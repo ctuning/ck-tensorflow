@@ -5,6 +5,15 @@
     "install_env": {
       "PACKAGE_GIT": "YES", 
       "PACKAGE_GIT_CHECKOUT": "v1.15.0", 
+      "PACKAGE_PATCH_V_0_1_7_DOWNLOAD_DEPENDENCIES":"",
+      "PACKAGE_PATCH_V_0_1_7_MAKEFILE":"",
+      "PACKAGE_PATCH_V_0_1_7_REGISTER_CC":"",
+      "PACKAGE_PATCH_V_1_13_1_MAKEFILE":"",
+      "PACKAGE_PATCH_V_1_14_0_DOWNLOAD_DEPENDENCIES":"",
+      "PACKAGE_PATCH_V_1_14_0_MAKEFILE":"",
+      "PACKAGE_PATCH_V_1_14_0_OFFSETOF":"",
+      "PACKAGE_PATCH_V_1_15_0_MAKEFILE":"",
+      "PACKAGE_PATCH_V_1_15_0_OFFSETOF":"",
       "PACKAGE_PATCH": "YES", 
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
