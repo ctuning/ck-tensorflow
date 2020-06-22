@@ -4,6 +4,7 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_0_1_7_DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_0_1_7_MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_0_1_7_REGISTER_CC>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_13_1_MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_14_0_DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_14_0_MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_14_0_OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_15_0_MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.variations/\\$<<PACKAGE_PATCH_V_1_15_0_OFFSETOF>>$",
       "PACKAGE_PATCH_V_0_1_7_DOWNLOAD_DEPENDENCIES":"",
       "PACKAGE_PATCH_V_0_1_7_MAKEFILE":"",
       "PACKAGE_PATCH_V_0_1_7_REGISTER_CC":"",
