@@ -17,9 +17,8 @@
       "PACKAGE_PATCH_V_1_15_0_OFFSETOF":"",
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
-    }, 
-    "version": "1.15.0"
-  }, 
+    } 
+  },
   "deps": {
     "compiler": {
       "local": "yes", 
@@ -54,9 +53,6 @@
     "tensorflow-static", 
     "vsrc", 
     "vstatic", 
-    "v1.15.0", 
-    "v1.15", 
-    "v1", 
     "channel-stable"
   ],
   "variations":{
@@ -104,7 +100,9 @@
     "rpi4":{
       "extra_env":{
         "EXTRA_CXXFLAGS":"-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
+      }
     }
+  },
   "template": "yes", 
   "template_type": "TFLite ML framework (static)", 
   "use_scripts_from_another_entry": {
