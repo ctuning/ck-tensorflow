@@ -58,7 +58,53 @@
     "v1.15", 
     "v1", 
     "channel-stable"
-  ], 
+  ],
+  "variations":{
+    "v0.1.7":{
+      "exta_env":{
+        "PACKAGE_GIT_CHECKOUT":"v0.1.7",
+        "PACKAGE_VERSION":"0.1.7",
+        "PACKAGE_PATCH_V_0_1_7_DOWNLOAD_DEPENDENCIES":"v0.1.7_download_dependencies.patch",
+        "PACKAGE_PATCH_V_0_1_7_MAKEFILE":"v0.1.7_Makefile.patch",
+        "PACKAGE_PATCH_V_0_1_7_REGISTER_CC":"v0.1.7_register.cc.patch"
+      }
+    },
+    "v1.13.1":{
+      "exta_env":{
+        "PACKAGE_GIT_CHECKOUT":"v1.13.1",
+        "PACKAGE_VERSION":"1.13.1",
+        "PACKAGE_PATCH_V_1_13_1_MAKEFILE":"v1.13.1_Makefile.patch"
+      }
+    },
+    "v1.14.0":{
+      "exta_env":{
+        "PACKAGE_GIT_CHECKOUT":"v1.14.0",
+        "PACKAGE_VERSION":"1.14.0",
+        "PACKAGE_PATCH_V_1_14_0_DOWNLOAD_DEPENDENCIES":"v1.14.0_download_dependencies.patch",
+        "PACKAGE_PATCH_V_1_14_0_MAKEFILE":"v1.14.0_Makefile.patch",
+        "PACKAGE_PATCH_V_1_14_0_OFFSETOF":"v1.14.0_OFFSETOF.patch"
+      }
+    },
+    "v1.15.0":{
+      "exta_env":{
+        "PACKAGE_GIT_CHECKOUT":"v1.15.0",
+        "PACKAGE_VERSION":"1.15.0",
+        "PACKAGE_PATCH_V_1_15_0_MAKEFILE":"v1.15.0_Makefile.patch",
+        "PACKAGE_PATCH_V_1_15_0_OFFSETOF":"v1.15.0_OFFSETOF.patch"
+      }
+    },
+    "v1.15.3":{
+      "exta_env":{
+        "PACKAGE_GIT_CHECKOUT":"v1.15.3",
+        "PACKAGE_VERSION":"1.15.3",
+        "PACKAGE_PATCH_V_1_15_0_MAKEFILE":"v1.15.0_Makefile.patch",
+        "PACKAGE_PATCH_V_1_15_0_OFFSETOF":"v1.15.0_OFFSETOF.patch"
+      }
+    },
+    "rpi4":{
+      "extra_env":{
+        "EXTRA_CXXFLAGS":"-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
+    }
   "template": "yes", 
   "template_type": "TFLite ML framework (static)", 
   "use_scripts_from_another_entry": {
