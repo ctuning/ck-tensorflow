@@ -1,0 +1,13 @@
+diff --git a/tensorflow/contrib/lite/Makefile b/tensorflow/contrib/lite/Makefile
+index b4504f2..68e665b 100644
+--- a/tensorflow/contrib/lite/Makefile
++++ b/tensorflow/contrib/lite/Makefile
+@@ -118,7 +118,7 @@ $(OBJDIR)%.o: %.c
+ 	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
+ 
+ # The target that's compiled if there's no command-line arguments.
+-all: $(LIB_PATH) $(BENCHMARK_PATH)
++all: $(LIB_PATH)
+ 
+ # Gathers together all the objects we've compiled into a single '.a' archive.
+ $(LIB_PATH): $(LIB_OBJS)
