@@ -4,7 +4,6 @@
     "git_src_dir": "src", 
     "install_env": {
       "PACKAGE_GIT": "YES", 
-      "PACKAGE_GIT_CHECKOUT": "v1.15.0", 
       "PACKAGE_PATCH_V_0_1_7_DOWNLOAD_DEPENDENCIES":"",
       "PACKAGE_PATCH_V_0_1_7_MAKEFILE":"",
       "PACKAGE_PATCH_V_0_1_7_REGISTER_CC":"",
