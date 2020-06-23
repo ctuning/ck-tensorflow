@@ -103,8 +103,6 @@
       }
     }
   },
-  "template": "yes", 
-  "template_type": "TFLite ML framework (static)", 
   "use_scripts_from_another_entry": {
     "data_uoa": "08154997bac8ed55", 
     "module_uoa": "script"
