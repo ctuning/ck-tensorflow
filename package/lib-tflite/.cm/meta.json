@@ -16,8 +16,9 @@
       "PACKAGE_PATCH__REL_1_15_0__MAKEFILE":"",
       "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"",
       "PACKAGE_SUB_DIR": "src", 
-      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow"
-    } 
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
+      "PACKAGE_VERSION": "default"
+    }
   },
   "deps": {
     "compiler": {
@@ -28,21 +29,18 @@
     }
   }, 
   "end_full_path": {
-    "android": "lib/libtensorflow-lite.a", 
     "linux": "lib/libtensorflow-lite.a"
   }, 
   "need_cpu_info": "yes", 
   "only_for_host_os_tags": [
-    "linux", 
-    "android"
+    "linux"
   ], 
   "only_for_target_os_tags": [
-    "linux", 
-    "android"
+    "linux"
   ], 
   "package_extra_name": " (from sources, static)", 
   "process_script": "install", 
-  "soft_uoa": "44398cb5ffa18a26", 
+  "soft_uoa": "lib.tflite.static",
   "suggested_path": "lib-tflite-src-static", 
   "tags": [
     "lib", 
@@ -55,9 +53,9 @@
     "vstatic", 
     "channel-stable"
   ],
-  "variations":{
+  "variations": {
     "rel.0.1.7":{
-      "exta_env":{
+      "extra_env": {
         "PACKAGE_GIT_CHECKOUT":"v0.1.7",
         "PACKAGE_VERSION":"0.1.7",
         "PACKAGE_PATCH__REL_0_1_7__DOWNLOAD_DEPENDENCIES":"",
@@ -65,15 +63,15 @@
         "PACKAGE_PATCH__REL_0_1_7__REGISTER_CC":""
       }
     },
-    "rel.1.13.1":{
-      "exta_env":{
+    "rel.1.13.1": {
+      "extra_env":{
         "PACKAGE_GIT_CHECKOUT":"v1.13.1",
         "PACKAGE_VERSION":"1.13.1",
         "PACKAGE_PATCH__REL_1_13_1__MAKEFILE":"v1.13.1_Makefile.patch"
       }
     },
-    "rel.1.14.0":{
-      "exta_env":{
+    "rel.1.14.0": {
+      "extra_env":{
         "PACKAGE_GIT_CHECKOUT":"v1.14.0",
         "PACKAGE_VERSION":"1.14.0",
         "PACKAGE_PATCH__REL_1_14_0__DOWNLOAD_DEPENDENCIES":"v1.14.0_download_dependencies.patch",
@@ -81,23 +79,23 @@
         "PACKAGE_PATCH__REL_1_14_0__OFFSETOF":"v1.14.0_offsetof.patch"
       }
     },
-    "rel.1.15.0":{
-      "exta_env":{
+    "rel.1.15.0": {
+      "extra_env":{
         "PACKAGE_GIT_CHECKOUT":"v1.15.0",
         "PACKAGE_VERSION":"1.15.0",
         "PACKAGE_PATCH__REL_1_15_0__MAKEFILE":"v1.15.0_Makefile.patch",
         "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
       }
     },
-    "rel.1.15.3":{
-      "exta_env":{
+    "rel.1.15.3": {
+      "extra_env":{
         "PACKAGE_GIT_CHECKOUT":"v1.15.3",
         "PACKAGE_VERSION":"1.15.3",
         "PACKAGE_PATCH__REL_1_15_0__MAKEFILE":"v1.15.0_Makefile.patch",
         "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
       }
     },
-    "rpi4":{
+    "rpi4": {
       "extra_env":{
         "EXTRA_CXXFLAGS":"-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
       }
