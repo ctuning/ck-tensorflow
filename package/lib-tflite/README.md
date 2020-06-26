@@ -1,20 +1,36 @@
 # TensorFlow Lite package
 
-This package installs TensorFlow Lite from the official tagged release `1.15.0` of TensorFlow ("Heavy").
+This package installs TensorFlow Lite from the following official tagged releases of TensorFlow.
 
-**NB:** This package enables the new GEMM backend of TFLite.
-To reproduce [MLPerf Inference v0.5 results](https://github.com/mlperf/inference_results_v0.5)
-from [dividiti](http://dividiti.com), use `ck-mlperf:package:lib-tflite-1.15.0-rc2-src-static`.
+* rel.1.13.1
+* rel.1.14.0
+* rel.1.15.0 - Enables new GEMM backend of TFLITE
+* rel.1.15.3 - 
+
+### Installation
 
 ```bash
-$ ck install package:lib-tflite-1.15.0-src-static --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=4
+$ ck install package --tags=lib,tflite,rel.1.15.3 --env.CK_HOST_CPU_NUMBER_OF_PROCESSORS=4
 ```
 
-**NB:** To use machine-specific build options (very important on Raspberry Pi, for example!), use:
+**NB:** To use machine-specific build options such as for the Raspberry Pi, check
+.cm/meta.json to see if the respective variation is available and add it to the installation
+command as shown (here in the case of rpi4):
+
+
 ```
-$ ck install package:lib-tflite-1.15.0-src-static \
+$ ck install package --tags=lib,tflite,rel.1.15.3,rpi4
+```
+
+or add the relevant extra flags if the relevant hardware
+isn't mentioned as shown in the following example
+
+
+```
+$ ck install package --tags=lib,tflite,rel.1.15.3 \
 --env.EXTRA_CXXFLAGS="-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4"
 ```
+
 
 ## Unresolved issues
 
