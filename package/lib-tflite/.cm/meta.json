@@ -85,6 +85,7 @@
     },
     "rpi4": {
       "extra_env":{
+        "CK_HOST_CPU_NUMBER_OF_PROCESSORS": 3,
         "EXTRA_CXXFLAGS":"-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
       }
     }
