@@ -135,8 +135,9 @@ echo ""
 if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
   echo
   echo "Building Android package..."
+  read -d '' CMD <<END_OF_CMD
   make -f ${TFLITE_MAKE_DIR}/Makefile \
-       -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS} \
+       -j ${CK_NUMBER_OF_MAKE_THREADS:-${CK_HOST_CPU_NUMBER_OF_PROCESSORS}} \
          TARGET=ANDROID \
          ARCH="${HOSTTYPE}" \
          COMPILER_TOOLCHAIN_NAME="${CK_COMPILER_TOOLCHAIN_NAME}" \
@@ -144,13 +145,19 @@ if [[ "${CK_ANDROID_NDK_ROOT_DIR}" ]]; then
          NDK_ROOT="${CK_ANDROID_NDK_ROOT_DIR}" \
          ANDROID_API="${CK_ANDROID_API_LEVEL}" \
          ANDROID_ARCH="${CK_ANDROID_ABI}"
+END_OF_CMD
+  echo ${CMD}
+  eval ${CMD}
   exit_if_error
 else
   echo
   echo "Building Linux package..."
-
+  read -d '' CMD <<END_OF_CMD
   make -f ${TFLITE_MAKE_DIR}/Makefile \
-       -j ${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
+       -j ${CK_NUMBER_OF_MAKE_THREADS:-${CK_HOST_CPU_NUMBER_OF_PROCESSORS}}
+END_OF_CMD
+  echo ${CMD}
+  eval ${CMD}
   exit_if_error
 fi
 
