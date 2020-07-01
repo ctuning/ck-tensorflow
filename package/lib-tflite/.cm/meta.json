@@ -85,6 +85,14 @@
         "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
       }
     },
+    "rel.2.0.2": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT":"v2.0.2",
+        "PACKAGE_VERSION":"2.0.2",
+        "PACKAGE_PATCH__REL_1_15_0__MAKEFILE":"v1.15.0_Makefile.patch",
+        "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
+      }
+    },
     "rel.2.1.0": {
       "extra_env": {
         "PACKAGE_GIT_CHECKOUT":"v2.1.0",
