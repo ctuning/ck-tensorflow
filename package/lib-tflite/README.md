@@ -4,9 +4,9 @@ This package builds TensorFlow Lite from the following official tagged releases 
 
 * `rel.1.13.1`
 * `rel.1.14.0`
-* `rel.1.15.0` (enables RUY, a new GEMM backend)
+* `rel.1.15.0` (enables [ruy](https://github.com/google/ruy), a new GEMM backend)
 * `rel.1.15.3`
-* `rel.2.0.2` (fails on 32-bit Raspberry Pi OS)
+* `rel.2.0.2` ([fails](#build_failure_2_0) on 32-bit Raspberry Pi OS)
 * `rel.2.1.0`
 * `rel.2.1.1`
 
@@ -48,6 +48,7 @@ However, thread variations currently only support 1-4 threads, while `CK_HOST_CP
 
 ## Known issues
 
+<a name="build_failure_2_0"></a>
 ### Cannot build v2.0.x on 32-bit Raspberry Pi OS
 
 Building `rel.2.0.2` on a Raspberry Pi 4 with 32-bit Raspberry Pi OS (GCC 8.3.0), runs into an assemler problem:
