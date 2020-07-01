@@ -5,13 +5,14 @@
     "install_env": {
       "PACKAGE_GIT": "YES", 
       "PACKAGE_PATCH": "YES", 
-      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_13_1__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_15_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_15_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_2_1_0__MAKEFILE>>$",
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_13_1__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_14_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_15_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_1_15_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_2_1_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__REL_2_1_0__MAKEFILE>>$",
       "PACKAGE_PATCH__REL_1_13_1__MAKEFILE":"",
       "PACKAGE_PATCH__REL_1_14_0__DOWNLOAD_DEPENDENCIES":"",
       "PACKAGE_PATCH__REL_1_14_0__MAKEFILE":"",
       "PACKAGE_PATCH__REL_1_14_0__OFFSETOF":"",
       "PACKAGE_PATCH__REL_1_15_0__MAKEFILE":"",
       "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"",
+      "PACKAGE_PATCH__REL_2_1_0__DOWNLOAD_DEPENDENCIES":"",
       "PACKAGE_PATCH__REL_2_1_0__MAKEFILE":"",
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
@@ -88,6 +89,7 @@
       "extra_env": {
         "PACKAGE_GIT_CHECKOUT":"v2.1.0",
         "PACKAGE_VERSION":"2.1.0",
+        "PACKAGE_PATCH__REL_2_1_0__DOWNLOAD_DEPENDENCIES":"v2.1.0_download_dependencies.patch",
         "PACKAGE_PATCH__REL_2_1_0__MAKEFILE":"v2.1.0_Makefile.patch",
         "PACKAGE_PATCH__REL_1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
       }
