@@ -24,7 +24,8 @@
     "CK_ENV_LIB_STDCPP_INCLUDE",
     "CK_ENV_LIB_STDCPP_INCLUDE_EXTRA",
     "CK_ENV_LIB_TF_INCLUDE0",
-    "CK_ENV_LIB_TF_INCLUDE1"
+    "CK_ENV_LIB_TF_INCLUDE1",
+    "CK_ENV_LIB_TF_INCLUDE2"
   ],
   "compiler_env": "CK_CXX",
   "compiler_flags_as_env": "$<<CK_COMPILER_FLAG_CPP11>>$ $<<CK_ENV_LIB_TF_DEF>>$ -Wall -Wno-sign-compare",

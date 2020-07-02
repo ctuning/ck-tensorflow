@@ -86,6 +86,7 @@ def setup(i):
     env[ep+'_LIB'] = lib_dir
     env[ep+'_INCLUDE0'] = src_dir
     env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'flatbuffers', 'include')
+    env[ep+'_INCLUDE2'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'absl')
     # TODO: Customize for TFLite v1.14+.
     env['CK_ENV_LIB_TF_DEF'] = '-DTF_LITE_1_13'
 
