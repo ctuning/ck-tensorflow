@@ -25,6 +25,7 @@ function exclude_from_build() {
 }
 
 
+############################################################
 if [ "${PACKAGE_GIT}" == "YES" ] ; then
   echo "--------------------------------";
   echo "Cloning package ${PACKAGE_URL} ..."
@@ -41,28 +42,12 @@ if [ "${PACKAGE_GIT}" == "YES" ] ; then
   exit_if_error
 fi
 
-cd ${INSTALL_DIR}/${PACKAGE_SUB_DIR}
 
-if [ "${PACKAGE_PATCH}" == "YES" ] ; then
-  if [ -d ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID} ] ; then
-    echo "--------------------------------";
-    echo "Patching source directory ..."
-    echo ""
-    for i in ${ORIGINAL_PACKAGE_DIR}/patch.${CK_TARGET_OS_ID}/*
-    do
-      echo "$i"
-      patch -p1 < $i
-      exit_if_error
-    done
-  fi
-fi
-
+############################################################
 echo "--------------------------------";
 echo "Preparing sources ..."
 echo ""
 
-
-############################################################
 if [ "${PACKAGE_PATCH}" == "YES" ] ; then
   echo ""
   echo "[Patcher] Patching of the original code enabled"
@@ -105,10 +90,6 @@ else
 fi
 
 ############################################################
-
-
-
-
 
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
