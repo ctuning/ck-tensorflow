@@ -1,8 +1,8 @@
 diff --git a/research/object_detection/utils/label_map_util.py b/research/object_detection/utils/label_map_util.py
-index e52b7d1..6619aa7 100644
+index c395a716..913d7edb 100644
 --- a/research/object_detection/utils/label_map_util.py
 +++ b/research/object_detection/utils/label_map_util.py
-@@ -135,7 +135,7 @@ def load_labelmap(path):
+@@ -129,7 +129,7 @@ def load_labelmap(path):
    Returns:
      a StringIntLabelMapProto
    """

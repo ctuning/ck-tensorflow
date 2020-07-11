@@ -3,14 +3,16 @@
   "customize": {
     "install_env": {
       "PACKAGE_GIT": "YES",
-      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_PATCH": "YES",
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__R1_12_0__TF_COMPAT_V1>>$",
+      "PACKAGE_PATCH__R1_12_0__TF_COMPAT_V1": "",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
       "PACKAGE_SUB_DIR": "models",
       "PACKAGE_URL": "https://github.com/tensorflow/models.git",
       "PACKAGE_VERSION": "master"
     },
     "no_os_in_suggested_path": "yes",
-    "no_ver_in_suggested_path": "no"
+    "no_ver_in_suggested_path": "yes"
   },
   "deps": {
     "protobuf": {
@@ -43,11 +45,42 @@
     "channel-stable"
   ],
   "variations": {
+    "r2.3.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "r2.3.0",
+        "PACKAGE_VERSION": "2.3.0"
+      },
+      "on_by_default": "yes"
+    },
+    "r2.2.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "r2.2.0",
+        "PACKAGE_VERSION": "2.2.0"
+      },
+      "on_by_default": "no"
+    },
+    "r2.1.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "r2.1.0",
+        "PACKAGE_VERSION": "2.1.0"
+      },
+      "on_by_default": "no"
+    },
+    "r1.13.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "r1.13.0",
+        "PACKAGE_PATCH__R1_12_0__TF_COMPAT_V1": "r1.12.0_tf.compat.v1.patch",
+        "PACKAGE_VERSION": "1.13.0"
+      },
+      "on_by_default": "no"
+    },
     "r1.12.0": {
       "extra_env": {
-        "PACKAGE_VERSION": "1.12.0",
-        "PACKAGE_GIT_CHECKOUT": "r1.12.0"
-      }
+        "PACKAGE_GIT_CHECKOUT": "r1.12.0",
+        "PACKAGE_PATCH__R1_12_0__TF_COMPAT_V1": "r1.12.0_tf.compat.v1.patch",
+        "PACKAGE_VERSION": "1.12.0"
+      },
+      "on_by_default": "no"
     }
   },
   "use_scripts_from_another_entry": {
