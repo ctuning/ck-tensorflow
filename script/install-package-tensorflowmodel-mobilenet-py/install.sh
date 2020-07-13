@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# Copyright (c) 2018 cTuning foundation.
+# Copyright (c) 2018-2020 cTuning foundation.
 # See CK COPYRIGHT.txt for copyright details.
 #
 # SPDX-License-Identifier: BSD-3-Clause.
@@ -24,6 +24,14 @@ wget ${PACKAGE_URL}/${PACKAGE_NAME}
 echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
 tar -zxvf ${PACKAGE_NAME}
+
+# Exception: v2 quantized unpacks into a subdirectory.
+if [[ -d ${PACKAGE_NAME_V2_QUANT} ]]; then
+  echo
+  echo "Move files out of ${PACKAGE_NAME_V2_QUANT}/ ..."
+  mv ${PACKAGE_NAME_V2_QUANT}/* ${PACKAGE_NAME_V2_QUANT}/..
+  rmdir ${PACKAGE_NAME_V2_QUANT}
+fi
 
 ########################################################################
 echo
