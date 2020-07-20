@@ -33,6 +33,14 @@ if [[ -d ${PACKAGE_NAME_V2_QUANT} ]]; then
   rmdir ${PACKAGE_NAME_V2_QUANT}
 fi
 
+#Exception: v3 also unpacks into subdirectory
+if [[ -d ${PACKAGE_NAME_MOBILENET_V3} ]]; then
+  echo
+  echo "Move files out of ${PACKAGE_NAME_MOBILENET_V3}/ ..."
+  mv ${PACKAGE_NAME_MOBILENET_V3}/* ${PACKAGE_NAME_MOBILENET_V3}/..
+  rmdir ${PACKAGE_NAME_MOBILENET_V3}
+fi
+
 ########################################################################
 echo
 echo "Remove temporary files ..."
