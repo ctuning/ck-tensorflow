@@ -20,6 +20,11 @@ echo
 echo "Download weights from ${PACKAGE_URL} ..."
 wget ${PACKAGE_URL}/${PACKAGE_NAME}
 
+echo ""
+echo "Show Mobilenet ${PACKAGE_NAME_MOBILENET_V3}/ ..."
+echo "Show Package Quant ${PACKAGE_NAME_V2_QUANT}/ ..."
+echo "Show V3 ${PACKAGE_V3}/ ..."
+
 ########################################################################
 echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
@@ -66,6 +71,11 @@ if [ "${VERSION}" == "1" ]; then
 fi
 if [ "${VERSION}" == "2" ]; then
   cp ${THIS_SCRIPT_DIR}/mobilenet_v2.py .
+  cp ${THIS_SCRIPT_DIR}/mobilenet.py .
+  cp ${THIS_SCRIPT_DIR}/conv_blocks.py .
+fi
+if [ "${VERSION}" == "3" ]; then
+  cp ${THIS_SCRIPT_DIR}/mobilenet_v3.py .
   cp ${THIS_SCRIPT_DIR}/mobilenet.py .
   cp ${THIS_SCRIPT_DIR}/conv_blocks.py .
 fi
