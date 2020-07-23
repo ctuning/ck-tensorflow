@@ -20,11 +20,6 @@ echo
 echo "Download weights from ${PACKAGE_URL} ..."
 wget ${PACKAGE_URL}/${PACKAGE_NAME}
 
-echo ""
-echo "Show Mobilenet ${PACKAGE_NAME_MOBILENET_V3}/ ..."
-echo "Show Package Quant ${PACKAGE_NAME_V2_QUANT}/ ..."
-echo "Show V3 ${PACKAGE_V3}/ ..."
-
 ########################################################################
 echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
