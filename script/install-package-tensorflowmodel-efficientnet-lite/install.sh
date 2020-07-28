@@ -11,10 +11,6 @@
 # Python model and weights install script
 #
 
-MULTIPLIER=${MODEL_MOBILENET_MULTIPLIER}
-RESOLUTION=${MODEL_MOBILENET_RESOLUTION}
-VERSION=${MODEL_MOBILENET_VERSION}
-
 ########################################################################
 echo
 echo "Download weights from ${PACKAGE_URL} ..."
@@ -25,12 +21,27 @@ echo
 echo "Unpack weights file ${PACKAGE_NAME} ..."
 tar -zxvf ${PACKAGE_NAME}
 
+
 #Efficientnet-lite unpacks into subdirectory
-if [[ -d ${PACKAGE_NAME_EFFICIENT_LITE} ]]; then
+if [[ -d ${PACKAGE_NAME_EFFICIENTNET_LITE} ]]; then
   echo
   echo "Move files out of ${PACKAGE_NAME_EFFICIENTNET_LITE}/ ..."
   mv ${PACKAGE_NAME_EFFICIENTNET_LITE}/* ${PACKAGE_NAME_EFFICIENTNET_LITE}/..
-  rmdir ${PACKAGE_NAME_MOBILENET_V3}
+  rmdir ${PACKAGE_NAME_EFFICIENTNET_LITE}
+
+  echo "Keeping file ${PACKAGE_NAME_EFFICIENTNET_LITE_WITH_PRECISION}.tflite"
+
+  if [ "${MODEL_EFFICIENTNET_LITE_PRECISION}" == "fp32" ]; then
+    file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-int8.tflite"
+    echo "Removing file ${file_to_remove}"
+    rm ${file_to_remove}
+  else
+    file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-fp32.tflite"
+    echo "Removing file ${file_to_remove}"
+    rm ${file_to_remove}
+  fi
+
+
 fi
 
 ########################################################################
@@ -43,7 +54,7 @@ function rm_file() {
     rm $1
   fi
 }
-# We don't use it right now, so remddove to save disk space, but it can be useful in future
+# We don't use it right now, so remove to save disk space, but it can be useful in future
 #rm_file "mobilenet_v${VERSION}_${MULTIPLIER}_${RESOLUTION}_eval.pbtxt"
 
 ########################################################################
