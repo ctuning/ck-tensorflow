@@ -54,27 +54,16 @@ fi
 
 
 # Edgetpu modifications keep tflite with selected precision
-
 if [ "${VERSION}" == "edgetpu" ]; then
-  if [ "${MODEL_MOBILENET_PRECISION}" == "int8" ]; then 
-    file1_to_remove="${PACKAGE_NAME_EDGETPU}_uint8.tflite" 
-    file2_to_remove="${PACKAGE_NAME_EDGETPU}_float.tflite" 
-    echo "Removing file ${file1_to_remove} ${file2_to_remove}" 
-    rm ${file1_to_remove} ${file2_to_remove} 
-  elif [ "${MODEL_MOBILENET_PRECISION}" == "uint8" ]; then  
-    file1_to_remove="${PACKAGE_NAME_EDGETPU}_int8.tflite" 
-    file2_to_remove="${PACKAGE_NAME_EDGETPU}_float.tflite" 
-    echo "Removing file ${file1_to_remove} ${file2_to_remove}" 
-    rm ${file1_to_remove} ${file2_to_remove} 
-  else
-    file1_to_remove="${PACKAGE_NAME_EDGETPU}_uint8.tflite" 
-    file2_to_remove="${PACKAGE_NAME_EDGETPU}_int8.tflite" 
-    echo "Removing file ${file1_to_remove} ${file2_to_remove}" 
-    rm ${file1_to_remove} ${file2_to_remove}
-  fi
+  keep_model_filename=${PACKAGE_NAME_EDGETPU}_${MODEL_MOBILENET_PRECISION}.tflite
+  for model_filename in ${PACKAGE_NAME_EDGETPU}_*.tflite
+  do
+    if [ "$model_filename" != "$keep_model_filename" ]; then
+      echo "Removing file ${model_filename}"
+      rm "$model_filename"
+    fi
+  done
 fi
-
-
 
 
 
