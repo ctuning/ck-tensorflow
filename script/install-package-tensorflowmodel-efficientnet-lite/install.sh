@@ -25,16 +25,16 @@ echo
 echo "Move files out of ${PACKAGE_NAME_EFFICIENTNET_LITE}/ ..."
 mv ${PACKAGE_NAME_EFFICIENTNET_LITE}/* ${PACKAGE_NAME_EFFICIENTNET_LITE}/..
 rmdir ${PACKAGE_NAME_EFFICIENTNET_LITE}
+
 echo "Keeping file ${PACKAGE_NAME_EFFICIENTNET_LITE_WITH_PRECISION}.tflite"
 if [ "${MODEL_EFFICIENTNET_LITE_PRECISION}" == "fp32" ]; then
   file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-int8.tflite"
-  echo "Removing file ${file_to_remove}"
-  rm ${file_to_remove}
 else
   file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-fp32.tflite"
-  echo "Removing file ${file_to_remove}"
-  rm ${file_to_remove}
 fi
+
+echo "Removing file ${file_to_remove}"
+rm ${file_to_remove}
 
 ########################################################################
 echo
