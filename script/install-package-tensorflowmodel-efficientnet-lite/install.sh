@@ -37,6 +37,8 @@ echo "Removing file ${file_to_remove}"
 rm ${file_to_remove}
 
 ########################################################################
-echo
-echo "Remove temporary files ..."
-rm ${PACKAGE_NAME}
+if [ "$PACKAGE_KEEP_ARCHIVE" != "YES" ]; then
+    echo
+    echo "Remove temporary files ..."
+    rm ${PACKAGE_NAME}
+fi
