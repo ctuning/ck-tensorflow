@@ -26,15 +26,16 @@ echo "Move files out of ${PACKAGE_NAME_EFFICIENTNET_LITE}/ ..."
 mv ${PACKAGE_NAME_EFFICIENTNET_LITE}/* ${PACKAGE_NAME_EFFICIENTNET_LITE}/..
 rmdir ${PACKAGE_NAME_EFFICIENTNET_LITE}
 
-echo "Keeping file ${PACKAGE_NAME_EFFICIENTNET_LITE_WITH_PRECISION}.tflite"
-if [ "${MODEL_EFFICIENTNET_LITE_PRECISION}" == "fp32" ]; then
-  file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-int8.tflite"
-else
-  file_to_remove="${PACKAGE_NAME_EFFICIENTNET_LITE}-fp32.tflite"
-fi
 
-echo "Removing file ${file_to_remove}"
-rm ${file_to_remove}
+keep_model_filename=${PACKAGE_NAME_EFFICIENTNET_LITE_WITH_PRECISION}.tflite
+echo "Keeping file ${keep_model_filename}"
+for model_filename in ${PACKAGE_NAME_EFFICIENTNET_LITE}-*.tflite
+do
+  if [ "$model_filename" != "$keep_model_filename" ]; then
+    echo "Removing file ${model_filename}"
+    rm "$model_filename"
+  fi
+done
 
 ########################################################################
 if [ "$PACKAGE_KEEP_ARCHIVE" != "YES" ]; then
