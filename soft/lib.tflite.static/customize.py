@@ -60,6 +60,7 @@ def setup(i):
 
     hosd=i['host_os_dict']
     tosd=i['target_os_dict']
+    macos = hosd.get('macos','')=='yes'
 
     winh=hosd.get('windows_base','')
 
@@ -77,8 +78,11 @@ def setup(i):
     if target_os_name == 'android':
       env[ep+'_LIBS'] = '-ltensorflow-lite -llog'
     elif target_os_name == 'linux':
-      # NB: -latomic required on RPi4; -lrt required for TFLite v1.14.
-      env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl -latomic -lrt'
+        if macos:
+          env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl'
+        else:
+          # NB: -latomic required on RPi4; -lrt required for TFLite v1.14.
+          env[ep+'_LIBS'] = '-pthread -ltensorflow-lite -ldl -latomic -lrt'
     else:
       return {'return': -1, 'error': 'Unsupported target OS'}
 
