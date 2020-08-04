@@ -55,7 +55,7 @@ fi
 
 # Edgetpu modifications keep tflite with selected precision
 if [ "${VERSION}" == "edgetpu" ]; then
-  keep_model_filename=${PACKAGE_NAME_EDGETPU}_${MODEL_MOBILENET_PRECISION}.tflite
+  keep_model_filename=${PACKAGE_NAME_EDGETPU}_${ML_MODEL_DATA_TYPE}.tflite
   echo "Keeping file ${keep_model_filename}"
   for model_filename in ${PACKAGE_NAME_EDGETPU}_*.tflite
   do
