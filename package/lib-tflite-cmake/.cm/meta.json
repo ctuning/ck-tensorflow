@@ -59,7 +59,7 @@
     "tensorflow-static",
     "vsrc",
     "vstatic",
-    "channel-stable"
+    "via-cmake"
   ],
   "use_preprocess_scripts_from_another_entry": {
     "data_uoa": "fd44428fbc77f77f",
