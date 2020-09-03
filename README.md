@@ -18,11 +18,11 @@ CK-TensorFlow repository provides automation components in the [CK format](https
 for tedious and repetitive tasks such as detecting and installing different TensorFlow versions, models and data sets 
 across diverse platforms and running AI/ML workflows in a unified way.
 
-**CK is a collaborative project and not a magic ;)** - if some third-party automation fails 
-or misses some functionality (software detection, package installation, bechmarking and autotuning workflow, etc),
+Note that if some third-party automation fails or misses some functionality 
+(software detection, package installation, bechmarking and autotuning workflow, etc),
 the CK concept is to continuously and collaboratively improve such reusable components! 
 Please provide your feedback and report bugs via GitHub issues
-or get in touch with the community via [public CK mailing list](https://groups.google.com/forum/#!forum/collective-knowledge)!
+or get in touch with the community using this [public CK mailing list](https://groups.google.com/forum/#!forum/collective-knowledge)!
 
 
 # Installation
