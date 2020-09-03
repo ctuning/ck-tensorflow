@@ -1,0 +1,39 @@
+diff --git a/tensorflow/lite/tools/make/Makefile b/tensorflow/lite/tools/make/Makefile
+index f67094f37b..92c3d68849 100644
+--- a/tensorflow/lite/tools/make/Makefile
++++ b/tensorflow/lite/tools/make/Makefile
+@@ -39,6 +39,8 @@ INCLUDES := \
+ -I$(MAKEFILE_DIR)/downloads/neon_2_sse \
+ -I$(MAKEFILE_DIR)/downloads/farmhash/src \
+ -I$(MAKEFILE_DIR)/downloads/flatbuffers/include \
++-I$(MAKEFILE_DIR)/downloads/googletest/googletest/include/ \
++-I$(MAKEFILE_DIR)/downloads/googletest/googlemock/include/ \
+ -I$(OBJDIR)
+ # This is at the end so any globally-installed frameworks like protobuf don't
+ # override local versions in the source tree.
+@@ -50,12 +52,14 @@ LIBS := \
+ -lstdc++ \
+ -lpthread \
+ -lm \
+--lz
++-lz \
++-lrt \
++-latomic
+ 
+ # There are no rules for compiling objects for the host system (since we don't
+ # generate things like the protobuf compiler that require that), so all of
+ # these settings are for the target compiler.
+-CXXFLAGS := -O3 -DNDEBUG -fPIC
++CXXFLAGS := -O3 -DNDEBUG -fPIC -flax-vector-conversions -fomit-frame-pointer -DTFLITE_WITH_RUY
+ CXXFLAGS += $(EXTRA_CXXFLAGS)
+ CFLAGS := ${CXXFLAGS}
+ CXXFLAGS += --std=c++11
+@@ -218,7 +222,7 @@ ALL_SRCS := \
+   $(CMD_LINE_TOOLS_SRCS)
+ 
+ # Where compiled objects are stored.
+-GENDIR := $(MAKEFILE_DIR)/gen/$(TARGET)_$(TARGET_ARCH)/
++GENDIR := $(MAKEFILE_DIR)/gen/
+ OBJDIR := $(GENDIR)obj/
+ BINDIR := $(GENDIR)bin/
+ LIBDIR := $(GENDIR)lib/

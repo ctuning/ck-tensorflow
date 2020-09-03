@@ -1,0 +1,36 @@
+diff --git a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+index 3dc863dccc..e7b0f9c573 100644
+--- a/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
++++ b/tensorflow/lite/kernels/internal/optimized/depthwiseconv_uint8_3x3_filter.h
+@@ -97,6 +97,7 @@ inline int8x8_t util_vld1_x8(const int8* data_addr) {
+ #define OFFSET_OUTPUT_WIDTH 84
+ #define OFFSET_OUTPUT_HEIGHT 88
+ 
++#if 0   // offsetof
+ static_assert(offsetof(DepthwiseConvParams, input_depth) == OFFSET_INPUT_DEPTH,
+               "");
+ static_assert(offsetof(DepthwiseConvParams, input_row_size) ==
+@@ -149,6 +150,7 @@ static_assert(offsetof(DepthwiseConvParams, output_width) ==
+ static_assert(offsetof(DepthwiseConvParams, output_height) ==
+                   OFFSET_OUTPUT_HEIGHT,
+               "");
++#endif // offsetof
+ 
+ // Dot product ops hard-coded
+ 
+@@ -203,6 +205,7 @@ static_assert(offsetof(DepthwiseConvParams, output_height) ==
+ #define DP_OFFSET_OUTPUT_SHIFT_PER_CHANNEL \
+   DP_OFFSET_OUTPUT_MULTPLIPLIER_PER_CHANNEL + 8
+ 
++#if 0   // offsetof
+ static_assert(offsetof(DepthwiseConvDotProdParams, input_depth) ==
+                   DP_OFFSET_INPUT_DEPTH,
+               "");
+@@ -310,6 +313,7 @@ static_assert(offsetof(DepthwiseConvDotProdParams,
+ static_assert(offsetof(DepthwiseConvDotProdParams, output_shift_per_channel) ==
+                   DP_OFFSET_OUTPUT_SHIFT_PER_CHANNEL,
+               "");
++#endif // offsetof
+ 
+ #endif  // __aarch64__ && !GOOGLE_L4T - Dot product ops hard-coded
+ 

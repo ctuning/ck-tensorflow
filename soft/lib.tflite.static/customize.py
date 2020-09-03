@@ -70,6 +70,7 @@ def setup(i):
     lib_dir = os.path.dirname(full_path)
     install_dir = os.path.dirname(lib_dir)
     src_dir = os.path.join(install_dir, 'src')
+    build_dir = os.path.join(install_dir, 'build') #cmake
 
     target_os_dict = i.get('target_os_dict', {})
     target_os_name = target_os_dict.get('ck_name2', '')
@@ -88,9 +89,15 @@ def setup(i):
 
     env[ep] = install_dir
     env[ep+'_LIB'] = lib_dir
-    env[ep+'_INCLUDE0'] = src_dir
-    env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'flatbuffers', 'include')
-    env[ep+'_INCLUDE2'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'absl')
+
+    if os.path.isdir(build_dir): #built with cmake
+      env[ep+'_INCLUDE0'] = src_dir
+      env[ep+'_INCLUDE1'] = os.path.join(build_dir, 'flatbuffers', 'include')
+      env[ep+'_INCLUDE2'] = os.path.join(build_dir, 'tensorflow', 'absl-cpp', 'absl')
+    else:
+      env[ep+'_INCLUDE0'] = src_dir
+      env[ep+'_INCLUDE1'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'flatbuffers', 'include')
+      env[ep+'_INCLUDE2'] = os.path.join(src_dir, 'tensorflow', 'lite',  'tools', 'make', 'downloads', 'absl')
     # TODO: Customize for TFLite v1.14+.
     env['CK_ENV_LIB_TF_DEF'] = '-DTF_LITE_1_13'
 

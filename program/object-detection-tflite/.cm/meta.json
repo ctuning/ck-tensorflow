@@ -12,11 +12,11 @@
       "local": "yes",
       "name": "TensorFlow Lite library",
       "sort": 20,
-      "tags": "lib,tflite,vstatic",
+      "tags": "lib,tflite,vstatic,master",
       "version_from": [
-        1,
-        13,
-        1
+        2,
+        2,
+        0
       ]
     },
     "lib-xopenme": {

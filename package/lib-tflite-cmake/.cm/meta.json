@@ -1,0 +1,116 @@
+{
+  "customize": {
+    "extra_dir": "",
+    "git_src_dir": "src",
+    "install_env": {
+      "PACKAGE_GIT": "YES",
+      "PACKAGE_PATCH": "YES",
+      "PACKAGE_SKIP_LINUX_MAKE": "YES",
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__BFLOAT16>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_3_0__OFFSETOF>>$",
+      "PACKAGE_PATCH__BFLOAT16": "",
+      "PACKAGE_PATCH__V2_3_0__OFFSETOF": "",
+      "PACKAGE_SUB_DIR": "src",
+      "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
+      "PACKAGE_VERSION": "default"
+    }
+  },
+  "deps": {
+    "cmake": {
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "CMake tool",
+      "skip_from_bat": "yes",
+      "sort": 20,
+      "tags": "tool,cmake",
+      "version_from": [
+        3,
+        16,
+        0
+      ]
+    },
+    "compiler": {
+      "local": "yes",
+      "name": "C++ compiler",
+      "sort": 0,
+      "tags": "compiler,lang-cpp"
+    }
+  },
+  "end_full_path": {
+    "linux": "lib/libtensorflow-lite.a"
+  },
+  "need_cpu_info": "yes",
+  "only_for_host_os_tags": [
+    "linux"
+  ],
+  "only_for_target_os_tags": [
+    "linux"
+  ],
+  "package_extra_name": " (from sources, static)",
+  "process_script": "install",
+  "soft_uoa": "lib.tflite.static",
+  "suggested_path": "lib-tflite-src-static",
+  "tags": [
+    "lib",
+    "tensorflow",
+    "lite",
+    "tflite",
+    "tensorflow-lite",
+    "tensorflow-static",
+    "vsrc",
+    "vstatic",
+    "channel-stable"
+  ],
+  "use_preprocess_scripts_from_another_entry": {
+    "data_uoa": "fd44428fbc77f77f",
+    "module_uoa": "84e27ad9dd12e734"
+  },
+  "use_scripts_from_another_entry": {
+    "data_uoa": "cd9ccc74060b3d18",
+    "module_uoa": "script"
+  },
+  "variations": {
+    "rpi4": {
+      "extra_env": {
+        "EXTRA_CXXFLAGS": "-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
+      }
+    },
+    "threads.1": {
+      "extra_env": {
+        "CK_NUMBER_OF_MAKE_THREADS": 1
+      }
+    },
+    "threads.2": {
+      "extra_env": {
+        "CK_NUMBER_OF_MAKE_THREADS": 2
+      }
+    },
+    "threads.3": {
+      "extra_env": {
+        "CK_NUMBER_OF_MAKE_THREADS": 3
+      }
+    },
+    "threads.4": {
+      "extra_env": {
+        "CK_NUMBER_OF_MAKE_THREADS": 4
+      }
+    },
+    "v2.3.0": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "v2.3.0",
+        "PACKAGE_PATCH__V2_3_0__MAKEFILE": "v2.3.0_Makefile.patch",
+        "PACKAGE_PATCH__V2_3_0__OFFSETOF": "v2.3.0_offsetof.patch",
+        "PACKAGE_VERSION": "2.3.0"
+      }
+    },
+    "master": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "master",
+        "PACKAGE_PATCH__BFLOAT16": "various.patch",
+        "PACKAGE_PATCH__V2_3_0__OFFSETOF": "",
+        "PACKAGE_VERSION": "master"
+      },
+      "on_by_default": "yes"
+    }
+  }
+}
