@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #
-# CK post installation script for Glow compiler.
+# CK post installation script for tflite.
 #
 # See CK LICENSE.txt for licensing details.
 # See CK COPYRIGHT.txt for copyright details.
@@ -43,7 +43,8 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DCMAKE_RANLIB="${CK_RANLIB_PATH_FOR_CMAKE}" \
   -DCMAKE_LINKER="${CK_LD_PATH_FOR_CMAKE}" \
   -DCMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES="${BUILD_DIR}/eigen" \
-  --verbose \
+  -DTFLITE_ENABLE_RUY=${PACKAGE_LIB_RUY} \
+  -DTFLITE_ENABLE_XNNPACK=${PACKAGE_LIB_XNNPACK} \
   "${SRC_DIR}"
 EO_CMK_CMD
 

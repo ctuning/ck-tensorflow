@@ -6,12 +6,14 @@
       "PACKAGE_GIT": "YES",
       "PACKAGE_PATCH": "YES",
       "PACKAGE_SKIP_LINUX_MAKE": "YES",
-      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__BFLOAT16>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_3_0__OFFSETOF>>$",
-      "PACKAGE_PATCH__BFLOAT16": "",
-      "PACKAGE_PATCH__V2_3_0__OFFSETOF": "",
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__PACKAGE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__OFFSETOF>>$",
+      "PACKAGE_PATCH__PACKAGE": "",
+      "PACKAGE_PATCH__OFFSETOF": "",
       "PACKAGE_SUB_DIR": "src",
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
-      "PACKAGE_VERSION": "default"
+      "PACKAGE_VERSION": "default",
+      "PACKAGE_LIB_RUY": "OFF",
+      "PACKAGE_LIB_XNNPACK": "OFF"
     }
   },
   "deps": {
@@ -75,42 +77,24 @@
         "EXTRA_CXXFLAGS": "-march=armv7-a+neon+vfpv4 -mfpu=neon-vfpv4 "
       }
     },
-    "threads.1": {
-      "extra_env": {
-        "CK_NUMBER_OF_MAKE_THREADS": 1
-      }
-    },
-    "threads.2": {
-      "extra_env": {
-        "CK_NUMBER_OF_MAKE_THREADS": 2
-      }
-    },
-    "threads.3": {
-      "extra_env": {
-        "CK_NUMBER_OF_MAKE_THREADS": 3
-      }
-    },
-    "threads.4": {
-      "extra_env": {
-        "CK_NUMBER_OF_MAKE_THREADS": 4
-      }
-    },
-    "v2.3.0": {
-      "extra_env": {
-        "PACKAGE_GIT_CHECKOUT": "v2.3.0",
-        "PACKAGE_PATCH__V2_3_0__MAKEFILE": "v2.3.0_Makefile.patch",
-        "PACKAGE_PATCH__V2_3_0__OFFSETOF": "v2.3.0_offsetof.patch",
-        "PACKAGE_VERSION": "2.3.0"
-      }
-    },
-    "master": {
+    "v2.3.99": {
       "extra_env": {
         "PACKAGE_GIT_CHECKOUT": "master",
-        "PACKAGE_PATCH__BFLOAT16": "various.patch",
-        "PACKAGE_PATCH__V2_3_0__OFFSETOF": "",
-        "PACKAGE_VERSION": "master"
+        "PACKAGE_PATCH__PACKAGE": "v2.3.99_package.patch",
+        "PACKAGE_PATCH__OFFSETOF": "v2.3.99_offsetof.patch",
+        "PACKAGE_VERSION": "2.3.99"
       },
       "on_by_default": "yes"
+    },
+    "with.ruy": {
+      "extra_env": {
+        "PACKAGE_LIB_RUY": "ON"
+      }
+    },
+    "with.xnnpack": {
+      "extra_env": {
+        "PACKAGE_LIB_XNNPACK": "ON"
+      }
     }
   }
 }
