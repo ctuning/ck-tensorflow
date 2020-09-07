@@ -17,6 +17,18 @@
     }
   },
   "deps": {
+    "lib-xnnpack": {
+      "enable_if_env": {
+        "PACKAGE_LIB_XNNPACK": [ "ON" ]
+      },
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "XNNPACK lib",
+      "skip_from_bat": "yes",
+      "sort": 20,
+      "tags": "lib,xnnpack"
+    },
     "cmake": {
       "add_to_path": "no",
       "force_target_as_host": "yes",
@@ -93,7 +105,8 @@
     },
     "with.xnnpack": {
       "extra_env": {
-        "PACKAGE_LIB_XNNPACK": "ON"
+        "PACKAGE_LIB_XNNPACK": "ON",
+        "EXTRA_FLAGS": "-I${CK_ENV_LIB_XNNPACK_INCLUDE}"
       }
     }
   }

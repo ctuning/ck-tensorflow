@@ -12,6 +12,7 @@
 # PACKAGE_DIR
 # INSTALL_DIR
 
+
 function exit_if_error() {
   message=${1:-"unknown"}
   if [ "${?}" != "0" ]; then
@@ -42,12 +43,10 @@ ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
   -DCMAKE_AR="${CK_AR_PATH_FOR_CMAKE}" \
   -DCMAKE_RANLIB="${CK_RANLIB_PATH_FOR_CMAKE}" \
   -DCMAKE_LINKER="${CK_LD_PATH_FOR_CMAKE}" \
-  -DCMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES="${BUILD_DIR}/eigen" \
   -DTFLITE_ENABLE_RUY=${PACKAGE_LIB_RUY} \
   -DTFLITE_ENABLE_XNNPACK=${PACKAGE_LIB_XNNPACK} \
   "${SRC_DIR}"
 EO_CMK_CMD
-
 
 # First, print the EXACT command we are about to run
 echo "Configuring the package with 'CMake' ..."
@@ -71,7 +70,17 @@ ${CK_AR_PATH_FOR_CMAKE} x ${BUILD_DIR}/_deps/fft2d-build/libfft2d_fftsg.a
 ${CK_AR_PATH_FOR_CMAKE} x ${BUILD_DIR}/_deps/ruy-build/libruy.a
 ${CK_AR_PATH_FOR_CMAKE} x ${BUILD_DIR}/_deps/farmhash-build/libfarmhash.a
 ${CK_AR_PATH_FOR_CMAKE} x ${BUILD_DIR}/_deps/flatbuffers-build/libflatbuffers.a
+
+if [ ${PACKAGE_LIB_XNNPACK} == 'ON' ]
+then
+    ${CK_AR_PATH_FOR_CMAKE} x ${CK_ENV_LIB_XNNPACK_LIB}/libclog.a
+    ${CK_AR_PATH_FOR_CMAKE} x ${CK_ENV_LIB_XNNPACK_LIB}/libcpuinfo.a
+    ${CK_AR_PATH_FOR_CMAKE} x ${CK_ENV_LIB_XNNPACK_LIB}/libpthreadpool.a
+    ${CK_AR_PATH_FOR_CMAKE} x ${CK_ENV_LIB_XNNPACK_LIB}/libXNNPACK.a
+fi
+
 ${CK_AR_PATH_FOR_CMAKE} r libtensorflow-lite.a *.o
+
 
 return 0
 
