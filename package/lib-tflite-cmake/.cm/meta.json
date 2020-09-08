@@ -14,7 +14,8 @@
       "PACKAGE_VERSION": "default",
       "PACKAGE_LIB_RUY": "OFF",
       "PACKAGE_LIB_XNNPACK": "OFF"
-    }
+    },
+    "no_ver_in_suggested_path": "yes"
   },
   "deps": {
     "lib-xnnpack": {
@@ -112,11 +113,6 @@
     "with.eigen": {
       "extra_env": {
       }
-    },
-    "default": {
-      "extra_env": {
-      },
-      "on_by_default": "yes"
     }
   }
 }
