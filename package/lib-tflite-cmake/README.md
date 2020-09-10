@@ -6,13 +6,6 @@ This package builds TensorFlow Lite (TFLite) using CMake from fixed revisions fr
 |-|-|
 | `v2.3.90` | 5c1c1085fe331de3 |
 
-## Pre-requisites
-
-The [XNNPACK](https://github.com/google/XNNPACK) backend implicitly requires [Googletest](https://github.com/google/googletest), which can be installed on Ubuntu/Debian as follows:
-
-```bash
-$ sudo apt install libgtest-dev
-```
 
 ## Installation
 
