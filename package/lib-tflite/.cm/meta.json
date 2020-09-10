@@ -5,7 +5,7 @@
     "install_env": {
       "PACKAGE_GIT": "YES", 
       "PACKAGE_PATCH": "YES", 
-      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_13_1__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_15_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_15_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_1_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_1_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_2_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_2_0__OFFSETOF>>$",
+      "PACKAGE_PATCH_LIST": "\\$<<ORIGINAL_PACKAGE_DIR>>$/patch.\\$<<CK_TARGET_OS_ID>>$/* \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_13_1__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_14_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_15_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V1_15_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_1_0__DOWNLOAD_DEPENDENCIES>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_1_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_2_0__MAKEFILE>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V2_2_0__OFFSETOF>>$ \\$<<ORIGINAL_PACKAGE_DIR>>$/patch.linux.variations/\\$<<PACKAGE_PATCH__V_FOR_CORAL__MAKEFILE>>$",
       "PACKAGE_PATCH__V1_13_1__MAKEFILE":"",
       "PACKAGE_PATCH__V1_14_0__DOWNLOAD_DEPENDENCIES":"",
       "PACKAGE_PATCH__V1_14_0__MAKEFILE":"",
@@ -16,6 +16,7 @@
       "PACKAGE_PATCH__V2_1_0__MAKEFILE":"",
       "PACKAGE_PATCH__V2_2_0__MAKEFILE":"",
       "PACKAGE_PATCH__V2_2_0__OFFSETOF":"",
+      "PACKAGE_PATCH__V_FOR_CORAL__MAKEFILE":"",
       "PACKAGE_SUB_DIR": "src", 
       "PACKAGE_URL": "https://github.com/tensorflow/tensorflow",
       "PACKAGE_VERSION": "default"
@@ -118,6 +119,14 @@
         "PACKAGE_VERSION":"2.2.0",
         "PACKAGE_PATCH__V2_2_0__MAKEFILE":"v2.2.0_Makefile.patch",
         "PACKAGE_PATCH__V2_2_0__OFFSETOF":"v2.2.0_offsetof.patch"
+      }
+    },
+    "for.coral": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT":"d855adfc5a0195788bf5f92c3c7352e638aa1109",
+        "PACKAGE_VERSION":"1.15.4",
+        "PACKAGE_PATCH__V_FOR_CORAL__MAKEFILE":"v_for_coral_Makefile.patch",
+        "PACKAGE_PATCH__V1_15_0__OFFSETOF":"v1.15.0_offsetof.patch"
       }
     },
     "rpi4": {
