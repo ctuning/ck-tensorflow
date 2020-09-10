@@ -57,7 +57,7 @@ cd ${BUILD_DIR} && eval ${CMK_CMD}
 exit_if_error "CMake failed"
 
 # Now, run the cmake command to build
-cd ${BUILD_DIR} && eval make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
+cd ${BUILD_DIR} && make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
 exit_if_error "Cmake build failed"
 
 

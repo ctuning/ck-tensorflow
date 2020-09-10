@@ -18,6 +18,17 @@
     "no_ver_in_suggested_path": "yes"
   },
   "deps": {
+    "lib-gtest": {
+      "enable_if_env": {
+        "PACKAGE_LIB_XNNPACK": [ "ON" ]
+      },
+      "add_to_path": "no",
+      "force_target_as_host": "yes",
+      "local": "yes",
+      "name": "GTEST lib",
+      "sort": 10,
+      "tags": "lib,gtest"
+    },
     "lib-xnnpack": {
       "enable_if_env": {
         "PACKAGE_LIB_XNNPACK": [ "ON" ]
@@ -27,7 +38,7 @@
       "local": "yes",
       "name": "XNNPACK lib",
       "skip_from_bat": "yes",
-      "sort": 20,
+      "sort": 15,
       "tags": "lib,xnnpack"
     },
     "cmake": {
@@ -107,7 +118,7 @@
     "with.xnnpack": {
       "extra_env": {
         "PACKAGE_LIB_XNNPACK": "ON",
-        "EXTRA_FLAGS": "-I${CK_ENV_LIB_XNNPACK_INCLUDE}"
+        "EXTRA_FLAGS": "-I${CK_ENV_LIB_XNNPACK_INCLUDE} -I${CK_ENV_LIB_GTEST_INCLUDE}"
       }
     },
     "with.eigen": {
