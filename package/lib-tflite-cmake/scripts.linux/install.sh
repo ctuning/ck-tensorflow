@@ -36,6 +36,7 @@ cd ${INSTALL_DIR}
 # Configure the package.
 read -d '' CMK_CMD <<EO_CMK_CMD
 ${CK_ENV_TOOL_CMAKE_BIN}/cmake \
+  -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_C_COMPILER="${CK_CC_PATH_FOR_CMAKE}" \
   -DCMAKE_C_FLAGS="${CK_CC_FLAGS_FOR_CMAKE} ${EXTRA_FLAGS} ${EXTRA_CXXFLAGS}" \
   -DCMAKE_CXX_COMPILER="${CK_CXX_PATH_FOR_CMAKE}" \
@@ -58,7 +59,7 @@ exit_if_error "CMake failed"
 
 # Now, run the cmake command to build
 cd ${BUILD_DIR} && make -j${CK_HOST_CPU_NUMBER_OF_PROCESSORS}
-exit_if_error "Cmake build failed"
+exit_if_error "CMake build failed"
 
 
 mkdir -p ${LIB_DIR}
