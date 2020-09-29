@@ -1,0 +1,49 @@
+diff --git a/tensorflow/core/platform/bfloat16.h b/tensorflow/core/platform/bfloat16.h
+index 3e3ab2ce55..b5d7d17daf 100644
+--- a/tensorflow/core/platform/bfloat16.h
++++ b/tensorflow/core/platform/bfloat16.h
+@@ -22,7 +22,7 @@ limitations under the License.
+ // clang-format on
+ 
+ namespace tensorflow {
+-typedef Eigen::bfloat16 bfloat16;
++//typedef Eigen::bfloat16 bfloat16;
+ }  // end namespace tensorflow
+ 
+ #endif  // TENSORFLOW_CORE_LIB_BFLOAT16_BFLOAT16_H_
+diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
+index ac7e373f18..b731401fc1 100644
+--- a/tensorflow/lite/CMakeLists.txt
++++ b/tensorflow/lite/CMakeLists.txt
+@@ -264,6 +264,10 @@ populate_tflite_source_vars("kernels/internal/reference/integer_ops"
+ populate_tflite_source_vars("kernels/internal/reference/sparse_ops"
+   TFLITE_KERNEL_INTERNAL_REF_SPARSE_OPS_SRCS
+ )
++populate_tflite_source_vars("tools/optimize/sparsity"
++  TFLITE_TOOLS_OPTIMIZE_SPARSITY_SRCS
++)
++
+ 
+ # Common include directories
+ include_directories(
+@@ -294,6 +298,7 @@ add_library(tensorflow-lite
+   ${TFLITE_KERNEL_SRCS}
+   ${TFLITE_NNAPI_SRCS}
+   ${TFLITE_SRCS}
++  ${TFLITE_TOOLS_OPTIMIZE_SPARSITY_SRCS}
+ )
+ target_link_libraries(tensorflow-lite
+   PUBLIC
+diff --git a/tensorflow/lite/interpreter_builder.cc b/tensorflow/lite/interpreter_builder.cc
+index 6c2b2e2455..dc77b31b31 100644
+--- a/tensorflow/lite/interpreter_builder.cc
++++ b/tensorflow/lite/interpreter_builder.cc
+@@ -625,7 +625,7 @@ TfLiteStatus InterpreterBuilder::operator()(
+     (*interpreter)->AddSubgraphs(subgraphs->size() - 1);
+   }
+ 
+-  (*interpreter)->SetProfiler(tflite::profiling::MaybeCreatePlatformProfiler());
++  //(*interpreter)->SetProfiler(tflite::profiling::MaybeCreatePlatformProfiler());
+ 
+   for (int subgraph_index = 0; subgraph_index < subgraphs->size();
+        ++subgraph_index) {

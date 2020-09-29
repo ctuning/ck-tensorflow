@@ -62,7 +62,12 @@ exit_if_error "Cmake build failed"
 
 
 mkdir -p ${LIB_DIR}
-mv ${BUILD_DIR}/libtensorflowlite.a ${LIB_DIR}/libtensorflow-lite.a
+if [ ${PACKAGE_VERSION} == '2.3.90' ]
+then
+    mv ${BUILD_DIR}/libtensorflowlite.a ${BUILD_DIR}/libtensorflow-lite.a
+fi
+
+mv ${BUILD_DIR}/libtensorflow-lite.a ${LIB_DIR}
 
 cd ${LIB_DIR}
 

@@ -110,6 +110,21 @@
       },
       "on_by_default": "yes"
     },
+    "v2.3.91": {
+      "extra_env": {
+        "PACKAGE_GIT_CHECKOUT": "8a643858ce174b8b",
+        "PACKAGE_PATCH__PACKAGE": "v2.3.91_package.patch",
+        "PACKAGE_PATCH__OFFSETOF": "v2.3.90_offsetof.patch",
+        "PACKAGE_VERSION": "2.3.91"
+      },
+      "on_by_default": "no"
+    },
+    "default": {
+      "extra_env": {
+        "PACKAGE_LIB_RUY": "OFF",
+        "PACKAGE_LIB_XNNPACK": "OFF"
+      }
+    },
     "with.ruy": {
       "extra_env": {
         "PACKAGE_LIB_RUY": "ON"
