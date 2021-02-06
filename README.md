@@ -1,8 +1,8 @@
 # Collective Knowledge components for TensorFlow
 
-**All CK components for AI and ML are now collected in [one repository](https://github.com/ctuning/ai)!**
+**All CK components can be found at [cKnowledge.io](https://cKnowledge.io) and in [one GitHub repository](https://github.com/ctuning/ai)!**
 
-*This project is hosted by the [cTuning foundation (non-profit R&D organization)](https://cTuning.org).*
+*This project is hosted by the [cTuning foundation](https://cTuning.org).*
 
 [![compatibility](https://github.com/ctuning/ck-guide-images/blob/master/ck-compatible.svg)](https://github.com/ctuning/ck)
 [![automation](https://github.com/ctuning/ck-guide-images/blob/master/ck-artifact-automated-and-reusable.svg)](http://cTuning.org/ae)
@@ -230,10 +230,6 @@ join this community effort!
 $ ck install package:squeezedetmodel-squeezedet
 $ ck run program:squeezedet
 ```
-
-# Coordination of development
-* [cTuning Foundation](http://cTuning.org)
-* [dividiti](http://dividiti.com)
 
 # Feedback
 
