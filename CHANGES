@@ -1,3 +1,8 @@
+20210403:
+  * [gfursin] fixed TFLite packages 1.13, 1.14 and 1.15 (eigen library).
+     https://github.com/ctuning/ck/issues/138
+     https://github.com/ctuning/ck/issues/139
+
 2019.12.21 - [FGG] added TensorFlow installation via PIP (for RPi4)
 
 2019.02.13 - [FGG] added TF Slim model CIFAR10 for SysML'19 reproducible papers

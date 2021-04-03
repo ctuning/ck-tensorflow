@@ -14,3 +14,7 @@ $ ck install package:lib-tflite-1.14.0-src-static --env.CK_HOST_CPU_NUMBER_OF_PR
 
 ## Unresolved issues
 None.
+
+# Notes
+
+gfursin fixed problem with eigen library thanks to [this note](https://github.com/tensorflow/tensorflow/issues/43348)

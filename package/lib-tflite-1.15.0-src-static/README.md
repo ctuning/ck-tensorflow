@@ -29,3 +29,7 @@ clang++: error: linker command failed with exit code 1 (use -v to see invocation
 ```
 
 ## Resolved issues
+
+# Notes
+
+gfursin fixed problem with eigen library thanks to [this note](https://github.com/tensorflow/tensorflow/issues/43348)
